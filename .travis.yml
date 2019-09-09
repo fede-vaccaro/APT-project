@@ -1,8 +1,14 @@
 cache:
  directories:
   - $HOME/.m2
+  - $HOME/.sonar/cache
 
-language: java
+addons:
+ sonarcloud:  
+  organization: "fede-vaccaro"
+token:
+  secure: $SONAR_TOKEN
+  language: java
 
 jdk: openjdk8
 
