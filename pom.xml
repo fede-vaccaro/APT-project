@@ -81,7 +81,7 @@
 											<limit>
 												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.50</minimum>
+												<minimum>0.99</minimum>
 											</limit>
 										</limits>
 									</rule>
@@ -113,6 +113,11 @@
 						</mutators>
 						<mutationThreshold>85</mutationThreshold>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eluder.coveralls</groupId>
+					<artifactId>coveralls-maven-plugin</artifactId>
+					<version>4.3.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>

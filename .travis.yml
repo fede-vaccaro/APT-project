@@ -5,4 +5,4 @@ jdk: openjdk8
 install: true
 
 script:
- - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify
+ - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify coveralls:report
