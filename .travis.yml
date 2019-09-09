@@ -1,0 +1,18 @@
+cache:
+ directories:
+  - $HOME/.m2
+  - $HOME/.sonar/cache
+
+addons:
+ sonarcloud:  
+  organization: "fede-vaccaro"
+token:
+  secure: $SONAR_TOKEN
+  language: java
+
+jdk: openjdk8
+
+install: true
+
+script:
+ - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify coveralls:report sonar:sonar
