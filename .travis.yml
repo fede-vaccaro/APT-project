@@ -1,0 +1,8 @@
+language: java
+
+jdk: openjdk8
+
+install: true
+
+script:
+ - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify
