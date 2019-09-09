@@ -12,6 +12,7 @@
 		<jacoco.version>0.8.3</jacoco.version>
 		<junit.version>4.12</junit.version>
 		<assertj.version>3.11.1</assertj.version>
+		<sonar.coverage.exclusions>**/Main.*</sonar.coverage.exclusions>
 	</properties>
 
 	<dependencyManagement>
