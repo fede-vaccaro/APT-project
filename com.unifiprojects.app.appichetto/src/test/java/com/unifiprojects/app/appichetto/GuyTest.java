@@ -12,7 +12,7 @@ public class GuyTest {
 
 	Guy guy;
 	
-	public final String guyName = "Heisenberg";
+	public final String guyName = "Walter White";
 	
 	@Before
 	public void setUp() {
