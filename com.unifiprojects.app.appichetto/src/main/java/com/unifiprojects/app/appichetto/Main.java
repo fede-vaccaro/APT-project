@@ -1,7 +1,5 @@
 package com.unifiprojects.app.appichetto;
 
-import com.unifiprojects.app.appichetto.Guy;
-
 /**
  * Hello world!
  *
