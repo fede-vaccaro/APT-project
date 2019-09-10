@@ -8,8 +8,8 @@ import com.unifiprojects.app.appichetto.Guy;
  */
 public class Main {
 	public static void main(String[] args) {
+
 		Guy ww = new Guy("Heisenberg");
-		System.out.println("Hello World.");
-		System.out.println(ww.sayMyName());
+		ww.sayMyName();
 	}
 }
