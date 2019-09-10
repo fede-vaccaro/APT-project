@@ -11,9 +11,10 @@ public class Guy {
 		this.name = name;
 	}
 
-	public void sayMyName() {
+	public String sayMyName() {
 		String sentence = "My name is: " + name;
 		LOGGER.info(sentence);
+		return sentence;
 	}
 
 }
