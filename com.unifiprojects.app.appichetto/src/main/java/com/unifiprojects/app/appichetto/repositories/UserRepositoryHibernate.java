@@ -9,33 +9,35 @@ import com.unifiprojects.app.appichetto.models.User;
 public class UserRepositoryHibernate implements UserRepository {
 
 	private EntityManager entityManager;
-	
+
 	public UserRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
 	@Override
 	public void save(User user) {
-		// TODO Auto-generated method stub
-
+		entityManager.getTransaction().begin();
+		if (user.getId() != null) {
+			entityManager.merge(user);
+		} else {
+			entityManager.persist(user);
+		}
+		entityManager.getTransaction().commit();
 	}
 
 	@Override
-	public User findById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public User findById(Long id) {
+		return entityManager.find(User.class, id);
 	}
 
 	@Override
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.createQuery("from User", User.class).getResultList();
 	}
 
 	@Override
-	public User findByUsername() {
-		// TODO Auto-generated method stub
-		return null;
+	public User findByUsername(String username) {
+		return entityManager.createQuery("from User where username = :username and password = :pw", User.class).setParameter("username", username).getSingleResult();
 	}
 
 }
