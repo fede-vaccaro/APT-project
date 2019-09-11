@@ -2,10 +2,10 @@ package com.unifiprojects.app.appichetto.models;
 
 public class Accounting {
 	private long id;
-	
+
 	private User from;
 	private User to;
-	
+
 	private double amount;
 
 	public long getId() {
