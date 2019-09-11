@@ -63,7 +63,7 @@ public class TestUserRepositoryHibernate {
 	}
 
 	@Test
-	public void testUserIsUpdatedWhenSavedAndNotReAddedOnDB() {
+	public void testUserIsUpdatedWhenSavedButNotReAddedToDB() {
 		User testUser = persistAndGetTestUser();
 
 		String newUsername = "NewName";
@@ -92,7 +92,7 @@ public class TestUserRepositoryHibernate {
 	}
 	
 	@Test
-	public void testFindByUsernameWhenUserIsOnDB() {
+	public void testFindByIdWhenUserIsOnDB() {
 		User testUser = persistAndGetTestUser();
 		
 		User retrievedUser = userRepository.findById(testUser.getId());
@@ -102,7 +102,7 @@ public class TestUserRepositoryHibernate {
 	}
 	
 	@Test
-	public void testFindByUsernameWhenUserIsNotOnDbReturnNull() {
+	public void testFindByIdWhenUserIsNotOnDbAndReturnNull() {
 		Long testFakeId = 9999999l;
 		
 		User retrievedUser = userRepository.findById(testFakeId);
@@ -136,6 +136,23 @@ public class TestUserRepositoryHibernate {
 	public void testFindAllWhenUserTableIsEmpty() {
 		ArrayList<User> retrievedUsers = (ArrayList<User>)userRepository.findAll();
 		assertThat(retrievedUsers).isEmpty();
+	}
+	
+	@Test
+	public void testFindByUsernameWhenUserIsActuallyOnDb() {
+		User testUser = persistAndGetTestUser();
+		
+		User retrievedUser = userRepository.findById(testUser.getId());
+		
+		assertThat(testUser).isEqualTo(retrievedUser);
+	}
+	
+	@Test
+	public void testFindByUsernameReturnNullWhenUserIsNotExistent() {
+		Long fakeId = 9999l;
+		User retrievedUser = userRepository.findById(fakeId);
+		
+		assertThat(retrievedUser).isNull();
 	}
 
 }
