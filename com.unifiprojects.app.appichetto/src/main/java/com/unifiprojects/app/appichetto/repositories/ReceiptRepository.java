@@ -1,6 +1,9 @@
-package com.unifiprojects.app.appichetto.models;
+package com.unifiprojects.app.appichetto.repositories;
 
 import java.util.List;
+
+import com.unifiprojects.app.appichetto.models.Receipt;
+import com.unifiprojects.app.appichetto.models.User;
 
 public interface ReceiptRepository {
 	public void saveReceipt(Receipt receipt);
