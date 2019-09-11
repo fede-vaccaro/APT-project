@@ -142,15 +142,15 @@ public class TestUserRepositoryHibernate {
 	public void testFindByUsernameWhenUserIsActuallyOnDb() {
 		User testUser = persistAndGetTestUser();
 		
-		User retrievedUser = userRepository.findById(testUser.getId());
+		User retrievedUser = userRepository.findByUsername(testUser.getUsername());
 		
 		assertThat(testUser).isEqualTo(retrievedUser);
 	}
 	
 	@Test
 	public void testFindByUsernameReturnNullWhenUserIsNotExistent() {
-		Long fakeId = 9999l;
-		User retrievedUser = userRepository.findById(fakeId);
+		String fakeName = "fakeName";
+		User retrievedUser = userRepository.findByUsername(fakeName);
 		
 		assertThat(retrievedUser).isNull();
 	}

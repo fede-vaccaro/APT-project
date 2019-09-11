@@ -3,12 +3,17 @@ package com.unifiprojects.app.appichetto.repositories;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.models.User;
 
 public class UserRepositoryHibernate implements UserRepository {
 
 	private EntityManager entityManager;
+	private static final Logger LOGGER = LogManager.getLogger(UserRepositoryHibernate.class);
 
 	public UserRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
@@ -37,7 +42,14 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	@Override
 	public User findByUsername(String username) {
-		return entityManager.createQuery("from User where username = :username and password = :pw", User.class).setParameter("username", username).getSingleResult();
+		try {
+			User result = entityManager.createQuery("from User where username = :username", User.class)
+					.setParameter("username", username).getSingleResult();
+			return result;
+		} catch (NoResultException e) {
+			LOGGER.debug(String.format("User with username %s not found.", username), e);
+			return null;
+		}
 	}
 
 }
