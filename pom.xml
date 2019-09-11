@@ -94,6 +94,7 @@
 						</ignore>
 						<excludes>
 							<esclude>**/Main.*</esclude>
+							<esclude>**/models/**</esclude>
 						</excludes>
 					</configuration>
 				</plugin>
