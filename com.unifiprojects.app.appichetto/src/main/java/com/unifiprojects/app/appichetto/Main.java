@@ -7,7 +7,5 @@ package com.unifiprojects.app.appichetto;
 public class Main {
 	public static void main(String[] args) {
 
-		Guy ww = new Guy("Heisenberg");
-		ww.sayMyName();
 	}
 }
