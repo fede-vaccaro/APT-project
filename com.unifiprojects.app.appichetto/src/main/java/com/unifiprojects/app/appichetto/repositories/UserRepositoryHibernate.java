@@ -21,6 +21,11 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	@Override
 	public void save(User user) {
+
+		if (this.findByUsername(user.getUsername()) != null) {
+			throw new AlreadyExistentException(
+					String.format("Username %s has been already picked.", user.getUsername()));
+		}
 		entityManager.getTransaction().begin();
 		if (user.getId() != null) {
 			entityManager.merge(user);
@@ -43,9 +48,8 @@ public class UserRepositoryHibernate implements UserRepository {
 	@Override
 	public User findByUsername(String username) {
 		try {
-			User result = entityManager.createQuery("from User where username = :username", User.class)
+			return entityManager.createQuery("from User where username = :username", User.class)
 					.setParameter("username", username).getSingleResult();
-			return result;
 		} catch (NoResultException e) {
 			LOGGER.debug(String.format("User with username %s not found.", username), e);
 			return null;
