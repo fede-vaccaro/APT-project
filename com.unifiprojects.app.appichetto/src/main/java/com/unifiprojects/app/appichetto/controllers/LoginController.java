@@ -14,7 +14,7 @@ public class LoginController {
 	private UserRepository userRepository;
 	private LoginView loginView;
 	
-	private static final Logger LOGGER = LogManager.getLogger(UserRepositoryHibernate.class);
+	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
 	
 	public LoginController(UserRepository userRepository, LoginView loginView) {
@@ -25,9 +25,8 @@ public class LoginController {
 	public void login(String username, String password) {
 		User user = userRepository.findByUsername(username);
 		if (user != null) {
-			if (user.getPassword() == password) {
+			if (user.getPassword().equals(password)) {
 				loginView.goToHomePage();
-				return;
 			}else {
 				loginView.showErrorMsg("Wrong password!");
 			}
