@@ -45,6 +45,7 @@ public class LoginController {
 			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Username already picked. Choice another username.");
 		}catch(IllegalArgumentException e) {
+			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Password too short. Choice another password.");
 		}
 	}

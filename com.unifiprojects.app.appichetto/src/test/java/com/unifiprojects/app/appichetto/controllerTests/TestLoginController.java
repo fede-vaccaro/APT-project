@@ -15,8 +15,8 @@ import static org.mockito.Mockito.*;
 
 public class TestLoginController {
 	
-	String username = "testUsername";
-	String password = "testPassword";
+	private final String username = "testUsername";
+	private final String password = "testPassword";
 	
 	@Mock
 	LoginView loginView;
@@ -78,7 +78,7 @@ public class TestLoginController {
 	public void testSignInShowErrorMsgWhenUsernameIsNotAvailable() {
 		User user = new User(username, password);
 		
-		doThrow(new AlreadyExistentException("")).when(userRepository).save(user);
+		doThrow(new AlreadyExistentException("Username already picked.")).when(userRepository).save(user);
 	
 		loginController.signIn(username, password);
 		

@@ -19,8 +19,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.assertj.core.api.Assertions.*;
-
 public class TestUserRepositoryHibernate {
 
 	private UserRepository userRepository;
