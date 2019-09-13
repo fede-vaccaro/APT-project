@@ -3,6 +3,8 @@ cache:
   - $HOME/.m2
   - $HOME/.sonar/cache
 
+env: DISPLAY=:99.0
+
 addons:
  sonarcloud:  
   organization: "fede-vaccaro"
@@ -13,6 +15,9 @@ token:
 jdk: openjdk8
 
 install: true
+
+before_script:
+- sh -e /etc/init.d/xvfb start
 
 script:
  - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify coveralls:report sonar:sonar
