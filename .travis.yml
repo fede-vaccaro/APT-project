@@ -19,8 +19,5 @@ jdk: openjdk8
 
 install: true
 
-before_script:
-- sh -e /etc/init.d/xvfb start
-
 script:
  - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify coveralls:report sonar:sonar
