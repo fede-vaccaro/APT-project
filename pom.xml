@@ -98,6 +98,7 @@
 						<excludes>
 							<esclude>**/Main.*</esclude>
 							<esclude>**/models/**</esclude>
+							<esclude>**/exceptions/**</esclude>
 						</excludes>
 					</configuration>
 				</plugin>
