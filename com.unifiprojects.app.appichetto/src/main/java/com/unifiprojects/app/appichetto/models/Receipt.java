@@ -1,13 +1,14 @@
 package com.unifiprojects.app.appichetto.models;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Receipt {
 	private Long id;
 	
 	private String description;
-	private Date timestamp;
+	private GregorianCalendar timestamp;
 	private User buyer;
 	private double totalPrice;
 	private List<Item> items;
@@ -21,7 +22,7 @@ public class Receipt {
 		return description;
 	}
 
-	public Date getTimestamp() {
+	public GregorianCalendar getTimestamp() {
 		return timestamp;
 	}
 
@@ -37,8 +38,28 @@ public class Receipt {
 		return items;
 	}
 
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+
 	public List<Accounting> getAccountings() {
 		return accountingList;
+	}
+
+	public void setTimestamp(GregorianCalendar timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setBuyer(User buyer) {
+		this.buyer = buyer;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public void setAccountingList(List<Accounting> accountingList) {
+		this.accountingList = accountingList;
 	}
 
 	public void addAccounting(Accounting accounting) {

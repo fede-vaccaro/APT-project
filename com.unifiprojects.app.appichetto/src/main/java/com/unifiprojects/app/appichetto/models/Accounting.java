@@ -6,6 +6,8 @@ public class Accounting {
 	private User user;
 	private double amount;
 	boolean paid;
+	private Receipt receipt;
+
 	
 	public Accounting(){
 		this.paid = false;
@@ -56,7 +58,11 @@ public class Accounting {
 		this.receipt = receipt;
 	}
 
-	private Receipt receipt;
+	@Override
+	public String toString() {
+		return "Accounting [amount=" + amount + ", paid=" + paid + ", receipt=" + receipt.getTimestamp().getTime() + "]";
+	}
+
 	
 	
 }
