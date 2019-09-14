@@ -25,14 +25,6 @@ public class PayViewReceiptsController {
 	private User loggedUser;
 	private ArrayList<Receipt> unpaidReceipts;
 
-	public User getLoggedUser() {
-		return loggedUser;
-	}
-
-	public void setLoggedUser(User loggedUser) {
-		this.loggedUser = loggedUser;
-	}
-
 	public PayViewReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
 			PayViewReceiptsView payViewReceiptsView) {
 		this.receiptRepository = receiptRepository;
