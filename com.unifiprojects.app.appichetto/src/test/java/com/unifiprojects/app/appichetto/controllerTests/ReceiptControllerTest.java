@@ -118,6 +118,8 @@ public class ReceiptControllerTest {
 		Item item = receiptController.addItem( name, price, description, users);
 		
 		verify(receipt).addItem(item);
+		verify(receiptView).showDoneMsg("Item added");
+		verify(receiptView).showCurrentItemList(receipt.getItems());;
 	}
 
 }

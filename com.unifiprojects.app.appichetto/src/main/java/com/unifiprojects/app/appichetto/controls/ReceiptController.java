@@ -27,6 +27,8 @@ public class ReceiptController {
 		try {
 			item = new Item(name, stringPrice, description, users);
 			receipt.addItem(item);
+			receiptView.showDoneMsg("Item added");
+			receiptView.showCurrentItemList(receipt.getItems());
 		} catch (IllegalName e) {
 			receiptView.showError("Empty name");
 
