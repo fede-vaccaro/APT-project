@@ -10,5 +10,7 @@ public interface PayViewReceiptsView {
 	void showReceipts(List<Receipt> unpaids);
 
 	void showItems(List<Item> items);
+	
+	void showErrorMsg(String msg);
 
 }
