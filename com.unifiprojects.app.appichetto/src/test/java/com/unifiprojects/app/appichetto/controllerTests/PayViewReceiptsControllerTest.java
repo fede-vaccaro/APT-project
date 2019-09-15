@@ -82,8 +82,8 @@ public class PayViewReceiptsControllerTest {
 
 		// receipt setup: payerUser bought item1 and item2 but he shares them with
 		// logged user...
-		Item item1 = new Item("Item1", 10., "", Arrays.asList(loggedUser, payerUser));
-		Item item2 = new Item("Item2", 5., "", Arrays.asList(loggedUser, payerUser));
+		Item item1 = new Item("Item1", 10., Arrays.asList(loggedUser, payerUser));
+		Item item2 = new Item("Item2", 5., Arrays.asList(loggedUser, payerUser));
 
 		receipt.setItems(Arrays.asList(item1, item2));
 		receipt.setTotalPrice(item1.getPrice() + item2.getPrice());

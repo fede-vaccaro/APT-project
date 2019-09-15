@@ -10,39 +10,12 @@ import com.unifiprojects.app.appichetto.exceptions.IllegalUsers;
 public class Item {
 	private Long id;
 	private String name;
-	private String description;
+	private int quantity;
 	private Double price;
 	private List<User> users;
 
-	public Item(String name, String stringPrice, String description, List<User> users) {
-		
-		Double price = 0.0;
-		
-		if (Objects.isNull(name) || name.isEmpty())
-			throw new IllegalName("Name is empty");
 
-		try {
-			price = Double.parseDouble(stringPrice);
-		}catch(NumberFormatException e) {
-			throw new IllegalPrice("Price is not double");
-		} catch (NullPointerException e) {
-			throw new IllegalPrice("Price is empty");
-		}		
-		
-		if ( price == 0.0 )
-			throw new IllegalPrice("Price is zero");
-		
-		if ( Objects.isNull(users) || users.isEmpty())
-			throw new IllegalUsers("Users list is empty");
-		
-		this.name = name;
-		this.price = price;
-		this.users = users;
-		this.description = description;	
-		
-	}
-	
-	public Item(String name, double price, String description, List<User> users) {
+	public Item(String name, double price, int quantity, List<User> users) {
 		
 		
 		if (Objects.isNull(name) || name.isEmpty())
@@ -61,10 +34,38 @@ public class Item {
 		this.name = name;
 		this.price = price;
 		this.users = users;
-		this.description = description;	
+		this.quantity = quantity;	
 		
 	}
 	
+	public Item(String name, double price, List<User> users) {
+		
+		
+		if (Objects.isNull(name) || name.isEmpty())
+			throw new IllegalName("Name is empty");
+
+			
+		
+		if ( price == 0.0 )
+			throw new IllegalPrice("Price is zero");
+		
+		this.price = price;
+
+		if ( Objects.isNull(users) || users.isEmpty())
+			throw new IllegalUsers("Users list is empty");
+		
+		this.name = name;
+		this.price = price;
+		this.users = users;
+		this.quantity = 1;	
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "Item [name=" + name + ", quantity=" + quantity + ", price=" + price + ", users=" + users + "]";
+	}
+
 	public double getPrice() {
 		return price;
 	}
