@@ -1,49 +1,35 @@
 package com.unifiprojects.app.appichetto.swingViews;
 
-import java.awt.Checkbox;
-import java.awt.CheckboxGroup;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import com.unifiprojects.app.appichetto.controls.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionListener;
 
-import org.assertj.swing.edt.GuiActionRunner;
 
-import javax.swing.event.ListSelectionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ReceiptSwingView extends JFrame implements ReceiptView {
 	/**
@@ -140,6 +126,12 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	}
 
 	@Override
+	public void itemUpdated(int index, Item item) {
+		listItemModel.set(index, item);
+		resetErrorLabel();
+	}
+
+	@Override
 	public void itemDeleted(Item item) {
 		listItemModel.removeElement(item);
 		resetErrorLabel();
@@ -205,24 +197,8 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		usersList = new JList<>(listUsersModel);
 		usersList.setName("usersList");
 		usersList.setSelectionModel(new DefaultListSelectionModel() {
-			private int i0 = -1;
-			private int i1 = -1;
 
 			public void setSelectionInterval(int index0, int index1) {
-				if (i0 == index0 && i1 == index1) {
-					if (getValueIsAdjusting()) {
-						setValueIsAdjusting(false);
-						setSelection(index0, index1);
-					}
-				} else {
-					i0 = index0;
-					i1 = index1;
-					setValueIsAdjusting(false);
-					setSelection(index0, index1);
-				}
-			}
-
-			private void setSelection(int index0, int index1) {
 				if (super.isSelectedIndex(index0)) {
 					super.removeSelectionInterval(index0, index1);
 				} else {

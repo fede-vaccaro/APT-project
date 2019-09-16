@@ -1,14 +1,12 @@
 package com.unifiprojects.app.appichetto.swingViews;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -27,6 +25,8 @@ import org.mockito.MockitoAnnotations;
 import com.unifiprojects.app.appichetto.controls.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
+
+
 
 @RunWith(GUITestRunner.class)
 public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
@@ -244,7 +244,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testDeleteButtonShouldDelegateToReceiptControllerDeleteItem() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item = addItemToList("Sugo", "1", "1", users);
+		Item item = addItemToList("Sugo", "1", "1", users); 
 
 		window.list("itemsList").selectItem(0);
 		

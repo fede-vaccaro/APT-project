@@ -42,10 +42,10 @@ public class ReceiptControllerTest {
 	public void testAddItemWithNullName() {
 		String name = null;
 		String price = null;
-		String description = null;
+		String quantity = null;
 		List<User> users = null;
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 		verify(receiptView).showError("Empty name");
 	}
 
@@ -53,10 +53,10 @@ public class ReceiptControllerTest {
 	public void testAddItemWithEmptyName() {
 		String name = "";
 		String price = null;
-		String description = null;
+		String quantity = null;
 		List<User> users = null;
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 
 		verify(receiptView).showError("Empty name");
 	}
@@ -65,10 +65,10 @@ public class ReceiptControllerTest {
 	public void testAddItemWithNullPrice() {
 		String name = "Item";
 		String price = null;
-		String description = null;
+		String quantity = null;
 		List<User> users = null;
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 
 		verify(receiptView).showError("Empty price");
 	}
@@ -77,10 +77,10 @@ public class ReceiptControllerTest {
 	public void testAddItemWithZeroPrice() {
 		String name = "Item";
 		String price = "0";
-		String description = null;
+		String quantity = null;
 		List<User> users = null;
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 
 		verify(receiptView).showError("Empty price");
 	}
@@ -89,10 +89,10 @@ public class ReceiptControllerTest {
 	public void testNewItemWithNullUser() {
 		String name = "Item";
 		String price = "2";
-		String description = null;
+		String quantity = "2";
 		List<User> users = null;
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 		verify(receiptView).showError("Empty users list");
 	}
 
@@ -100,10 +100,10 @@ public class ReceiptControllerTest {
 	public void testNewItemWithEmptyUser() {
 		String name = "Item";
 		String price = "2";
-		String description = null;
+		String quantity = "2";
 		List<User> users = new ArrayList<User>();
 
-		receiptController.addItem(name, price, description, users);
+		receiptController.addItem(name, price, quantity, users);
 		verify(receiptView).showError("Empty users list");
 	}
 	
@@ -112,10 +112,10 @@ public class ReceiptControllerTest {
 	public void testNewItem() {
 		String name = "Item";
 		String price = "2";
-		String description = null;
+		String quantity = "2";
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		
-		Item item = receiptController.addItem( name, price, description, users);
+		Item item = receiptController.addItem( name, price, quantity, users);
 		
 		verify(receipt).addItem(item);
 		verify(receiptView).showDoneMsg("Item added");
