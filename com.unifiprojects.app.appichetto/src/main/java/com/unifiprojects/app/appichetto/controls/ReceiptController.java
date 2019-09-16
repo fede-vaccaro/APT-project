@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.controls;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,14 +22,14 @@ public class ReceiptController {
 		this.receiptView = receiptView;
 	}
 
-	public Item addItem(String name, String stringPrice, String description, List<User> users) {
+	public Item addItem(String name, String stringPrice, String quantity, List<User> users) {
 
 		Item item = null;
 		try {
-			item = new Item(name, stringPrice, description, users);
+			item = new Item(name, stringPrice, quantity, users);
 			receipt.addItem(item);
 			receiptView.showDoneMsg("Item added");
-			receiptView.showCurrentItemList(receipt.getItems());
+			receiptView.showCurrentItemsList(receipt.getItems());
 		} catch (IllegalName e) {
 			receiptView.showError("Empty name");
 
@@ -39,6 +40,21 @@ public class ReceiptController {
 			receiptView.showError("Empty users list");
 		}
 		return item;
+	}
+
+	public List<User> getUsers() {
+		//TODO call user repository
+		return Arrays.asList(new User());
+	}
+
+	public void deleteItem(Item item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateItem(String name, String stringPrice, String quantity, List<User> users, int index ) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -119,7 +119,7 @@ public class ReceiptControllerTest {
 		
 		verify(receipt).addItem(item);
 		verify(receiptView).showDoneMsg("Item added");
-		verify(receiptView).showCurrentItemList(receipt.getItems());;
+		verify(receiptView).showCurrentItemsList(receipt.getItems());;
 	}
 
 }
