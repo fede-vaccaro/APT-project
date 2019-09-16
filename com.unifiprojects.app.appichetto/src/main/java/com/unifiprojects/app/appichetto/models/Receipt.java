@@ -12,9 +12,13 @@ public class Receipt {
 	private List<Item> items;
 	
 	
+	public List<Item> getItems() {
+		return items;
+	}
+
+
 	public void addItem(Item item) {
-		// TODO Auto-generated method stub
-		
+		items.add(item);
 	}
 
 	
