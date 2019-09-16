@@ -3,6 +3,11 @@ cache:
   - $HOME/.m2
   - $HOME/.sonar/cache
 
+env: DISPLAY=:99.0
+
+services:
+  - xvfb
+
 addons:
  sonarcloud:  
   organization: "fede-vaccaro"
