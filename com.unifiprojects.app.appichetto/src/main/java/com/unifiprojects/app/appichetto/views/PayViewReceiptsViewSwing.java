@@ -1,12 +1,15 @@
 package com.unifiprojects.app.appichetto.views;
 
 import java.awt.EventQueue;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 
+import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -34,6 +37,22 @@ import javax.swing.SwingConstants;
 
 public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
+	public List<Accounting> getAccountings() {
+		return accountings;
+	}
+
+	public void setAccountings(List<Accounting> accountings) {
+		this.accountings = accountings;
+	}
+
+	public List<Receipt> getUnpaids() {
+		return unpaids;
+	}
+
+	public void setUnpaids(List<Receipt> unpaids) {
+		this.unpaids = unpaids;
+	}
+
 	public JFrame getFrame() {
 		return frame;
 	}
@@ -46,9 +65,48 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	private JComboBox<User> userSelection;
 	private DefaultComboBoxModel<User> userComboBoxModel;
 	private JList<Item> itemList;
-	private DefaultListModel<Item> itemListModels;// each add element triggers a listener, which actually refresh the
-													// receipt lis
+	private DefaultListModel<Item> itemListModel;// each add element triggers a listener, which actually refresh the
+
+	public DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
+		return receiptListModel;
+	}
+
+	public DefaultComboBoxModel<User> getUserComboBoxModel() {
+		return userComboBoxModel;
+	}
+
+	public DefaultListModel<Item> getItemListModel() {
+		return itemListModel;
+	}
+
+	public void setReceiptListModel(DefaultListModel<CustomToStringReceipt> receiptListModel) {
+		this.receiptListModel = receiptListModel;
+	}
+
+	public void setUserComboBoxModel(DefaultComboBoxModel<User> userComboBoxModel) {
+		this.userComboBoxModel = userComboBoxModel;
+	}
+
+	public void setItemListModel(DefaultListModel<Item> itemListModel) {
+		this.itemListModel = itemListModel;
+	}
+
 	private List<Receipt> unpaids;
+	private List<Accounting> accountings;
+
+	private final String totalForThisReceipt = "Total for this receipt: ";
+	private final String totalDebtToUser = "Total debt to user: ";
+	private JLabel lblTotalForThis;
+	private JLabel lblTotaldebttouser;
+	private User loggedUser;
+
+	public User getLoggedUser() {
+		return loggedUser;
+	}
+
+	public void setLoggedUser(User loggedUser) {
+		this.loggedUser = loggedUser;
+	}
 
 	/**
 	 * Launch the application.
@@ -78,6 +136,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("Pay and View receipts bought by others");
 		frame.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 14));
 		frame.setBounds(100, 100, 1024, 768);
 		frame.setMinimumSize(new Dimension(1024, 768));
@@ -128,15 +187,28 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_lblItemsInReceipts.gridy = 4;
 		frame.getContentPane().add(lblItemsInReceipts, gbc_lblItemsInReceipts);
 
+		JButton btnPay = new JButton("Pay");
+		btnPay.setEnabled(false);
+
+		btnPay.setName("payButton");
+		GridBagConstraints gbc_btnPay = new GridBagConstraints();
+		gbc_btnPay.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPay.gridx = 1;
+		gbc_btnPay.gridy = 9;
+		frame.getContentPane().add(btnPay, gbc_btnPay);
+
 		receiptListModel = new DefaultListModel<>();
 		receiptList = new JList<>(receiptListModel);
 		receiptList.setName("receiptList");
 		receiptList.addListSelectionListener(e -> {
 			int selectedIndex = receiptList.getSelectedIndex();
 			if (selectedIndex >= 0) {
-				showItems(receiptListModel.get(selectedIndex).getReceipt().getItems());
+				Receipt receipt = receiptListModel.get(selectedIndex).getReceipt();
+				showItems(receipt.getItems());
+				displayReceiptAmount(receipt);
 			}
 		});
+		receiptList.addListSelectionListener(e -> btnPay.setEnabled(receiptList.getSelectedIndex() > -1));
 
 		GridBagConstraints gbc_receiptList = new GridBagConstraints();
 		gbc_receiptList.gridheight = 2;
@@ -146,8 +218,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_receiptList.gridy = 5;
 		frame.getContentPane().add(receiptList, gbc_receiptList);
 
-		itemListModels = new DefaultListModel<>();
-		itemList = new JList<>(itemListModels);
+		itemListModel = new DefaultListModel<>();
+		itemList = new JList<>(itemListModel);
 		itemList.setName("itemList");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);
@@ -164,7 +236,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_separator.gridy = 6;
 		frame.getContentPane().add(separator, gbc_separator);
 
-		JLabel lblTotaldebttouser = new JLabel("Total debt to user:");
+		lblTotaldebttouser = new JLabel(totalDebtToUser);
+		lblTotaldebttouser.setName("totalDebtToUser");
 		lblTotaldebttouser.setFont(new Font("Dialog", Font.BOLD, 14));
 		GridBagConstraints gbc_lblTotaldebttouser = new GridBagConstraints();
 		gbc_lblTotaldebttouser.anchor = GridBagConstraints.WEST;
@@ -173,7 +246,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_lblTotaldebttouser.gridy = 7;
 		frame.getContentPane().add(lblTotaldebttouser, gbc_lblTotaldebttouser);
 
-		JLabel lblTotalForThis = new JLabel("Total for this receipt:");
+		lblTotalForThis = new JLabel(totalForThisReceipt);
+		lblTotalForThis.setName("totalForSelectedReceipt");
 		GridBagConstraints gbc_lblTotalForThis = new GridBagConstraints();
 		gbc_lblTotalForThis.anchor = GridBagConstraints.WEST;
 		gbc_lblTotalForThis.insets = new Insets(0, 0, 5, 0);
@@ -193,15 +267,6 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		frame.getContentPane().add(txtEnterAmount, gbc_txtEnterAmount);
 		txtEnterAmount.setColumns(10);
 
-		JButton btnPay = new JButton("Pay");
-		btnPay.setEnabled(false);
-		btnPay.setName("payButton");
-		GridBagConstraints gbc_btnPay = new GridBagConstraints();
-		gbc_btnPay.insets = new Insets(0, 0, 5, 5);
-		gbc_btnPay.gridx = 1;
-		gbc_btnPay.gridy = 9;
-		frame.getContentPane().add(btnPay, gbc_btnPay);
-
 		lblErrorMsg = new JLabel("");
 		lblErrorMsg.setForeground(Color.RED);
 		lblErrorMsg.setName("errorMsg");
@@ -219,15 +284,25 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		unpaids.stream().filter(r -> r.getBuyer().equals(selectedUser))
 				.forEach(r -> receiptListModel.addElement(new CustomToStringReceipt(r)));
 		receiptList.setSelectedIndex(0);
-		// showItems(receiptListModel.get(0).getReceipt().getItems());
+		if (accountings != null) {
+			double totalDebtToSelectedUser = accountings.stream()
+					.filter(a -> a.getReceipt().getBuyer().equals(selectedUser)).mapToDouble(a -> a.getAmount()).sum();
+			lblTotaldebttouser.setText(totalDebtToUser + String.format("%.2f", totalDebtToSelectedUser));
+		}
 	}
 
 	@Override
 	public void showReceipts(List<Receipt> receipts) {
 		if (receipts == null) {
 			showErrorMsg("You have no accounting.");
+			receiptListModel.clear();
+			itemListModel.clear();
+			userComboBoxModel.removeAllElements();
 		} else {
 			this.unpaids = receipts;
+
+			extractEachAccountingOfLoggedUser(receipts);
+
 			Set<User> userSet = new HashSet<>();
 
 			unpaids.stream().forEach(r -> userSet.add(r.getBuyer()));
@@ -237,10 +312,20 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		}
 	}
 
+	private void extractEachAccountingOfLoggedUser(List<Receipt> receipts) {
+		accountings = new ArrayList<>();
+		receipts.stream().forEach(r -> accountings.addAll(r.getAccountings()));
+		accountings = accountings.stream().filter(a -> a.getUser().equals(loggedUser)).collect(Collectors.toList());
+	}
+
+	private void displayReceiptAmount(Receipt receipt) {
+		lblTotalForThis.setText(totalForThisReceipt + String.format("%.2f", receipt.getTotalPrice()));
+	}
+
 	@Override
 	public void showItems(List<Item> items) {
-		itemListModels.clear();
-		items.stream().forEach(itemListModels::addElement);
+		itemListModel.clear();
+		items.stream().forEach(itemListModel::addElement);
 	}
 
 	@Override
