@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.repositoryTests;
+package com.unifiprojects.app.appichetto.repositories;
 
 import static org.assertj.core.api.Assertions.*;
 

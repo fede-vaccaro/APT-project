@@ -1,27 +1,6 @@
-package com.unifiprojects.app.appichetto.viewTests;
+package com.unifiprojects.app.appichetto.views;
 
-import org.assertj.swing.annotation.GUITest;
-import org.assertj.swing.core.matcher.JButtonMatcher;
-import org.assertj.swing.core.matcher.JLabelMatcher;
-import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.junit.runner.GUITestRunner;
-import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.*;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import com.unifiprojects.app.appichetto.models.Accounting;
-import com.unifiprojects.app.appichetto.models.Item;
-import com.unifiprojects.app.appichetto.models.Receipt;
-import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsViewSwing;
-
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
-import org.assertj.swing.core.Settings;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,22 +8,43 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.DefaultListModel;
-
+import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JLabelMatcher;
+import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.verify;
+
+import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
+import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Item;
+import com.unifiprojects.app.appichetto.models.Receipt;
+import com.unifiprojects.app.appichetto.models.User;
 
 @RunWith(GUITestRunner.class)
 public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 
+	@Mock
+	private PayViewReceiptsController payViewReceiptsController;
+
+	
+	@InjectMocks
 	private PayViewReceiptsViewSwing payViewReceiptsSwing;
 
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
-			payViewReceiptsSwing = new PayViewReceiptsViewSwing();
+			payViewReceiptsSwing = new PayViewReceiptsViewSwing(payViewReceiptsController);
 			return payViewReceiptsSwing;
 		});
 		window = new FrameFixture(robot(), payViewReceiptsSwing.getFrame());
@@ -263,8 +263,6 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
 		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
-		// GuiActionRunner.execute(() ->
-		// payViewReceiptsSwing.showReceipts(Arrays.asList(receipt2, receipt1)));
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 
@@ -417,18 +415,18 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item2, item3));
 
 		double debt = receipt1.getTotalPrice() / 2.0 + receipt2.getTotalPrice() / 2.0;
-		
+
 		payViewReceiptsSwing.setLoggedUser(logged);
 
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 			List<Accounting> accountings = new ArrayList<>();
 			List<Receipt> unpaids = payViewReceiptsSwing.getUnpaids();
-			
-			for(Receipt r: unpaids) {
+
+			for (Receipt r : unpaids) {
 				accountings.addAll(r.getAccountings());
 			}
-			
+
 			accountings = accountings.stream().filter(a -> a.getUser().equals(logged)).collect(Collectors.toList());
 			payViewReceiptsSwing.setAccountings(accountings);
 			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
@@ -467,11 +465,11 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 			List<Accounting> accountings = new ArrayList<>();
 			List<Receipt> unpaids = payViewReceiptsSwing.getUnpaids();
-			
-			for(Receipt r: unpaids) {
+
+			for (Receipt r : unpaids) {
 				accountings.addAll(r.getAccountings());
 			}
-			
+
 			accountings = accountings.stream().filter(a -> a.getUser().equals(logged)).collect(Collectors.toList());
 			payViewReceiptsSwing.setAccountings(accountings);
 			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
@@ -490,10 +488,208 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void payButtonIsLockedIfReceiptListIsEmpty() {
-		window.button("payButton").requireDisabled();
+	public void enterAmountFieldShowErrorIfNonDoubleAreWritten() {
+		window.textBox("enterAmountField").deleteText();
+		window.textBox("enterAmountField").enterText("this is a not-numeric text");
+		window.label("errorMsg").requireText("Not valid entered amount.");
 	}
 
-	// TODO: testing the Pay button and the amount input
+	@Test
+	@GUITest
+	public void errorMsgDisappearIfEnteredAmountIsEmptied() {
+		window.textBox("enterAmountField").enterText("not num");
+		window.textBox("enterAmountField").deleteText();
+		window.label("errorMsg").requireText("");
+	}
+
+	@Test
+	@GUITest
+	public void intValueIsCorrectlyParsedWhenEnteredInTextBox() {
+		window.textBox("enterAmountField").enterText("42");
+		double enteredValue = payViewReceiptsSwing.getEnteredValue();
+		assertThat(enteredValue).isEqualTo(42.0);
+		window.label("errorMsg").requireText("");
+	}
+
+	@Test
+	@GUITest
+	public void doubleValueIsCorrectlyParsedWhenEnteredInTextBox() {
+		window.textBox("enterAmountField").enterText("42.75");
+		double enteredValue = payViewReceiptsSwing.getEnteredValue();
+		assertThat(enteredValue).isEqualTo(42.75);
+		window.label("errorMsg").requireText("");
+	}
+
+	@Test
+	@GUITest
+	public void buttonIsUnlockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountLesserThanTotal() {
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double totalDebt = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0 - 2.0;
+
+		window.textBox("enterAmountField").enterText(totalDebt.toString());
+
+		window.button("payButton").requireEnabled();
+
+	}
+
+	@Test
+	@GUITest
+	public void buttonIsLockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountHigherThanTotal() {
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double total = receipt1.getTotalPrice() + receipt2.getTotalPrice() + 10.;
+
+		window.textBox("enterAmountField").enterText(total.toString());
+
+		window.button("payButton").requireDisabled();
+
+	}
+
+	@Test
+	@GUITest
+	public void buttonIsUnlockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountEqualToTotal() {
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double totalDebt = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
+
+		window.textBox("enterAmountField").enterText(totalDebt.toString());
+
+		window.button("payButton").requireEnabled();
+
+	}
+
+	@Test
+	@GUITest
+	public void buttonGetLockedFromUnlockedIfTheUserListIsCleared() {
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double totalDebt = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
+
+		window.textBox("enterAmountField").enterText(totalDebt.toString());
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.getUserComboBoxModel().removeAllElements();
+			payViewReceiptsSwing.getReceiptListModel().clear();
+			payViewReceiptsSwing.getAccountings().clear();
+		});
+		window.button("payButton").requireDisabled();
+
+	}
+
+	@Test
+	@GUITest
+	public void payButtonClickedDelegateToController() {
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+			
+			payViewReceiptsSwing.setLoggedUser(logged);
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double totalDebt = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
+
+		window.textBox("enterAmountField").enterText(totalDebt.toString());
+
+		window.button("payButton").click();
+
+		verify(payViewReceiptsController).payAmount(totalDebt, logged, payer);
+
+	}
 
 }
