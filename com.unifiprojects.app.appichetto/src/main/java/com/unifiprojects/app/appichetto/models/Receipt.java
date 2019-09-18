@@ -4,14 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 public class Receipt {
-	private String id;
+	private Long id;
+	
 	private String description;
 	private Date timestamp;
 	private User buyer;
 	private double totalPrice;
 	private List<Item> items;
+	private List<Accounting> accountingList;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -33,6 +35,15 @@ public class Receipt {
 
 	public List<Item> getItems() {
 		return items;
+	}
+
+	public List<Accounting> getAccountings() {
+		return accountingList;
+	}
+
+	public void addAccounting(Accounting accounting) {
+		accountingList.add(accounting);
+		accounting.setReceipt(this);
 	}
 
 }

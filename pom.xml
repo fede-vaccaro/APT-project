@@ -67,6 +67,7 @@
 						<excludes>
 							<esclude>**/Main.*</esclude>
 							<esclude>**/models/**</esclude>
+              <esclude>**/exceptions/**</esclude>
 						</excludes>
 					</configuration>
 
@@ -100,9 +101,7 @@
 									</rule>
 								</rules>
 							</configuration>
-
 						</execution>
-
 					</executions>
 				</plugin>
 				<plugin>
