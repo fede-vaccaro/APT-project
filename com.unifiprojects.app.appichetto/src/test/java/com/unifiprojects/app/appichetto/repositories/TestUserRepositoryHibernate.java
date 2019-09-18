@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.repositoryTests;
+package com.unifiprojects.app.appichetto.repositories;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,8 +18,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import org.assertj.core.api.Assertions.*;
 
 public class TestUserRepositoryHibernate {
 
