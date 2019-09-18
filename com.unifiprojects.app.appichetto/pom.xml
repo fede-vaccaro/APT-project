@@ -18,6 +18,19 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-forms</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-common</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>${javaee-api.version}</version>
@@ -70,9 +83,20 @@
 		
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.10.0</version>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-swing-junit</artifactId>
+			<version>3.9.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-swing</artifactId>
+			<version>3.5.0</version>
 		</dependency>
 
 	</dependencies>
