@@ -1,12 +1,9 @@
-package com.unifiprojects.app.appichetto.controls;
+package com.unifiprojects.app.appichetto.controllers;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import com.unifiprojects.app.appichetto.exceptions.IllegalName;
-import com.unifiprojects.app.appichetto.exceptions.IllegalPrice;
-import com.unifiprojects.app.appichetto.exceptions.IllegalUsers;
+import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -18,43 +15,40 @@ public class ReceiptController {
 	private ReceiptView receiptView;
 
 	public ReceiptController(Receipt receipt, ReceiptView receiptView) {
-		this.receipt = receipt;
+		this.setReceipt(receipt);
 		this.receiptView = receiptView;
 	}
 
-	public Item addItem(String name, String stringPrice, String quantity, List<User> users) {
+	void addItemToReceipt(Item item) {
+		receipt.addItem(item);
+	}
 
-		Item item = null;
-		try {
-			item = new Item(name, stringPrice, quantity, users);
-			receipt.addItem(item);
-			receiptView.showDoneMsg("Item added");
-			receiptView.showCurrentItemsList(receipt.getItems());
-		} catch (IllegalName e) {
-			receiptView.showError("Empty name");
+	public void addItem(Item item) {
+		receipt.addItem(item);
+		receiptView.itemAdded(item); 
+	}
 
-		} catch (IllegalPrice e) {
-			receiptView.showError("Empty price");
-
-		} catch (IllegalUsers e) {
-			receiptView.showError("Empty users list");
+	public void updateItem(Item item, int index) {
+		if (index >= receipt.getItemsListSize())
+			throw new IllegalIndex("Index not in list");
+		else {
+			receipt.updateItem(index, item);
+			receiptView.itemUpdated(index, item);
 		}
-		return item;
 	}
 
 	public List<User> getUsers() {
-		//TODO call user repository
+		// TODO call user repository
 		return Arrays.asList(new User());
 	}
 
 	public void deleteItem(Item item) {
-		// TODO Auto-generated method stub
-		
+		receipt.deteleItem(item);
+		receiptView.itemDeleted(item);
 	}
 
-	public void updateItem(String name, String stringPrice, String quantity, List<User> users, int index ) {
-		// TODO Auto-generated method stub
-		
+	public void setReceipt(Receipt receipt) {
+		this.receipt = receipt;
 	}
 
 }
