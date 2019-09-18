@@ -12,10 +12,6 @@ public interface ReceiptView {
 
 	public void showError(String string);
 
-	public void showDoneMsg(String string);
-
-	public void showSelectedItem(Item item);
-
 	public void itemAdded(Item item);
 	
 	public void itemDeleted(Item item);
