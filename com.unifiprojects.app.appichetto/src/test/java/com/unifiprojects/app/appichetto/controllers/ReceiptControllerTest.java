@@ -1,4 +1,10 @@
-package com.unifiprojects.app.appichetto.controllerTests;
+package com.unifiprojects.app.appichetto.controllers;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,25 +12,23 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
-
-import com.unifiprojects.app.appichetto.controls.ReceiptController;
-import com.unifiprojects.app.appichetto.exceptions.IllegalName;
-import com.unifiprojects.app.appichetto.exceptions.IllegalUsers;
+import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ReceiptControllerTest {
 
-	@Mock
+	@Spy
 	private Receipt receipt;
 
 	@Mock
@@ -39,87 +43,70 @@ public class ReceiptControllerTest {
 	}
 
 	@Test
-	public void testAddItemWithNullName() {
-		String name = null;
-		String price = null;
-		String quantity = null;
-		List<User> users = null;
-
-		receiptController.addItem(name, price, quantity, users);
-		verify(receiptView).showError("Empty name");
-	}
-
-	@Test
-	public void testAddItemWithEmptyName() {
-		String name = "";
-		String price = null;
-		String quantity = null;
-		List<User> users = null;
-
-		receiptController.addItem(name, price, quantity, users);
-
-		verify(receiptView).showError("Empty name");
-	}
-
-	@Test
-	public void testAddItemWithNullPrice() {
-		String name = "Item";
-		String price = null;
-		String quantity = null;
-		List<User> users = null;
-
-		receiptController.addItem(name, price, quantity, users);
-
-		verify(receiptView).showError("Empty price");
-	}
-
-	@Test
-	public void testAddItemWithZeroPrice() {
-		String name = "Item";
-		String price = "0";
-		String quantity = null;
-		List<User> users = null;
-
-		receiptController.addItem(name, price, quantity, users);
-
-		verify(receiptView).showError("Empty price");
-	}
-
-	@Test
-	public void testNewItemWithNullUser() {
-		String name = "Item";
-		String price = "2";
-		String quantity = "2";
-		List<User> users = null;
-
-		receiptController.addItem(name, price, quantity, users);
-		verify(receiptView).showError("Empty users list");
-	}
-
-	@Test
-	public void testNewItemWithEmptyUser() {
-		String name = "Item";
-		String price = "2";
-		String quantity = "2";
-		List<User> users = new ArrayList<User>();
-
-		receiptController.addItem(name, price, quantity, users);
-		verify(receiptView).showError("Empty users list");
-	}
-	
-
-	@Test
-	public void testNewItem() {
+	public void testAddItem() {
 		String name = "Item";
 		String price = "2";
 		String quantity = "2";
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		
-		Item item = receiptController.addItem( name, price, quantity, users);
+
+		Item item = new Item(name, price, quantity, users);
+		receiptController.addItem(item);
 		
 		verify(receipt).addItem(item);
-		verify(receiptView).showDoneMsg("Item added");
-		verify(receiptView).showCurrentItemsList(receipt.getItems());;
+		verify(receiptView).itemAdded(item);
+		assertTrue(receipt.getItems().contains(item));
+	}
+
+	@Test
+	public void testUpadteItemWithWrongIndex() {
+		String name = "Item";
+		String price = "1";
+		String quantity = "1";
+		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
+		Item item = new Item(name, price, quantity, users);
+
+		try {
+			receiptController.updateItem(item, 1);
+			fail("Illegal index");
+		} catch (IllegalIndex e) {
+			assertEquals("Index not in list", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testUpadteItem() {
+		String name = "Item";
+		String price = "1";
+		String quantity = "1";
+		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
+		Item oldItem = new Item(name, "2", quantity, users);
+		Item newItem = new Item(name, price, quantity, users);
+
+		receiptController.addItemToReceipt(oldItem);
+
+		int index = 0;
+		receiptController.updateItem(newItem, index);
+		
+		verify(receipt).updateItem(index, newItem);
+		verify(receiptView).itemUpdated(index, newItem);
+		assertTrue(receipt.getItems().contains(newItem));
+		assertFalse(receipt.getItems().contains(oldItem));
+	}
+
+	@Test
+	public void testDeleteItem() {
+		String name = "Item";
+		String price = "1";
+		String quantity = "1";
+		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
+		Item itemToDelete = new Item(name, price, quantity, users);
+
+		receiptController.addItemToReceipt(itemToDelete);
+		
+		receiptController.deleteItem(itemToDelete);
+		verify(receipt).deteleItem(itemToDelete);
+		verify(receiptView).itemDeleted(itemToDelete);
+		assertFalse(receipt.getItems().contains(itemToDelete));
 	}
 
 }
