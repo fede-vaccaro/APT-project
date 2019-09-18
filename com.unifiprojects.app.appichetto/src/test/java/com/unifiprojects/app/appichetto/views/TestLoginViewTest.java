@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.viewTests;
+package com.unifiprojects.app.appichetto.views;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;

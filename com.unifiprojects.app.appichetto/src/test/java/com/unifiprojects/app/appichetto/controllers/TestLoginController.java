@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.controllerTests;
+package com.unifiprojects.app.appichetto.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
