@@ -59,6 +59,30 @@ public class PayViewReceiptsControllerTest {
 		verify(payViewReceiptsView).showReceipts(unpaids);
 		verify(payViewReceiptsView).showItems(unpaids.get(0).getItems());
 	}
+	
+	@Test
+	public void testReceiptsAreOrderedFromLatestToOlderWhenCallingShowUnpaidReceipts() {
+		User loggedUser = new User("logged", "pw");
+		User payerUser = new User("payer", "pw");
+
+		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+				new GregorianCalendar(2019, 9, 14));
+		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+				new GregorianCalendar(2019, 9, 10));
+		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+				new GregorianCalendar(2019, 9, 17));
+
+		List<Receipt> unpaids = Arrays.asList(receipt2, receipt1, receipt3);
+		when(receiptRepository.getAllUnpaidReceiptOf(loggedUser)).thenReturn(unpaids);
+
+		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		
+		List<Receipt> unpaidsOrdered = Arrays.asList(receipt3, receipt2, receipt1);
+		
+		verify(payViewReceiptsView).showReceipts(unpaidsOrdered);
+		verify(payViewReceiptsView).showItems(unpaidsOrdered.get(0).getItems());
+
+	}
 
 	@Test
 	public void testNoItemIsShownWhenUnpaidReceiptsIsVoid() {
@@ -306,11 +330,24 @@ public class PayViewReceiptsControllerTest {
 	}
 
 	@Test
-	public void testNothingIsPayedIfAmountIsLessEqualThanZeroAndShowErrorMsg() {
+	public void testNothingIsPayedIfAmountIsLessZeroAndShowErrorMsg() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw2");
 
 		double amountToPay = -3.0;
+
+		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+
+		verify(payViewReceiptsView).showErrorMsg("Amount payed should be more than zero.");
+		verifyNoMoreInteractions(accountingRepository);
+	}
+	
+	@Test
+	public void testNothingIsPayedIfAmountIsEqualToZeroAndShowErrorMsg() {
+		User loggedUser = new User("logged", "pw");
+		User payerUser = new User("payer", "pw2");
+
+		double amountToPay = 0.0;
 
 		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 

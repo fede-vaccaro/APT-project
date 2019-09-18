@@ -55,8 +55,6 @@ public class PayViewReceiptsController {
 
 			if (totalAmountToPay < remainingAmountToPay) {
 				payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
-				LOGGER.info(String.format("Total amount to pay  %.2f  > entered amount %.2f !", totalAmountToPay,
-						remainingAmountToPay));
 				return;
 			}
 
