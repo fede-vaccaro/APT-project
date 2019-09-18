@@ -62,6 +62,15 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco.version}</version>
+					<configuration>
+
+						<excludes>
+							<esclude>**/Main.*</esclude>
+							<esclude>**/models/**</esclude>
+              <esclude>**/exceptions/**</esclude>
+						</excludes>
+					</configuration>
+
 					<executions>
 						<execution>
 							<goals>
@@ -71,12 +80,14 @@
 								<goal>report</goal>
 							</goals>
 						</execution>
+
 						<execution>
 							<id>jacoco-check</id>
 							<goals>
 								<goal>check</goal>
 							</goals>
 							<configuration>
+
 								<rules>
 									<rule>
 										<element>PACKAGE</element>
@@ -84,7 +95,7 @@
 											<limit>
 												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.70</minimum>
+												<minimum>0.5</minimum>
 											</limit>
 										</limits>
 									</rule>
