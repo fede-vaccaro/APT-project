@@ -31,6 +31,8 @@ public class LoginViewSwing implements LoginView{
 	/**
 	 * Launch the application.
 	 */
+	
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -43,7 +45,7 @@ public class LoginViewSwing implements LoginView{
 			}
 		});
 	}
-
+	*/
 	/**
 	 * Create the application.
 	 */
@@ -54,10 +56,6 @@ public class LoginViewSwing implements LoginView{
 	
 	public LoginViewSwing() {
 		initialize();
-	}
-
-	public LoginController getLoginController() {
-		return loginController;
 	}
 
 	public void setLoginController(LoginController loginController) {
