@@ -178,8 +178,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		frame = new JFrame();
 		frame.setTitle("Pay and View receipts bought by others");
 		frame.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 14));
-		frame.setBounds(100, 100, 1024, 768);
-		frame.setMinimumSize(new Dimension(1024, 768));
+		frame.setBounds(100, 100, 450, 300);
+		frame.setMinimumSize(new Dimension(800, 600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
