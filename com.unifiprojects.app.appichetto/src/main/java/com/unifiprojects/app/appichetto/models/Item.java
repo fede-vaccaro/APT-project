@@ -12,6 +12,14 @@ import javax.persistence.OneToMany;
 @Entity
 public class Item {
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [name=" + name + ", quantity=" + quantity + ", price=" + price + ", owners=" + owners + "]";
@@ -21,34 +29,6 @@ public class Item {
 		return id;
 	}
 	
-	public Item(String name, double price, List<User> users) {
-		
-		
-		if (Objects.isNull(name) || name.isEmpty())
-			throw new IllegalName("Name is empty");
-
-			
-		
-		if ( price == 0.0 )
-			throw new IllegalPrice("Price is zero");
-		
-		this.price = price;
-
-		if ( Objects.isNull(users) || users.isEmpty())
-			throw new IllegalUsers("Users list is empty");
-		
-		this.name = name;
-		this.price = price;
-		this.users = users;
-		this.quantity = 1;	
-		
-	}
-	
-	@Override
-	public String toString() {
-		return "Item [name=" + name + ", quantity=" + quantity + ", price=" + price + ", users=" + users + "]";
-	}
-
 	@Id
 	@GeneratedValue
 	private Long id;

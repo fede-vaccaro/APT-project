@@ -12,11 +12,6 @@ import javax.persistence.OneToOne;
 public class Accounting {
 	
 	@Override
-	public String toString() {
-		return "Accounting [user=" + user + ", amount=" + amount + ", paid=" + paid + ", receipt=" + receipt + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -64,8 +59,6 @@ public class Accounting {
 	
 	private double amount;
 	boolean paid;
-	private Receipt receipt;
-
 	
 	@OneToOne
 	private Receipt receipt;
