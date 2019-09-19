@@ -103,15 +103,6 @@
 							</configuration>
 						</execution>
 					</executions>
-					<configuration>
-						<ignore>
-						</ignore>
-						<excludes>
-							<esclude>**/Main.*</esclude>
-							<esclude>**/models/**</esclude>
-							<esclude>**/exceptions/**</esclude>
-						</excludes>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.pitest</groupId>
