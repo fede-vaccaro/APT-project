@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
-import com.unifiprojects.app.appichetto.views.LoginViewSwing;
+import com.unifiprojects.app.appichetto.swingViews.LoginViewSwing;
 
 import org.junit.Test;
 

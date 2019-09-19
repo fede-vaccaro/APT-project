@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingViews;
 
 import java.awt.EventQueue;
 
@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
+import com.unifiprojects.app.appichetto.views.LoginView;
 
 import java.awt.Dimension;
 import javax.swing.JLabel;
