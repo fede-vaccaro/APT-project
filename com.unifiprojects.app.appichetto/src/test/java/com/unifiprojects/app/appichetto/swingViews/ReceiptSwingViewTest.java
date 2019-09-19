@@ -32,14 +32,14 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private ReceiptSwingView receiptSwingView;
 
-	private User addUserToList(String name, String psw) {
+	private User addUserToListUserModel(String name, String psw) {
 		User user = new User(name, psw);
 		GuiActionRunner.execute(() -> receiptSwingView.getListUsersModel().addElement(user));
 		return user;
 	}
 
-	private Item addItemToList(String name, String stringPrice, String stringQuantity, List<User> users) {
-		Item item = new Item(name, stringPrice, stringQuantity, users);
+	private Item addItemToItemListModel(String name, double price, int quantity, List<User> users) {
+		Item item = new Item(name, price, quantity, users);
 		GuiActionRunner.execute(() -> receiptSwingView.getListItemModel().addElement(item));
 		return item;
 
@@ -85,7 +85,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("nameBox").enterText("Sugo");
 		window.textBox("priceBox").enterText("2.2");
 		window.textBox("quantityBox").enterText("2");
-		addUserToList("Pippo", "psw");
+		addUserToListUserModel("Pippo", "psw");
 
 		window.list("usersList").selectItem(0);
 
@@ -100,7 +100,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenFormIsNonEmptyThenAddButtonShouldBeEnabledCompilingFirstUsersListThenItemInfo() {
-		addUserToList("Pippo", "psw");
+		addUserToListUserModel("Pippo", "psw");
 		window.list("usersList").selectItem(0);
 		window.textBox("nameBox").enterText("Sugo");
 		window.textBox("priceBox").enterText("2.2");
@@ -118,7 +118,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		JTextComponentFixture priceBox = window.textBox("priceBox");
 		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
-		addUserToList("Pippo", "psw");
+		addUserToListUserModel("Pippo", "psw");
 		window.list("usersList").selectItem(0);
 		nameBox.enterText("Sugo");
 		priceBox.enterText("  ");
@@ -142,7 +142,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testSaveUpdateAndDeleteButtonsShouldBeEnabledOnlyWhenAnItemIsSelected() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
-		addItemToList("Sugo", "2.2", "2", users);
+		addItemToItemListModel("Sugo", 2.0, 2, users);
 		window.list("itemsList").selectItem(0);
 		JButtonFixture saveButton = window.button(JButtonMatcher.withText("Save"));
 		JButtonFixture updateButton = window.button(JButtonMatcher.withText("Update"));
@@ -156,8 +156,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testShowCurrentItemsListShouldAddItemDescriptionsToTheList() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
-		Item item1 = new Item("Sugo", "1", "1", users);
-		Item item2 = new Item("Pasta", "2", "1", users);
+		Item item1 = new Item("Sugo", 1, 1, users);
+		Item item2 = new Item("Pasta", 2, 1, users);
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
 		String[] listContents = window.list("itemsList").contents();
 		assertThat(listContents).containsExactly(item1.toString(), item2.toString());
@@ -182,7 +182,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testItemAddedShouldAddTheItemToTheListAndResetTheErrorLabel() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item = new Item("Sugo", "1", "1", users);
+		Item item = new Item("Sugo", 1, 1, users);
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemAdded(item));
 		String[] listContents = window.list("itemsList").contents();
@@ -193,8 +193,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testItemDeletedShouldDeleteTheItemFromTheListAndResetTheErrorLabel() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item1 = new Item("Sugo", "1", "1", users);
-		Item item2 = new Item("Pasta", "1", "1", users);
+		Item item1 = new Item("Sugo", 1, 1, users);
+		Item item2 = new Item("Pasta", 1, 1, users);
 
 		GuiActionRunner.execute(() -> {
 			receiptSwingView.getListItemModel().addElement(item1);
@@ -214,9 +214,9 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		JButtonFixture saveButton = window.button(JButtonMatcher.withText("Save"));
 		JButtonFixture updateButton = window.button(JButtonMatcher.withText("Update"));
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete"));
-		User user = addUserToList("Pippo", "psw");
-		User user1 = addUserToList("Pluto", "psw");
-		addItemToList("Sugo", "2.2", "2", Arrays.asList(user, user1));
+		User user = addUserToListUserModel("Pippo", "psw");
+		User user1 = addUserToListUserModel("Pluto", "psw");
+		addItemToItemListModel("Sugo", 2.2, 2, Arrays.asList(user, user1));
 		JTextComponentFixture nameBox = window.textBox("nameBox");
 		JTextComponentFixture priceBox = window.textBox("priceBox");
 		JTextComponentFixture quantityBox = window.textBox("quantityBox");
@@ -237,8 +237,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testAddButtonShouldDelegateToReceiptControllerNewItemAndTheFormIsClear() {
-		User user1 = addUserToList("Pippo", "psw");
-		User user2 = addUserToList("Pluto", "psw");
+		User user1 = addUserToListUserModel("Pippo", "psw");
+		User user2 = addUserToListUserModel("Pluto", "psw");
 		JTextComponentFixture nameBox = window.textBox("nameBox");
 		JTextComponentFixture priceBox = window.textBox("priceBox");
 		JTextComponentFixture quantityBox = window.textBox("quantityBox");
@@ -249,11 +249,11 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.list("usersList").selectItem(0);
 		window.list("usersList").selectItem(1);
 
-		Item item = new Item("Sugo", "2.0", "2", Arrays.asList(user1, user2));
+		Item item = new Item("Sugo", 2, 2, Arrays.asList(user1, user2));
 
 		window.button(JButtonMatcher.withText("Save")).click();
 
-		verify(receiptController).addItem(new Item("Sugo", "2.0", "2", Arrays.asList(user1, user2)));
+		verify(receiptController).addItem(new Item("Sugo", 2.0, 2, Arrays.asList(user1, user2)));
 		nameBox.requireText("");
 		priceBox.requireText("");
 		quantityBox.requireText("");
@@ -263,16 +263,16 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testUpdateButtonShouldDelegateToReceiptControllerUpdateItem() {
-		User user1 = addUserToList("Pippo", "psw");
-		User user2 = addUserToList("Pluto", "psw");
+		User user1 = addUserToListUserModel("Pippo", "psw");
+		User user2 = addUserToListUserModel("Pluto", "psw");
 
-		Item item = addItemToList("Sugo", "1", "1", Arrays.asList(user1, user2));
-		Item item1 = addItemToList("Pasta", "1", "1", Arrays.asList(user1, user2));
+		Item item = addItemToItemListModel("Sugo", 1., 1, Arrays.asList(user1, user2));
+		Item item1 = addItemToItemListModel("Pasta", 1., 1, Arrays.asList(user1, user2));
 
 		window.list("itemsList").selectItem(1);
 
 		window.button(JButtonMatcher.withText("Update")).click();
-		verify(receiptController).updateItem(new Item("Pasta", "1.0", "1", Arrays.asList(user1, user2)),
+		verify(receiptController).updateItem(new Item("Pasta", 1, 1, Arrays.asList(user1, user2)),
 				1);
 		window.list("usersList").requireNoSelection();
 		window.list("itemsList").requireNoSelection();
@@ -281,7 +281,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testDeleteButtonShouldDelegateToReceiptControllerDeleteItem() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item = addItemToList("Sugo", "1", "1", users);
+		Item item = addItemToItemListModel("Sugo", 1., 1, users);
 
 		window.list("itemsList").selectItem(0);
 
@@ -292,8 +292,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	
 	@Test 
 	public void testSaveReceiptIsEnabledWithAtLeastASaveIsDone() {
-		User user1 = addUserToList("Pippo", "psw");
-		User user2 = addUserToList("Pluto", "psw");
+		User user1 = addUserToListUserModel("Pippo", "psw");
+		User user2 = addUserToListUserModel("Pluto", "psw");
 		JTextComponentFixture nameBox = window.textBox("nameBox");
 		JTextComponentFixture priceBox = window.textBox("priceBox");
 		JTextComponentFixture quantityBox = window.textBox("quantityBox");

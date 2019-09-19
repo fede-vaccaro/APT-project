@@ -45,8 +45,8 @@ public class ReceiptControllerTest {
 	@Test
 	public void testAddItem() {
 		String name = "Item";
-		String price = "2";
-		String quantity = "2";
+		double price = 2;
+		int quantity = 2;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
 		Item item = new Item(name, price, quantity, users);
@@ -60,8 +60,8 @@ public class ReceiptControllerTest {
 	@Test
 	public void testUpadteItemWithWrongIndex() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item item = new Item(name, price, quantity, users);
 
@@ -76,10 +76,10 @@ public class ReceiptControllerTest {
 	@Test
 	public void testUpadteItem() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item oldItem = new Item(name, "2", quantity, users);
+		Item oldItem = new Item(name, 2, quantity, users);
 		Item newItem = new Item(name, price, quantity, users);
 
 		receiptController.addItemToReceipt(oldItem);
@@ -96,8 +96,8 @@ public class ReceiptControllerTest {
 	@Test
 	public void testDeleteItem() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item itemToDelete = new Item(name, price, quantity, users);
 

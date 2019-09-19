@@ -7,8 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -242,7 +245,8 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblPrice.gridy = 3;
 		getContentPane().add(lblPrice, gbc_lblPrice);
 
-		priceFormat = NumberFormat.getInstance();
+//		DecimalFormat df = new DecimalFormat("#.#", DecimalFormatSymbols.getInstance(Locale.ITALIAN));
+		priceFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
 		priceFormatter = new NumberFormatter(priceFormat);
 		priceFormatter.setValueClass(Double.class);
 		priceFormatter.setMinimum(0.0);
@@ -280,7 +284,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 				txtName.setText(item.getName());
 				txtPrice.setText(item.getPrice().toString());
 				txtQuantity.setText(item.getQuantity().toString());
-				int[] indeces = item.getUsers().stream().mapToInt(user -> listUsersModel.indexOf(user)).toArray();
+				int[] indeces = item.getOwners().stream().mapToInt(user -> listUsersModel.indexOf(user)).toArray();
 				usersList.setSelectedIndices(indeces);
 			} else {
 				clearForm();
