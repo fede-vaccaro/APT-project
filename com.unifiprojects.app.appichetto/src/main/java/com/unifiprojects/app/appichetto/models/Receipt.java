@@ -18,6 +18,14 @@ public class Receipt {
 	private Long id;
 	
 	private String description;
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	private GregorianCalendar timestamp;
 	
 	@OneToOne
@@ -117,8 +125,7 @@ public class Receipt {
 		if (accountingList == null) {
 			if (other.accountingList != null)
 				return false;
-		} else if (!accountingList.equals(other.accountingList))
-			return false;
+		}
 		if (buyer == null) {
 			if (other.buyer != null)
 				return false;

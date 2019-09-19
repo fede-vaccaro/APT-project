@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
 import java.util.List;
-
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -13,6 +12,14 @@ import javax.persistence.OneToMany;
 @Entity
 public class Item {
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [name=" + name + ", quantity=" + quantity + ", price=" + price + ", owners=" + owners + "]";
@@ -21,11 +28,7 @@ public class Item {
 	public Long getId() {
 		return id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
+	
 	@Id
 	@GeneratedValue
 	private Long id;
