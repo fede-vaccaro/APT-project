@@ -1,8 +1,12 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -17,9 +21,9 @@ public class User {
 
 	private String username;
 	private String password;
-
+	
 	public User() {
-
+		
 	}
 
 	public User(String username, String password) {
@@ -27,7 +31,7 @@ public class User {
 		this.password = password;
 	}
 
-	public String getUsername() {
+  public String getUsername() {
 		return username;
 	}
 
@@ -42,7 +46,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	public String toString() {
+		return username;
+	}	
+		
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.repositories;
+package com.unifiprojects.app.appichetto.exceptions;
 
 public class AlreadyExistentException extends RuntimeException {
 
