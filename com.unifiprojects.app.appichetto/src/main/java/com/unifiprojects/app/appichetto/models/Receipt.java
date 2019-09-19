@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class Receipt {
 	private Long id;
 	
@@ -15,7 +16,8 @@ public class Receipt {
 	private List<Accounting> accountingList;
 
 	public Receipt() {
-		items = new ArrayList<Item>();
+		items = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
