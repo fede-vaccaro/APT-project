@@ -23,7 +23,7 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.swingViews.PayViewReceiptsView;
 
 public class PayViewReceiptsControllerTest {
 

@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingViews;
 
 import java.util.List;
 

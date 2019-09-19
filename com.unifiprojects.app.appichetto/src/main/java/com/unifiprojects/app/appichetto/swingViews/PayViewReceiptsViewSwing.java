@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingViews;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
 
 import java.awt.FlowLayout;
 import javax.swing.JList;

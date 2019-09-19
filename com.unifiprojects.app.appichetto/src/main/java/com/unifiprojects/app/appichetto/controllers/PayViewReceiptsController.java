@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.unifiprojects.app.appichetto.models.*;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.swingViews.PayViewReceiptsView;
 
 public class PayViewReceiptsController {
 
