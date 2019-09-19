@@ -2,6 +2,8 @@ package com.unifiprojects.app.appichetto.exceptions;
 
 public class IllegalIndex extends IllegalArgumentException {
 
+	private static final long serialVersionUID = 1L;
+
 	public IllegalIndex() {
 		super();
 	}

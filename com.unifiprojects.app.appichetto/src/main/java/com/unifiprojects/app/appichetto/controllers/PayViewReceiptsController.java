@@ -9,13 +9,16 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.unifiprojects.app.appichetto.models.*;
+import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Receipt;
+import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.swingViews.PayViewReceiptsView;
 
 public class PayViewReceiptsController {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsController.class);
 
 	private ReceiptRepository receiptRepository;

@@ -1,14 +1,32 @@
 package com.unifiprojects.app.appichetto.swingViews;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
 import com.unifiprojects.app.appichetto.models.Accounting;
@@ -16,36 +34,6 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
-
-import java.awt.FlowLayout;
-import javax.swing.JList;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.NumberFormat;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSeparator;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.Font;
-import javax.swing.SwingConstants;
 
 public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
