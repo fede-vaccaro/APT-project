@@ -27,6 +27,9 @@ public class Item {
 
 	}
 
+	public Item() {
+	}
+
 	public String toString() {
 		return this.name + " x" + this.quantity;
 	}
