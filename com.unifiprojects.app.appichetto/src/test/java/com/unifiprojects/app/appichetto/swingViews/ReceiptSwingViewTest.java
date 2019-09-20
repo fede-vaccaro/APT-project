@@ -305,5 +305,16 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Save Receipt")).requireEnabled();
 	}
+	
+	@Test
+	public void testSaveReceiptDelegateToReceiptControllerToSaveReceipt() {
+		User user1 = addUserToListUserModel("Pippo", "psw");
+		User user2 = addUserToListUserModel("Pluto", "psw");
+		Item item = addItemToItemListModel("Pasta", 1., 1, Arrays.asList(user1, user2));
+
+
+		window.button(JButtonMatcher.withText("Save Receipt")).click();
+		verify(receiptController).saveReceipt();
+	}
 
 }

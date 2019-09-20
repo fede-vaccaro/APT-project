@@ -78,17 +78,17 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(() -> {
-			try {
-				ReceiptSwingView frame = new ReceiptSwingView();
-				frame.setReceiptController(new ReceiptController(new Receipt(), frame));
-				frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(() -> {
+//			try {
+//				ReceiptSwingView frame = new ReceiptSwingView();
+//				frame.setReceiptController(new ReceiptController(new Receipt(), frame));
+//				frame.setVisible(true);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
+//	}
 
 	public DefaultListModel<Item> getListItemModel() {
 		return listItemModel;
@@ -476,5 +476,11 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 
 		this.pack();
 
+	}
+
+	@Override
+	public void goToHome() {
+		// TODO Auto-generated method stub
+		
 	}
 }
