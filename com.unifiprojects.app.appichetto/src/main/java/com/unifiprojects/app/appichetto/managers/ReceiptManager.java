@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,32 +8,56 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 
 public class ReceiptManager {
-	private User receiptOwner;
 	private Receipt receipt;
-	private List<User> users;
-	private List<Item> items;
+	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountings;
-	private RepositoryManager repositoryManager;
 
-	public ReceiptManager(User receiptOwner, List<User> users, Receipt receipt, RepositoryManager repositoryManager) {
-		this.receiptOwner = receiptOwner;
-		this.users = users;
+	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, Map<User, Accounting> accountings) {
 		this.receipt = receipt;
-		this.items = receipt.getItems();
-		this.repositoryManager = repositoryManager;
-		//this.accountings = new HashMap<>();
-		
-		
-		//users.stream().forEach(user -> accountings.put(user, new Accounting(user, 0.0)));
+		this.receiptRepository = receiptRepository;
+		this.accountings = accountings;
 	}
 
 	public void addItem(Item item) {
-		List<User> itemOwner = item.getUsers();
-		double pricePerOwner = item.getPrice()/itemOwner.size();
-		items.add(item);
-		itemOwner.stream().forEach(owner -> accountings.get(owner).addAmount(pricePerOwner));
+		receipt.addItem(item);
+		double pricePerOwner = item.getPrice() * item.getQuantity() / item.getOwners().size();
+
+		item.getOwners().stream().forEach(user -> {
+			if (accountings.containsKey(user))
+				accountings.get(user).addAmount(pricePerOwner);
+			else
+				accountings.put(user, new Accounting(user, pricePerOwner));
+		});
 	}
-	
+
+	public void updateItem( int index, Item item) {
+		receipt.updateItem(index, item);
+		double oldPrice = receipt.getItem(index).getPricePerOwner();
+		double priceGap = item.getPricePerOwner() - oldPrice;
+		
+		item.getOwners().stream().forEach(user -> accountings.get(user).addAmount(priceGap));
+		
+	}
+
+	public void deleteItem(Item itemToDelete) {
+		receipt.deleteItem(itemToDelete);	
+		double price = -itemToDelete.getPricePerOwner();
+		
+		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
+	}
+
+	public void saveReceipt() {
+		
+		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
+		receiptRepository.saveReceipt(receipt);
+	}
+
+	public int getItemsListSize() {
+		return receipt.getItemsListSize();
+	}
+
+
 }
