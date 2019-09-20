@@ -30,8 +30,9 @@ public class Receipt {
 
 	private GregorianCalendar timestamp;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	private User buyer;
+	
 	private double totalPrice;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -85,6 +86,7 @@ public class Receipt {
 
 	public void setBuyer(User buyer) {
 		this.buyer = buyer;
+		buyer.addReceipt(this);
 	}
 
 	public void setTotalPrice(double totalPrice) {

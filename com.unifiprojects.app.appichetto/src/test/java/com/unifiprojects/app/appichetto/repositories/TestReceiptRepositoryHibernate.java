@@ -85,7 +85,8 @@ public class TestReceiptRepositoryHibernate {
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser, creditorUser));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser, creditorUser));
 
-		Accounting accountingToCreditorUser = new Accounting(debtorUser, item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
+		Accounting accountingToCreditorUser = new Accounting(debtorUser,
+				item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
 
 		Receipt receipt1 = new Receipt();
 		receipt1.setBuyer(creditorUser);
@@ -103,14 +104,15 @@ public class TestReceiptRepositoryHibernate {
 
 		entityManager.persist(accountingToCreditorUser);
 		entityManager.persist(receipt1);
-		
+
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
+		item1.setName("hamburger");
 		Item newItem = new Item("hamburger", 10.0, Arrays.asList(debtorUser));
 		Accounting newAccounting = new Accounting(debtorUser, item1.getPrice() / 2.0);
-		
+
 		receipt1.setTotalPrice(item1.getPrice() + newItem.getPrice());
 		receipt1.setItems(Arrays.asList(item1, newItem));
 		receipt1.setAccountingList(Arrays.asList(newAccounting));
@@ -132,10 +134,10 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser, creditorUser));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser, creditorUser));
-		
+
 		Receipt receipt = new Receipt();
 		Accounting accountingToDebtor = new Accounting(debtorUser, item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
-		
+
 		receipt.setBuyer(creditorUser);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt.setItems(Arrays.asList(item1, item2));
@@ -151,7 +153,7 @@ public class TestReceiptRepositoryHibernate {
 
 		entityManager.persist(accountingToDebtor);
 		entityManager.persist(receipt);
-		
+
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
@@ -159,11 +161,11 @@ public class TestReceiptRepositoryHibernate {
 		List<Receipt> unpaids = receiptRepositoryHibernate.getAllUnpaidReceiptsOf(debtorUser);
 		assertThat(unpaids).hasSize(1);
 		Receipt foundReceipt = unpaids.get(0);
-	
+
 		assertThat(foundReceipt).isEqualTo(receipt);
 
 	}
-	
+
 	@Test
 	public void testGetAllUnpaidReceiptOfReturnTheOnlyUnpaidReceipt() {
 		User debtorUser = new User("user1", "pw");
@@ -171,20 +173,20 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser, creditorUser));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser, creditorUser));
-		
+
 		Receipt receipt1 = new Receipt();
 		Receipt receipt2 = new Receipt();
 		Accounting accountingToDebtorUserForReceipt1 = new Accounting(debtorUser, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUserForReceipt2 = new Accounting(debtorUser, item2.getPrice() / 2.0);
-		
+
 		accountingToDebtorUserForReceipt2.setPaid(true);
-				
+
 		receipt1.setBuyer(creditorUser);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt1.setItems(Arrays.asList(item1));
 		receipt1.setAccountingList(Arrays.asList(accountingToDebtorUserForReceipt1));
 		receipt1.setTotalPrice(item1.getPrice());
-		
+
 		receipt2.setBuyer(creditorUser);
 		receipt2.setTimestamp(new GregorianCalendar(2019, 8, 12));
 		receipt2.setItems(Arrays.asList(item2));
@@ -202,7 +204,7 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.persist(accountingToDebtorUserForReceipt2);
 		entityManager.persist(receipt1);
 		entityManager.persist(receipt2);
-		
+
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
@@ -210,12 +212,12 @@ public class TestReceiptRepositoryHibernate {
 		List<Receipt> unpaids = receiptRepositoryHibernate.getAllUnpaidReceiptsOf(debtorUser);
 		assertThat(unpaids).hasSize(1);
 		Receipt foundReceipt = unpaids.get(0);
-		
+
 		// because receipt1 has been already paid
 		assertThat(foundReceipt).isEqualTo(receipt1);
 
 	}
-	
+
 	@Test
 	public void testGetUnpaidReceiptsDoesntReturnReceiptsThatShouldByPaidByOtherUser() {
 		User debtorUser1 = new User("user1", "pw");
@@ -224,18 +226,18 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser1, creditorUser));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(creditorUser, debtorUser2));
-		
+
 		Receipt receipt1 = new Receipt();
 		Receipt receipt2 = new Receipt();
 		Accounting accountingToDebtorUser1ForReceipt1 = new Accounting(debtorUser1, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUser2ForReceipt2 = new Accounting(debtorUser2, item2.getPrice() / 2.0);
-		
+
 		receipt1.setBuyer(creditorUser);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt1.setItems(Arrays.asList(item1));
 		receipt1.setAccountingList(Arrays.asList(accountingToDebtorUser1ForReceipt1));
 		receipt1.setTotalPrice(item1.getPrice());
-		
+
 		receipt2.setBuyer(creditorUser);
 		receipt2.setTimestamp(new GregorianCalendar(2019, 8, 12));
 		receipt2.setItems(Arrays.asList(item2));
@@ -254,20 +256,20 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.persist(accountingToDebtorUser2ForReceipt2);
 		entityManager.persist(receipt1);
 		entityManager.persist(receipt2);
-		
+
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
+
 		List<Receipt> unpaids = receiptRepositoryHibernate.getAllUnpaidReceiptsOf(debtorUser1);
 		assertThat(unpaids).hasSize(1);
 		Receipt foundReceipt = unpaids.get(0);
-		
+
 		// because receipt1 has been already paid
 		assertThat(foundReceipt).isEqualTo(receipt1);
 
 	}
-	
+
 	@Test
 	public void testGetAllUnpaidReceiptsOfReturnNullIfAllAccountingArePaid() {
 		User debtorUser = new User("user1", "pw");
@@ -275,11 +277,11 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser, creditorUser));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser, creditorUser));
-		
+
 		Receipt receipt = new Receipt();
 		Accounting accountingToDebtor = new Accounting(debtorUser, item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
 		accountingToDebtor.setPaid(true);
-		
+
 		receipt.setBuyer(creditorUser);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt.setItems(Arrays.asList(item1, item2));
@@ -295,16 +297,16 @@ public class TestReceiptRepositoryHibernate {
 
 		entityManager.persist(accountingToDebtor);
 		entityManager.persist(receipt);
-		
+
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
+
 		List<Receipt> unpaids = receiptRepositoryHibernate.getAllUnpaidReceiptsOf(debtorUser);
 		assertThat(unpaids).isNull();
-		
+
 	}
-	
+
 	@Test
 	public void testFindByIdReturnsTheCorrectReceipt() {
 		User user = new User("user", "pw");
@@ -312,19 +314,19 @@ public class TestReceiptRepositoryHibernate {
 		receipt.setBuyer(user);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt.setTotalPrice(10.0);
-		
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(user);
 		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
+
 		Receipt foundReceipt = receiptRepositoryHibernate.getById(receipt.getId());
 		assertThat(foundReceipt).isEqualTo(receipt);
 
 	}
-	
+
 	@Test
 	public void testFindByIdReturnsNullIfIsNotPresent() {
 		User user = new User("user", "pw");
@@ -332,15 +334,15 @@ public class TestReceiptRepositoryHibernate {
 		receipt.setBuyer(user);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt.setTotalPrice(10.0);
-		
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(user);
 		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
-		Receipt foundReceipt = receiptRepositoryHibernate.getById(receipt.getId()+1l);
+
+		Receipt foundReceipt = receiptRepositoryHibernate.getById(receipt.getId() + 9999l);
 		assertThat(foundReceipt).isNull();
 
 	}
@@ -353,18 +355,18 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser1, creditorUser1));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser1, creditorUser2));
-		
+
 		Receipt receipt1 = new Receipt();
 		Receipt receipt2 = new Receipt();
 		Accounting accountingToDebtorUserForReceipt1 = new Accounting(debtorUser1, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUserForReceipt2 = new Accounting(debtorUser1, item2.getPrice() / 2.0);
-		
+
 		receipt1.setBuyer(creditorUser1);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt1.setItems(Arrays.asList(item1));
 		receipt1.setAccountingList(Arrays.asList(accountingToDebtorUserForReceipt1));
 		receipt1.setTotalPrice(item1.getPrice());
-		
+
 		receipt2.setBuyer(creditorUser2);
 		receipt2.setTimestamp(new GregorianCalendar(2019, 8, 12));
 		receipt2.setItems(Arrays.asList(item2));
@@ -386,17 +388,15 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
-		List<Receipt> receiptsBoughtByCreditorUser1 = receiptRepositoryHibernate
-				.getAllReceiptsBoughtBy(creditorUser1);
-		List<Receipt> receiptsBoughtByCreditorUser2 = receiptRepositoryHibernate
-				.getAllReceiptsBoughtBy(creditorUser2);
-		
+
+		List<Receipt> receiptsBoughtByCreditorUser1 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(creditorUser1);
+		List<Receipt> receiptsBoughtByCreditorUser2 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(creditorUser2);
+
 		assertThat(receiptsBoughtByCreditorUser1).containsExactlyInAnyOrder(receipt1);
 		assertThat(receiptsBoughtByCreditorUser2).containsExactlyInAnyOrder(receipt2);
 
 	}
-	
+
 	@Test
 	public void testGetAllReceiptBoughtByReturnsNullToDebtorUser1() {
 		User debtorUser1 = new User("user1", "pw");
@@ -405,18 +405,18 @@ public class TestReceiptRepositoryHibernate {
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser1, creditorUser1));
 		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser1, creditorUser2));
-		
+
 		Receipt receipt1 = new Receipt();
 		Receipt receipt2 = new Receipt();
 		Accounting accountingToDebtorUserForReceipt1 = new Accounting(debtorUser1, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUserForReceipt2 = new Accounting(debtorUser1, item2.getPrice() / 2.0);
-		
+
 		receipt1.setBuyer(creditorUser1);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
 		receipt1.setItems(Arrays.asList(item1));
 		receipt1.setAccountingList(Arrays.asList(accountingToDebtorUserForReceipt1));
 		receipt1.setTotalPrice(item1.getPrice());
-		
+
 		receipt2.setBuyer(creditorUser2);
 		receipt2.setTimestamp(new GregorianCalendar(2019, 8, 12));
 		receipt2.setItems(Arrays.asList(item2));
@@ -438,11 +438,43 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
-		List<Receipt> receiptsBoughtByDebtorUser1 = receiptRepositoryHibernate
-				.getAllReceiptsBoughtBy(debtorUser1);
-		
+
+		List<Receipt> receiptsBoughtByDebtorUser1 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(debtorUser1);
+
 		assertThat(receiptsBoughtByDebtorUser1).isNull();
 
 	}
+
+	@Test
+	public void testReceiptIsRemovedWhenUser1IsRemoved() {
+		User user1 = new User("user1", "pw");
+		User user2 = new User("user2", "pw");
+		Receipt receipt = new Receipt();
+		Item item1 = new Item("potato", 10.0, Arrays.asList(user1, user2));
+		Item item2 = new Item("tomato", 10.0, Arrays.asList(user1, user2));
+		receipt.addItem(item1);
+		receipt.addItem(item2);
+		receipt.setBuyer(user1);
+		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
+		receipt.setTotalPrice(10.0);
+
+		entityManager.getTransaction().begin();
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		entityManager.persist(receipt);
+		entityManager.getTransaction().commit();
+
+		entityManager.clear();
+		
+		user1 = entityManager.merge(user1);
+		entityManager.remove(user1);
+		
+		Receipt foundReceipt = entityManager.find(Receipt.class, receipt.getId());
+		User foundUser2 = entityManager.find(User.class, user2.getId());
+		User foundUser1 = entityManager.find(User.class, user1.getId());
+		assertThat(foundReceipt).isNull();
+		assertThat(foundUser1).isNull();
+		assertThat(foundUser2).isEqualTo(user2);
+	}
+
 }
