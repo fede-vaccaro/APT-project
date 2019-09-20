@@ -34,7 +34,7 @@ public class PayViewReceiptsController {
 	}
 
 	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
-		unpaidReceipts = new ArrayList<Receipt>(receiptRepository.getAllUnpaidReceiptOf(loggedUser));
+		unpaidReceipts = new ArrayList<Receipt>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
 		payViewReceiptsView.showReceipts(unpaidReceipts);
