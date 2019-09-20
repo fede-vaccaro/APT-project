@@ -2,41 +2,66 @@ package com.unifiprojects.app.appichetto.models;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+@Entity
 public class Item {
-	private Long id;
-	private String name;
-	private Integer quantity;
-	private Double price;
-	private List<User> users;
-
-	public Item(String name, Double price, Integer quantity, List<User> users) {
-
-		this.price = price;
-		this.quantity = quantity;
-		this.name = name;
-		this.users = users;
-
-	}
-
-	public Item(String name, String price, String quantity, List<User> users) {
-
-		this.price = Double.valueOf(price);
-		this.quantity = Integer.valueOf(quantity);
-		this.name = name;
-		this.users = users;
-
-	}
-
-	public Item() {
-	}
-
-	public String toString() {
-		return this.name + " x" + this.quantity;
-	}
 
 	public String getName() {
 		return name;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Item [name=" + name + ", quantity=" + quantity + ", price=" + price + ", owners=" + owners + "]";
+	}
+
+	public Long getId() {
+		return id;
+	}
+	
+	@Id
+	@GeneratedValue
+	private Long id;
+	
+	private String name;
+	private Integer quantity;
+	private Double price;
+	
+	@ManyToMany
+	private List<User> owners;
+	
+	public Item() {
+		
+	}
+
+	public Item(String name, double price, int quantity, List<User> users) {
+		this.name = name;
+		this.price = price;
+		this.owners = users;
+		this.quantity = quantity;	
+	}
+	
+	public Item(String name, double price, List<User> users) {
+		this.price = price;
+		this.name = name;
+		this.price = price;
+		this.owners = users;
+		this.quantity = 1;	
+	}
+	
+	/*
+	@Override
+	public String toString() {
+		return this.name + " x" + this.quantity;
+	}*/
 
 	public Integer getQuantity() {
 		return quantity;
@@ -46,8 +71,8 @@ public class Item {
 		return price;
 	}
 
-	public List<User> getUsers() {
-		return users;
+	public List<User> getOwners() {
+		return owners;
 	}
 
 	public void setPrice(double price) {
@@ -59,9 +84,9 @@ public class Item {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((owners == null) ? 0 : owners.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
-		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
-		result = prime * result + ((users == null) ? 0 : users.hashCode());
+		result = prime * result + quantity;
 		return result;
 	}
 
@@ -79,20 +104,17 @@ public class Item {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (owners == null) {
+			if (other.owners != null)
+				return false;
+		} else if (!owners.containsAll(other.owners) && other.owners.containsAll(owners))
+			return false;
 		if (price == null) {
 			if (other.price != null)
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (quantity == null) {
-			if (other.quantity != null)
-				return false;
-		} else if (!quantity.equals(other.quantity))
-			return false;
-		if (users == null) {
-			if (other.users != null)
-				return false;
-		} else if (!users.equals(other.users))
+		if (quantity != other.quantity)
 			return false;
 		return true;
 	}

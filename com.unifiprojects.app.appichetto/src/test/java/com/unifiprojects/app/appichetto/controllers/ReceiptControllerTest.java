@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ import com.unifiprojects.app.appichetto.views.ReceiptView;
 @RunWith(MockitoJUnitRunner.class)
 public class ReceiptControllerTest {
 
-	@Spy
+	@Mock
 	private Receipt receipt;
 
 	@Mock
@@ -45,8 +46,8 @@ public class ReceiptControllerTest {
 	@Test
 	public void testAddItem() {
 		String name = "Item";
-		String price = "2";
-		String quantity = "2";
+		double price = 2;
+		int quantity = 2;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
 		Item item = new Item(name, price, quantity, users);
@@ -54,14 +55,13 @@ public class ReceiptControllerTest {
 		
 		verify(receipt).addItem(item);
 		verify(receiptView).itemAdded(item);
-		assertTrue(receipt.getItems().contains(item));
 	}
 
 	@Test
 	public void testUpadteItemWithWrongIndex() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item item = new Item(name, price, quantity, users);
 
@@ -76,28 +76,27 @@ public class ReceiptControllerTest {
 	@Test
 	public void testUpadteItem() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item oldItem = new Item(name, "2", quantity, users);
+		Item oldItem = new Item(name, 2, quantity, users);
 		Item newItem = new Item(name, price, quantity, users);
 
+		when(receipt.getItemsListSize()).thenReturn(1);
 		receiptController.addItemToReceipt(oldItem);
-
+		
 		int index = 0;
 		receiptController.updateItem(newItem, index);
 		
 		verify(receipt).updateItem(index, newItem);
 		verify(receiptView).itemUpdated(index, newItem);
-		assertTrue(receipt.getItems().contains(newItem));
-		assertFalse(receipt.getItems().contains(oldItem));
 	}
 
 	@Test
 	public void testDeleteItem() {
 		String name = "Item";
-		String price = "1";
-		String quantity = "1";
+		double price = 1;
+		int quantity = 1;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item itemToDelete = new Item(name, price, quantity, users);
 

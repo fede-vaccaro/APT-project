@@ -87,12 +87,6 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-swing</artifactId>
-			<version>3.5.0</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>

@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingViews;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
-import com.unifiprojects.app.appichetto.views.LoginViewSwing;
+import com.unifiprojects.app.appichetto.swingViews.LoginViewSwing;
 
 import org.junit.Test;
 

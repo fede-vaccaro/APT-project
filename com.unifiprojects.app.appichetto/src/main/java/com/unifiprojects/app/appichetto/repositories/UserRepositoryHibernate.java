@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class UserRepositoryHibernate implements UserRepository {

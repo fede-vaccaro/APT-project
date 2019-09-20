@@ -1,20 +1,19 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingViews;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
-
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.Color;
+import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginViewSwing implements LoginView{
 	private LoginController loginController;
