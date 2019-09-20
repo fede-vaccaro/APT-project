@@ -2,24 +2,24 @@ package com.unifiprojects.app.appichetto.models;
 
 public class Accounting {
 	private Long id;
-
+	private Receipt receipt;
 	private User user;
 	private double amount;
 	boolean paid;
-	
-	public Accounting(){
+
+	public Accounting() {
 		this.paid = false;
 		this.amount = 0.0;
 		this.receipt = null;
 	}
-	
+
 	public Accounting(User user, double amount) {
 		this.user = user;
 		this.amount = amount;
 		this.paid = false;
 		this.receipt = null;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -48,6 +48,10 @@ public class Accounting {
 		this.amount = amount;
 	}
 
+	public void addAmount(double amount) {
+		this.amount += amount;
+	}
+
 	public void setPaid(boolean paid) {
 		this.paid = paid;
 	}
@@ -56,7 +60,4 @@ public class Accounting {
 		this.receipt = receipt;
 	}
 
-	private Receipt receipt;
-	
-	
 }

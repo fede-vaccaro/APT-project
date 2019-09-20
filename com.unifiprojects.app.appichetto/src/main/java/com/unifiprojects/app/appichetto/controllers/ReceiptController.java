@@ -15,7 +15,7 @@ public class ReceiptController {
 	private ReceiptView receiptView;
 
 	public ReceiptController(Receipt receipt, ReceiptView receiptView) {
-		this.setReceipt(receipt);
+		this.receipt = receipt;
 		this.receiptView = receiptView;
 	}
 

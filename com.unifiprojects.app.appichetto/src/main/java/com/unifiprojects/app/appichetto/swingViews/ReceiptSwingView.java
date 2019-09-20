@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -242,7 +243,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblPrice.gridy = 3;
 		getContentPane().add(lblPrice, gbc_lblPrice);
 
-		priceFormat = NumberFormat.getInstance();
+		priceFormat = NumberFormat.getInstance(Locale.ENGLISH);
 		priceFormatter = new NumberFormatter(priceFormat);
 		priceFormatter.setValueClass(Double.class);
 		priceFormatter.setMinimum(0.0);
