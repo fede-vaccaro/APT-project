@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ import com.unifiprojects.app.appichetto.views.ReceiptView;
 @RunWith(MockitoJUnitRunner.class)
 public class ReceiptControllerTest {
 
-	@Spy
+	@Mock
 	private Receipt receipt;
 
 	@Mock
@@ -54,7 +55,6 @@ public class ReceiptControllerTest {
 		
 		verify(receipt).addItem(item);
 		verify(receiptView).itemAdded(item);
-		assertTrue(receipt.getItems().contains(item));
 	}
 
 	@Test
@@ -82,15 +82,14 @@ public class ReceiptControllerTest {
 		Item oldItem = new Item(name, 2, quantity, users);
 		Item newItem = new Item(name, price, quantity, users);
 
+		when(receipt.getItemsListSize()).thenReturn(1);
 		receiptController.addItemToReceipt(oldItem);
-
+		
 		int index = 0;
 		receiptController.updateItem(newItem, index);
 		
 		verify(receipt).updateItem(index, newItem);
 		verify(receiptView).itemUpdated(index, newItem);
-		assertTrue(receipt.getItems().contains(newItem));
-		assertFalse(receipt.getItems().contains(oldItem));
 	}
 
 	@Test
