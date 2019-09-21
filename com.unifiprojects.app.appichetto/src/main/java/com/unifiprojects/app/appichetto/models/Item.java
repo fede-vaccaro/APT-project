@@ -40,7 +40,7 @@ public class Item {
 	private List<User> owners;
 
 
-	public Item(String name, double price, int quantity, List<User> users) {
+	public Item(String name, Double price, Integer quantity, List<User> users) {
 		this.name = name;
 		this.price = price;
 		this.owners = users;

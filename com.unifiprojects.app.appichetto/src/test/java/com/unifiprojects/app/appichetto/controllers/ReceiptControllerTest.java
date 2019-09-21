@@ -76,7 +76,7 @@ public class ReceiptControllerTest {
 		int quantity = 1;
 		int index = 0;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item oldItem = new Item(name, 2, quantity, users);
+		Item oldItem = new Item(name, 2., quantity, users);
 		Item newItem = new Item(name, price, quantity, users);
 		receiptController.addItemToReceipt(oldItem);
 
