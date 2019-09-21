@@ -1,8 +1,13 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -18,6 +23,9 @@ public class User {
 	private String username;
 	private String password;
 	
+	@OneToMany(mappedBy="buyer", cascade = CascadeType.ALL)
+	private List<Receipt> boughtReceipts;
+	
 	public User() {
 		
 	}
@@ -26,7 +34,22 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
+	
+	public void setBoughtReceipts(List<Receipt> boughtReceipts) {
+		if(this.boughtReceipts == null) {
+			boughtReceipts = new ArrayList<>();
+		}
+		this.boughtReceipts.clear();
+		this.boughtReceipts.addAll(boughtReceipts);
+	}
 
+	public void addReceipt(Receipt r) {
+		if (boughtReceipts == null) {
+			boughtReceipts = new ArrayList<Receipt>();
+		}
+		boughtReceipts.add(r);
+	}
+	
   public String getUsername() {
 		return username;
 	}

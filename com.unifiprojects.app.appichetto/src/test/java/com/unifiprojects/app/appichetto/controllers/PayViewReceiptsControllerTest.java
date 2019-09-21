@@ -53,7 +53,7 @@ public class PayViewReceiptsControllerTest {
 				new GregorianCalendar(2019, 9, 14));
 
 		List<Receipt> unpaids = Arrays.asList(receipt);
-		when(receiptRepository.getAllUnpaidReceiptOf(loggedUser)).thenReturn(unpaids);
+		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
 		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 		verify(payViewReceiptsView).showReceipts(unpaids);
@@ -73,7 +73,7 @@ public class PayViewReceiptsControllerTest {
 				new GregorianCalendar(2019, 9, 17));
 
 		List<Receipt> unpaids = Arrays.asList(receipt2, receipt1, receipt3);
-		when(receiptRepository.getAllUnpaidReceiptOf(loggedUser)).thenReturn(unpaids);
+		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
 		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 		
@@ -89,7 +89,7 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 
 		List<Receipt> unpaids = Arrays.asList();
-		when(receiptRepository.getAllUnpaidReceiptOf(loggedUser)).thenReturn(unpaids);
+		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
 		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 		verify(payViewReceiptsView).showReceipts(unpaids);
