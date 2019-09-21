@@ -110,10 +110,10 @@
 					<version>1.4.3</version>
 					<configuration>
 						<targetClasses>
-							<param></param>
+							<param>com.unifiprojects.app.appichetto.*</param>
 						</targetClasses>
 						<targetTests>
-							<param></param>
+							<param>com.unifiprojects.app.appichetto.*</param>
 						</targetTests>
 						<mutators>
 							<mutator>ALL</mutator>

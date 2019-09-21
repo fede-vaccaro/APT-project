@@ -87,7 +87,9 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
+
 
 	<build>
 		<plugins>
@@ -104,6 +106,10 @@
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
 			</plugin>
 		</plugins>
 	</build>

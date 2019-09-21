@@ -1,7 +1,7 @@
 cache:
- directories:
-  - $HOME/.m2
-  - $HOME/.sonar/cache
+  directories:
+    - $HOME/.m2
+    - $HOME/.sonar/cache
 
 env: DISPLAY=:99.0
 
@@ -9,15 +9,20 @@ services:
   - xvfb
 
 addons:
- sonarcloud:  
-  organization: "fede-vaccaro"
+  sonarcloud:
+    organization: "fede-vaccaro"
 token:
   secure: $SONAR_TOKEN
   language: java
 
 jdk: openjdk8
 
+matrix:
+  include:
+    - if: type = cron
+      env: PIT_MAVEN_ARGS="org.pitest:pitest-maven:mutationCoverage"
+
 install: true
 
 script:
- - mvn -f com.unifiprojects.app.appichetto/pom.xml clean test verify coveralls:report sonar:sonar
+  - mvn -f com.unifiprojects.app.appichetto/pom.xml clean test verify coveralls:report sonar:sonar $PIT_MAVEN_ARGS
