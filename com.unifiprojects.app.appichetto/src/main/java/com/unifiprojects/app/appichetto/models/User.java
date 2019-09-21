@@ -23,15 +23,24 @@ public class User {
 	private String username;
 	private String password;
 	
-	@OneToMany(mappedBy="buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="buyer", cascade = CascadeType.ALL)
 	private List<Receipt> boughtReceipts;
 	
 	public User() {
+		
 	}
 
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+	
+	public void setBoughtReceipts(List<Receipt> boughtReceipts) {
+		if(this.boughtReceipts == null) {
+			boughtReceipts = new ArrayList<>();
+		}
+		this.boughtReceipts.clear();
+		this.boughtReceipts.addAll(boughtReceipts);
 	}
 
 	public void addReceipt(Receipt r) {

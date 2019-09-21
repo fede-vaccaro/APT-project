@@ -219,13 +219,13 @@ public class TestReceiptRepositoryHibernate {
 	}
 
 	@Test
-	public void testGetUnpaidReceiptsDoesntReturnReceiptsThatShouldByPaidByOtherUser() {
+	public void testGetUnpaidReceiptsDoesntReturnReceiptsThatShouldPaidByOtherUser() {
 		User debtorUser1 = new User("user1", "pw");
 		User creditorUser = new User("user2", "pw");
 		User debtorUser2 = new User("user3", "pw");
 
 		Item item1 = new Item("potato", 10.0, Arrays.asList(debtorUser1, creditorUser));
-		Item item2 = new Item("tomato", 5.0, Arrays.asList(creditorUser, debtorUser2));
+		Item item2 = new Item("tomato", 5.0, Arrays.asList(debtorUser2, creditorUser));
 
 		Receipt receipt1 = new Receipt();
 		Receipt receipt2 = new Receipt();
@@ -348,7 +348,7 @@ public class TestReceiptRepositoryHibernate {
 	}
 
 	@Test
-	public void testGetAllReceiptBoughtByReturnsCorrectReceipts() {
+	public void testGetAllReceiptBoughtByReturnsCorrectReceipts() { 
 		User debtorUser1 = new User("user1", "pw");
 		User creditorUser1 = new User("user2", "pw");
 		User creditorUser2 = new User("user3", "pw");
