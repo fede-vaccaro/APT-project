@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.unifiprojects.app.appichetto.exceptions.UncommittableTransaction;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.transactionHandlers.HibernateTransaction;
 import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
@@ -69,7 +69,7 @@ public class TestHibernateTransaction {
 	public void testDoInTransactionDoesRollbackIfRollbackExceptionIsThrownAndReturnFalse() {
 		User user1 = new User("user", "pw");
 
-		assertThatExceptionOfType(UncommittableTransaction.class).isThrownBy(() -> {
+		assertThatExceptionOfType(UncommittableTransactionException.class).isThrownBy(() -> {
 			transaction.doInTransaction(() -> {
 				entityManager.persist(user1);
 				throw new RollbackException();

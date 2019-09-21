@@ -1,14 +1,14 @@
 package com.unifiprojects.app.appichetto.exceptions;
 
-public class UncommittableTransaction extends RuntimeException {
+public class UncommittableTransactionException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public UncommittableTransaction(String msg) {
+	public UncommittableTransactionException(String msg) {
 		super(msg);
 	}
 
-	public UncommittableTransaction() {
+	public UncommittableTransactionException() {
 		super("Unable to commit this transaction.");
 	}
 }

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
-import com.unifiprojects.app.appichetto.exceptions.UncommittableTransaction;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class LoginController {
@@ -51,7 +51,7 @@ public class LoginController {
 		} catch (IllegalArgumentException e) {
 			LOGGER.log(Level.INFO, e.getMessage());
 			loginView.showErrorMsg("Password too short. Choice another password.");
-		} catch (UncommittableTransaction e) {
+		} catch (UncommittableTransactionException e) {
 			LOGGER.log(Level.INFO, e.getMessage());
 			loginView.showErrorMsg("Something went wrong with the DB connection.");
 		}

@@ -1,36 +1,27 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
-import com.unifiprojects.app.appichetto.exceptions.UncommittableTransaction;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.transactionHandlers.ExecuteInTransaction;
+import com.unifiprojects.app.appichetto.transactionHandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import javax.transaction.RollbackException;
 
 public class TestLoginController {
-	
-	private class FakeTransaction implements TransactionHandler {
-
-		@Override
-		public void doInTransaction(ExecuteInTransaction command) throws UncommittableTransaction {
-			command.execute();
-		}
-		
-	}
-	
 	
 	private final String username = "testUsername";
 	private final String password = "testPassword";
@@ -123,10 +114,10 @@ public class TestLoginController {
 		
 		TransactionHandler throwingExceptionTransaction = new TransactionHandler() {
 			@Override
-			public void doInTransaction(ExecuteInTransaction command) throws UncommittableTransaction {
+			public void doInTransaction(ExecuteInTransaction command) throws UncommittableTransactionException {
 				try {
 				command.execute();
-				throw new UncommittableTransaction("Can't connect to the DB");
+				throw new UncommittableTransactionException("Can't connect to the DB");
 				}catch(IllegalArgumentException e) {
 					
 				}
@@ -134,7 +125,6 @@ public class TestLoginController {
 		};
 		
 		loginController.setTransactionHandler(throwingExceptionTransaction);
-		User user = new User(username, password);
 
 		loginController.signIn(username, password);
 		

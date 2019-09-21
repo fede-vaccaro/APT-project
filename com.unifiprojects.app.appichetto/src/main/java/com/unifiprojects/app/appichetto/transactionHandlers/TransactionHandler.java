@@ -1,10 +1,10 @@
 package com.unifiprojects.app.appichetto.transactionHandlers;
 
-import com.unifiprojects.app.appichetto.exceptions.UncommittableTransaction;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 
 public interface TransactionHandler {
 
-	public void doInTransaction(ExecuteInTransaction command) throws UncommittableTransaction;
+	public void doInTransaction(ExecuteInTransaction command) throws UncommittableTransactionException;
 	
 }
 
