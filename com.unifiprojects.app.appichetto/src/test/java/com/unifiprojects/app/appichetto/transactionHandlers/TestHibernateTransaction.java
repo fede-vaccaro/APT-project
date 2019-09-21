@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -71,12 +72,11 @@ public class TestHibernateTransaction {
 		assertThatExceptionOfType(UncommittableTransaction.class).isThrownBy(() -> {
 			transaction.doInTransaction(() -> {
 				entityManager.persist(user1);
-				entityManagerFactory.close();
+				throw new RollbackException();
 			});
 		});
 
-		entityManagerFactory = Persistence.createEntityManagerFactory("test-persistence-unit");
-		entityManager = entityManagerFactory.createEntityManager();
+		entityManager.clear();
 		
 		assertThat(entityManager.find(User.class, user1.getId())).isNull();
 	}

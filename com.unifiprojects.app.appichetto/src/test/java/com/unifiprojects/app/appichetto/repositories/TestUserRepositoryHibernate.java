@@ -53,8 +53,10 @@ public class TestUserRepositoryHibernate {
 
 		User testUser = new User(username, userPassword);
 
+		entityManager.getTransaction().begin();
 		userRepository.save(testUser);
-
+		entityManager.getTransaction().commit();
+		
 		entityManager.clear();
 
 		User retrievedUser = (User) entityManager.find(User.class, testUser.getId());
@@ -68,7 +70,9 @@ public class TestUserRepositoryHibernate {
 		String newUsername = "NewName";
 		testUser.setUsername(newUsername);
 
+		entityManager.getTransaction().begin();
 		userRepository.save(testUser);
+		entityManager.getTransaction().commit();
 		
 		entityManager.clear();
 		

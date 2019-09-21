@@ -22,13 +22,11 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
 	@Override
 	public void saveReceipt(Receipt receipt) {
-		entityManager.getTransaction().begin();
 		if (receipt.getId() != null) {
 			entityManager.merge(receipt);
 		} else {
 			entityManager.persist(receipt);
 		}
-		entityManager.getTransaction().commit();
 	}
 
 	@Override

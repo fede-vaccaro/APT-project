@@ -27,13 +27,11 @@ public class UserRepositoryHibernate implements UserRepository {
 			throw new AlreadyExistentException(
 					String.format("Username %s has been already picked.", user.getUsername()));
 		}
-		entityManager.getTransaction().begin();
 		if (user.getId() != null) {
 			entityManager.merge(user);
 		} else {
 			entityManager.persist(user);
 		}
-		entityManager.getTransaction().commit();
 	}
 
 	@Override
