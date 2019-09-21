@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.swingViews;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -22,9 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
+import com.unifiprojects.app.appichetto.ListSelectionModel.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.ListSelectionModel.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
-import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
@@ -52,10 +51,6 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	private ReceiptController receiptController;
 	private JList<User> usersList;
 
-	public void setUsersList(JList<User> usersList) {
-		this.usersList = usersList;
-	}
-
 	private DefaultListModel<User> listUsersModel;
 	private JButton btnUpdate;
 	private JTextField textField;
@@ -72,7 +67,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 
 	public void setReceiptController(ReceiptController receiptController) {
 		this.receiptController = receiptController;
-		// receiptController.getUsers().stream().forEach(listUsersModel::addElement);
+		receiptController.getUsers().stream().forEach(listUsersModel::addElement);
 	}
 
 	/**
@@ -162,6 +157,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		getContentPane().setLayout(gridBagLayout);
 
 		KeyAdapter btnSaveEnabled = null;
+		KeyAdapter btnUpdateEnabled = null;
 		listItemModel = new DefaultListModel<>();
 		listUsersModel = new DefaultListModel<>();
 
@@ -243,7 +239,6 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblPrice.gridy = 3;
 		getContentPane().add(lblPrice, gbc_lblPrice);
 
-//		DecimalFormat df = new DecimalFormat("#.#", DecimalFormatSymbols.getInstance(Locale.ITALIAN));
 		priceFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
 		priceFormatter = new NumberFormatter(priceFormat);
 		priceFormatter.setValueClass(Double.class);
@@ -264,17 +259,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		itemsScrollPane = new JScrollPane();
 		itemsList = new JList<>(listItemModel);
 		itemsList.setName("itemsList");
-		itemsList.setSelectionModel(new DefaultListSelectionModel() {
-			@Override
-			public void setSelectionInterval(int index0, int index1) {
-				if (super.isSelectedIndex(index0)) {
-					super.removeSelectionInterval(index0, index1);
-				} else {
-					super.clearSelection();
-					super.addSelectionInterval(index0, index1);
-				}
-			}
-		});
+		itemsList.setSelectionModel(new ItemsListSelectionModel());
 		itemsScrollPane.setViewportView(itemsList);
 		itemsList.addListSelectionListener(arg0 -> {
 			if (!itemsList.isSelectionEmpty()) {
@@ -338,22 +323,13 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		usersScrollPane = new JScrollPane();
 		usersList = new JList<>(listUsersModel);
 		usersList.setName("usersList");
-		usersList.setSelectionModel(new DefaultListSelectionModel() {
-			@Override
-			public void setSelectionInterval(int index0, int index1) {
-				if (super.isSelectedIndex(index0)) {
-					super.removeSelectionInterval(index0, index1);
-				} else {
-					super.addSelectionInterval(index0, index1);
-				}
-			}
-		});
+		usersList.setSelectionModel(new UsersListSelectionModel());
 
 		usersList.addListSelectionListener(arg0 -> {
-			btnSave.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().trim().isEmpty()
-					&& !txtQuantity.getText().trim().isEmpty() && !usersList.isSelectionEmpty());
-			btnUpdate.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().trim().isEmpty()
-					&& !txtQuantity.getText().trim().isEmpty() && !usersList.isSelectionEmpty()
+			btnSave.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().isEmpty()
+					&& !txtQuantity.getText().isEmpty() && !usersList.isSelectionEmpty());
+			btnUpdate.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().isEmpty()
+					&& !txtQuantity.getText().isEmpty() && !usersList.isSelectionEmpty()
 					&& !itemsList.isSelectionEmpty());
 		});
 
@@ -399,6 +375,9 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_btnSaveReceipt.gridx = 1;
 		gbc_btnSaveReceipt.gridy = 11;
 		getContentPane().add(btnSaveReceipt, gbc_btnSaveReceipt);
+		btnSaveReceipt.addActionListener(e -> {
+			receiptController.saveReceipt();
+		});
 		btnSave.setEnabled(false);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
 		gbc_btnSave.anchor = GridBagConstraints.NORTH;
@@ -463,16 +442,25 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		btnSaveEnabled = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				btnSave.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().trim().isEmpty()
-						&& !txtQuantity.getText().trim().isEmpty() && !usersList.isSelectionEmpty());
-				btnUpdate.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().trim().isEmpty()
-						&& !txtQuantity.getText().trim().isEmpty() && !usersList.isSelectionEmpty()
+				btnSave.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().isEmpty()
+						&& !txtQuantity.getText().isEmpty() && !usersList.isSelectionEmpty());
+			}
+		};
+
+		btnUpdateEnabled = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				btnUpdate.setEnabled(!txtName.getText().trim().isEmpty() && !txtPrice.getText().isEmpty()
+						&& !txtQuantity.getText().isEmpty() && !usersList.isSelectionEmpty()
 						&& !itemsList.isSelectionEmpty());
 			}
 		};
 		txtQuantity.addKeyListener(btnSaveEnabled);
+		txtQuantity.addKeyListener(btnUpdateEnabled);
 		txtPrice.addKeyListener(btnSaveEnabled);
+		txtPrice.addKeyListener(btnUpdateEnabled);
 		txtName.addKeyListener(btnSaveEnabled);
+		txtName.addKeyListener(btnUpdateEnabled);
 
 		this.pack();
 
@@ -481,6 +469,5 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	@Override
 	public void goToHome() {
 		// TODO Auto-generated method stub
-		
 	}
 }
