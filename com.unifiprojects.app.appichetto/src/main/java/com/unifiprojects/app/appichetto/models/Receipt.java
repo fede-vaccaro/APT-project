@@ -30,7 +30,7 @@ public class Receipt {
 
 	private GregorianCalendar timestamp;
 	
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne
 	private User buyer;
 	
 	private double totalPrice;

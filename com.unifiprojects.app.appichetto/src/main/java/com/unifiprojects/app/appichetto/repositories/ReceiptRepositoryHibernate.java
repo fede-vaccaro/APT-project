@@ -59,4 +59,14 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 		return entityManager.find(Receipt.class, id);
 	}
 
+	@Override
+	public void removeReceipt(Receipt receipt) {
+		Receipt toBeRemoved = receipt;
+		if(!entityManager.contains(receipt)){
+			toBeRemoved = entityManager.merge(receipt);
+		}
+		
+		entityManager.remove(toBeRemoved);		
+	}
+
 }
