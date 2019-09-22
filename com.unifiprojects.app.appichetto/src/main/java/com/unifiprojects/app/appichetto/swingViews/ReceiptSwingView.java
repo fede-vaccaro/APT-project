@@ -20,9 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
-import com.unifiprojects.app.appichetto.ListSelectionModel.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.ListSelectionModel.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
+import com.unifiprojects.app.appichetto.listSelectionModel.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.listSelectionModel.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;

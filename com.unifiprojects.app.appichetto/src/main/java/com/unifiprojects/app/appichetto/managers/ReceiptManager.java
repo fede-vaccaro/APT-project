@@ -50,7 +50,6 @@ public class ReceiptManager {
 	}
 
 	public void saveReceipt() {
-		
 		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
 		receiptRepository.saveReceipt(receipt);
 	}
