@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -28,14 +30,15 @@ public class Receipt {
 
 	private GregorianCalendar timestamp;
 	
-	@OneToOne
+	@ManyToOne
 	private User buyer;
+	
 	private double totalPrice;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Item> items;
 	
-	@OneToMany
+	@OneToMany(mappedBy="receipt", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Accounting> accountingList;
 
 	public Receipt() {
@@ -84,6 +87,7 @@ public class Receipt {
 
 	public void setBuyer(User buyer) {
 		this.buyer = buyer;
+		buyer.addReceipt(this);
 	}
 
 	public void setTotalPrice(double totalPrice) {
@@ -92,6 +96,7 @@ public class Receipt {
 
 	public void setAccountingList(List<Accounting> accountingList) {
 		this.accountingList = accountingList;
+		accountingList.forEach(a -> a.setReceipt(this));
 	}
 
 	public void addAccounting(Accounting accounting) {
@@ -140,7 +145,7 @@ public class Receipt {
 		if (items == null) {
 			if (other.items != null)
 				return false;
-		} else if (!items.equals(other.items))
+		} else if (!(items.containsAll(other.items) && other.items.containsAll(this.items)))
 			return false;
 		if (timestamp == null) {
 			if (other.timestamp != null)

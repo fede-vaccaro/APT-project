@@ -3,20 +3,26 @@ package com.unifiprojects.app.appichetto.controllers;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.repositories.UserRepository;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
+import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginController {
 	private UserRepository userRepository;
 	private LoginView loginView;
+	private TransactionHandler transaction;
 	
 	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
-
 	
-	public LoginController(UserRepository userRepository, LoginView loginView) {
+	public LoginController(TransactionHandler transaction, UserRepository userRepository, LoginView loginView) {
+		this.transaction = transaction;
 		this.userRepository = userRepository;
 		this.loginView = loginView;
 	}
@@ -38,7 +44,7 @@ public class LoginController {
 		
 		try {
 			User newUser = new User(username, password);
-			userRepository.save(newUser);
+			transaction.doInTransaction(()->userRepository.save(newUser));
 			loginView.goToHomePage();
 		}catch(AlreadyExistentException e) {
 			LOGGER.info(e.getMessage());
@@ -46,7 +52,15 @@ public class LoginController {
 		}catch(IllegalArgumentException e) {
 			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Password too short. Choice another password.");
+		}catch(UncommittableTransactionException e) {
+			LOGGER.info(e.getMessage());
+			loginView.showErrorMsg("Something went wrong with the DB connection.");
 		}
+	}
+
+	public void setTransactionHandler(TransactionHandler transactionHandler) {
+		this.transaction = transactionHandler;
+		
 	}
 
 }
