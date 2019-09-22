@@ -9,6 +9,10 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class Item {
+	
+	public Item() {
+		
+	}
 
 	public String getName() {
 		return name;
