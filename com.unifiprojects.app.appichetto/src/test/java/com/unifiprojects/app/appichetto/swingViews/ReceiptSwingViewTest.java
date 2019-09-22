@@ -15,10 +15,9 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -26,7 +25,6 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 
-@RunWith(GUITestRunner.class)
 public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
@@ -38,11 +36,22 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		return user;
 	}
 
-	private Item addItemToItemListModel(String name, double price, int quantity, List<User> users) {
+	private Item addItemToItemListModel(String name, Double price, Integer quantity, List<User> users) {
 		Item item = new Item(name, price, quantity, users);
 		GuiActionRunner.execute(() -> receiptSwingView.getListItemModel().addElement(item));
 		return item;
 
+	}
+
+	private void clearNamePriceQuantityUsersSelectionAndItemsSelection() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+		nameBox.setText("");
+		priceBox.setText("");
+		quantityBox.setText("");
+		window.list("usersList").clearSelection();
+		window.list("itemsList").clearSelection();
 	}
 
 	@Mock
@@ -113,29 +122,202 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenOneOrMoreArgumentAreBlanckThenSaveAndUpdateButtonsAreDisabled() {
+	public void testWhenNameIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
 		JTextComponentFixture nameBox = window.textBox("nameBox");
 		JTextComponentFixture priceBox = window.textBox("priceBox");
 		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
-		addUserToListUserModel("Pippo", "psw");
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
 		window.list("usersList").selectItem(0);
-		nameBox.enterText("Sugo");
-		priceBox.enterText("  ");
-		quantityBox.enterText("2");
+		window.textBox("nameBox").enterText("  ");
+		window.textBox("priceBox").enterText("");
+		window.textBox("quantityBox").enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		nameBox.setText("");
-		priceBox.setText("");
-		quantityBox.setText("");
-
-		nameBox.setText(" ");
-		priceBox.setText("2.2");
-		quantityBox.setText("  ");
+		window.textBox("priceBox").enterText("2.2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
+		window.textBox("quantityBox").enterText("2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenNameIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.textBox("nameBox").enterText("  ");
+		window.textBox("priceBox").enterText("");
+		window.textBox("quantityBox").enterText("");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("priceBox").enterText("2.2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("quantityBox").enterText("2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.list("usersList").selectItem(0);
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+	}
+
+	@Test
+	@GUITest
+	public void testWhenPriceIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.list("usersList").selectItem(0);
+		window.textBox("nameBox").enterText("");
+		window.textBox("priceBox").enterText("  ");
+		window.textBox("quantityBox").enterText("");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("nameBox").enterText("Sugo");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("quantityBox").enterText("2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenPriceIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.textBox("nameBox").enterText("");
+		window.textBox("priceBox").enterText("  ");
+		window.textBox("quantityBox").enterText("");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("nameBox").enterText("Sugo");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("quantityBox").enterText("2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.list("usersList").selectItem(0);
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenQuantityIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.list("usersList").selectItem(0);
+		window.textBox("nameBox").enterText("");
+		window.textBox("priceBox").enterText("");
+		window.textBox("quantityBox").enterText("  ");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("nameBox").enterText("Sugo");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("priceBox").enterText("2.2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenQuantityIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.textBox("nameBox").enterText("");
+		window.textBox("priceBox").enterText("");
+		window.textBox("quantityBox").enterText("  ");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("nameBox").enterText("Sugo");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.textBox("priceBox").enterText("2.2");
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+
+		window.list("usersList").selectItem(0);
+		window.button(JButtonMatcher.withText("Save")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+	
+	@Test
+	@GUITest
+	public void testUploadButtonIsDisabledWhenAnItemIsSelectedAndThenNameIsEmpty() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+
+		window.list("itemsList").selectItem(0);
+		window.textBox("nameBox").setText("");
+		window.textBox("nameBox").enterText("   ");
+
+		window.button(JButtonMatcher.withText("Update")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testUploadButtonIsEnabledWhenAnItemIsSelectedAndThenNameIsModified() {
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+		
+		User user = addUserToListUserModel("Pippo", "psw");
+		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
+		
+		window.list("itemsList").selectItem(0);
+		window.textBox("nameBox").setText("");
+		window.textBox("nameBox").enterText("Sugo");
+		
+		window.button(JButtonMatcher.withText("Update")).requireEnabled();
 	}
 
 	@Test
@@ -156,8 +338,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testShowCurrentItemsListShouldAddItemDescriptionsToTheList() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
-		Item item1 = new Item("Sugo", 1, 1, users);
-		Item item2 = new Item("Pasta", 2, 1, users);
+		Item item1 = new Item("Sugo", 1., 1, users);
+		Item item2 = new Item("Pasta", 2., 1, users);
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
 		String[] listContents = window.list("itemsList").contents();
 		assertThat(listContents).containsExactly(item1.toString(), item2.toString());
@@ -182,7 +364,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testItemAddedShouldAddTheItemToTheListAndResetTheErrorLabel() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item = new Item("Sugo", 1, 1, users);
+		Item item = new Item("Sugo", 1., 1, users);
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemAdded(item));
 		String[] listContents = window.list("itemsList").contents();
@@ -193,8 +375,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testItemDeletedShouldDeleteTheItemFromTheListAndResetTheErrorLabel() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item item1 = new Item("Sugo", 1, 1, users);
-		Item item2 = new Item("Pasta", 1, 1, users);
+		Item item1 = new Item("Sugo", 1., 1, users);
+		Item item2 = new Item("Pasta", 1., 1, users);
 
 		GuiActionRunner.execute(() -> {
 			receiptSwingView.getListItemModel().addElement(item1);
@@ -202,6 +384,23 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		});
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemDeleted(item1));
+
+		String[] listContents = window.list("itemsList").contents();
+		assertThat(listContents).containsExactly(item2.toString());
+		window.label("errorMsgLabel").requireText(" ");
+	}
+
+	@Test
+	public void testItemUpdatedShouldUpdateTheItemFromTheListAndResetTheErrorLabel() {
+		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
+		Item item1 = new Item("Sugo", 1., 1, users);
+		Item item2 = new Item("Pasta", 1., 1, users);
+
+		GuiActionRunner.execute(() -> {
+			receiptSwingView.getListItemModel().addElement(item1);
+		});
+
+		GuiActionRunner.execute(() -> receiptSwingView.itemUpdated(0, item2));
 
 		String[] listContents = window.list("itemsList").contents();
 		assertThat(listContents).containsExactly(item2.toString());
@@ -249,7 +448,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.list("usersList").selectItem(0);
 		window.list("usersList").selectItem(1);
 
-		Item item = new Item("Sugo", 2, 2, Arrays.asList(user1, user2));
+		Item item = new Item("Sugo", 2., 2, Arrays.asList(user1, user2));
 
 		window.button(JButtonMatcher.withText("Save")).click();
 
@@ -272,8 +471,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.list("itemsList").selectItem(1);
 
 		window.button(JButtonMatcher.withText("Update")).click();
-		verify(receiptController).updateItem(new Item("Pasta", 1, 1, Arrays.asList(user1, user2)),
-				1);
+		verify(receiptController).updateItem(new Item("Pasta", 1., 1, Arrays.asList(user1, user2)), 1);
 		window.list("usersList").requireNoSelection();
 		window.list("itemsList").requireNoSelection();
 	}
@@ -289,8 +487,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(receiptController).deleteItem(item);
 
 	}
-	
-	@Test 
+
+	@Test
 	public void testSaveReceiptIsEnabledWithAtLeastASaveIsDone() {
 		User user1 = addUserToListUserModel("Pippo", "psw");
 		User user2 = addUserToListUserModel("Pluto", "psw");
@@ -307,5 +505,26 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Save Receipt")).requireEnabled();
 	}
+
+	@Test
+	public void testSaveReceiptDelegateToReceiptControllerToSaveReceipt() {
+		User user1 = addUserToListUserModel("Pippo", "psw");
+		User user2 = addUserToListUserModel("Pluto", "psw");
+		JTextComponentFixture nameBox = window.textBox("nameBox");
+		JTextComponentFixture priceBox = window.textBox("priceBox");
+		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+
+		nameBox.enterText("Sugo");
+		priceBox.enterText("2.0");
+		quantityBox.enterText("2");
+		window.list("usersList").selectItem(0);
+		window.list("usersList").selectItem(1);
+		window.button(JButtonMatcher.withText("Save")).click();
+
+		window.button(JButtonMatcher.withText("Save Receipt")).click();
+		verify(receiptController).saveReceipt();
+	}
+	
+	
 
 }

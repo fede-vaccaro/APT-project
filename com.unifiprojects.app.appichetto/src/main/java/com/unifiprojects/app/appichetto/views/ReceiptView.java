@@ -18,4 +18,6 @@ public interface ReceiptView {
 
 	public void itemUpdated(int index, Item item);
 
+	public void goToHome();
+
 }

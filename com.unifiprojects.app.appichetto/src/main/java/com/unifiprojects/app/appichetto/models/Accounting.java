@@ -114,7 +114,11 @@ public class Accounting {
 
 	@Override
 	public String toString() {
-		return "Accounting [amount=" + amount + ", paid=" + paid + ", receipt=" + receipt.getTimestamp().getTime() + "]";
+		return "Accounting [amount=" + amount + ", paid=" + paid + "]";
+	}
+
+	public void addAmount(double amount) {
+		this.amount += amount;
 	}
 		
 }

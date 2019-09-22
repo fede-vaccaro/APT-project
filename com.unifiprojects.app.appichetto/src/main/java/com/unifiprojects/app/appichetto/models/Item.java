@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -37,12 +38,9 @@ public class Item {
 	
 	@ManyToMany
 	private List<User> owners;
-	
-	public Item() {
-		
-	}
 
-	public Item(String name, double price, int quantity, List<User> users) {
+
+	public Item(String name, Double price, Integer quantity, List<User> users) {
 		this.name = name;
 		this.price = price;
 		this.owners = users;
@@ -119,5 +117,8 @@ public class Item {
 		return true;
 	}
 
+	public double getPricePerOwner() {
+		return price*quantity/owners.size();
+	}
 
 }

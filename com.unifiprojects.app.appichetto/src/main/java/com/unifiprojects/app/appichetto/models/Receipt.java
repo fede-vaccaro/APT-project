@@ -40,6 +40,7 @@ public class Receipt {
 
 	public Receipt() {
 		items = new ArrayList<>();
+		accountingList = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -61,7 +62,7 @@ public class Receipt {
 		items.set(index, item);
 	}
 
-	public void deteleItem(Item itemToDelete) {
+	public void deleteItem(Item itemToDelete) {
 		items.remove(itemToDelete);
 	}
 
@@ -159,5 +160,8 @@ public class Receipt {
 		return totalPrice;
 	}
 
+	public Item getItem(int index) {
+		return items.get(index);
+	}
 
 }
