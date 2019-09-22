@@ -69,7 +69,9 @@ public class TestUserRepositoryHibernate {
 		testUser.setUsername(newUsername);
 
 		userRepository.save(testUser);
-
+		
+		entityManager.clear();
+		
 		List<User> extractedUserList = entityManager.createQuery("from User", User.class).getResultList();
 
 		assertThat(extractedUserList).containsOnly(testUser);

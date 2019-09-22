@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -58,7 +59,7 @@ public class Accounting {
 	private double amount;
 	boolean paid;
 	
-	@OneToOne
+	@ManyToOne
 	private Receipt receipt;
 
 	
