@@ -1,8 +1,6 @@
 package com.unifiprojects.app.appichetto.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,20 +9,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.assertj.core.condition.AnyOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Item;
-import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 

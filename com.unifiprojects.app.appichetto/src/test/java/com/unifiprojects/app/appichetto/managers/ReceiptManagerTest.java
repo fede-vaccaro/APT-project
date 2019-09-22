@@ -1,18 +1,13 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.in;
-import static org.mockito.Mockito.inOrder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
-import org.assertj.core.internal.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

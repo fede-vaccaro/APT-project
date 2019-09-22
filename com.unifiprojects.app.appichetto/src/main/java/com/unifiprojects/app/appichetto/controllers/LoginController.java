@@ -1,9 +1,5 @@
 package com.unifiprojects.app.appichetto.controllers;
 
-import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.views.LoginView;
-
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
