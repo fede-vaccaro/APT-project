@@ -12,11 +12,14 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -24,6 +27,9 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.swingViews.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionCommands;
+import com.unifiprojects.app.appichetto.transactionHandlers.FakeTransaction;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
 
 public class PayViewReceiptsControllerTest {
 
@@ -39,9 +45,13 @@ public class PayViewReceiptsControllerTest {
 	@Mock
 	private PayViewReceiptsView payViewReceiptsView;
 
+	@Captor
+	private ArgumentCaptor<List<Receipt>> listReceiptCaptor;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		payViewReceiptsController.setTransactionHandler(new FakeTransaction());
 	}
 
 	@Test
@@ -59,7 +69,7 @@ public class PayViewReceiptsControllerTest {
 		verify(payViewReceiptsView).showReceipts(unpaids);
 		verify(payViewReceiptsView).showItems(unpaids.get(0).getItems());
 	}
-	
+
 	@Test
 	public void testReceiptsAreOrderedFromLatestToOlderWhenCallingShowUnpaidReceipts() {
 		User loggedUser = new User("logged", "pw");
@@ -76,9 +86,9 @@ public class PayViewReceiptsControllerTest {
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
 		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
-		
+
 		List<Receipt> unpaidsOrdered = Arrays.asList(receipt3, receipt2, receipt1);
-		
+
 		verify(payViewReceiptsView).showReceipts(unpaidsOrdered);
 		verify(payViewReceiptsView).showItems(unpaidsOrdered.get(0).getItems());
 
@@ -121,7 +131,7 @@ public class PayViewReceiptsControllerTest {
 	}
 
 	@Test
-	public void testAccountingIsPaidWhenPayAmountIfThereIsOnlyOneReceiptAndPaymentIsEqualToDebt() {
+	public void testAccountingIsPaidWhenCalledPayAmountIfThereIsOnlyOneReceiptAndEnteredAmountIsEqualToDebt() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
@@ -135,10 +145,11 @@ public class PayViewReceiptsControllerTest {
 
 		assertThat(accounting.isPaid()).isTrue();
 		verify(accountingRepository).saveAccounting(accounting);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
-	public void testAccountingIsNotPaidButScaledWhenPayAmountIsLessThanDebt() {
+	public void testAccountingIsNotPaidButScaledWhenCalledPayAmountAndEnteredAmountIsLessThanDebt() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
@@ -157,10 +168,11 @@ public class PayViewReceiptsControllerTest {
 		assertThat(accounting.isPaid()).isFalse();
 		assertThat(accounting.getAmount()).isEqualTo(difference);
 		verify(accountingRepository).saveAccounting(accounting);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
-	public void testOlderAccountingIsPaidFirstAndNewerLaterWhenPayAmountIsEqualToDebt() {
+	public void testOlderAccountingIsPaidFirstAndNewerLaterWhenCalledPayAmountAndEnteredAmountIsEqualToDebt() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
@@ -187,6 +199,7 @@ public class PayViewReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -219,10 +232,11 @@ public class PayViewReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
-	public void testOnlyFirstTwoOlderAccountigArePaidAndNewerScaledWhenPayAmountIsLessThanDebtButEnoughToPayTheFirstTwoAccounting() {
+	public void testOnlyFirstTwoOlderAccountigArePaidAndNewerScaledWhenCalledPayAmountAndEnteredAmountIsLessThanDebtButEnoughToPayTheFirstTwoAccountings() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
@@ -257,10 +271,11 @@ public class PayViewReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting2);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
-	public void testOnlyOlderAccountingIsPaidNewerScaledAndLastUnpaidWhenPayAmountIsLessThanDebtButEnoughToPayJustTheFirstAccounting() {
+	public void testOnlyOlderAccountingIsPaidNewerScaledAndLastUnpaidWhenCalledPayAmountButEnteredAmountIsLessThanDebtButEnoughToPayJustTheFirstAccounting() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
@@ -295,6 +310,41 @@ public class PayViewReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting1);
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting2);
 		verifyNoMoreInteractions(accountingRepository);
+		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+	}
+
+	@Test
+	public void testShowErrorMessageIfUncommittableExceptionIsLaunchedDuringTransaction() {
+		User loggedUser = new User("logged", "pw");
+		User payerUser = new User("payer", "pw");
+
+		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+				new GregorianCalendar(2019, 8, 14));
+
+		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
+
+		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(newerAccounting));
+
+		double surplus = 2.0;
+		double amountToPay = newerAccounting.getAmount() - surplus;
+
+		TransactionHandler throwingExceptionTransaction = new TransactionHandler() {
+			@Override
+			public void doInTransaction(TransactionCommands command) throws UncommittableTransactionException {
+				try {
+					command.execute();
+					throw new UncommittableTransactionException("Can't connect to the DB");
+				} catch (IllegalArgumentException e) {
+
+				}
+			}
+		};
+
+		payViewReceiptsController.setTransactionHandler(throwingExceptionTransaction);
+
+		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+
+		verify(payViewReceiptsView).showErrorMsg("Something went wrong while committing the payment.");
 	}
 
 	@Test
@@ -341,7 +391,7 @@ public class PayViewReceiptsControllerTest {
 		verify(payViewReceiptsView).showErrorMsg("Amount payed should be more than zero.");
 		verifyNoMoreInteractions(accountingRepository);
 	}
-	
+
 	@Test
 	public void testNothingIsPayedIfAmountIsEqualToZeroAndShowErrorMsg() {
 		User loggedUser = new User("logged", "pw");
@@ -354,7 +404,7 @@ public class PayViewReceiptsControllerTest {
 		verify(payViewReceiptsView).showErrorMsg("Amount payed should be more than zero.");
 		verifyNoMoreInteractions(accountingRepository);
 	}
-	
+
 	@Test
 	public void testNothingIsPayedIfEnteredAmountIsMoreThanAmountToPayAndShowErrorMsg() {
 		User loggedUser = new User("logged", "pw");
@@ -363,16 +413,15 @@ public class PayViewReceiptsControllerTest {
 		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
 		Accounting accounting = receipt1.getAccountings().get(0);
-		double superiorAmountToPay = accounting.getAmount()*2.0;
+		double superiorAmountToPay = accounting.getAmount() * 2.0;
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
 		payViewReceiptsController.payAmount(superiorAmountToPay, loggedUser, payerUser);
-		
+
 		verify(accountingRepository).getAccountingsOf(loggedUser);
 		verify(payViewReceiptsView).showErrorMsg("Entered amount more than should be payed.");
 		verifyNoMoreInteractions(accountingRepository);
 		assertThat(accounting.isPaid()).isFalse();
 	}
-
 
 }

@@ -8,8 +8,12 @@ import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionCommands;
+import com.unifiprojects.app.appichetto.transactionHandlers.FakeTransaction;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.LoginView;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +34,7 @@ public class TestLoginController {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		loginController.setTransactionHandler(new FakeTransaction());
 	}
 
 	@Test
@@ -97,6 +102,29 @@ public class TestLoginController {
 		verify(loginView).showErrorMsg("Password too short. Choice another password.");
 		verify(loginView, never()).goToHomePage();
 
+	}
+	
+	@Test
+	public void testSignInShowErrorWhenLaunchedUncommittableException() {
+		
+		TransactionHandler throwingExceptionTransaction = new TransactionHandler() {
+			@Override
+			public void doInTransaction(TransactionCommands command) throws UncommittableTransactionException {
+				try {
+				command.execute();
+				throw new UncommittableTransactionException("Can't connect to the DB");
+				}catch(IllegalArgumentException e) {
+					
+				}
+			}
+		};
+		
+		loginController.setTransactionHandler(throwingExceptionTransaction);
+
+		loginController.signIn(username, password);
+		
+		verify(loginView).showErrorMsg("Something went wrong with the DB connection.");
+		verify(loginView, never()).goToHomePage(); 
 	}
 	
 }
