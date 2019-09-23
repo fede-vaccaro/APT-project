@@ -39,6 +39,9 @@ public class ShowHistoryControllerTest {
 	@Captor
 	ArgumentCaptor<String> stringCaptor;
 	
+	@Captor
+	ArgumentCaptor<List<Receipt>> receiptListCaptor;
+	
 	private User loggedUser;
 
 	private Receipt receipt1;
@@ -107,6 +110,29 @@ public class ShowHistoryControllerTest {
 		verify(showHistoryView).showShoppingHistory(history);
 		verify(showHistoryView).showErrorMsg(stringCaptor.capture());
 		verifyNoMoreInteractions(showHistoryView);
+	}
+	
+	@Test
+	public void testShowHistoryUpdateOrdersTheReceiptsByTheLatestBeforeCallingTheView() {
+		Receipt receipt2 = new Receipt();
+		receipt2.setBuyer(loggedUser);
+		
+		receipt2.setTimestamp(new GregorianCalendar(2019, 7, 18));
+		receipt0.setTimestamp(new GregorianCalendar(2019, 8, 4));
+		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 18));
+		
+		
+		List<Receipt> history = Arrays.asList(receipt2, receipt0, receipt1);
+		
+		when(receiptRepository.getAllReceiptsBoughtBy(loggedUser)).thenReturn(history);
+		
+		showHistoryController.showHistory();
+		
+		verify(showHistoryView).showShoppingHistory(receiptListCaptor.capture());
+		verifyNoMoreInteractions(showHistoryView);
+
+		assertThat(receiptListCaptor.getValue()).isEqualTo(Arrays.asList(receipt1, receipt0, receipt2));
+
 	}
 
 }
