@@ -31,15 +31,14 @@ public class ShowHistoryController {
 	public void showHistory() {
 		List<Receipt> boughtReceipts = receiptRepository.getAllReceiptsBoughtBy(loggedUser);
 
-		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
-		boughtReceipts.sort(dateComparator.reversed());
-
-		showHistoryView.showShoppingHistory(boughtReceipts);
-
 		if (boughtReceipts == null) {
 			showHistoryView.showErrorMsg("You have no receipts in the history.");
+		} else {
+			Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp()
+					.compareTo(r2.getTimestamp());
+			boughtReceipts.sort(dateComparator.reversed());
 		}
-
+		showHistoryView.showShoppingHistory(boughtReceipts);
 	}
 
 }
