@@ -15,8 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
