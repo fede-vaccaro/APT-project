@@ -9,6 +9,11 @@ import javax.persistence.ManyToOne;
 public class Accounting {
 	
 	@Override
+	public String toString() {
+		return "Accounting [user=" + user.getUsername() + ", amount=" + amount + ", paid=" + paid + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -111,10 +116,6 @@ public class Accounting {
 		this.receipt = receipt;
 	}
 
-	@Override
-	public String toString() {
-		return "Accounting [amount=" + amount + ", paid=" + paid + "]";
-	}
 
 	public void addAmount(double amount) {
 		this.amount += amount;
