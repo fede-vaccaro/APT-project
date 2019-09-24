@@ -2,6 +2,8 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -17,19 +19,22 @@ import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.LoginView;
 import static org.mockito.Mockito.*;
 
-public class TestLoginController {
+public class LoginControllerTest {
 	
 	private final String username = "testUsername";
 	private final String password = "testPassword";
 	
 	@Mock
-	LoginView loginView;
+	private LoginView loginView;
 
 	@Mock
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@InjectMocks
-	LoginController loginController;
+	private LoginController loginController;
+	
+	@Captor
+	private ArgumentCaptor<String> stringCaptor;
 
 	@Before
 	public void setUp() {
@@ -92,14 +97,14 @@ public class TestLoginController {
 	}
 	
 	@Test
-	public void testSignInShowErrorMsgWhenPasswordIsTooShort() {
-		User user = new User(username, password);
+	public void testSignInShowErrorMsgWhenUsernameIsTooShort() {
+		User user = new User("", password);
 		
 		doThrow(new IllegalArgumentException()).when(userRepository).save(user);
 	
-		loginController.signIn(username, password);
+		loginController.signIn(user.getUsername(), password);
 		
-		verify(loginView).showErrorMsg("Password too short. Choice another password.");
+		verify(loginView).showErrorMsg(stringCaptor.capture());
 		verify(loginView, never()).goToHomePage();
 
 	}
@@ -126,5 +131,6 @@ public class TestLoginController {
 		verify(loginView).showErrorMsg("Something went wrong with the DB connection.");
 		verify(loginView, never()).goToHomePage(); 
 	}
+	
 	
 }

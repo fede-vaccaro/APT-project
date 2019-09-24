@@ -22,18 +22,17 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	@Override
 	public void save(User user) {
-
+		if((user.getUsername().trim()).equals(""))
+			throw new IllegalArgumentException("You can't use empty string username.");
 		if (this.findByUsername(user.getUsername()) != null) {
 			throw new AlreadyExistentException(
 					String.format("Username %s has been already picked.", user.getUsername()));
 		}
-		entityManager.getTransaction().begin();
 		if (user.getId() != null) {
 			entityManager.merge(user);
 		} else {
 			entityManager.persist(user);
 		}
-		entityManager.getTransaction().commit();
 	}
 
 	@Override
