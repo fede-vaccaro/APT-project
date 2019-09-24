@@ -64,8 +64,8 @@ public class ReceiptManagerTest {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
 		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting());
-		Accounting accountingPluto = spy(new Accounting());
+		Accounting accountingPippo = spy(new Accounting(pippo));
+		Accounting accountingPluto = spy(new Accounting(pluto));
 		ArgumentCaptor<Double>  priceOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
 		ArgumentCaptor<Double>  priceOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
 		

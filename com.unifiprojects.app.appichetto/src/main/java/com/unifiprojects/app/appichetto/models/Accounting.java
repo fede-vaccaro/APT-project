@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -67,6 +68,13 @@ public class Accounting {
 		this.amount = 0.0;
 		this.receipt = null;
 		this.user = null;
+	}
+
+	public Accounting(User user){
+		this.paid = false;
+		this.amount = 0.0;
+		this.receipt = null;
+		this.user = user;
 	}
 	
 	public Accounting(User user, double amount) {
