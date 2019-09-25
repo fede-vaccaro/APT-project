@@ -21,6 +21,7 @@ public class AccountingRepositoryHibernateTest {
 
 	private static EntityManagerFactory entityManagerFactory;
 	private static EntityManager entityManager;
+
 	private AccountingRepository accountingRepository;
 
 	@BeforeClass
@@ -58,7 +59,7 @@ public class AccountingRepositoryHibernateTest {
 	public void testSaveAccounting() {
 		User user = createAndPersistUser("Pippo");
 		
-		Accounting accounting = new Accounting(user, 0.0);
+		Accounting accounting = new Accounting(user);
 		
 		accountingRepository.saveAccounting(accounting);
 		entityManager.clear();
@@ -80,8 +81,8 @@ public class AccountingRepositoryHibernateTest {
 		User pippo = createAndPersistUser("Pippo");
 		User pluto = createAndPersistUser("Pluto");
 		
-		Accounting accountingOfPippo = new Accounting(pippo, 0.0);
-		Accounting accountingOfPluto = new Accounting(pluto, 0.0);
+		Accounting accountingOfPippo = new Accounting(pippo);
+		Accounting accountingOfPluto = new Accounting(pluto);
 		
 		entityManager.getTransaction().begin();
 		entityManager.persist(accountingOfPippo);

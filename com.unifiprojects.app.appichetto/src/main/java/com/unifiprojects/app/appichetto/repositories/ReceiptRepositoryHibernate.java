@@ -1,12 +1,9 @@
 package com.unifiprojects.app.appichetto.repositories;
 
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;

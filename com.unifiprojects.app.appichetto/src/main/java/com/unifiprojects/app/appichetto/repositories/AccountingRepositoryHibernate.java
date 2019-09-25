@@ -3,7 +3,6 @@ package com.unifiprojects.app.appichetto.repositories;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.User;
@@ -11,7 +10,7 @@ import com.unifiprojects.app.appichetto.models.User;
 public class AccountingRepositoryHibernate implements AccountingRepository {
 
 	private EntityManager entityManager;
-
+	
 	public AccountingRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
