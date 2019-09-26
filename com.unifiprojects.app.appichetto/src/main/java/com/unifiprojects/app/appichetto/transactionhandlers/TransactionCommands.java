@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.transactionHandlers;
+package com.unifiprojects.app.appichetto.transactionhandlers;
 
 @FunctionalInterface
 public interface TransactionCommands {

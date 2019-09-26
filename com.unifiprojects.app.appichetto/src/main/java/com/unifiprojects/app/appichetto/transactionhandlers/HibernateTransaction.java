@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.transactionHandlers;
+package com.unifiprojects.app.appichetto.transactionhandlers;
 
 import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;

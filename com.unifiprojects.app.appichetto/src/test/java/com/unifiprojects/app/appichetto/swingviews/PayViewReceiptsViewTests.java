@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.swingViews;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;

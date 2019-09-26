@@ -1,4 +1,6 @@
-package com.unifiprojects.app.appichetto.swingViews;
+package com.unifiprojects.app.appichetto.swingviews;
+
+import static org.mockito.Mockito.verify;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -7,15 +9,12 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
-import com.unifiprojects.app.appichetto.swingViews.LoginViewSwing;
-
-import org.junit.Test;
 
 @RunWith(GUITestRunner.class)
 public class TestLoginViewTest extends AssertJSwingJUnitTestCase {

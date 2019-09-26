@@ -38,6 +38,9 @@ public class Item {
 	@ManyToMany
 	private List<User> owners;
 
+	public Item() {
+		
+	}
 
 	public Item(String name, Double price, Integer quantity, List<User> users) {
 		this.name = name;

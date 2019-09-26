@@ -132,7 +132,6 @@ public class ReceiptManagerTest {
 	public void testSaveReceiptAddAccountingToReceiptAndCallTheRepository() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
-		Item itemToDelete = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
 		Accounting accountingPippo = new Accounting(pippo, 1.1);
 		Accounting accountingPluto = new Accounting(pluto, 1.1);
 		

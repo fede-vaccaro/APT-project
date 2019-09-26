@@ -1,21 +1,24 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.transactionHandlers.TransactionCommands;
-import com.unifiprojects.app.appichetto.transactionHandlers.FakeTransaction;
-import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
+import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
+import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;
+import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.LoginView;
-import static org.mockito.Mockito.*;
 
 public class TestLoginController {
 	

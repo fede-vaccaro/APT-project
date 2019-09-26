@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.listSelectionModel;
+package com.unifiprojects.app.appichetto.listselectionmodel;
 
 import javax.swing.DefaultListSelectionModel;
 

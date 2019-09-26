@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.swingViews;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -21,8 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
-import com.unifiprojects.app.appichetto.listSelectionModel.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.listSelectionModel.UsersListSelectionModel;
+import com.unifiprojects.app.appichetto.listselectionmodel.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.listselectionmodel.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.ReceiptView;

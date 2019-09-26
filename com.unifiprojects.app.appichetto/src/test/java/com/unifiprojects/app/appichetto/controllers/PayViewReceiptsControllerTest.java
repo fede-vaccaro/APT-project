@@ -26,10 +26,10 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.swingViews.PayViewReceiptsView;
-import com.unifiprojects.app.appichetto.transactionHandlers.TransactionCommands;
-import com.unifiprojects.app.appichetto.transactionHandlers.FakeTransaction;
-import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
+import com.unifiprojects.app.appichetto.swingviews.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
+import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;
+import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 
 public class PayViewReceiptsControllerTest {
 
