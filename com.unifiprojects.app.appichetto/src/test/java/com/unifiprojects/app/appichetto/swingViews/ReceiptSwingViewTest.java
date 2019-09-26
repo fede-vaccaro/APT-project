@@ -16,7 +16,6 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -29,6 +28,9 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	private ReceiptSwingView receiptSwingView;
+	private JTextComponentFixture nameBox;
+	private JTextComponentFixture priceBox;
+	private JTextComponentFixture quantityBox;
 
 	private User addUserToListUserModel(String name, String psw) {
 		User user = new User(name, psw);
@@ -38,25 +40,17 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private Item addItemToItemListModel(String name, Double price, Integer quantity, List<User> users) {
 		Item item = new Item(name, price, quantity, users);
+		
+		
 		GuiActionRunner.execute(() -> receiptSwingView.getListItemModel().addElement(item));
 		return item;
 
 	}
 
-	private void clearNamePriceQuantityUsersSelectionAndItemsSelection() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
-		nameBox.setText("");
-		priceBox.setText("");
-		quantityBox.setText("");
-		window.list("usersList").clearSelection();
-		window.list("itemsList").clearSelection();
-	}
-
 	@Mock
 	private ReceiptController receiptController;
-
+	
+	@Override
 	protected void onSetUp() {
 		MockitoAnnotations.initMocks(this);
 		GuiActionRunner.execute(() -> {
@@ -66,19 +60,22 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		});
 		window = new FrameFixture(robot(), receiptSwingView);
 		window.show(); // shows the frame to test
+		nameBox = window.textBox("nameBox");
+		priceBox = window.textBox("priceBox");
+		quantityBox = window.textBox("quantityBox");
 	}
 
 	@Test
 	@GUITest
 	public void testControlsInitialStates() {
 		window.label(JLabelMatcher.withText("Name"));
-		window.textBox("nameBox").requireEnabled();
+		nameBox.requireEnabled();
 
 		window.label(JLabelMatcher.withText("Price"));
 		window.textBox("priceBox").requireEnabled();
 
 		window.label(JLabelMatcher.withText("Quantity"));
-		window.textBox("quantityBox").requireEnabled();
+		quantityBox.requireEnabled();
 
 		// TODO test both scroll panels are present
 
@@ -91,9 +88,9 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenFormIsNonEmptyThenAddButtonShouldBeEnabledCompilingFirstItemInfoThenUsersList() {
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.textBox("priceBox").enterText("2.2");
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 		addUserToListUserModel("Pippo", "psw");
 
 		window.list("usersList").selectItem(0);
@@ -111,9 +108,9 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testWhenFormIsNonEmptyThenAddButtonShouldBeEnabledCompilingFirstUsersListThenItemInfo() {
 		addUserToListUserModel("Pippo", "psw");
 		window.list("usersList").selectItem(0);
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.textBox("priceBox").enterText("2.2");
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 
 		window.button(JButtonMatcher.withText("Save")).requireEnabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -123,17 +120,14 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenNameIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		window.list("usersList").selectItem(0);
-		window.textBox("nameBox").enterText("  ");
+		nameBox.enterText("  ");
 		window.textBox("priceBox").enterText("");
-		window.textBox("quantityBox").enterText("");
+		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -141,7 +135,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 	}
@@ -149,16 +143,13 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenNameIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
-		window.textBox("nameBox").enterText("  ");
+		nameBox.enterText("  ");
 		window.textBox("priceBox").enterText("");
-		window.textBox("quantityBox").enterText("");
+		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -166,7 +157,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -179,25 +170,22 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenPriceIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		window.list("usersList").selectItem(0);
-		window.textBox("nameBox").enterText("");
+		nameBox.enterText("");
 		window.textBox("priceBox").enterText("  ");
-		window.textBox("quantityBox").enterText("");
+		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 	}
@@ -205,24 +193,21 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenPriceIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
-		window.textBox("nameBox").enterText("");
+		nameBox.enterText("");
 		window.textBox("priceBox").enterText("  ");
-		window.textBox("quantityBox").enterText("");
+		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("quantityBox").enterText("2");
+		quantityBox.enterText("2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -234,21 +219,18 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenQuantityIsBlanckAndUserIsSelectFirstThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		window.list("usersList").selectItem(0);
-		window.textBox("nameBox").enterText("");
+		nameBox.enterText("");
 		window.textBox("priceBox").enterText("");
-		window.textBox("quantityBox").enterText("  ");
+		quantityBox.enterText("  ");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -260,20 +242,17 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testWhenQuantityIsBlanckAndUserIsSelectTheLastThenSaveAndUpdateButtonsAreDisabled() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
-		window.textBox("nameBox").enterText("");
+		nameBox.enterText("");
 		window.textBox("priceBox").enterText("");
-		window.textBox("quantityBox").enterText("  ");
+		quantityBox.enterText("  ");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.enterText("Sugo");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
@@ -289,16 +268,13 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testUploadButtonIsDisabledWhenAnItemIsSelectedAndThenNameIsEmpty() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		window.list("itemsList").selectItem(0);
-		window.textBox("nameBox").setText("");
-		window.textBox("nameBox").enterText("   ");
+		nameBox.setText("");
+		nameBox.enterText("   ");
 
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 	}
@@ -306,16 +282,13 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testUploadButtonIsEnabledWhenAnItemIsSelectedAndThenNameIsModified() {
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 		
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 		
 		window.list("itemsList").selectItem(0);
-		window.textBox("nameBox").setText("");
-		window.textBox("nameBox").enterText("Sugo");
+		nameBox.setText("");
+		nameBox.enterText("Sugo");
 		
 		window.button(JButtonMatcher.withText("Update")).requireEnabled();
 	}
@@ -416,9 +389,6 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		User user = addUserToListUserModel("Pippo", "psw");
 		User user1 = addUserToListUserModel("Pluto", "psw");
 		addItemToItemListModel("Sugo", 2.2, 2, Arrays.asList(user, user1));
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		window.list("itemsList").selectItem(0);
 		nameBox.requireText("Sugo");
@@ -438,17 +408,12 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testAddButtonShouldDelegateToReceiptControllerNewItemAndTheFormIsClear() {
 		User user1 = addUserToListUserModel("Pippo", "psw");
 		User user2 = addUserToListUserModel("Pluto", "psw");
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
 
 		nameBox.enterText("Sugo");
 		priceBox.enterText("2.0");
 		quantityBox.enterText("2");
 		window.list("usersList").selectItem(0);
 		window.list("usersList").selectItem(1);
-
-		Item item = new Item("Sugo", 2., 2, Arrays.asList(user1, user2));
 
 		window.button(JButtonMatcher.withText("Save")).click();
 
@@ -465,8 +430,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		User user1 = addUserToListUserModel("Pippo", "psw");
 		User user2 = addUserToListUserModel("Pluto", "psw");
 
-		Item item = addItemToItemListModel("Sugo", 1., 1, Arrays.asList(user1, user2));
-		Item item1 = addItemToItemListModel("Pasta", 1., 1, Arrays.asList(user1, user2));
+		addItemToItemListModel("Sugo", 1., 1, Arrays.asList(user1, user2));
+		addItemToItemListModel("Pasta", 1., 1, Arrays.asList(user1, user2));
 
 		window.list("itemsList").selectItem(1);
 
@@ -490,11 +455,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testSaveReceiptIsEnabledWithAtLeastASaveIsDone() {
-		User user1 = addUserToListUserModel("Pippo", "psw");
-		User user2 = addUserToListUserModel("Pluto", "psw");
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+		addUserToListUserModel("Pippo", "psw");
+		addUserToListUserModel("Pluto", "psw");
 
 		nameBox.enterText("Sugo");
 		priceBox.enterText("2.0");
@@ -508,11 +470,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testSaveReceiptDelegateToReceiptControllerToSaveReceipt() {
-		User user1 = addUserToListUserModel("Pippo", "psw");
-		User user2 = addUserToListUserModel("Pluto", "psw");
-		JTextComponentFixture nameBox = window.textBox("nameBox");
-		JTextComponentFixture priceBox = window.textBox("priceBox");
-		JTextComponentFixture quantityBox = window.textBox("quantityBox");
+		addUserToListUserModel("Pippo", "psw");
+		addUserToListUserModel("Pluto", "psw");
 
 		nameBox.enterText("Sugo");
 		priceBox.enterText("2.0");

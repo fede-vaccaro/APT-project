@@ -4,15 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.transactionHandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
 public class ReceiptController {
 
 	private ReceiptManager receiptManager;
 	private ReceiptView receiptView;
+	private TransactionHandler transactionHandler;
 
 	public ReceiptController(ReceiptManager receiptManager, ReceiptView receiptView) {
 		this.receiptManager = receiptManager;
@@ -25,7 +28,7 @@ public class ReceiptController {
 
 	public void addItem(Item item) {
 		receiptManager.addItem(item);
-		receiptView.itemAdded(item); 
+		receiptView.itemAdded(item);
 	}
 
 	public void updateItem(Item item, int index) {
@@ -48,8 +51,12 @@ public class ReceiptController {
 	}
 
 	public void saveReceipt() {
-		receiptManager.saveReceipt();
-		receiptView.goToHome();
+		try {
+			transactionHandler.doInTransaction(() -> receiptManager.saveReceipt());
+			receiptView.goToHome();
+		} catch (UncommittableTransactionException e) {
+			receiptView.showError("Something went wrong while saving receipt.");
+		}
 	}
 
 }

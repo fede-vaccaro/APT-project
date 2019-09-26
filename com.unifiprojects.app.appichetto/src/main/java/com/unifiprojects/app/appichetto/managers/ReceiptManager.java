@@ -47,7 +47,7 @@ public class ReceiptManager {
 		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
 	}
 
-	public void saveReceipt() {
+	public void saveReceipt(){
 		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
 		receiptRepository.saveReceipt(receipt);
 	}

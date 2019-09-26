@@ -67,6 +67,13 @@ public class Accounting {
 		this.receipt = null;
 		this.user = null;
 	}
+
+	public Accounting(User user){
+		this.paid = false;
+		this.amount = 0.0;
+		this.receipt = null;
+		this.user = user;
+	}
 	
 	public Accounting(User user, double amount) {
 		this.user = user;
