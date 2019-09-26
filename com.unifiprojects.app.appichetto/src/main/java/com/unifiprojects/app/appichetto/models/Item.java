@@ -10,6 +10,10 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Item {
 
+	public Item() {
+
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -26,42 +30,37 @@ public class Item {
 	public Long getId() {
 		return id;
 	}
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	private String name;
 	private Integer quantity;
 	private Double price;
-	
+
 	@ManyToMany
 	private List<User> owners;
-
-	public Item() {
-		
-	}
 
 	public Item(String name, Double price, Integer quantity, List<User> users) {
 		this.name = name;
 		this.price = price;
 		this.owners = users;
-		this.quantity = quantity;	
+		this.quantity = quantity;
 	}
-	
+
 	public Item(String name, double price, List<User> users) {
 		this.price = price;
 		this.name = name;
 		this.price = price;
 		this.owners = users;
-		this.quantity = 1;	
+		this.quantity = 1;
 	}
-	
+
 	/*
-	@Override
-	public String toString() {
-		return this.name + " x" + this.quantity;
-	}*/
+	 * @Override public String toString() { return this.name + " x" + this.quantity;
+	 * }
+	 */
 
 	public Integer getQuantity() {
 		return quantity;
@@ -120,7 +119,7 @@ public class Item {
 	}
 
 	public double getPricePerOwner() {
-		return price*quantity/owners.size();
+		return price * quantity / owners.size();
 	}
 
 }

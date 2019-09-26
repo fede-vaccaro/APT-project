@@ -47,7 +47,7 @@ public class LoginController {
 			loginView.showErrorMsg("Username already picked. Choice another username.");
 		}catch(IllegalArgumentException e) {
 			LOGGER.info(e.getMessage());
-			loginView.showErrorMsg("Password too short. Choice another password.");
+			loginView.showErrorMsg(e.getMessage());
 		}catch(UncommittableTransactionException e) {
 			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Something went wrong with the DB connection.");

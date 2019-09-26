@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.models.User;
@@ -14,6 +15,7 @@ import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import javax.persistence.Persistence;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,6 +47,14 @@ public class TestUserRepositoryHibernate {
 
 		userRepository = new UserRepositoryHibernate(entityManager);
 	}
+	
+	@After
+	public void closeTransaction() {
+		EntityTransaction transaction = entityManager.getTransaction();
+		if(transaction.isActive()) {
+			transaction.commit();
+		}
+	}
 
 	@Test
 	public void testUserIsSavedForTheFirstTimeOnDB() {
@@ -53,7 +63,9 @@ public class TestUserRepositoryHibernate {
 
 		User testUser = new User(username, userPassword);
 
+		entityManager.getTransaction().begin();
 		userRepository.save(testUser);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
@@ -68,10 +80,12 @@ public class TestUserRepositoryHibernate {
 		String newUsername = "NewName";
 		testUser.setUsername(newUsername);
 
+		entityManager.getTransaction().begin();
 		userRepository.save(testUser);
-		
+		entityManager.getTransaction().commit();
+
 		entityManager.clear();
-		
+
 		List<User> extractedUserList = entityManager.createQuery("from User", User.class).getResultList();
 
 		assertThat(extractedUserList).containsOnly(testUser);
@@ -89,9 +103,12 @@ public class TestUserRepositoryHibernate {
 
 		User testUserWithDuplicatedUserName = new User(username, userPassword);
 
-		assertThatExceptionOfType(AlreadyExistentException.class)
-				.isThrownBy(() -> userRepository.save(testUserWithDuplicatedUserName)).withMessage(String
-						.format("Username %s has been already picked.", testUserWithDuplicatedUserName.getUsername()));
+		assertThatExceptionOfType(AlreadyExistentException.class).isThrownBy(() -> {
+			entityManager.getTransaction().begin();
+			userRepository.save(testUserWithDuplicatedUserName);
+			entityManager.getTransaction().commit();
+		}).withMessage(
+				String.format("Username %s has been already picked.", testUserWithDuplicatedUserName.getUsername()));
 
 	}
 
@@ -167,6 +184,21 @@ public class TestUserRepositoryHibernate {
 		User retrievedUser = userRepository.findByUsername(fakeName);
 
 		assertThat(retrievedUser).isNull();
+	}
+
+	@Test
+	public void testSavingUserWithEmptyUsernameLaunchException() {
+		User user = new User("   ", "pw");
+
+		assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> {
+
+			entityManager.getTransaction().begin();
+			userRepository.save(user);
+			entityManager.getTransaction().commit();
+		}).withMessage("You can't use empty string username.");
+		if (entityManager.getTransaction().isActive())
+			entityManager.getTransaction().commit();
+
 	}
 
 }
