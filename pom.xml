@@ -15,6 +15,7 @@
 		<hibernate.version>5.2.6.Final</hibernate.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
 		<javaee-api.version>7.0</javaee-api.version>
+		<sonar.exclusions>**/models/**, **/exceptions/**, **/listselectionmodel/**</sonar.exclusions>
 	</properties>
 
 	<dependencyManagement>
@@ -67,7 +68,7 @@
 						<excludes>
 							<esclude>**/Main.*</esclude>
 							<esclude>**/models/**</esclude>
-              <esclude>**/exceptions/**</esclude>
+							<esclude>**/exceptions/**</esclude>
 						</excludes>
 					</configuration>
 
