@@ -14,6 +14,11 @@ import javax.persistence.OneToMany;
 @Entity
 public class Receipt {
 
+	@Override
+	public String toString() {
+		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "]";
+	}
+
 	@Id
 	@GeneratedValue
 	private Long id;
