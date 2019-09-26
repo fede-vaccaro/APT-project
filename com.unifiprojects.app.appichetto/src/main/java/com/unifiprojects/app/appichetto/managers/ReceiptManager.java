@@ -1,7 +1,5 @@
 package com.unifiprojects.app.appichetto.managers;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
@@ -33,23 +31,23 @@ public class ReceiptManager {
 		});
 	}
 
-	public void updateItem( int index, Item item) {
+	public void updateItem(int index, Item item) {
 		receipt.updateItem(index, item);
 		double oldPrice = receipt.getItem(index).getPricePerOwner();
 		double priceGap = item.getPricePerOwner() - oldPrice;
-		
+
 		item.getOwners().stream().forEach(user -> accountings.get(user).addAmount(priceGap));
-		
+
 	}
 
 	public void deleteItem(Item itemToDelete) {
-		receipt.deleteItem(itemToDelete);	
+		receipt.deleteItem(itemToDelete);
 		double price = -itemToDelete.getPricePerOwner();
-		
+
 		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
 	}
 
-	public void saveReceipt() {
+	public void saveReceipt(){
 		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
 		receiptRepository.saveReceipt(receipt);
 	}
@@ -57,6 +55,5 @@ public class ReceiptManager {
 	public int getItemsListSize() {
 		return receipt.getItemsListSize();
 	}
-
 
 }
