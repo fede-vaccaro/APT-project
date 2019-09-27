@@ -26,7 +26,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
 
 @RunWith(GUITestRunner.class)
 public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
