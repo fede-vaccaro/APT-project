@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -16,12 +15,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryViewSwing implements ShowHistoryView {
@@ -41,36 +40,6 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	private JLabel receiptLabel;
 	private JButton btnHomepage;
 	private JLabel message;
-
-	/**
-	 * Launch the application.
-	 */
-
-	public static class AccountingFormatter {
-		public static String format(Accounting a) {
-			if (a != null)
-				return a.getUser().getUsername() + ": " + String.format("%.2f", a.getAmount()) + "; paid: "
-						+ a.isPaid();
-			return null;
-		}
-	}
-
-	private class AccountingCellRenderer extends JLabel implements ListCellRenderer<Accounting> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends Accounting> list, Accounting value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			if (value.isPaid()) {
-				setForeground(new Color(34, 139, 34));
-			} else {
-				setForeground(new Color(139, 0, 0));
-			}
-			setText(AccountingFormatter.format(value));
-			return this;
-		}
-	}
 
 	/**
 	 * Create the application.
@@ -196,27 +165,23 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	@Override
 	public void showShoppingHistory(List<Receipt> receipts) {
 		receiptListModel.clear();
-		if (receipts != null) {
-			receipts.stream().forEach(receiptListModel::addElement);
-		}
+		receipts.stream().forEach(receiptListModel::addElement);
 		computeTotalAccountings(receipts);
 	}
 
 	private void showItemList(Receipt receipt) {
 		itemListModel.clear();
-		if (receipt != null)
-			receipt.getItems().stream().forEach(itemListModel::addElement);
+		receipt.getItems().stream().forEach(itemListModel::addElement);
 	}
 
 	private void showAccountingList(Receipt receipt) {
 		accountingListModel.clear();
-		if (receipt != null)
-			receipt.getAccountings().stream().forEach(accountingListModel::addElement);
+		receipt.getAccountings().stream().forEach(accountingListModel::addElement);
 	}
 
 	private void computeTotalAccountings(List<Receipt> history) {
 		totalAccountingsListModel.clear();
-		if (history != null) {
+		if (!history.isEmpty()) {
 			Map<User, Double> totalAccounting = new HashMap<User, Double>();
 
 			history.stream().forEach(r -> {

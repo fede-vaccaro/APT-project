@@ -21,7 +21,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.ShowHistoryViewSwing.AccountingFormatter;
+import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
