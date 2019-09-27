@@ -70,7 +70,7 @@ public class ReceiptControllerTest {
 		Item item = new Item("Item", 2.2, 2, users);
 
 		try {
-			receiptController.updateItem(item, 1);
+			receiptController.updateItem(item, 0);
 			fail("Illegal index");
 		} catch (IllegalIndex e) {
 			assertEquals("Index not in list", e.getMessage());
@@ -84,10 +84,8 @@ public class ReceiptControllerTest {
 		int quantity = 1;
 		int index = 0;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
-		Item oldItem = new Item(name, 2., quantity, users);
 		Item newItem = new Item(name, price, quantity, users);
-		receiptController.addItemToReceipt(oldItem);
-
+		
 		when(receiptManager.getItemsListSize()).thenReturn(1);
 
 		receiptController.updateItem(newItem, index);
@@ -100,7 +98,6 @@ public class ReceiptControllerTest {
 	public void testDeleteItem() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item itemToDelete = new Item("Item", 2.2, 2, users);
-		receiptController.addItemToReceipt(itemToDelete);
 
 		receiptController.deleteItem(itemToDelete);
 

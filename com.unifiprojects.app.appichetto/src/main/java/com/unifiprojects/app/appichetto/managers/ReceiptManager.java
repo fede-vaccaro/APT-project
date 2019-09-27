@@ -35,19 +35,16 @@ public class ReceiptManager {
 		receipt.updateItem(index, item);
 		double oldPrice = receipt.getItem(index).getPricePerOwner();
 		double priceGap = item.getPricePerOwner() - oldPrice;
-
 		item.getOwners().stream().forEach(user -> accountings.get(user).addAmount(priceGap));
-
 	}
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
 		double price = -itemToDelete.getPricePerOwner();
-
 		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
 	}
 
-	public void saveReceipt(){
+	public void saveReceipt() {
 		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
 		receiptRepository.saveReceipt(receipt);
 	}

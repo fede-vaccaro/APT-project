@@ -22,10 +22,6 @@ public class ReceiptController {
 		this.receiptView = receiptView;
 	}
 
-	void addItemToReceipt(Item item) {
-		receiptManager.addItem(item);
-	}
-
 	public void addItem(Item item) {
 		receiptManager.addItem(item);
 		receiptView.itemAdded(item);
