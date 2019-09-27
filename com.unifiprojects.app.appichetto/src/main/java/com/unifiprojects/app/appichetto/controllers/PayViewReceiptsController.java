@@ -32,7 +32,6 @@ public class PayViewReceiptsController {
 	private ReceiptRepository receiptRepository;
 	private AccountingRepository accountingRepository;
 	private PayViewReceiptsView payViewReceiptsView;
-	private ArrayList<Receipt> unpaidReceipts;
 
 	public PayViewReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
 			PayViewReceiptsView payViewReceiptsView) {
@@ -42,7 +41,7 @@ public class PayViewReceiptsController {
 	}
 
 	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
-		unpaidReceipts = new ArrayList<Receipt>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
+		ArrayList<Receipt> unpaidReceipts = new ArrayList<>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
 		payViewReceiptsView.showReceipts(unpaidReceipts);
@@ -52,55 +51,55 @@ public class PayViewReceiptsController {
 	}
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {
-		if (enteredAmount > 0.0) {
-			List<Accounting> accountingsBetweenLoggedAndBuyer = getAccountingsBetweenLoggedAndBuyer(loggedUser,
-					buyerUser);
-
-			Comparator<Accounting> dateReceiptComparator = (Accounting a1, Accounting a2) -> a1.getReceipt()
-					.getTimestamp().compareTo(a2.getReceipt().getTimestamp());
-
-			accountingsBetweenLoggedAndBuyer.sort(dateReceiptComparator);
-
-			Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(a -> a.getAmount()).sum();
-
-			try {
-				transaction.doInTransaction(() -> {
-					Double remainingAmount = new Double(enteredAmount);
-
-					if (totalAmountToPay < remainingAmount) {
-						payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
-						return;
-					}
-
-					for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
-						Double accountingAmount = new Double(accounting.getAmount());
-						if (remainingAmount > 0.0) {
-							if (remainingAmount >= accountingAmount) {
-								accounting.setPaid(true);
-								remainingAmount -= accountingAmount;
-							} else {
-								accountingAmount -= remainingAmount;
-								accounting.setAmount(accountingAmount);
-								remainingAmount = 0.0;
-							}
-							accountingRepository.saveAccounting(accounting);
-						}
-					}
-				});
-			} catch (UncommittableTransactionException e) {
-				payViewReceiptsView.showErrorMsg("Something went wrong while committing the payment.");
-			}
-			showUnpaidReceiptsOfLoggedUser(loggedUser);
-		} else {
+		if (enteredAmount <= 0.0) {
 			payViewReceiptsView.showErrorMsg("Amount payed should be more than zero.");
+			return;
 		}
+
+		List<Accounting> accountingsBetweenLoggedAndBuyer = getAccountingsBetweenLoggedAndBuyer(loggedUser, buyerUser);
+
+		Comparator<Accounting> dateReceiptComparator = (Accounting a1, Accounting a2) -> a1.getReceipt().getTimestamp()
+				.compareTo(a2.getReceipt().getTimestamp());
+
+		accountingsBetweenLoggedAndBuyer.sort(dateReceiptComparator);
+
+		Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(Accounting::getAmount).sum();
+
+		try {
+			transaction.doInTransaction(() -> {
+				Double remainingAmount = enteredAmount;
+
+				if (totalAmountToPay < remainingAmount) {
+					payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
+					return;
+				}
+
+				for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
+					Double accountingAmount = accounting.getAmount();
+					if (remainingAmount > 0.0) {
+						if (remainingAmount >= accountingAmount) {
+							accounting.setPaid(true);
+							remainingAmount -= accountingAmount;
+						} else {
+							accountingAmount -= remainingAmount;
+							accounting.setAmount(accountingAmount);
+							remainingAmount = 0.0;
+						}
+						accountingRepository.saveAccounting(accounting);
+					}
+				}
+			});
+		} catch (UncommittableTransactionException e) {
+			payViewReceiptsView.showErrorMsg("Something went wrong while committing the payment.");
+		}
+		showUnpaidReceiptsOfLoggedUser(loggedUser);
+
 	}
 
 	private List<Accounting> getAccountingsBetweenLoggedAndBuyer(User loggedUser, User buyerUser) {
 		List<Accounting> accountings = accountingRepository.getAccountingsOf(loggedUser);
 
-		List<Accounting> accountingsBetweenLoggedAndBuyer = accountings.stream()
-				.filter(a -> a.getReceipt().getBuyer().equals(buyerUser)).collect(Collectors.toList());
-		return accountingsBetweenLoggedAndBuyer;
+		return accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(buyerUser))
+				.collect(Collectors.toList());
 	}
 }

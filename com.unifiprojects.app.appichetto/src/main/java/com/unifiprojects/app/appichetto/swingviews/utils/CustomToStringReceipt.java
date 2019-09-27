@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.views;
+package com.unifiprojects.app.appichetto.swingviews.utils;
 import com.unifiprojects.app.appichetto.models.Receipt;
 
 public class CustomToStringReceipt {

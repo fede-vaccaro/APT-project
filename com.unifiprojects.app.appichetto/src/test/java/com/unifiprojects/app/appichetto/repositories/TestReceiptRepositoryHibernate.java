@@ -303,7 +303,7 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.clear();
 
 		List<Receipt> unpaids = receiptRepositoryHibernate.getAllUnpaidReceiptsOf(debtorUser);
-		assertThat(unpaids).isNull();
+		assertThat(unpaids).isEmpty();
 
 	}
 
@@ -441,7 +441,7 @@ public class TestReceiptRepositoryHibernate {
 
 		List<Receipt> receiptsBoughtByDebtorUser1 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(debtorUser1);
 
-		assertThat(receiptsBoughtByDebtorUser1).isNull();
+		assertThat(receiptsBoughtByDebtorUser1).isEmpty();
 
 	}
 
