@@ -85,31 +85,11 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		return userComboBoxModel;
 	}
 
-	public DefaultListModel<Item> getItemListModel() {
-		return itemListModel;
-	}
-
-	public void setReceiptListModel(DefaultListModel<CustomToStringReceipt> receiptListModel) {
-		this.receiptListModel = receiptListModel;
-	}
-
-	public void setUserComboBoxModel(DefaultComboBoxModel<User> userComboBoxModel) {
-		this.userComboBoxModel = userComboBoxModel;
-	}
-
-	public void setItemListModel(DefaultListModel<Item> itemListModel) {
-		this.itemListModel = itemListModel;
-	}
-
 	private List<Receipt> unpaids;
 	private List<Accounting> accountings;
 
 	public Double getEnteredValue() {
 		return enteredAmount;
-	}
-
-	public User getLoggedUser() {
-		return loggedUser;
 	}
 
 	public void setLoggedUser(User loggedUser) {

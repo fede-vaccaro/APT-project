@@ -26,14 +26,7 @@ public class LoginViewSwing implements LoginView{
 	public JFrame getFrame() {
 		return frmAppichetto;
 	}
-	/**
-	 * Create the application.
-	 */
-	public LoginViewSwing(LoginController loginController) {
-		this.loginController = loginController;
-		initialize();
-	}
-	
+
 	public LoginViewSwing() {
 		initialize();
 	}
