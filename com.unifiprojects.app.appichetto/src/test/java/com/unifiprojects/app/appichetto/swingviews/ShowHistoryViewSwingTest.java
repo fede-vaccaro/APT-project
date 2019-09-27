@@ -136,10 +136,10 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	@GUITest
-	public void testShowShoppingHistoryEmptyEachListIfArgumentIsNull() {
+	public void testShowShoppingHistoryEmptyEachListIfArgumentIsEmpty() {
 		
 		List<Receipt> history = Arrays.asList(receipt0);
-		List<Receipt> updatedHistory = null;
+		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
@@ -223,9 +223,9 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	@GUITest
-	public void testTotalUnpaidAccountingsAreEmptiedIfArgumentIsNull() {
+	public void testTotalUnpaidAccountingsAreEmptiedIfArgumentIsEmpty() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
-		List<Receipt> updatedHistory = null;
+		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);

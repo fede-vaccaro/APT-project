@@ -341,7 +341,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	@Override
 	public void showReceipts(List<Receipt> receipts) {
-		if (receipts == null) {
+		if (receipts.isEmpty()) {
 			showErrorMsg("You have no accounting.");
 			receiptListModel.clear();
 			itemListModel.clear();
