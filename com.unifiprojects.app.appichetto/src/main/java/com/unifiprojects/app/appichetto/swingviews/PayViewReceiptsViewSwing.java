@@ -39,8 +39,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsViewSwing.class);
 
-	private static final String totalForThisReceipt = "Total for this receipt: ";
-	private static final String totalDebtToUser = "Total debt to user: ";
+	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
+	private static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
 	private PayViewReceiptsController payViewReceiptsController;
 
@@ -51,7 +51,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	private DefaultListModel<CustomToStringReceipt> receiptListModel;
 	private JComboBox<User> userSelection;
 	private DefaultComboBoxModel<User> userComboBoxModel;
-	private DefaultListModel<Item> itemListModel;// each add element triggers a listener, which actually refresh the
+	private DefaultListModel<Item> itemListModel;
 	private JLabel lblTotalForThis;
 	private JLabel lblTotaldebttouser;
 	private User loggedUser;
@@ -241,7 +241,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_separator.gridy = 6;
 		frame.getContentPane().add(separator, gbc_separator);
 
-		lblTotaldebttouser = new JLabel(totalDebtToUser);
+		lblTotaldebttouser = new JLabel(TOTALDEBTTOUSERMESSAGE);
 		lblTotaldebttouser.setName("totalDebtToUser");
 		lblTotaldebttouser.setFont(new Font("Dialog", Font.BOLD, 14));
 		GridBagConstraints gbc_lblTotaldebttouser = new GridBagConstraints();
@@ -251,7 +251,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_lblTotaldebttouser.gridy = 7;
 		frame.getContentPane().add(lblTotaldebttouser, gbc_lblTotaldebttouser);
 
-		lblTotalForThis = new JLabel(totalForThisReceipt);
+		lblTotalForThis = new JLabel(TOTALFORTHISRECEIPTMESSAGE);
 		lblTotalForThis.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblTotalForThis.setName("totalForSelectedReceipt");
 		GridBagConstraints gbc_lblTotalForThis = new GridBagConstraints();
@@ -310,7 +310,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		receiptList.setSelectedIndex(0);
 		if (accountings != null) {
 			double totalDebtToSelectedUser = getTotalDebtToSelectedUser(selectedUser);
-			lblTotaldebttouser.setText(totalDebtToUser + String.format("%.2f", totalDebtToSelectedUser));
+			lblTotaldebttouser.setText(TOTALDEBTTOUSERMESSAGE + String.format("%.2f", totalDebtToSelectedUser));
 		}
 	}
 
@@ -347,7 +347,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	}
 
 	private void displayReceiptAmount(Receipt receipt) {
-		lblTotalForThis.setText(totalForThisReceipt + String.format("%.2f", receipt.getTotalPrice()));
+		lblTotalForThis.setText(TOTALFORTHISRECEIPTMESSAGE + String.format("%.2f", receipt.getTotalPrice()));
 	}
 
 	@Override

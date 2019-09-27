@@ -15,10 +15,6 @@ public class ShowHistoryController {
 
 	private User loggedUser;
 
-	public User getLoggedUser() {
-		return loggedUser;
-	}
-
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
