@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.swingViews;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingViews.ShowHistoryViewSwing.AccountingFormatter;
+import com.unifiprojects.app.appichetto.swingviews.ShowHistoryViewSwing.AccountingFormatter;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {

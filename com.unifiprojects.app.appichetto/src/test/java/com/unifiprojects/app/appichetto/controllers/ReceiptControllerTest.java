@@ -46,8 +46,8 @@ public class ReceiptControllerTest {
 	private ReceiptController receiptController;
 
 	@Captor
-    private ArgumentCaptor<TransactionCommands> lambdaCaptor;
-    
+	private ArgumentCaptor<TransactionCommands> lambdaCaptor;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -108,27 +108,27 @@ public class ReceiptControllerTest {
 		verify(receiptView).itemDeleted(itemToDelete);
 	}
 
-
 	@Test
 	public void testSaveReceiptWhenUncommittableTransactionExceptionIsCatched() {
-		
-		doThrow(new UncommittableTransactionException()).when(transactionHandler).doInTransaction(Matchers.any(TransactionCommands.class));
-		
+
+		doThrow(new UncommittableTransactionException()).when(transactionHandler)
+				.doInTransaction(Matchers.any(TransactionCommands.class));
+
 		receiptController.saveReceipt();
-		
+
 		verify(receiptView).showError("Something went wrong while saving receipt.");
 	}
 
 	@Test
 	public void testSaveReceipt() {
-		
+
 		receiptController.saveReceipt();
-		
+
 		verify(transactionHandler).doInTransaction(lambdaCaptor.capture());
-		
+
 		TransactionCommands receiptManagerCallSaveReceipt = lambdaCaptor.getValue();
 		receiptManagerCallSaveReceipt.execute();
-		
+
 		verify(receiptManager).saveReceipt();
 		verify(receiptView).goToHome();
 	}

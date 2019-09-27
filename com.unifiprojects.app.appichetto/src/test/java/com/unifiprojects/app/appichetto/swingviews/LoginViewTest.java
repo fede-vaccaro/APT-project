@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 
 @RunWith(GUITestRunner.class)
-public class TestLoginViewTest extends AssertJSwingJUnitTestCase {
+public class LoginViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	
