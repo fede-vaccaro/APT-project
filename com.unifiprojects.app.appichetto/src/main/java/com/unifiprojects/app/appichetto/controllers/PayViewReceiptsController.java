@@ -32,7 +32,6 @@ public class PayViewReceiptsController {
 	private ReceiptRepository receiptRepository;
 	private AccountingRepository accountingRepository;
 	private PayViewReceiptsView payViewReceiptsView;
-	private ArrayList<Receipt> unpaidReceipts;
 
 	public PayViewReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
 			PayViewReceiptsView payViewReceiptsView) {
@@ -42,7 +41,7 @@ public class PayViewReceiptsController {
 	}
 
 	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
-		unpaidReceipts = new ArrayList<Receipt>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
+		ArrayList<Receipt> unpaidReceipts = new ArrayList<>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
 		payViewReceiptsView.showReceipts(unpaidReceipts);
@@ -61,11 +60,12 @@ public class PayViewReceiptsController {
 
 			accountingsBetweenLoggedAndBuyer.sort(dateReceiptComparator);
 
-			Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(a -> a.getAmount()).sum();
+			Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(Accounting::getAmount)
+					.sum();
 
 			try {
 				transaction.doInTransaction(() -> {
-					Double remainingAmount = new Double(enteredAmount);
+					Double remainingAmount = enteredAmount;
 
 					if (totalAmountToPay < remainingAmount) {
 						payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
@@ -73,7 +73,7 @@ public class PayViewReceiptsController {
 					}
 
 					for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
-						Double accountingAmount = new Double(accounting.getAmount());
+						Double accountingAmount = accounting.getAmount();
 						if (remainingAmount > 0.0) {
 							if (remainingAmount >= accountingAmount) {
 								accounting.setPaid(true);
@@ -99,8 +99,7 @@ public class PayViewReceiptsController {
 	private List<Accounting> getAccountingsBetweenLoggedAndBuyer(User loggedUser, User buyerUser) {
 		List<Accounting> accountings = accountingRepository.getAccountingsOf(loggedUser);
 
-		List<Accounting> accountingsBetweenLoggedAndBuyer = accountings.stream()
-				.filter(a -> a.getReceipt().getBuyer().equals(buyerUser)).collect(Collectors.toList());
-		return accountingsBetweenLoggedAndBuyer;
+		return accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(buyerUser))
+				.collect(Collectors.toList());
 	}
 }

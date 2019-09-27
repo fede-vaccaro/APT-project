@@ -3,7 +3,6 @@ package com.unifiprojects.app.appichetto.swingviews;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -46,18 +45,6 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ShowHistoryViewSwing window = new ShowHistoryViewSwing();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public static class AccountingFormatter {
 		public static String format(Accounting a) {
@@ -188,7 +175,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gbc_totalAccountingList.gridx = 1;
 		gbc_totalAccountingList.gridy = 6;
 		frame.getContentPane().add(totalAccountingList, gbc_totalAccountingList);
-		
+
 		btnHomepage = new JButton("Homepage");
 		btnHomepage.setName("homepageBtn");
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
@@ -196,7 +183,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gbc_btnHomepage.gridx = 0;
 		gbc_btnHomepage.gridy = 8;
 		frame.getContentPane().add(btnHomepage, gbc_btnHomepage);
-		
+
 		message = new JLabel("");
 		message.setName("errorMsg");
 		GridBagConstraints gbc_message = new GridBagConstraints();

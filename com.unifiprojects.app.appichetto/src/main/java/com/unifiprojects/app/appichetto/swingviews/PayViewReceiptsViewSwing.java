@@ -38,7 +38,25 @@ import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
 public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsViewSwing.class);
-	
+
+	private static final String totalForThisReceipt = "Total for this receipt: ";
+	private static final String totalDebtToUser = "Total debt to user: ";
+
+	private PayViewReceiptsController payViewReceiptsController;
+
+	private JFrame frame;
+	private JTextField txtEnterAmount;
+	private JLabel lblErrorMsg;
+	private JList<CustomToStringReceipt> receiptList;
+	private DefaultListModel<CustomToStringReceipt> receiptListModel;
+	private JComboBox<User> userSelection;
+	private DefaultComboBoxModel<User> userComboBoxModel;
+	private DefaultListModel<Item> itemListModel;// each add element triggers a listener, which actually refresh the
+	private JLabel lblTotalForThis;
+	private JLabel lblTotaldebttouser;
+	private User loggedUser;
+	private Double enteredAmount;
+
 	public List<Accounting> getAccountings() {
 		return accountings;
 	}
@@ -58,18 +76,6 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	public JFrame getFrame() {
 		return frame;
 	}
-
-	private PayViewReceiptsController payViewReceiptsController;
-
-	private JFrame frame;
-	private JTextField txtEnterAmount;
-	private JLabel lblErrorMsg;
-	private JList<CustomToStringReceipt> receiptList;
-	private DefaultListModel<CustomToStringReceipt> receiptListModel;
-	private JComboBox<User> userSelection;
-	private DefaultComboBoxModel<User> userComboBoxModel;
-	private JList<Item> itemList;
-	private DefaultListModel<Item> itemListModel;// each add element triggers a listener, which actually refresh the
 
 	public DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
 		return receiptListModel;
@@ -98,13 +104,6 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	private List<Receipt> unpaids;
 	private List<Accounting> accountings;
 
-	private final String totalForThisReceipt = "Total for this receipt: ";
-	private final String totalDebtToUser = "Total debt to user: ";
-	private JLabel lblTotalForThis;
-	private JLabel lblTotaldebttouser;
-	private User loggedUser;
-	private Double enteredAmount;
-
 	public Double getEnteredValue() {
 		return enteredAmount;
 	}
@@ -118,19 +117,11 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	}
 
 	/**
-	 * Launch the application.
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PayViewReceiptsViewSwing window = new PayViewReceiptsViewSwing();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	 * Launch the application. public static void main(String[] args) {
+	 * EventQueue.invokeLater(new Runnable() { public void run() { try {
+	 * PayViewReceiptsViewSwing window = new PayViewReceiptsViewSwing();
+	 * window.frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); }
+	 * } }); }
 	 */
 
 	/**
@@ -146,14 +137,12 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 		try {
 			enteredAmount = (double) Integer.parseInt(enteredAmountString);
-			return true;// showErrorMsg("");
+			return true;
 		} catch (NumberFormatException ex) {
 			try {
-				enteredAmount = (double) Double.parseDouble(enteredAmountString);
-				// showErrorMsg("");
-				return true;// showErrorMsg("");
+				enteredAmount = Double.parseDouble(enteredAmountString);
+				return true;
 			} catch (NumberFormatException ex2) {
-
 				return false;
 			}
 
@@ -187,8 +176,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_lblUser.gridy = 1;
 		frame.getContentPane().add(lblUser, gbc_lblUser);
 
-		userComboBoxModel = new DefaultComboBoxModel<User>();
-		userSelection = new JComboBox<User>(userComboBoxModel);
+		userComboBoxModel = new DefaultComboBoxModel<>();
+		userSelection = new JComboBox<>(userComboBoxModel);
 		userSelection.setName("userSelection");
 
 		userSelection.addActionListener(e -> refreshReceiptList());
@@ -221,9 +210,9 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		btnPay.addActionListener(e -> {
 			LOGGER.info(enteredAmount);
 			LOGGER.info(loggedUser);
-			LOGGER.info((User)userComboBoxModel.getSelectedItem());
+			LOGGER.info((User) userComboBoxModel.getSelectedItem());
 			LOGGER.info(payViewReceiptsController);
-			payViewReceiptsController.payAmount(enteredAmount, loggedUser, (User)userComboBoxModel.getSelectedItem());
+			payViewReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
 		});
 		btnPay.setName("payButton");
 		GridBagConstraints gbc_btnPay = new GridBagConstraints();
@@ -255,7 +244,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		frame.getContentPane().add(receiptList, gbc_receiptList);
 
 		itemListModel = new DefaultListModel<>();
-		itemList = new JList<>(itemListModel);
+		JList<Item> itemList = new JList<>(itemListModel);
 		itemList.setName("itemList");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);
@@ -292,7 +281,6 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_lblTotalForThis.gridy = 7;
 		frame.getContentPane().add(lblTotalForThis, gbc_lblTotalForThis);
 
-		// txtEnterAmount = new JFormattedTextField(NumberFormat.getNumberInstance());
 		txtEnterAmount = new JTextField();
 		txtEnterAmount.setName("enterAmountField");
 		txtEnterAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -347,9 +335,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	}
 
 	private double getTotalDebtToSelectedUser(User selectedUser) {
-		double totalDebtToSelectedUser = accountings.stream()
-				.filter(a -> a.getReceipt().getBuyer().equals(selectedUser)).mapToDouble(a -> a.getAmount()).sum();
-		return totalDebtToSelectedUser;
+		return accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(selectedUser))
+				.mapToDouble(Accounting::getAmount).sum();
 	}
 
 	@Override

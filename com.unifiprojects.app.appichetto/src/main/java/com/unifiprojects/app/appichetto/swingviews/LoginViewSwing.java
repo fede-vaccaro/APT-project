@@ -26,25 +26,6 @@ public class LoginViewSwing implements LoginView{
 	public JFrame getFrame() {
 		return frmAppichetto;
 	}
-	
-	/**
-	 * Launch the application.
-	 */
-	
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginViewSwing window = new LoginViewSwing();
-					window.frmAppichetto.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
 	/**
 	 * Create the application.
 	 */
