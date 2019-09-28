@@ -30,25 +30,17 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
 	@Override
 	public List<Receipt> getAllUnpaidReceiptsOf(User user) {
-		List<Receipt> unpaids = (List<Receipt>) entityManager
-				.createQuery("from Accounting where paid=:paid and user=:user", Accounting.class)
+		return entityManager.createQuery("from Accounting where paid=:paid and user=:user", Accounting.class)
 				.setParameter("paid", false).setParameter("user", user).getResultList().stream()
-				.map(a -> a.getReceipt()).collect(Collectors.toList());
-		if (unpaids.isEmpty())
-			return null;
+				.map(Accounting::getReceipt).collect(Collectors.toList());
 
-		return unpaids;
 	}
 
 	@Override
 	public List<Receipt> getAllReceiptsBoughtBy(User user) {
-		List<Receipt> receiptsBoughtBy = (List<Receipt>) entityManager
-				.createQuery("from Receipt where buyer=:buyer", Receipt.class).setParameter("buyer", user)
+		return entityManager.createQuery("from Receipt where buyer=:buyer", Receipt.class).setParameter("buyer", user)
 				.getResultList();
-		if (receiptsBoughtBy.isEmpty())
-			return null;
 
-		return receiptsBoughtBy;
 	}
 
 	@Override
@@ -59,11 +51,11 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 	@Override
 	public void removeReceipt(Receipt receipt) {
 		Receipt toBeRemoved = receipt;
-		if(!entityManager.contains(receipt)){
+		if (!entityManager.contains(receipt)) {
 			toBeRemoved = entityManager.merge(receipt);
 		}
-		
-		entityManager.remove(toBeRemoved);		
+
+		entityManager.remove(toBeRemoved);
 	}
 
 }

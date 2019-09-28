@@ -21,7 +21,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.ShowHistoryViewSwing.AccountingFormatter;
+import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
@@ -136,10 +136,10 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	@GUITest
-	public void testShowShoppingHistoryEmptyEachListIfArgumentIsNull() {
+	public void testShowShoppingHistoryEmptyEachListIfArgumentIsEmpty() {
 		
 		List<Receipt> history = Arrays.asList(receipt0);
-		List<Receipt> updatedHistory = null;
+		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
@@ -223,9 +223,9 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	@GUITest
-	public void testTotalUnpaidAccountingsAreEmptiedIfArgumentIsNull() {
+	public void testTotalUnpaidAccountingsAreEmptiedIfArgumentIsEmpty() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
-		List<Receipt> updatedHistory = null;
+		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);

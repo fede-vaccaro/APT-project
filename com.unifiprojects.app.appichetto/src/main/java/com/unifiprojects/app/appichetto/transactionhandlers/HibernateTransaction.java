@@ -7,12 +7,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 
 public class HibernateTransaction implements TransactionHandler {
 
-	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsController.class);
+	private static final Logger LOGGER = LogManager.getLogger(HibernateTransaction.class);
 
 	
 	EntityManager entityManager;
@@ -29,7 +28,7 @@ public class HibernateTransaction implements TransactionHandler {
 			entityManager.getTransaction().commit();
 		} catch (RollbackException re) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.ERROR, "Unable to commit transaction: " + re.getMessage());
+			LOGGER.log(Level.ERROR, String.format("Unable to commit transaction: %s", re.getMessage()));
 			throw new UncommittableTransactionException("Unable to commit the transaction");
 		}
 

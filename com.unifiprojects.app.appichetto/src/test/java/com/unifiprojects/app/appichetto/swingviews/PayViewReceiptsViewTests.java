@@ -26,7 +26,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.views.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
 
 @RunWith(GUITestRunner.class)
 public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
@@ -76,8 +76,8 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testShowReceiptsVisualizeMessageWhenInputIsNull() {
-		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(null));
+	public void testShowReceiptsVisualizeMessageWhenInputIsEmpty() {
+		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList()));
 		window.label("errorMsg").requireText("You have no accounting.");
 	}
 
@@ -370,7 +370,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void callingShowReceiptWithNullArgumentAfterHavingCalledShowReceiptWithNotNullArgumentShouldClearTheLists() {
+	public void callingShowReceiptWithEmptyListArgumentAfterHavingCalledShowReceiptWithNotNullArgumentShouldClearTheLists() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
 
@@ -385,7 +385,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.showReceipts(Arrays.asList(receipt2, receipt1));
-			payViewReceiptsSwing.showReceipts(null);
+			payViewReceiptsSwing.showReceipts(Arrays.asList());
 		});
 
 		window.label("errorMsg").requireText("You have no accounting.");

@@ -1,9 +1,7 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,84 +15,29 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryViewSwing implements ShowHistoryView {
 
 	private JFrame frame;
-	private JList<Receipt> receiptList;
-	private JList<Item> itemList;
-	private JList<Accounting> accountingList;
-	private JList<String> totalAccountingList;
 
 	private DefaultListModel<Receipt> receiptListModel;
 	private DefaultListModel<Item> itemListModel;
 	private DefaultListModel<Accounting> accountingListModel;
 	private DefaultListModel<String> totalAccountingsListModel;
 
-	private JLabel lblTotalAccountings;
-	private JLabel receiptLabel;
-	private JButton btnHomepage;
 	private JLabel message;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ShowHistoryViewSwing window = new ShowHistoryViewSwing();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public static class AccountingFormatter {
-		public static String format(Accounting a) {
-			if (a != null)
-				return a.getUser().getUsername() + ": " + String.format("%.2f", a.getAmount()) + "; paid: "
-						+ a.isPaid();
-			return null;
-		}
-	}
-
-	private class AccountingCellRenderer extends JLabel implements ListCellRenderer<Accounting> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends Accounting> list, Accounting value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			if (value.isPaid()) {
-				setForeground(new Color(34, 139, 34));
-			} else {
-				setForeground(new Color(139, 0, 0));
-			}
-			setText(AccountingFormatter.format(value));
-			return this;
-		}
-	}
-
-	/**
-	 * Create the application.
-	 */
 	public ShowHistoryViewSwing() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("History");
@@ -109,7 +52,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		frame.getContentPane().setLayout(gridBagLayout);
 
-		receiptLabel = new JLabel("Receipts you bought:");
+		JLabel receiptLabel = new JLabel("Receipts you bought:");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
@@ -124,7 +67,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.getContentPane().add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		receiptListModel = new DefaultListModel<>();
-		receiptList = new JList<>(receiptListModel);
+		JList<Receipt> receiptList = new JList<>(receiptListModel);
 		receiptList.setName("receiptList");
 
 		receiptList.addListSelectionListener(e -> {
@@ -142,7 +85,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.getContentPane().add(receiptList, gbc_receiptList);
 
 		itemListModel = new DefaultListModel<>();
-		itemList = new JList<>(itemListModel);
+		JList<Item> itemList = new JList<>(itemListModel);
 		itemList.setName("itemList");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);
@@ -159,7 +102,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.getContentPane().add(lblUnpaidAccountings, gbc_lblUnpaidAccountings);
 
 		accountingListModel = new DefaultListModel<>();
-		accountingList = new JList<>(accountingListModel);
+		JList<Accounting> accountingList = new JList<>(accountingListModel);
 		accountingList.setForeground(new Color(51, 51, 51));
 
 		accountingList.setCellRenderer(new AccountingCellRenderer());
@@ -172,7 +115,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gbc_accountingList.gridy = 4;
 		frame.getContentPane().add(accountingList, gbc_accountingList);
 
-		lblTotalAccountings = new JLabel("Total unpaid accountings:");
+		JLabel lblTotalAccountings = new JLabel("Total unpaid accountings:");
 		GridBagConstraints gbc_lblTotalAccountings = new GridBagConstraints();
 		gbc_lblTotalAccountings.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTotalAccountings.gridx = 1;
@@ -180,7 +123,7 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.getContentPane().add(lblTotalAccountings, gbc_lblTotalAccountings);
 
 		totalAccountingsListModel = new DefaultListModel<>();
-		totalAccountingList = new JList<>(totalAccountingsListModel);
+		JList<String> totalAccountingList = new JList<>(totalAccountingsListModel);
 		totalAccountingList.setName("totalAccountingList");
 		GridBagConstraints gbc_totalAccountingList = new GridBagConstraints();
 		gbc_totalAccountingList.gridheight = 4;
@@ -188,15 +131,15 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gbc_totalAccountingList.gridx = 1;
 		gbc_totalAccountingList.gridy = 6;
 		frame.getContentPane().add(totalAccountingList, gbc_totalAccountingList);
-		
-		btnHomepage = new JButton("Homepage");
+
+		JButton btnHomepage = new JButton("Homepage");
 		btnHomepage.setName("homepageBtn");
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
 		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHomepage.gridx = 0;
 		gbc_btnHomepage.gridy = 8;
 		frame.getContentPane().add(btnHomepage, gbc_btnHomepage);
-		
+
 		message = new JLabel("");
 		message.setName("errorMsg");
 		GridBagConstraints gbc_message = new GridBagConstraints();
@@ -209,28 +152,24 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	@Override
 	public void showShoppingHistory(List<Receipt> receipts) {
 		receiptListModel.clear();
-		if (receipts != null) {
-			receipts.stream().forEach(receiptListModel::addElement);
-		}
+		receipts.stream().forEach(receiptListModel::addElement);
 		computeTotalAccountings(receipts);
 	}
 
 	private void showItemList(Receipt receipt) {
 		itemListModel.clear();
-		if (receipt != null)
-			receipt.getItems().stream().forEach(itemListModel::addElement);
+		receipt.getItems().stream().forEach(itemListModel::addElement);
 	}
 
 	private void showAccountingList(Receipt receipt) {
 		accountingListModel.clear();
-		if (receipt != null)
-			receipt.getAccountings().stream().forEach(accountingListModel::addElement);
+		receipt.getAccountings().stream().forEach(accountingListModel::addElement);
 	}
 
 	private void computeTotalAccountings(List<Receipt> history) {
 		totalAccountingsListModel.clear();
-		if (history != null) {
-			Map<User, Double> totalAccounting = new HashMap<User, Double>();
+		if (!history.isEmpty()) {
+			Map<User, Double> totalAccounting = new HashMap<>();
 
 			history.stream().forEach(r -> {
 				r.getAccountings().stream().forEach(a -> {
