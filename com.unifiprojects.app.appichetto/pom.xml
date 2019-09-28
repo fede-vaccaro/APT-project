@@ -139,4 +139,22 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>no-gui-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/swingviews/**</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
