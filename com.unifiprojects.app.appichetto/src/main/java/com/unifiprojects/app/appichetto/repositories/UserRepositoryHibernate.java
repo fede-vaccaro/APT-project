@@ -42,13 +42,13 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	@Override
 	public List<User> findAll() {
-		return entityManager.createQuery("from User", User.class).getResultList();
+		return entityManager.createQuery("from users", User.class).getResultList();
 	}
 
 	@Override
 	public User findByUsername(String username) {
 		try {
-			return entityManager.createQuery("from User where username = :username", User.class)
+			return entityManager.createQuery("from users where username = :username", User.class)
 					.setParameter("username", username).getSingleResult();
 		} catch (NoResultException e) {
 			LOGGER.debug(String.format("User with username %s not found.", username), e);

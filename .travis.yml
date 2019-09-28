@@ -29,4 +29,4 @@ matrix:
 install: skip
 
 script:
-  -  travis_wait 120 mvn -f com.unifiprojects.app.appichetto/pom.xml clean test verify coveralls:report sonar:sonar $PIT_MAVEN_ARGS
+  -  travis_wait 360 mvn -f com.unifiprojects.app.appichetto/pom.xml clean test verify coveralls:report sonar:sonar $PIT_MAVEN_ARGS

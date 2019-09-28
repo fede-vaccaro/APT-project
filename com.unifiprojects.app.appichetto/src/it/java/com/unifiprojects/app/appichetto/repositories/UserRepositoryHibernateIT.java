@@ -2,15 +2,17 @@ package com.unifiprojects.app.appichetto.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.junit.Test;
 
 public class UserRepositoryHibernateIT {
 
 	@Test
 	public void test() {
-		String testMessage = "success";
-		System.out.println("TEST MESSAGE IS: " + testMessage);
-		assertThat(testMessage).isEqualTo("success");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("it-persistence-unit");
+		assertThat(emf).isNotNull();
 	}
 
 }
