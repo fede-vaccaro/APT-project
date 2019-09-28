@@ -18,7 +18,7 @@
 		<testcontainer.version>1.10.5</testcontainer.version>
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
 		<sonar.exclusions>**/models/**, **/exceptions/**,
-			**/listselectionmodel/**</sonar.exclusions>
+			**/swingviews/utils/**</sonar.exclusions>
 	</properties>
 
 	<dependencyManagement>

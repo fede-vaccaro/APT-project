@@ -21,10 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
-import com.unifiprojects.app.appichetto.listselectionmodel.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.listselectionmodel.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
 public class ReceiptSwingView extends JFrame implements ReceiptView {

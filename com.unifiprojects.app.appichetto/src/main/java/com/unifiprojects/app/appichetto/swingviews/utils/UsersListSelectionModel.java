@@ -1,8 +1,8 @@
-package com.unifiprojects.app.appichetto.listselectionmodel;
+package com.unifiprojects.app.appichetto.swingviews.utils;
 
 import javax.swing.DefaultListSelectionModel;
 
-public class ItemsListSelectionModel extends DefaultListSelectionModel {
+public class UsersListSelectionModel extends DefaultListSelectionModel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,7 +11,6 @@ public class ItemsListSelectionModel extends DefaultListSelectionModel {
 		if (super.isSelectedIndex(index0)) {
 			super.removeSelectionInterval(index0, index1);
 		} else {
-			super.clearSelection();
 			super.addSelectionInterval(index0, index1);
 		}
 	}
