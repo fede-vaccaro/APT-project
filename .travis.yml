@@ -7,6 +7,7 @@ env: DISPLAY=:99.0
 
 services:
   - xvfb
+  - docker
 
 addons:
   sonarcloud:

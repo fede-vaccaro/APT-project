@@ -15,7 +15,10 @@
 		<hibernate.version>5.2.6.Final</hibernate.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
 		<javaee-api.version>7.0</javaee-api.version>
-		<sonar.exclusions>**/models/**, **/exceptions/**, **/listselectionmodel/**</sonar.exclusions>
+		<testcontainer.version>1.10.5</testcontainer.version>
+		<postgresql.version>9.4.1212.jre6</postgresql.version>
+		<sonar.exclusions>**/models/**, **/exceptions/**,
+			**/listselectionmodel/**</sonar.exclusions>
 	</properties>
 
 	<dependencyManagement>
@@ -33,6 +36,77 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.27.2</version>
+					<configuration>
+						<images>
+							<image>
+								<name>postgres:10</name>
+								<run>
+									<ports>
+										<port>5432:5432</port>
+									</ports>
+									<env>
+										<POSTGRES_USER>docker</POSTGRES_USER>
+										<POSTGRES_PASSWORD>docker</POSTGRES_PASSWORD>
+										<POSTGRES_DB>docker</POSTGRES_DB>
+									</env>
+								</run>
+							</image>
+						</images>
+					</configuration>
+					<executions>
+						<execution>
+							<id>docker:start</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>docker:stop</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.0.0</version>
+					<executions>
+						<execution>
+							<id>add-test-source</id>
+							<phase>generate-test-sources</phase>
+							<goals>
+								<goal>add-test-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<source>src/it/java</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.22.1</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
@@ -69,6 +143,7 @@
 							<esclude>**/Main.*</esclude>
 							<esclude>**/models/**</esclude>
 							<esclude>**/exceptions/**</esclude>
+							<esclude>**/swingviews/utils/**</esclude>
 						</excludes>
 					</configuration>
 
