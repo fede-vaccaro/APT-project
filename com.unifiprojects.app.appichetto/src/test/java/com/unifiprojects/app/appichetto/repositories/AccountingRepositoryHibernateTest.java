@@ -2,7 +2,6 @@ package com.unifiprojects.app.appichetto.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -92,7 +91,7 @@ public class AccountingRepositoryHibernateTest {
 		
 		
 		List<Accounting> retrivedPippoAccounting = accountingRepository.getAccountingsOf(pippo);
-		assertThat(retrivedPippoAccounting).isEqualTo(Arrays.asList(accountingOfPippo));	
+		assertThat(retrivedPippoAccounting).containsExactlyInAnyOrder(accountingOfPippo);	
 	}
 	
 	@Test
