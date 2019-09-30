@@ -18,8 +18,7 @@ public class AccountingRepositoryHibernate implements AccountingRepository {
 
 	@Override
 	public void saveAccounting(Accounting accounting) {
-		Accounting retrivedAccounting = entityManager.find(Accounting.class, accounting.getId());
-		if (Objects.isNull(retrivedAccounting))
+		if (Objects.isNull(accounting.getId()))
 			entityManager.persist(accounting);
 		else
 			entityManager.merge(accounting);
