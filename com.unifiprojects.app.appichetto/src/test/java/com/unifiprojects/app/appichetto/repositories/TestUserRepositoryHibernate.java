@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.repositories;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-
-import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
-import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import javax.persistence.Persistence;
 
 import org.junit.After;
@@ -20,6 +16,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
+import com.unifiprojects.app.appichetto.models.User;
 
 public class TestUserRepositoryHibernate {
 

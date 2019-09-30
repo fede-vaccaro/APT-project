@@ -72,7 +72,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 
 	/**
 	 * Launch the application.
-	 */
+	 */	
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(() -> {
 //			try {
