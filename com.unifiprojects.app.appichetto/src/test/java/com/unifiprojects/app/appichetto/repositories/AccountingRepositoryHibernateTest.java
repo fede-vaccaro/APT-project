@@ -61,7 +61,31 @@ public class AccountingRepositoryHibernateTest {
 		
 		Accounting accounting = new Accounting(user);
 		
+		entityManager.getTransaction().begin();
 		accountingRepository.saveAccounting(accounting);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
+		
+		Accounting retrivedAccounting = entityManager.find(Accounting.class, accounting.getId());
+		assertThat(accounting).isEqualTo(retrivedAccounting);
+	}
+
+	@Test	
+	public void testUpdateAccounting() {
+		User user = createAndPersistUser("Pippo");
+		
+		Accounting accounting = new Accounting(user);
+		
+		entityManager.getTransaction().begin();
+		entityManager.persist(accounting);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
+
+		accounting.addAmount(2.2);
+		
+		entityManager.getTransaction().begin();
+		accountingRepository.saveAccounting(accounting);
+		entityManager.getTransaction().commit();
 		entityManager.clear();
 		
 		Accounting retrivedAccounting = entityManager.find(Accounting.class, accounting.getId());
@@ -89,7 +113,6 @@ public class AccountingRepositoryHibernateTest {
 		entityManager.persist(accountingOfPluto);
 		entityManager.getTransaction().commit();
 		entityManager.clear();
-		
 		
 		List<Accounting> retrivedPippoAccounting = accountingRepository.getAccountingsOf(pippo);
 		assertThat(retrivedPippoAccounting).isEqualTo(Arrays.asList(accountingOfPippo));	

@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.math3.util.Precision;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -48,10 +50,12 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	private AccountingRepository accountingRepository;
 	private ReceiptRepository receiptRepository;
 	private User loggedUser;
-	private User payerUser;
-	private Receipt firstReceipt;
-	private Receipt secondReceipt;
-	private Receipt thirdReceipt;
+	private User payer1;
+	private Receipt firstReceiptPayer1;
+	private Receipt secondReceiptPayer1;
+	private Receipt thirdReceiptPayer1;
+	private Receipt firstReceiptPayer2;
+	private User payer2;
 
 	private static EntityManager entityManager;
 
@@ -83,29 +87,34 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			payViewReceiptsView.setController(payViewReceiptsController);
 
 			loggedUser = new User("logged", "pw");
-			payerUser = new User("payer", "pw");
+			payer1 = new User("payer", "pw");
+			payer2 = new User("payer2", "pw");
 
-			firstReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
-					new GregorianCalendar(2019, 8, 10));
-			secondReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-					payerUser, new GregorianCalendar(2019, 8, 11));
+			firstReceiptPayer1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
+					payer1, new GregorianCalendar(2019, 8, 10));
+			secondReceiptPayer1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
+					payer1, new GregorianCalendar(2019, 8, 11));
+			firstReceiptPayer2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
+					payer2, new GregorianCalendar(2019, 8, 10));
 
-			Item tomato = new Item("tomato", 3., Arrays.asList(loggedUser, payerUser));
-			Item hamburger = new Item("hamburger", 6., Arrays.asList(loggedUser, payerUser));
-			Item bread = new Item("bread", 4., Arrays.asList(loggedUser, payerUser));
-			thirdReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
-					new GregorianCalendar(2019, 8, 12), Arrays.asList(tomato, bread, hamburger));
+			Item tomato = new Item("tomato", 1.35, Arrays.asList(loggedUser, payer1));
+			Item hamburger = new Item("hamburger", 4.45, Arrays.asList(loggedUser, payer1));
+			Item bread = new Item("bread", 3.89, Arrays.asList(loggedUser, payer1));
+			thirdReceiptPayer1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
+					payer1, new GregorianCalendar(2019, 8, 12), Arrays.asList(tomato, bread, hamburger));
 
 			entityManager.getTransaction().begin();
 			entityManager.persist(loggedUser);
-			entityManager.persist(payerUser);
-			entityManager.persist(thirdReceipt);
-			entityManager.persist(firstReceipt);
-			entityManager.persist(secondReceipt);
+			entityManager.persist(payer1);
+			entityManager.persist(payer2);
+			entityManager.persist(firstReceiptPayer2);
+			entityManager.persist(thirdReceiptPayer1);
+			entityManager.persist(secondReceiptPayer1);
 			entityManager.getTransaction().commit();
-			
+
+			payViewReceiptsView.setLoggedUser(loggedUser);
 			GuiActionRunner.execute(() -> payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser));
-			
+
 			return payViewReceiptsView;
 		});
 		window = new FrameFixture(robot(), payViewReceiptsView.getFrame());
@@ -115,15 +124,73 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testInitialState() {
+		window.comboBox("userSelection").selectItem("payer");
+		String[] receiptListString = window.list("receiptList").contents();
+		assertThat(receiptListString)
+				.isEqualTo(Arrays.asList((new CustomToStringReceipt(thirdReceiptPayer1)).toString(),
+						(new CustomToStringReceipt(secondReceiptPayer1)).toString(),
+						(new CustomToStringReceipt(firstReceiptPayer2)).toString()).toArray());
+
+		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debtToPayer));
+	}
+
+	@GUITest
+	@Test
+	public void testPayAllReceiptsToPayer1() {
+		window.comboBox("userSelection").selectItem("payer");
+
+		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer));
+		window.button("payButton").click();
+
+		String[] userComboBoxString = window.comboBox("userSelection").contents();
+
+		assertThat(userComboBoxString).doesNotContain("payer");
+	}
+
+	@GUITest
+	@Test
+	public void testPayHalfReceiptsToPayer1() {
+		window.comboBox("userSelection").selectItem("payer");
+
+		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer / 2.0));
+		window.button("payButton").click();
+
+		window.comboBox("userSelection").selectItem("payer");
+		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f",
+				Precision.round(debtToPayer, 2) - Precision.round(debtToPayer / 2.0, 2)));
 
 		String[] receiptListString = window.list("receiptList").contents();
-		
-		Pause.pause(20000);
+		assertThat(receiptListString)
+				.isEqualTo(Arrays.asList((new CustomToStringReceipt(thirdReceiptPayer1)).toString(),
+						(new CustomToStringReceipt(secondReceiptPayer1)).toString()).toArray());
 
-		assertThat(receiptListString).isEqualTo(Arrays.asList((new CustomToStringReceipt(thirdReceipt)).toString(),
-				(new CustomToStringReceipt(secondReceipt)).toString(),
-				(new CustomToStringReceipt(firstReceipt)).toString()).toArray());
-				
+	}
+
+	@GUITest
+	@Test
+	public void testPayEachUserShowMessage() {
+		window.comboBox("userSelection").selectItem("payer");
+
+		Double debtToPayer1 = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer1));
+		window.button("payButton").click();
+
+		window.comboBox("userSelection").selectItem("payer2");
+
+		Double debtToPayer2 = Arrays.asList(firstReceiptPayer2).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer2));
+		window.button("payButton").click();
+
+		window.label("errorMsg").requireText("You have no accountings.");
+
 	}
 
 }

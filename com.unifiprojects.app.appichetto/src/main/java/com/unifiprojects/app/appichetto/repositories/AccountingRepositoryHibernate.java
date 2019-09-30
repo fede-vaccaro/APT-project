@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.repositories;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 
@@ -10,14 +11,17 @@ import com.unifiprojects.app.appichetto.models.User;
 public class AccountingRepositoryHibernate implements AccountingRepository {
 
 	private EntityManager entityManager;
-	
+
 	public AccountingRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
 	@Override
 	public void saveAccounting(Accounting accounting) {
-		entityManager.merge(accounting);
+		if (Objects.isNull(accounting.getId()))
+			entityManager.persist(accounting);
+		else
+			entityManager.merge(accounting);
 	}
 
 	@Override

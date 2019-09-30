@@ -66,7 +66,6 @@ public class PayViewReceiptsControllerTest {
 
 		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 		verify(payViewReceiptsView).showReceipts(unpaids);
-		verify(payViewReceiptsView).showItems(unpaids.get(0).getItems());
 	}
 
 	@Test
@@ -89,7 +88,6 @@ public class PayViewReceiptsControllerTest {
 		List<Receipt> unpaidsOrdered = Arrays.asList(receipt3, receipt2, receipt1);
 
 		verify(payViewReceiptsView).showReceipts(unpaidsOrdered);
-		verify(payViewReceiptsView).showItems(unpaidsOrdered.get(0).getItems());
 
 	}
 
