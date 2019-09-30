@@ -23,7 +23,7 @@ public class ReceiptManager {
 		receipt.addItem(item);
 		double pricePerOwner = item.getPrice() * item.getQuantity() / item.getOwners().size();
 
-		item.getOwners().stream().forEach(user -> {
+		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer())).forEach(user -> {
 			if (accountings.containsKey(user))
 				accountings.get(user).addAmount(pricePerOwner);
 			else

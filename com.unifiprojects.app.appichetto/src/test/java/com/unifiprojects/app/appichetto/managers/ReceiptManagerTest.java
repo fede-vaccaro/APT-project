@@ -1,18 +1,24 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -51,11 +57,22 @@ public class ReceiptManagerTest {
 		receiptManager.addItem(item);
 
 		verify(accountings).put(pippo, new Accounting(pippo, 4.4));
-
 	}
 
 	@Test
-	public void testAddItemAddItemToReceiptAndUpdateAccountingsCorrectly() {
+	public void testWhenAnItemIsAddedAccountingOfReceiptBuyerWillNotBeCreated() {
+		User pippo = new User("Pippo", "psw");
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
+
+		when(receipt.getBuyer()).thenReturn(pippo);
+				
+		receiptManager.addItem(item);
+		
+		verifyZeroInteractions(accountings);
+	}
+
+	@Test 
+	public void testAddItemWhenAccountingExistsThenItemIsAddedToReceiptAndAccountingsAreUpdatedCorrectly() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
 		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
@@ -74,8 +91,8 @@ public class ReceiptManagerTest {
 		verify(receipt).addItem(item);
 		verify(accountings.get(pippo)).addAmount(priceOfPippoCaptor.capture());
 		verify(accountings.get(pluto)).addAmount(priceOfPlutoCaptor.capture());
-		assert (priceOfPippoCaptor.getValue()).equals(2.2);
-		assert (priceOfPlutoCaptor.getValue()).equals(2.2);
+		assertThat(priceOfPippoCaptor.getValue()).isEqualTo(2.2);
+		assertThat(priceOfPlutoCaptor.getValue()).isEqualTo(2.2);
 	}
 
 	@Test
