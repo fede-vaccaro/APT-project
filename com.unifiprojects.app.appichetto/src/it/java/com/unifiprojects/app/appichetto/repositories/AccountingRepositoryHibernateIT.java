@@ -2,9 +2,6 @@ package com.unifiprojects.app.appichetto.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.junit.AfterClass;
@@ -21,7 +18,7 @@ public class AccountingRepositoryHibernateIT {
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 	private static EntityManager entityManager;
 
-	private AccountingRepository accountingRepository;
+	private AccountingRepositoryHibernate accountingRepository;
 
 	@BeforeClass
 	public static void setupEntityManager() {
