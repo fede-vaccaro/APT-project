@@ -22,8 +22,8 @@ public class ReceiptManager {
 	public void addItem(Item item) {
 		receipt.addItem(item);
 		double pricePerOwner = item.getPrice() * item.getQuantity() / item.getOwners().size();
-
-		item.getOwners().stream().forEach(user -> {
+		
+		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer())).forEach(user -> {
 			if (accountings.containsKey(user))
 				accountings.get(user).addAmount(pricePerOwner);
 			else
@@ -35,12 +35,16 @@ public class ReceiptManager {
 		receipt.updateItem(index, item);
 		double oldPrice = receipt.getItem(index).getPricePerOwner();
 		double priceGap = item.getPricePerOwner() - oldPrice;
-		item.getOwners().stream().forEach(user -> accountings.get(user).addAmount(priceGap));
+
+		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
+				.forEach(user -> accountings.get(user).addAmount(priceGap));
+
 	}
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
 		double price = -itemToDelete.getPricePerOwner();
+
 		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
 	}
 
