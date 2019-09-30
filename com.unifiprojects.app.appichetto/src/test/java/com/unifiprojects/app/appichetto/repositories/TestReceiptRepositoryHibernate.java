@@ -69,7 +69,6 @@ public class TestReceiptRepositoryHibernate {
 		receipt1.setAccountingList(Arrays.asList(accountingToUser1));
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
-
 		entityManager.clear();
 
 		receiptRepositoryHibernate.saveReceipt(receipt1);
@@ -449,39 +448,7 @@ public class TestReceiptRepositoryHibernate {
 	}
 
 	@Test
-	public void testReceiptIsRemovedWhenUser1IsRemoved() {
-		User creditorUser = new User("user1", "pw");
-		User debtorUser = new User("user2", "pw");
-		Receipt receipt = new Receipt();
-		Item item1 = new Item("potato", 10.0, Arrays.asList(creditorUser, debtorUser));
-		Item item2 = new Item("tomato", 10.0, Arrays.asList(creditorUser, debtorUser));
-		receipt.addItem(item1);
-		receipt.addItem(item2);
-		receipt.setBuyer(creditorUser);
-		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
-		receipt.setTotalPrice(10.0);
-
-		entityManager.getTransaction().begin();
-		entityManager.persist(creditorUser);
-		entityManager.persist(debtorUser);
-		entityManager.persist(receipt);
-		entityManager.getTransaction().commit();
-
-		entityManager.clear();
-		
-		creditorUser = entityManager.merge(creditorUser);
-		entityManager.remove(creditorUser);
-		
-		Receipt foundReceipt = entityManager.find(Receipt.class, receipt.getId());
-		User foundUser2 = entityManager.find(User.class, debtorUser.getId());
-		User foundUser1 = entityManager.find(User.class, creditorUser.getId());
-		assertThat(foundReceipt).isNull();
-		assertThat(foundUser1).isNull();
-		assertThat(foundUser2).isEqualTo(debtorUser);
-	}
-	
-	@Test
-	public void testRemovingAReceiptWhenNotAttachedRemovesItsItemsAndAccountingsButNotTheUsers(){
+	public void testRemovingAReceiptWhenNotAttachedRemovesItsItemsAndAccountingsButNotTheUsers() {
 		User debtorUser = new User("user1", "pw");
 		User creditorUser = new User("user2", "pw");
 
@@ -504,10 +471,9 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
-		
-		
+
 		receiptRepositoryHibernate.removeReceipt(receipt);
-		
+
 		assertThat(entityManager.find(User.class, creditorUser.getId())).isEqualTo(creditorUser);
 		assertThat(entityManager.find(User.class, debtorUser.getId())).isEqualTo(debtorUser);
 		assertThat(entityManager.find(Item.class, item1.getId())).isNull();
@@ -515,9 +481,9 @@ public class TestReceiptRepositoryHibernate {
 		assertThat(entityManager.find(Accounting.class, accountingToUser1.getId())).isNull();
 		assertThat(entityManager.find(Receipt.class, receipt.getId())).isNull();
 	}
-	
+
 	@Test
-	public void testRemovingAReceiptWhenAttachedRemovesItsItemsAndAccountingsButNotTheUsers(){
+	public void testRemovingAReceiptWhenAttachedRemovesItsItemsAndAccountingsButNotTheUsers() {
 		User debtorUser = new User("user1", "pw");
 		User creditorUser = new User("user2", "pw");
 
@@ -540,7 +506,7 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().commit();
 
 		receiptRepositoryHibernate.removeReceipt(receipt);
-		
+
 		assertThat(entityManager.find(User.class, creditorUser.getId())).isEqualTo(creditorUser);
 		assertThat(entityManager.find(User.class, debtorUser.getId())).isEqualTo(debtorUser);
 		assertThat(entityManager.find(Item.class, item1.getId())).isNull();
