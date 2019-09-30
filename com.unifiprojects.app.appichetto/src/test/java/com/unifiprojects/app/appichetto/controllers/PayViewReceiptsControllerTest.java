@@ -21,7 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.Accounting;
-import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
@@ -59,7 +58,7 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt receipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
 
 		List<Receipt> unpaids = Arrays.asList(receipt);
@@ -75,11 +74,11 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 10));
-		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 17));
 
 		List<Receipt> unpaids = Arrays.asList(receipt2, receipt1, receipt3);
@@ -107,35 +106,13 @@ public class PayViewReceiptsControllerTest {
 
 	}
 
-	public Receipt generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(User loggedUser, User payerUser,
-			GregorianCalendar timestamp) {
-
-		Receipt receipt = new Receipt();
-
-		receipt.setTimestamp(timestamp);
-		receipt.setBuyer(payerUser);
-
-		// receipt setup: payerUser bought item1 and item2 but he shares them with
-		// logged user...
-		Item item1 = new Item("Item1", 10., Arrays.asList(loggedUser, payerUser));
-		Item item2 = new Item("Item2", 5., Arrays.asList(loggedUser, payerUser));
-
-		receipt.setItems(Arrays.asList(item1, item2));
-		receipt.setTotalPrice(item1.getPrice() + item2.getPrice());
-
-		// so now, logged user owes 7.5 credits to payer user
-		Accounting debtFromLoggedToPayer = new Accounting(loggedUser, item1.getPrice() / 2 + item2.getPrice() / 2);
-		debtFromLoggedToPayer.setReceipt(receipt);
-		receipt.setAccountingList(Arrays.asList(debtFromLoggedToPayer));
-		return receipt;
-	}
 
 	@Test
 	public void testAccountingIsPaidWhenCalledPayAmountIfThereIsOnlyOneReceiptAndEnteredAmountIsEqualToDebt() {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
 		Accounting accounting = receipt1.getAccountings().get(0);
 		double exactAmountToPay = accounting.getAmount();
@@ -153,7 +130,7 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
 
 		Accounting accounting = receipt1.getAccountings().get(0);
@@ -176,9 +153,9 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
-		Receipt olderReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 4));
 
 		InOrder inOrder = inOrder(accountingRepository);
@@ -207,9 +184,9 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 4));
 
 		InOrder inOrder = inOrder(accountingRepository);
@@ -240,11 +217,11 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 1));
 
 		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
@@ -279,11 +256,11 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 1));
 
 		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
@@ -318,7 +295,7 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 8, 14));
 
 		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
@@ -353,10 +330,10 @@ public class PayViewReceiptsControllerTest {
 		User payer1 = new User("payer1", "pw");
 		User payer2 = new User("payer2", "pw");
 
-		Receipt receiptByPayer1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payer1,
+		Receipt receiptByPayer1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payer1,
 				new GregorianCalendar(2019, 8, 14));
 
-		Receipt receiptByPayer2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payer2,
+		Receipt receiptByPayer2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payer2,
 				new GregorianCalendar(2019, 8, 3));
 
 		Accounting accountingByPayer1 = receiptByPayer1.getAccountings().get(0);
@@ -410,7 +387,7 @@ public class PayViewReceiptsControllerTest {
 		User loggedUser = new User("logged", "pw");
 		User payerUser = new User("payer", "pw");
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 14));
 		Accounting accounting = receipt1.getAccountings().get(0);
 		double superiorAmountToPay = accounting.getAmount() * 2.0;

@@ -45,9 +45,6 @@ public class PayViewReceiptsController {
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
 		payViewReceiptsView.showReceipts(unpaidReceipts);
-		Optional<Receipt> firstReceipt = unpaidReceipts.stream().findFirst();
-		if (firstReceipt.isPresent())
-			payViewReceiptsView.showItems(firstReceipt.get().getItems());
 	}
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {

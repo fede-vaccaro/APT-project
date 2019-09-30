@@ -44,6 +44,10 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	private PayViewReceiptsController payViewReceiptsController;
 
+	public void setController(PayViewReceiptsController payViewReceiptsController) {
+		this.payViewReceiptsController = payViewReceiptsController;
+	}
+
 	private JFrame frame;
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
@@ -109,6 +113,10 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	 */
 	public PayViewReceiptsViewSwing(PayViewReceiptsController payViewReceiptsController) {
 		this.payViewReceiptsController = payViewReceiptsController;
+		initialize();
+	}
+
+	public PayViewReceiptsViewSwing() {
 		initialize();
 	}
 
@@ -211,6 +219,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 				showItems(receipt.getItems());
 				displayReceiptAmount(receipt);
 			}
+			User selectedUser = (User) userComboBoxModel.getSelectedItem();
+			refreshTotalDebtToSelectedUser(selectedUser);
 		});
 
 		userSelection.addActionListener(e -> btnPay.setEnabled(getIfPayButtonShouldBeEnabled()));
@@ -308,6 +318,10 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		unpaids.stream().filter(r -> r.getBuyer().equals(selectedUser))
 				.forEach(r -> receiptListModel.addElement(new CustomToStringReceipt(r)));
 		receiptList.setSelectedIndex(0);
+		//refreshTotalDebtToSelectedUser(selectedUser);
+	}
+
+	private void refreshTotalDebtToSelectedUser(User selectedUser) {
 		if (accountings != null) {
 			double totalDebtToSelectedUser = getTotalDebtToSelectedUser(selectedUser);
 			lblTotaldebttouser.setText(TOTALDEBTTOUSERMESSAGE + String.format("%.2f", totalDebtToSelectedUser));

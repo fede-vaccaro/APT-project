@@ -17,9 +17,7 @@ public class AccountingRepositoryHibernate implements AccountingRepository {
 
 	@Override
 	public void saveAccounting(Accounting accounting) {
-		entityManager.getTransaction().begin();
-		entityManager.persist(accounting);
-		entityManager.getTransaction().commit();
+		entityManager.merge(accounting);
 	}
 
 	@Override
