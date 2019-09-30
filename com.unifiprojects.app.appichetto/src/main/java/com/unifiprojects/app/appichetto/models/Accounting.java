@@ -87,7 +87,7 @@ public class Accounting {
 		this.receipt = null;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
