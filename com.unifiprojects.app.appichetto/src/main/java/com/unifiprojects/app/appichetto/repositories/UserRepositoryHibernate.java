@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
+import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class UserRepositoryHibernate implements UserRepository {
@@ -22,7 +24,7 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	@Override
 	public void save(User user) {
-		if((user.getUsername().trim()).equals(""))
+		if ((user.getUsername().trim()).equals(""))
 			throw new IllegalArgumentException("You can't use empty string username.");
 		if (this.findByUsername(user.getUsername()) != null) {
 			throw new AlreadyExistentException(
@@ -54,6 +56,26 @@ public class UserRepositoryHibernate implements UserRepository {
 			LOGGER.debug(String.format("User with username %s not found.", username), e);
 			return null;
 		}
+	}
+
+	@Override
+	public void removeUser(User user) {
+		User toBeRemoved = user;
+		if (!entityManager.contains(user)) {
+			toBeRemoved = entityManager.merge(user);
+		}
+		
+		/*for(Item i : new ArrayList<>(user.getOwnedItems())) {
+			user.getOwnedItems().remove(i);
+			
+			List<User> updatedOwnersForItem = new ArrayList<>(i.getOwners());
+			updatedOwnersForItem.remove(user);
+			i.setOwners(updatedOwnersForItem);
+			entityManager.merge(i);
+		}*/
+		
+		entityManager.remove(toBeRemoved);
+
 	}
 
 }
