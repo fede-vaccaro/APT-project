@@ -120,6 +120,19 @@ public class ReceiptManagerTest {
 		assert (priceOfPippoCaptor.getValue()).equals(1.1);
 		assert (priceOfPlutoCaptor.getValue()).equals(1.1);
 	}
+	
+	@Test
+	public void testWhenAnItemIsUpdatedAccountingOfReceiptBuyerWillNotBeCalled() {
+		User pippo = new User("Pippo", "psw");
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
+
+		when(receipt.getBuyer()).thenReturn(pippo);
+		when(receipt.getItem(0)).thenReturn(item);
+				
+		receiptManager.updateItem(0, item);
+		
+		verifyZeroInteractions(accountings);
+	}
 
 	@Test
 	public void testDeleteItemDeleteItemAndUpdateAccountingsCorrectly() {
