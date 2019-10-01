@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -45,27 +46,36 @@ public class ReceiptManagerTest {
 	@Test
 	public void testWhenAnItemIsAddedAndAccountingNotExistThenWillBeCreated() {
 		User pippo = new User("Pippo", "psw");
-		User pluto = new User("Pluto", "psw");
-		Item item = new Item("Sugo", 2.2, 4, Arrays.asList(pippo, pluto));
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
 
 		when(accountings.get(pippo)).thenReturn(null);
-		when(accountings.get(pluto)).thenReturn(null);
-		
+
 		receiptManager.addItem(item);
 
 		verify(accountings).put(pippo, new Accounting(pippo, 4.4));
-		verify(accountings).put(pluto, new Accounting(pluto, 4.4));
 	}
 
 	@Test
-	public void testAddItemAddItemToReceiptAndUpdateAccountingsCorrectly() {
+	public void testWhenAnItemIsAddedAccountingOfReceiptBuyerWillNotBeCreated() {
+		User pippo = new User("Pippo", "psw");
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
+
+		when(receipt.getBuyer()).thenReturn(pippo);
+				
+		receiptManager.addItem(item);
+		
+		verifyZeroInteractions(accountings);
+	}
+
+	@Test 
+	public void testAddItemWhenAccountingExistsThenItemIsAddedToReceiptAndAccountingsAreUpdatedCorrectly() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
-		Item item = new Item("Sugo", 2.2, 4, Arrays.asList(pippo, pluto));
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
 		Accounting accountingPippo = spy(new Accounting(pippo));
 		Accounting accountingPluto = spy(new Accounting(pluto));
-		ArgumentCaptor<Double> amountOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
-		ArgumentCaptor<Double> amountOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
+		ArgumentCaptor<Double> priceOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
+		ArgumentCaptor<Double> priceOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
 
 		when(accountings.get(pippo)).thenReturn(accountingPippo);
 		when(accountings.containsKey(pippo)).thenReturn(true);
@@ -75,40 +85,50 @@ public class ReceiptManagerTest {
 		receiptManager.addItem(item);
 
 		verify(receipt).addItem(item);
-		verify(accountings.get(pippo)).addAmount(amountOfPippoCaptor.capture());
-		verify(accountings.get(pluto)).addAmount(amountOfPlutoCaptor.capture());
-		assert (amountOfPippoCaptor.getValue()).equals(4.4);
-		assert (amountOfPlutoCaptor.getValue()).equals(4.4);
-	}
-
-
-
-	@Test
-	public void testUpdateItemUpdateItemAndUpdateAccountingsCorrectly() {
-		User pippo = new User("Pippo", "psw");
-		User pluto = new User("Pluto", "psw");
-		Item oldItem = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
-		Item updatedItem = new Item("Sugo", 2.2, 4, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
-		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
-		ArgumentCaptor<Double> priceOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
-		ArgumentCaptor<Double> priceOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
-		
-		when(accountings.get(pippo)).thenReturn(accountingPippo);
-		when(accountings.containsKey(pippo)).thenReturn(true);
-		when(accountings.get(pluto)).thenReturn(accountingPluto);
-		when(accountings.containsKey(pluto)).thenReturn(true);
-		when(receipt.getItem(0)).thenReturn(oldItem);
-		
-		receiptManager.updateItem(0, updatedItem);
-		
-		verify(receipt).updateItem(0, updatedItem);
 		verify(accountings.get(pippo)).addAmount(priceOfPippoCaptor.capture());
 		verify(accountings.get(pluto)).addAmount(priceOfPlutoCaptor.capture());
 		assertThat(priceOfPippoCaptor.getValue()).isEqualTo(2.2);
 		assertThat(priceOfPlutoCaptor.getValue()).isEqualTo(2.2);
 	}
 
+	@Test
+	public void testUpdateItemUpdateItemAndUpdateAccountingsCorrectly() {
+		User pippo = new User("Pippo", "psw");
+		User pluto = new User("Pluto", "psw");
+		Item oldItem = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
+		Item updatedItem = new Item("Sugo", 2.2, 3, Arrays.asList(pippo, pluto));
+		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
+		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
+		ArgumentCaptor<Double> priceOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
+		ArgumentCaptor<Double> priceOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
+
+		when(accountings.get(pippo)).thenReturn(accountingPippo);
+		when(accountings.containsKey(pippo)).thenReturn(true);
+		when(accountings.get(pluto)).thenReturn(accountingPluto);
+		when(accountings.containsKey(pluto)).thenReturn(true);
+		when(receipt.getItem(0)).thenReturn(oldItem);
+
+		receiptManager.updateItem(0, updatedItem);
+
+		verify(receipt).updateItem(0, updatedItem);
+		verify(accountings.get(pippo)).addAmount(priceOfPippoCaptor.capture());
+		verify(accountings.get(pluto)).addAmount(priceOfPlutoCaptor.capture());
+		assertThat(priceOfPippoCaptor.getValue()).isEqualTo(1.1);
+		assertThat(priceOfPlutoCaptor.getValue()).isEqualTo(1.1);
+	}
+	
+	@Test
+	public void testWhenAnItemIsUpdatedAccountingOfReceiptBuyerWillNotBeCalled() {
+		User pippo = new User("Pippo", "psw");
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
+
+		when(receipt.getBuyer()).thenReturn(pippo);
+		when(receipt.getItem(0)).thenReturn(item);
+				
+		receiptManager.updateItem(0, item);
+		
+		verifyZeroInteractions(accountings);
+	}
 
 	@Test
 	public void testDeleteItemDeleteItemAndUpdateAccountingsCorrectly() {
@@ -119,14 +139,14 @@ public class ReceiptManagerTest {
 		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
 		ArgumentCaptor<Double> priceOfPippoCaptor = ArgumentCaptor.forClass(Double.class);
 		ArgumentCaptor<Double> priceOfPlutoCaptor = ArgumentCaptor.forClass(Double.class);
-		
+
 		when(accountings.get(pippo)).thenReturn(accountingPippo);
 		when(accountings.containsKey(pippo)).thenReturn(true);
 		when(accountings.get(pluto)).thenReturn(accountingPluto);
 		when(accountings.containsKey(pluto)).thenReturn(true);
-		
+
 		receiptManager.deleteItem(itemToDelete);
-		
+
 		verify(receipt).deleteItem(itemToDelete);
 		verify(accountings.get(pippo)).addAmount(priceOfPippoCaptor.capture());
 		verify(accountings.get(pluto)).addAmount(priceOfPlutoCaptor.capture());

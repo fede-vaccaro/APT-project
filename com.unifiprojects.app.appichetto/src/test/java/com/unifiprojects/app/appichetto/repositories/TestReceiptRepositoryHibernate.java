@@ -1,5 +1,11 @@
 package com.unifiprojects.app.appichetto.repositories;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -9,13 +15,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.unifiprojects.app.appichetto.models.*;
-
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.List;
+import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Item;
+import com.unifiprojects.app.appichetto.models.Receipt;
+import com.unifiprojects.app.appichetto.models.User;
 
 public class TestReceiptRepositoryHibernate {
 

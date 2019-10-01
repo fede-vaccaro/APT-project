@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
@@ -26,6 +27,7 @@ import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionExcep
 import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
@@ -38,6 +40,9 @@ public class ReceiptControllerTest {
 
 	@Mock
 	private ReceiptView receiptView;
+	
+	@Mock
+	private UserRepository userRepository;   
 
 	@Mock
 	private TransactionHandler transactionHandler;
@@ -129,5 +134,17 @@ public class ReceiptControllerTest {
 		verify(receiptManager).saveReceipt();
 		verify(receiptView).goToHome();
 	}
-
+	
+	@Test
+	public void testGetUserReturnUserListCallingUserRepository() {
+		User pippo = new User("pippo","psw");
+		User pluto = new User("pluto","psw");
+		
+		when(userRepository.findAll()).thenReturn(Arrays.asList(pippo, pluto));
+		
+		List<User> users = receiptController.getUsers();
+		
+		verify(userRepository).findAll();		
+		assertThat(users).containsExactlyInAnyOrder(pippo, pluto);
+	}
 }
