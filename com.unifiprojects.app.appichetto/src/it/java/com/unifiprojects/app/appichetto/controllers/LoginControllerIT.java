@@ -41,8 +41,8 @@ public class LoginControllerIT {
 
 
 	@Before
-	public void wipeTablesBeforeTest() {
-		
+	public void setUp() {
+		baseTest.wipeTablesBeforeTest();
 		MockitoAnnotations.initMocks(this);
 		entityManager = baseTest.getEntityManager();
 		userRepository = new UserRepositoryHibernate(entityManager);
