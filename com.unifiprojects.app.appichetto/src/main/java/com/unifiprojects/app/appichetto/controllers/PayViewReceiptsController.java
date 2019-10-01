@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,9 +46,6 @@ public class PayViewReceiptsController {
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
 		payViewReceiptsView.showReceipts(unpaidReceipts);
-		Optional<Receipt> firstReceipt = unpaidReceipts.stream().findFirst();
-		if (firstReceipt.isPresent())
-			payViewReceiptsView.showItems(firstReceipt.get().getItems());
 	}
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {
@@ -69,7 +67,7 @@ public class PayViewReceiptsController {
 			transaction.doInTransaction(() -> {
 				Double remainingAmount = enteredAmount;
 
-				if (totalAmountToPay < remainingAmount) {
+				if (Precision.round(totalAmountToPay,2) < Precision.round(remainingAmount,2)) {
 					payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
 					return;
 				}

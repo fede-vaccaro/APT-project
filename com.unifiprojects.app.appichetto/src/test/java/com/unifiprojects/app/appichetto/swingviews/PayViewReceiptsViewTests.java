@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -36,7 +37,6 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	@Mock
 	private PayViewReceiptsController payViewReceiptsController;
 
-	
 	@InjectMocks
 	private PayViewReceiptsViewSwing payViewReceiptsSwing;
 
@@ -78,32 +78,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testShowReceiptsVisualizeMessageWhenInputIsEmpty() {
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList()));
-		window.label("errorMsg").requireText("You have no accounting.");
-	}
-
-	public Receipt generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(User loggedUser, User payerUser,
-			GregorianCalendar timestamp, List<Item> itemList) {
-
-		Receipt receipt = new Receipt();
-
-		receipt.setTimestamp(timestamp);
-		receipt.setBuyer(payerUser);
-
-		// receipt setup: payerUser bought item1 and item2 but he shares them with
-		// logged user...
-		if (itemList == null) {
-			Item item1 = new Item("Item1", 10., Arrays.asList(loggedUser, payerUser));
-			Item item2 = new Item("Item2", 5., Arrays.asList(loggedUser, payerUser));
-			itemList = Arrays.asList(item1, item2);
-		}
-		receipt.setItems(itemList);
-		// assuming each item is owned by logged user and a buyer
-		Double totalAmount = itemList.stream().mapToDouble(i -> i.getPrice()).sum();
-		receipt.setTotalPrice(totalAmount);
-		Accounting debtFromLoggedToPayer = new Accounting(loggedUser, totalAmount / 2.0);
-		debtFromLoggedToPayer.setReceipt(receipt);
-		receipt.setAccountingList(Arrays.asList(debtFromLoggedToPayer));
-		return receipt;
+		window.label("errorMsg").requireText("You have no accountings.");
 	}
 
 	@Test
@@ -111,7 +86,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testShowReceiptsVisualizeTheOnlyReceipt() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 10), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt)));
 		String[] receiptListString = window.list("receiptList").contents();
@@ -123,11 +98,11 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testShowReceiptsVisualizeTheThreeReceipts() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 2), null);
-		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 3), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2, receipt3)));
 		String[] receiptListString = window.list("receiptList").contents();
@@ -142,7 +117,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testShowReceiptsVisualizeTheBuyerInUserSelection() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt)));
 		String[] userListString = window.comboBox().contents();
@@ -154,9 +129,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testShowReceiptsDoesntVisualizeMultipleTimeTheSameUser() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2)));
 		String[] userListString = window.comboBox().contents();
@@ -169,11 +144,11 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		User logged = new User("logged", "pw");
 		User payer1 = new User("payer1", "pw2");
 		User payer2 = new User("payer2", "pw3");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), null);
-		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 3), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2, receipt3)));
 		String[] userListString = window.comboBox().contents();
@@ -186,11 +161,11 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		User logged = new User("logged", "pw");
 		User payer1 = new User("payer1", "pw2");
 		User payer2 = new User("payer2", "pw3");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), null);
-		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 3), null);
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt3, receipt2, receipt1)));
 		String[] receiptListString = window.list("receiptList").contents();
@@ -204,11 +179,11 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		User logged = new User("logged", "pw");
 		User payer1 = new User("payer1", "pw2");
 		User payer2 = new User("payer2", "pw3");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), null);
-		Receipt receipt3 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 3), null);
 
 		GuiActionRunner.execute(() -> {
@@ -240,7 +215,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		User payer = new User("payer", "pw2");
 		Item item1 = new Item("potatos", 5.0, Arrays.asList(logged, payer));
 		Item item2 = new Item("tomatos", 5.0, Arrays.asList(logged, payer));
-		Receipt receipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
 		GuiActionRunner.execute(() -> payViewReceiptsSwing.showReceipts(Arrays.asList(receipt)));
 		String[] itemListString = window.list("itemList").contents();
@@ -259,9 +234,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 5.0, Arrays.asList(logged, payer2));
 		Item item3 = new Item("hamburgers", 5.0, Arrays.asList(logged, payer2));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
@@ -291,9 +266,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 5.0, Arrays.asList(logged, payer));
 		Item item3 = new Item("hamburgers", 5.0, Arrays.asList(logged, payer));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
 
 		GuiActionRunner.execute(() -> {
@@ -323,15 +298,17 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testSelectedReceiptDisplayTheTotalAmount() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 10), null);
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt));
 
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
 			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt));
 
-			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
 		});
+
 		window.label("totalForSelectedReceipt")
 				.requireText(String.format("Total for this receipt: %.2f", receipt.getTotalPrice()));
 	}
@@ -346,9 +323,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 2.0, Arrays.asList(logged, payer));
 		Item item3 = new Item("hamburgers", 5.0, Arrays.asList(logged, payer));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
 
 		GuiActionRunner.execute(() -> {
@@ -378,9 +355,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 2.0, Arrays.asList(logged, payer));
 		Item item3 = new Item("hamburgers", 5.0, Arrays.asList(logged, payer));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item2, item3));
 
 		GuiActionRunner.execute(() -> {
@@ -388,7 +365,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payViewReceiptsSwing.showReceipts(Arrays.asList());
 		});
 
-		window.label("errorMsg").requireText("You have no accounting.");
+		window.label("errorMsg").requireText("You have no accountings.");
 
 		String[] receiptStringList = window.list("receiptList").contents();
 		String[] itemStringList = window.list("itemList").contents();
@@ -409,34 +386,55 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 2.0, Arrays.asList(logged, payer));
 		Item item3 = new Item("hamburgers", 10.0, Arrays.asList(logged, payer));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
-				new GregorianCalendar(2019, 8, 1), Arrays.asList(item2, item3));
-
-		double debt = receipt1.getTotalPrice() / 2.0 + receipt2.getTotalPrice() / 2.0;
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
 
 		payViewReceiptsSwing.setLoggedUser(logged);
 
 		GuiActionRunner.execute(() -> {
 			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 			List<Accounting> accountings = new ArrayList<>();
-			List<Receipt> unpaids = payViewReceiptsSwing.getUnpaids();
 
+			List<Receipt> unpaids = payViewReceiptsSwing.getUnpaids();
 			for (Receipt r : unpaids) {
 				accountings.addAll(r.getAccountings());
 			}
-
 			accountings = accountings.stream().filter(a -> a.getUser().equals(logged)).collect(Collectors.toList());
 			payViewReceiptsSwing.setAccountings(accountings);
-			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
-			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
 
 			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
 		});
-
+		double debt = receipt1.getTotalPrice() / 2.0 + receipt2.getTotalPrice() / 2.0;
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debt));
 
+	}
+
+	@Test
+	@GUITest
+	public void ComputedTotalDebtToUserIsCorrectAfterCallingShowReceiptsWithOnlyOnePayer() {
+		User logged = new User("logged", "pw");
+
+		User payer1 = new User("payer1", "pw2");
+
+		Item item1 = new Item("potatos", 2.0, Arrays.asList(logged, payer1));
+		Item item2 = new Item("hamburgers", 4.0, Arrays.asList(logged, payer1));
+		Item item3 = new Item("bread", 4.0, Arrays.asList(logged, payer1));
+
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
+
+		double debtToPayer1 = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
+
+		payViewReceiptsSwing.setLoggedUser(logged);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2));
+		});
+		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debtToPayer1));
 	}
 
 	@Test
@@ -451,9 +449,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Item item2 = new Item("tomatos", 3.0, Arrays.asList(logged, payer2));
 		Item item3 = new Item("hamburgers", 4.0, Arrays.asList(logged, payer2));
 
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer1,
 				new GregorianCalendar(2019, 8, 1), Arrays.asList(item1, item2));
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer2,
 				new GregorianCalendar(2019, 8, 2), Arrays.asList(item2, item3));
 
 		double debtToPayer1 = receipt1.getTotalPrice() / 2.0;
@@ -462,22 +460,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		payViewReceiptsSwing.setLoggedUser(logged);
 
 		GuiActionRunner.execute(() -> {
-			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			List<Accounting> accountings = new ArrayList<>();
-			List<Receipt> unpaids = payViewReceiptsSwing.getUnpaids();
-
-			for (Receipt r : unpaids) {
-				accountings.addAll(r.getAccountings());
-			}
-
-			accountings = accountings.stream().filter(a -> a.getUser().equals(logged)).collect(Collectors.toList());
-			payViewReceiptsSwing.setAccountings(accountings);
-			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
-			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
-
-			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer1);
-			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer2);
+			payViewReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2));
 		});
+
 		window.comboBox("userSelection").selectItem("payer1");
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debtToPayer1));
 
@@ -525,9 +510,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void buttonIsUnlockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountLesserThanTotal() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 
 		GuiActionRunner.execute(() -> {
@@ -557,9 +542,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void buttonIsLockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountHigherThanTotal() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 
 		GuiActionRunner.execute(() -> {
@@ -590,9 +575,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void buttonIsUnlockedIfThereIsAnAvailableUserAndSomeReceiptAndAnAmountEqualToTotal() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 
 		GuiActionRunner.execute(() -> {
@@ -623,9 +608,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void buttonGetLockedFromUnlockedIfTheUserListIsCleared() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 
 		GuiActionRunner.execute(() -> {
@@ -661,9 +646,9 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void payButtonClickedDelegateToController() {
 		User logged = new User("logged", "pw");
 		User payer = new User("payer", "pw2");
-		Receipt receipt1 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
-		Receipt receipt2 = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
 				new GregorianCalendar(2019, 8, 1), null);
 
 		GuiActionRunner.execute(() -> {
@@ -676,7 +661,7 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
 			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
-			
+
 			payViewReceiptsSwing.setLoggedUser(logged);
 		});
 
@@ -689,6 +674,43 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		window.button("payButton").click();
 
 		verify(payViewReceiptsController).payAmount(totalDebt, logged, payer);
+
+	}
+
+	@Test
+	@GUITest
+	public void payButtonClickedEmptyTheText() {
+		
+		User logged = new User("logged", "pw");
+		User payer = new User("payer", "pw2");
+		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(logged, payer,
+				new GregorianCalendar(2019, 8, 1), null);
+
+		GuiActionRunner.execute(() -> {
+			payViewReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt1));
+			payViewReceiptsSwing.getReceiptListModel().addElement(new CustomToStringReceipt(receipt2));
+			payViewReceiptsSwing.getUserComboBoxModel().addElement(payer);
+
+			payViewReceiptsSwing.setAccountings(new ArrayList<>());
+
+			payViewReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
+			payViewReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
+
+			payViewReceiptsSwing.setLoggedUser(logged);
+		});
+
+		payViewReceiptsSwing.getUserComboBoxModel().setSelectedItem(payer);
+
+		Double totalDebt = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
+
+		window.textBox("enterAmountField").enterText(totalDebt.toString());
+
+		window.button("payButton").click();
+
+		window.textBox("enterAmountField").requireText("");
 
 	}
 

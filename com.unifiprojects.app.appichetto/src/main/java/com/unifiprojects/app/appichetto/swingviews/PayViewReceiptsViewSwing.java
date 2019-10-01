@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,6 +45,10 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	private static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
 	private PayViewReceiptsController payViewReceiptsController;
+
+	public void setController(PayViewReceiptsController payViewReceiptsController) {
+		this.payViewReceiptsController = payViewReceiptsController;
+	}
 
 	private JFrame frame;
 	private JTextField txtEnterAmount;
@@ -112,6 +118,10 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		initialize();
 	}
 
+	public PayViewReceiptsViewSwing() {
+		initialize();
+	}
+
 	private boolean parseEnteredAmountAndCheckIfIsValid() {
 		String enteredAmountString = txtEnterAmount.getText();
 
@@ -133,6 +143,9 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
+		Locale.setDefault(Locale.US);
+
 		frame = new JFrame();
 		frame.setTitle("Pay and View receipts bought by others");
 		frame.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -193,6 +206,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 			LOGGER.info((User) userComboBoxModel.getSelectedItem());
 			LOGGER.info(payViewReceiptsController);
 			payViewReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
+			txtEnterAmount.setText("");
 		});
 		btnPay.setName("payButton");
 		GridBagConstraints gbc_btnPay = new GridBagConstraints();
@@ -211,6 +225,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 				showItems(receipt.getItems());
 				displayReceiptAmount(receipt);
 			}
+			User selectedUser = (User) userComboBoxModel.getSelectedItem();
+			refreshTotalDebtToSelectedUser(selectedUser);
 		});
 
 		userSelection.addActionListener(e -> btnPay.setEnabled(getIfPayButtonShouldBeEnabled()));
@@ -298,7 +314,8 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	private boolean getIfPayButtonShouldBeEnabled() {
 		return (userSelection.getSelectedIndex() > -1) && parseEnteredAmountAndCheckIfIsValid()
-				&& (enteredAmount <= getTotalDebtToSelectedUser((User) userComboBoxModel.getSelectedItem()));
+				&& (enteredAmount <= Precision
+						.round(getTotalDebtToSelectedUser((User) userComboBoxModel.getSelectedItem()), 2));
 	}
 
 	private void refreshReceiptList() {
@@ -308,6 +325,9 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		unpaids.stream().filter(r -> r.getBuyer().equals(selectedUser))
 				.forEach(r -> receiptListModel.addElement(new CustomToStringReceipt(r)));
 		receiptList.setSelectedIndex(0);
+	}
+
+	private void refreshTotalDebtToSelectedUser(User selectedUser) {
 		if (accountings != null) {
 			double totalDebtToSelectedUser = getTotalDebtToSelectedUser(selectedUser);
 			lblTotaldebttouser.setText(TOTALDEBTTOUSERMESSAGE + String.format("%.2f", totalDebtToSelectedUser));
@@ -321,11 +341,11 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	@Override
 	public void showReceipts(List<Receipt> receipts) {
+		receiptListModel.clear();
+		itemListModel.clear();
+		userComboBoxModel.removeAllElements();
 		if (receipts.isEmpty()) {
-			showErrorMsg("You have no accounting.");
-			receiptListModel.clear();
-			itemListModel.clear();
-			userComboBoxModel.removeAllElements();
+			showErrorMsg("You have no accountings.");
 		} else {
 			this.unpaids = receipts;
 

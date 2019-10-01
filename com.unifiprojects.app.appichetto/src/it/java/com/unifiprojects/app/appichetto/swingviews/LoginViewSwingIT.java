@@ -23,17 +23,18 @@ import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 @RunWith(GUITestRunner.class)
-public class LoginViewIT extends AssertJSwingJUnitTestCase {
+public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
-	private static EntityManager entityManager;
 
 	private LoginViewSwing loginViewSwing;
 
 	private LoginController loginController;
 
 	private UserRepository userRepository;
+
+	private static EntityManager entityManager;
 
 	@BeforeClass
 	public static void setupEntityManager() {
@@ -73,8 +74,8 @@ public class LoginViewIT extends AssertJSwingJUnitTestCase {
 		window.textBox("passwordField").enterText(password);
 		window.button(JButtonMatcher.withText("Sign-in")).click();
 		
-		User newUser = (User) entityManager
-				.createQuery("from users where username=:username")
+		User newUser = entityManager
+				.createQuery("from users where username=:username", User.class)
 				.setParameter("username", username).getSingleResult();
 		
 		assertThat(newUser).isEqualTo(new User(username, password));
