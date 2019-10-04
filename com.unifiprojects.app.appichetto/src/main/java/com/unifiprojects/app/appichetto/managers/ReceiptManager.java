@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
@@ -13,16 +14,16 @@ public class ReceiptManager {
 	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountings;
 
-	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, Map<User, Accounting> accountings) {
-		this.receipt = receipt;
+	public ReceiptManager(User buyer, ReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
-		this.accountings = accountings;
+		this.receipt = new Receipt(buyer);
+		this.accountings = new HashMap<>();
 	}
 
 	public void addItem(Item item) {
 		receipt.addItem(item);
-		double pricePerOwner = item.getPrice() * item.getQuantity() / item.getOwners().size();
-		
+		double pricePerOwner = Math.round(100 * item.getPrice() * item.getQuantity() / item.getOwners().size()) / 100.0;
+
 		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer())).forEach(user -> {
 			if (accountings.containsKey(user))
 				accountings.get(user).addAmount(pricePerOwner);
@@ -32,18 +33,16 @@ public class ReceiptManager {
 	}
 
 	public void updateItem(int index, Item item) {
-		receipt.updateItem(index, item);
 		double oldPrice = receipt.getItem(index).getPricePerOwner();
 		double priceGap = item.getPricePerOwner() - oldPrice;
-
+		receipt.updateItem(index, item);
 		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
 				.forEach(user -> accountings.get(user).addAmount(priceGap));
-
 	}
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
-		double price = -itemToDelete.getPricePerOwner();
+		Double price = -itemToDelete.getPricePerOwner();
 
 		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
 	}
@@ -57,4 +56,11 @@ public class ReceiptManager {
 		return receipt.getItemsListSize();
 	}
 
+	void setAccountings(Map<User, Accounting> accountings) {
+		this.accountings = accountings;
+	}
+	
+	void setReceipt(Receipt receipt) {
+		this.receipt = receipt;
+	}
 }
