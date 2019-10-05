@@ -108,7 +108,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		addUserToListUserModel("Pippo", "psw");
 		window.list("usersList").selectItem(0);
 		nameBox.enterText("Sugo");
-		window.textBox("priceBox").enterText("2.2");
+		priceBox.enterText("2.2");
 		quantityBox.enterText("2");
 
 		window.button(JButtonMatcher.withText("Save")).requireEnabled();
@@ -125,7 +125,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.list("usersList").selectItem(0);
 		nameBox.enterText("  ");
-		window.textBox("priceBox").enterText("");
+		priceBox.enterText("");
 		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -147,7 +147,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		nameBox.enterText("  ");
-		window.textBox("priceBox").enterText("");
+		priceBox.enterText("");
 		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -175,7 +175,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.list("usersList").selectItem(0);
 		nameBox.enterText("");
-		window.textBox("priceBox").enterText("  ");
+		priceBox.enterText("  ");
 		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -197,7 +197,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		nameBox.enterText("");
-		window.textBox("priceBox").enterText("  ");
+		priceBox.enterText("  ");
 		quantityBox.enterText("");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -224,7 +224,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.list("usersList").selectItem(0);
 		nameBox.enterText("");
-		window.textBox("priceBox").enterText("");
+		priceBox.enterText("");
 		quantityBox.enterText("  ");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -233,7 +233,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("priceBox").enterText("2.2");
+		priceBox.enterText("2.2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 	}
@@ -246,7 +246,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
 		nameBox.enterText("");
-		window.textBox("priceBox").enterText("");
+		priceBox.enterText("");
 		quantityBox.enterText("  ");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
@@ -255,7 +255,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 
-		window.textBox("priceBox").enterText("2.2");
+		priceBox.enterText("2.2");
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 

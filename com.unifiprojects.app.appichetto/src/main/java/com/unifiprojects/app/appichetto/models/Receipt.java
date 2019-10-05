@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -14,24 +15,12 @@ import javax.persistence.OneToMany;
 @Entity
 public class Receipt {
 
-	@Override
-	public String toString() {
-		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "]";
-	}
+
 
 	@Id
 	@GeneratedValue
 	private Long id;
-	
 	private String description;
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	private GregorianCalendar timestamp;
 	
 	@ManyToOne
@@ -48,6 +37,13 @@ public class Receipt {
 	public Receipt() {
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
+	}
+
+	public Receipt(User buyer) {
+		this.buyer = buyer;
+		items = new ArrayList<>();
+		accountingList = new ArrayList<>();
+		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
 	}
 
 	public Long getId() {
@@ -173,4 +169,18 @@ public class Receipt {
 		return items.get(index);
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	@Override
+	public String toString() {
+		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "]";
+	}
+	
+	
 }
