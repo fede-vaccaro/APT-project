@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -197,4 +198,5 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
 	}
+
 }

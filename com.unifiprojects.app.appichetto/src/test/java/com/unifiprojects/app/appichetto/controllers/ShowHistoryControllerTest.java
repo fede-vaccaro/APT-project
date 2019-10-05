@@ -103,7 +103,7 @@ public class ShowHistoryControllerTest {
 	
 	@Test
 	public void testShowHistoryShowAnErrorMsgIfTheResultIsEmpty() {
-		List<Receipt> history = null;
+		List<Receipt> history = Arrays.asList();
 		when(receiptRepository.getAllReceiptsBoughtBy(loggedUser)).thenReturn(history);
 		showHistoryController.showHistory();
 		verify(showHistoryView).showShoppingHistory(history);

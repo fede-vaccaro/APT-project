@@ -502,7 +502,7 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
+		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
 		receiptRepositoryHibernate.removeReceipt(receipt);

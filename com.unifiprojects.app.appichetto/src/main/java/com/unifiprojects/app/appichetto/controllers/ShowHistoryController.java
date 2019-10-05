@@ -27,7 +27,7 @@ public class ShowHistoryController {
 	public void showHistory() {
 		List<Receipt> boughtReceipts = receiptRepository.getAllReceiptsBoughtBy(loggedUser);
 
-		if (boughtReceipts == null) {
+		if (boughtReceipts.isEmpty()) {
 			showHistoryView.showErrorMsg("You have no receipts in the history.");
 		} else {
 			Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp()
