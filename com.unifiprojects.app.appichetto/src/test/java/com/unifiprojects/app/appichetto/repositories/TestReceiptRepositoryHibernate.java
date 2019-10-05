@@ -70,8 +70,9 @@ public class TestReceiptRepositoryHibernate {
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
 		entityManager.clear();
-
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
@@ -119,7 +120,9 @@ public class TestReceiptRepositoryHibernate {
 		receipt1.setItems(Arrays.asList(item1, newItem));
 		receipt1.setAccountingList(Arrays.asList(newAccounting));
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
