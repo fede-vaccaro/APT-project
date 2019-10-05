@@ -65,8 +65,10 @@ public class ReceiptRepositoryHibernateIT {
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
 		entityManager.clear();
-
+		
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
