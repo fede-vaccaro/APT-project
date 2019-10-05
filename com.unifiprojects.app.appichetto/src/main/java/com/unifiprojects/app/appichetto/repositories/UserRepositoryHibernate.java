@@ -1,6 +1,5 @@
 package com.unifiprojects.app.appichetto.repositories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
-import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class UserRepositoryHibernate implements UserRepository {

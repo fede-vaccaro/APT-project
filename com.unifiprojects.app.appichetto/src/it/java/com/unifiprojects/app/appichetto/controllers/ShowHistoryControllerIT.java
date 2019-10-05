@@ -1,5 +1,12 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.junit.AfterClass;
@@ -10,15 +17,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.models.Receipt;

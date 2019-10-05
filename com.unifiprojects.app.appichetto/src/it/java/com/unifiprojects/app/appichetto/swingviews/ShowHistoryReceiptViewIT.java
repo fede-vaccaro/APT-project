@@ -1,44 +1,32 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.math3.util.Precision;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
-import com.unifiprojects.app.appichetto.controllers.LoginController;
-import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
-import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
-
-import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {

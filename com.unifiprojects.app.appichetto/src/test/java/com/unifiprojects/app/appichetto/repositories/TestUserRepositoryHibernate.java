@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,8 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
-import com.unifiprojects.app.appichetto.models.Item;
-import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class TestUserRepositoryHibernate {
