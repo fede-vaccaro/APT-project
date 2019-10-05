@@ -42,6 +42,7 @@ public class LoginControllerIT {
 
 	@Before
 	public void wipeTablesBeforeTest() {
+		baseTest.wipeTablesBeforeTest();
 		
 		MockitoAnnotations.initMocks(this);
 		entityManager = baseTest.getEntityManager();

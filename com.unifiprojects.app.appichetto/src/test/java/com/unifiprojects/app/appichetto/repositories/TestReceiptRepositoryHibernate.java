@@ -71,7 +71,9 @@ public class TestReceiptRepositoryHibernate {
 
 		entityManager.clear();
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
@@ -119,7 +121,9 @@ public class TestReceiptRepositoryHibernate {
 		receipt1.setItems(Arrays.asList(item1, newItem));
 		receipt1.setAccountingList(Arrays.asList(newAccounting));
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
+		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
@@ -467,12 +471,14 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
+		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.removeReceipt(receipt);
+		entityManager.getTransaction().commit();
 
 		assertThat(entityManager.find(User.class, creditorUser.getId())).isEqualTo(creditorUser);
 		assertThat(entityManager.find(User.class, debtorUser.getId())).isEqualTo(debtorUser);
@@ -502,10 +508,12 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
+		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.removeReceipt(receipt);
+		entityManager.getTransaction().commit();
 
 		assertThat(entityManager.find(User.class, creditorUser.getId())).isEqualTo(creditorUser);
 		assertThat(entityManager.find(User.class, debtorUser.getId())).isEqualTo(debtorUser);

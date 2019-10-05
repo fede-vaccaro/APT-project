@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -17,11 +18,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryControllerTest {
@@ -103,7 +106,7 @@ public class ShowHistoryControllerTest {
 	
 	@Test
 	public void testShowHistoryShowAnErrorMsgIfTheResultIsEmpty() {
-		List<Receipt> history = null;
+		List<Receipt> history = Arrays.asList();
 		when(receiptRepository.getAllReceiptsBoughtBy(loggedUser)).thenReturn(history);
 		showHistoryController.showHistory();
 		verify(showHistoryView).showShoppingHistory(history);
@@ -134,4 +137,27 @@ public class ShowHistoryControllerTest {
 
 	}
 
+	@Test
+	public void testRemoveReceipt() {
+		showHistoryController.setTransaction(new FakeTransaction());
+		
+		
+		showHistoryController.removeReceipt(receipt0);
+		
+		verify(receiptRepository).removeReceipt(receipt0);
+		verify(showHistoryView).showErrorMsg(String.format("Receipt (from %s) deleted.", receipt0.getTimestamp().getTime()));
+		verify(showHistoryView).showShoppingHistory(receiptListCaptor.capture());
+	}
+	
+	@Test
+	public void testRemoveReceiptWhenUncommittableExceptionIsLaunched() {
+		showHistoryController.setTransaction(new FakeTransaction());
+		doThrow(new UncommittableTransactionException()).when(receiptRepository).removeReceipt(receipt0);
+				
+		showHistoryController.removeReceipt(receipt0);
+			
+		verify(showHistoryView).showErrorMsg("Something went wrong with the database.");
+		verify(showHistoryView).showShoppingHistory(receiptListCaptor.capture());
+	}
+	
 }

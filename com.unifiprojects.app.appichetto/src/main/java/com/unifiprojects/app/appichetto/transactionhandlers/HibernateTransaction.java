@@ -11,6 +11,14 @@ import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionExcep
 
 public class HibernateTransaction implements TransactionHandler {
 
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
 	private static final Logger LOGGER = LogManager.getLogger(HibernateTransaction.class);
 
 	

@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -34,6 +35,12 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 
 	private JLabel message;
 
+	private ShowHistoryController showHistoryController;
+
+	private JButton btnRmbutton;
+
+	private JList<Receipt> receiptList;
+
 	public ShowHistoryViewSwing() {
 		initialize();
 	}
@@ -47,9 +54,10 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
 		frame.getContentPane().setLayout(gridBagLayout);
 
 		JLabel receiptLabel = new JLabel("Receipts you bought:");
@@ -67,13 +75,16 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		frame.getContentPane().add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		receiptListModel = new DefaultListModel<>();
-		JList<Receipt> receiptList = new JList<>(receiptListModel);
+		receiptList = new JList<>(receiptListModel);
 		receiptList.setName("receiptList");
 
 		receiptList.addListSelectionListener(e -> {
 			Receipt selectedReceipt = receiptList.getSelectedValue();
-			showItemList(selectedReceipt);
-			showAccountingList(selectedReceipt);
+			if (selectedReceipt != null) {
+				showItemList(selectedReceipt);
+				showAccountingList(selectedReceipt);
+			}
+			btnRmbutton.setEnabled(!receiptListModel.isEmpty());
 		});
 
 		GridBagConstraints gbc_receiptList = new GridBagConstraints();
@@ -126,18 +137,27 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		JList<String> totalAccountingList = new JList<>(totalAccountingsListModel);
 		totalAccountingList.setName("totalAccountingList");
 		GridBagConstraints gbc_totalAccountingList = new GridBagConstraints();
-		gbc_totalAccountingList.gridheight = 4;
+		gbc_totalAccountingList.gridheight = 5;
 		gbc_totalAccountingList.fill = GridBagConstraints.BOTH;
 		gbc_totalAccountingList.gridx = 1;
 		gbc_totalAccountingList.gridy = 6;
 		frame.getContentPane().add(totalAccountingList, gbc_totalAccountingList);
+
+		btnRmbutton = new JButton("Remove selected");
+		btnRmbutton.setEnabled(false);
+		btnRmbutton.addActionListener(e -> showHistoryController.removeReceipt(receiptList.getSelectedValue()));
+		GridBagConstraints gbc_btnRmbutton = new GridBagConstraints();
+		gbc_btnRmbutton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRmbutton.gridx = 0;
+		gbc_btnRmbutton.gridy = 8;
+		frame.getContentPane().add(btnRmbutton, gbc_btnRmbutton);
 
 		JButton btnHomepage = new JButton("Homepage");
 		btnHomepage.setName("homepageBtn");
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
 		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHomepage.gridx = 0;
-		gbc_btnHomepage.gridy = 8;
+		gbc_btnHomepage.gridy = 9;
 		frame.getContentPane().add(btnHomepage, gbc_btnHomepage);
 
 		message = new JLabel("");
@@ -145,13 +165,17 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		GridBagConstraints gbc_message = new GridBagConstraints();
 		gbc_message.insets = new Insets(0, 0, 0, 5);
 		gbc_message.gridx = 0;
-		gbc_message.gridy = 9;
+		gbc_message.gridy = 10;
 		frame.getContentPane().add(message, gbc_message);
 	}
 
 	@Override
 	public void showShoppingHistory(List<Receipt> receipts) {
 		receiptListModel.clear();
+		itemListModel.clear();
+		accountingListModel.clear();
+		totalAccountingsListModel.clear();
+		receiptList.clearSelection();
 		receipts.stream().forEach(receiptListModel::addElement);
 		computeTotalAccountings(receipts);
 	}
@@ -197,4 +221,9 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
 	}
+
+	public void setController(ShowHistoryController showHistoryController) {
+		this.showHistoryController = showHistoryController;
+	}
+
 }
