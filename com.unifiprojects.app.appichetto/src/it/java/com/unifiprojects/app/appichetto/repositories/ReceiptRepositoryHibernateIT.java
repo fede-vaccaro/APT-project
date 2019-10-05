@@ -65,7 +65,6 @@ public class ReceiptRepositoryHibernateIT {
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
 		entityManager.clear();
-		
 		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
 		entityManager.getTransaction().commit();
@@ -221,7 +220,6 @@ public class ReceiptRepositoryHibernateIT {
 		assertThat(entityManager.find(Item.class, item2.getId())).isNull();
 		assertThat(entityManager.find(Accounting.class, accountingToUser1.getId())).isNull();
 		assertThat(entityManager.find(Receipt.class, receipt.getId())).isNull();
-		System.out.println(receipt.getId());
 	}
 
 }

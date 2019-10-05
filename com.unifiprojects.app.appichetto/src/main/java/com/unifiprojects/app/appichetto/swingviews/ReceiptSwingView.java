@@ -67,7 +67,10 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 
 	public void setReceiptController(ReceiptController receiptController) {
 		this.receiptController = receiptController;
-		receiptController.getUsers().stream().forEach(listUsersModel::addElement);
+	}
+	
+	public void setUsers() {
+		receiptController.getUsers().stream().forEach(listUsersModel::addElement);		
 	}
 
 	/**

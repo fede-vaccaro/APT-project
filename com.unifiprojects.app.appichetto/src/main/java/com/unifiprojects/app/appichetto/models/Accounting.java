@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Accounting {
-	
+
 	@Override
 	public String toString() {
 		return "Accounting [user=" + user.getUsername() + ", amount=" + amount + ", paid=" + paid + "]";
@@ -58,35 +58,34 @@ public class Accounting {
 
 	@ManyToOne
 	private User user;
-	
+
 	private double amount;
 	boolean paid;
-	
+
 	@ManyToOne
 	private Receipt receipt;
 
-	
-	public Accounting(){
+	public Accounting() {
 		this.paid = false;
 		this.amount = 0.0;
 		this.receipt = null;
 		this.user = null;
 	}
 
-	public Accounting(User user){
+	public Accounting(User user) {
 		this.paid = false;
 		this.amount = 0.0;
 		this.receipt = null;
 		this.user = user;
 	}
-	
+
 	public Accounting(User user, double amount) {
 		this.user = user;
 		this.amount = amount;
 		this.paid = false;
 		this.receipt = null;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -123,9 +122,8 @@ public class Accounting {
 		this.receipt = receipt;
 	}
 
-
 	public void addAmount(double amount) {
 		this.amount += amount;
 	}
-		
+
 }

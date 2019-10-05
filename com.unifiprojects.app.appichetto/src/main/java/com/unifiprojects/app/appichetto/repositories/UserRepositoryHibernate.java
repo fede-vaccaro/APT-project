@@ -55,5 +55,4 @@ public class UserRepositoryHibernate implements UserRepository {
 			return null;
 		}
 	}
-
 }
