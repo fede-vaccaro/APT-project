@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -42,6 +43,7 @@ public class Receipt {
 		this.buyer = buyer;
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
+		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
 	}
 
 	public Long getId() {
