@@ -3,6 +3,9 @@ package com.unifiprojects.app.appichetto.managers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -13,6 +16,7 @@ public class ReceiptManager {
 	private Receipt receipt;
 	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountings;
+	private static final Logger LOGGER = LogManager.getLogger(ReceiptManager.class);
 
 	public ReceiptManager(User buyer, ReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
@@ -30,6 +34,7 @@ public class ReceiptManager {
 			else
 				accountings.put(user, new Accounting(user, pricePerOwner));
 		});
+		LOGGER.debug("{} ADDED BY RECEIPT MANAGER", item);
 	}
 
 	public void updateItem(int index, Item item) {
@@ -38,26 +43,28 @@ public class ReceiptManager {
 		receipt.updateItem(index, item);
 		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
 				.forEach(user -> accountings.get(user).addAmount(priceGap));
+		LOGGER.debug("{} UPDATED BY RECEIPT MANAGER", item);
 	}
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
 		Double price = -itemToDelete.getPricePerOwner();
-
-		itemToDelete.getOwners().stream().forEach(user -> accountings.get(user).addAmount(price));
+		itemToDelete.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
+				.forEach(user -> accountings.get(user).addAmount(price));
+		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", itemToDelete);
 	}
 
 	public Long saveReceipt() {
 		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
 		receiptRepository.saveReceipt(receipt);
+		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
 		return receipt.getId();
 	}
-	
 
 	public int getItemsListSize() {
 		return receipt.getItemsListSize();
 	}
-	
+
 	public Receipt getReceipt() {
 		return receipt;
 	}
@@ -65,7 +72,7 @@ public class ReceiptManager {
 	void setAccountings(Map<User, Accounting> accountings) {
 		this.accountings = accountings;
 	}
-	
+
 	void setReceipt(Receipt receipt) {
 		this.receipt = receipt;
 	}
