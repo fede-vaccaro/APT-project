@@ -91,7 +91,6 @@ public class Receipt {
 
 	public void setBuyer(User buyer) {
 		this.buyer = buyer;
-		buyer.addReceipt(this);
 	}
 
 	public void setTotalPrice(double totalPrice) {
