@@ -24,7 +24,8 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [name=" + name + ", quantity=" + quantity + String.format(", price=%.2f", price) + ", owners=" + owners + "]";
+		return "Item [name=" + name + ", quantity=" + quantity + String.format(", price=%.2f", price) + ", owners="
+				+ owners + "]";
 	}
 
 	public Long getId() {
