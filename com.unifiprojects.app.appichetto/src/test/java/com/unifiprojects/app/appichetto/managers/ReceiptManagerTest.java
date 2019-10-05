@@ -1,7 +1,9 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -11,6 +13,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,7 +30,7 @@ public class ReceiptManagerTest {
 	private Receipt receipt;
 
 	private Map<User, Accounting> accountings;
-	
+
 	private User buyer;
 
 	@Mock
@@ -40,10 +43,10 @@ public class ReceiptManagerTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	private void spyAndSetReceipt() {
 		receipt = spy(new Receipt(buyer));
-		receiptManager.setReceipt(receipt);		
+		receiptManager.setReceipt(receipt);
 	}
 
 	private void spyAndSetAccountings() {
@@ -56,7 +59,7 @@ public class ReceiptManagerTest {
 		User pippo = new User("Pippo", "psw");
 		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
 		spyAndSetAccountings();
-		
+
 		receiptManager.addItem(item);
 
 		verify(accountings).put(pippo, new Accounting(pippo, 4.4));
@@ -69,13 +72,13 @@ public class ReceiptManagerTest {
 		spyAndSetReceipt();
 		spyAndSetAccountings();
 		receipt.setBuyer(pippo);
-				
+
 		receiptManager.addItem(item);
-		
+
 		verifyZeroInteractions(accountings);
 	}
 
-	@Test 
+	@Test
 	public void testAddItemWhenAccountingExistsThenItemIsAddedToReceiptAndAccountingsAreUpdatedCorrectly() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
@@ -114,7 +117,7 @@ public class ReceiptManagerTest {
 		verify(accountings.get(pippo)).addAmount(1.1);
 		verify(accountings.get(pluto)).addAmount(1.1);
 	}
-	
+
 	@Test
 	public void testWhenAnItemIsUpdatedAccountingOfReceiptBuyerWillNotBeCalled() {
 		User pippo = new User("Pippo", "psw");
@@ -123,9 +126,9 @@ public class ReceiptManagerTest {
 		spyAndSetAccountings();
 		receipt.setBuyer(pippo);
 		receipt.addItem(item);
-				
+
 		receiptManager.updateItem(0, item);
-		
+
 		verifyZeroInteractions(accountings);
 	}
 
@@ -149,11 +152,32 @@ public class ReceiptManagerTest {
 	}
 
 	@Test
+	public void testDeleteItemDeleteItemDoesntCallAccountingsOfBuyer() {
+		User pippo = new User("Pippo", "psw");
+		User pluto = new User("Pluto", "psw");
+		Item itemToDelete = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
+		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
+		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
+		spyAndSetReceipt();
+		spyAndSetAccountings();
+		receipt.setBuyer(pippo);
+		accountings.put(pippo, accountingPippo);
+		accountings.put(pluto, accountingPluto);
+
+		receiptManager.deleteItem(itemToDelete);
+
+		verify(receipt).deleteItem(itemToDelete);
+		verifyZeroInteractions(accountings.get(pippo));
+		verify(accountings.get(pluto)).addAmount(-2.2);
+	}
+
+	@Test
 	public void testSaveReceiptAddAccountingToReceiptAndCallTheRepository() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
 		Accounting accountingPippo = new Accounting(pippo, 1.1);
 		Accounting accountingPluto = new Accounting(pluto, 1.1);
+		ArgumentCaptor<Accounting> accountingCaptor = ArgumentCaptor.forClass(Accounting.class);
 		spyAndSetReceipt();
 		spyAndSetAccountings();
 		accountings.put(pippo, accountingPippo);
@@ -162,10 +186,8 @@ public class ReceiptManagerTest {
 
 		receiptManager.saveReceipt();
 
-		//TODO in order must be only from receipt and receipRepository, not also from receipt itself
-		inOrder.verify(receipt).addAccounting(accountingPluto);
-		inOrder.verify(receipt).addAccounting(accountingPippo);
+		inOrder.verify(receipt, times(2)).addAccounting(accountingCaptor.capture());
 		inOrder.verify(receiptRepository).saveReceipt(receipt);
-
+		assertThat(accountingCaptor.getAllValues()).containsExactlyInAnyOrder(accountingPippo, accountingPluto);
 	}
 }
