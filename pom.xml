@@ -217,13 +217,17 @@
 					<version>1.4.3</version>
 					<configuration>
 						<targetClasses>
-							<param>com.unifiprojects.app.appichetto.*</param>
+							<param>com.unifiprojects.app.appichetto/src/main/**/controllers/*</param>
+							<param>com.unifiprojects.app.appichetto/src/main/**/repositories/*</param>
+							<param>com.unifiprojects.app.appichetto/src/main/**/swingviews/*</param>
+							<param>com.unifiprojects.app.appichetto/src/main/**/transactionhandlers/*</param>
+							<param>com.unifiprojects.app.appichetto/src/main/**/managers/*</param>
 						</targetClasses>
 						<targetTests>
-							<param>com.unifiprojects.app.appichetto.*</param>
+							<param>com.unifiprojects.app.appichetto/src/test/**</param>
 						</targetTests>
 						<mutators>
-							<mutator>ALL</mutator>
+							<mutator>NEW_DEFAULTS</mutator>
 						</mutators>
 						<mutationThreshold>85</mutationThreshold>
 					</configuration>

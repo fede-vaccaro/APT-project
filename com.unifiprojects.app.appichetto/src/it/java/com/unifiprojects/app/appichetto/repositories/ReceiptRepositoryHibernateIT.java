@@ -65,7 +65,6 @@ public class ReceiptRepositoryHibernateIT {
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
 		entityManager.clear();
-
 		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
 		entityManager.getTransaction().commit();
@@ -205,13 +204,16 @@ public class ReceiptRepositoryHibernateIT {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
+		entityManager.persist(receipt);
 		entityManager.getTransaction().commit();
 
 		entityManager.clear();
 
+		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.removeReceipt(receipt);
+		entityManager.getTransaction().commit();
 
+		
 		assertThat(entityManager.find(User.class, creditorUser.getId())).isEqualTo(creditorUser);
 		assertThat(entityManager.find(User.class, debtorUser.getId())).isEqualTo(debtorUser);
 		assertThat(entityManager.find(Item.class, item1.getId())).isNull();

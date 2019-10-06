@@ -55,25 +55,4 @@ public class UserRepositoryHibernate implements UserRepository {
 			return null;
 		}
 	}
-
-	@Override
-	public void removeUser(User user) {
-		User toBeRemoved = user;
-		if (!entityManager.contains(user)) {
-			toBeRemoved = entityManager.merge(user);
-		}
-
-		/*
-		 * for(Item i : new ArrayList<>(user.getOwnedItems())) {
-		 * user.getOwnedItems().remove(i);
-		 * 
-		 * List<User> updatedOwnersForItem = new ArrayList<>(i.getOwners());
-		 * updatedOwnersForItem.remove(user); i.setOwners(updatedOwnersForItem);
-		 * entityManager.merge(i); }
-		 */
-
-		entityManager.remove(toBeRemoved);
-
-	}
-
 }

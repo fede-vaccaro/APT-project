@@ -12,12 +12,16 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 
+import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -28,6 +32,9 @@ import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	ShowHistoryViewSwing showHistoryViewSwing;
+	
+	@Mock
+	ShowHistoryController showHistoryController;
 
 	private FrameFixture window;
 
@@ -49,6 +56,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			showHistoryViewSwing = new ShowHistoryViewSwing();
+			showHistoryViewSwing.setController(showHistoryController);
 			return showHistoryViewSwing;
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());
@@ -279,4 +287,67 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		//TODO test call notify observer
 	}
 
+	@Test
+	@GUITest
+	public void testRemoveReceiptDelegateToController() {
+		List<Receipt> history = Arrays.asList(receipt0, receipt1);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
+		
+		window.list("receiptList").selectItem(receipt1.toString());
+		window.button(JButtonMatcher.withText("Remove selected")).click();
+		
+		verify(showHistoryController).removeReceipt(receipt1);
+	}
+	
+	@Test
+	@GUITest
+	public void testButtonIsDisabledWhenListIsEmpty() {
+		List<Receipt> history = Arrays.asList();
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
+		
+		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
+
+	}
+	
+	@Test
+	@GUITest
+	public void testButtonIsEnabledElementIsSelected() {
+		List<Receipt> history = Arrays.asList(receipt0);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
+		window.list("receiptList").selectItem(receipt0.toString());
+		
+		window.button(JButtonMatcher.withText("Remove selected")).requireEnabled();
+	}
+	
+	@Test
+	@GUITest
+	public void testButtonIsDisabledWhenNoItemIsSelectedButListIsNotEmpty() {
+		List<Receipt> history = Arrays.asList(receipt0, receipt1);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
+		
+		window.list("receiptList").clearSelection();
+		
+		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
+	}
+	
+	@Test
+	@GUITest
+	public void testClearingTheReceiptListWhenSomethingIsSelectedDisableTheRemoveButton() {
+		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
+
+		window.list("receiptList").selectItem(0);
+		
+		List<Receipt> historyAfter = Arrays.asList();
+		
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyAfter));
+
+		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
+	}
+	
 }

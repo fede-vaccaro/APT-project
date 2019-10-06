@@ -1,5 +1,8 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -12,12 +15,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.models.Accounting;
-import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
@@ -70,11 +70,11 @@ public class PayReceiptControllerIT {
 		loggedUser = new User("logged", "pw");
 		payerUser = new User("payer", "pw");
 
-		firstReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		firstReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 1));
-		secondReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		secondReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 2));
-		thirdReceipt = generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+		thirdReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
 				new GregorianCalendar(2019, 9, 3));
 		
 		entityManager.getTransaction().begin();
@@ -88,29 +88,6 @@ public class PayReceiptControllerIT {
 		
 		entityManager.clear();
 		
-	}
-	
-	private Receipt generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(User loggedUser, User payerUser,
-			GregorianCalendar timestamp) {
-
-		Receipt receipt = new Receipt();
-
-		receipt.setTimestamp(timestamp);
-		receipt.setBuyer(payerUser);
-
-		// receipt setup: payerUser bought item1 and item2 but he shares them with
-		// logged user...
-		Item item1 = new Item("Item1", 10., Arrays.asList(loggedUser, payerUser));
-		Item item2 = new Item("Item2", 5., Arrays.asList(loggedUser, payerUser));
-
-		receipt.setItems(Arrays.asList(item1, item2));
-		receipt.setTotalPrice(item1.getPrice() + item2.getPrice());
-
-		// so now, logged user owes 7.5 credits to payer user
-		Accounting debtFromLoggedToPayer = new Accounting(loggedUser, item1.getPrice() / 2 + item2.getPrice() / 2);
-		debtFromLoggedToPayer.setReceipt(receipt);
-		receipt.setAccountingList(Arrays.asList(debtFromLoggedToPayer));
-		return receipt;
 	}
 	
 	@Test

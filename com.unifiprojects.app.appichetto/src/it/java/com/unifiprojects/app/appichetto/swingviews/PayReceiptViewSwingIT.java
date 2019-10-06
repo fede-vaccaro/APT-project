@@ -100,9 +100,10 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(loggedUser);
 			entityManager.persist(payer1);
 			entityManager.persist(payer2);
-			entityManager.persist(firstReceiptPayer2);
-			entityManager.persist(thirdReceiptPayer1);
+			entityManager.persist(firstReceiptPayer1);
 			entityManager.persist(secondReceiptPayer1);
+			entityManager.persist(thirdReceiptPayer1);
+			entityManager.persist(firstReceiptPayer2);
 			entityManager.getTransaction().commit();
 
 			payViewReceiptsView.setLoggedUser(loggedUser);
