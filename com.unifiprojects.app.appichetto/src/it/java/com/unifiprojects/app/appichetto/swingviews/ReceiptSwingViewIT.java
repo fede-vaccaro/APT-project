@@ -80,7 +80,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptSwingView.setUsers();
 			return receiptSwingView;
 		});
-		window = new FrameFixture(robot(), receiptSwingView);
+		window = new FrameFixture(robot(), receiptSwingView.frame);
 		window.show();
 		nameBox = window.textBox("nameBox");
 		priceBox = window.textBox("priceBox");
