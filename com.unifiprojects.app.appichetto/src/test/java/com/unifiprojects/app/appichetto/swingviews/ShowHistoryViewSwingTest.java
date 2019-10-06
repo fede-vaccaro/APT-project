@@ -277,6 +277,15 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		
 		window.label("errorMsg").requireText(msg);
 	}
+	
+	@Test
+	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
+		window.button(JButtonMatcher.withText("Home")).click();
+		
+		showHistoryViewSwing.goToHome();
+		assertThat(showHistoryViewSwing.getFrame().isActive()).isFalse();
+		//TODO test call notify observer
+	}
 
 	@Test
 	@GUITest

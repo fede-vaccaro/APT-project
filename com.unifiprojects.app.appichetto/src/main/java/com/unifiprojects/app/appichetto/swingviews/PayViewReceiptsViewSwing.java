@@ -36,8 +36,9 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
 
-public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
+public class PayViewReceiptsViewSwing extends ObservableFrame implements PayViewReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsViewSwing.class);
 
@@ -93,6 +94,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 
 	private List<Receipt> unpaids;
 	private List<Accounting> accountings;
+	private JButton btnHome;
 
 	public Double getEnteredValue() {
 		return enteredAmount;
@@ -154,9 +156,9 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		frame.getContentPane().setLayout(gridBagLayout);
 
@@ -208,11 +210,19 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 			payViewReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
 			txtEnterAmount.setText("");
 		});
+
+		btnHome = new JButton("Home");
+		GridBagConstraints gbc_btnHome = new GridBagConstraints();
+		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
+		gbc_btnHome.gridx = 2;
+		gbc_btnHome.gridy = 12;
+		frame.getContentPane().add(btnHome, gbc_btnHome);
+		btnHome.addActionListener(e -> goToHome());
 		btnPay.setName("payButton");
 		GridBagConstraints gbc_btnPay = new GridBagConstraints();
 		gbc_btnPay.insets = new Insets(0, 0, 5, 5);
 		gbc_btnPay.gridx = 1;
-		gbc_btnPay.gridy = 9;
+		gbc_btnPay.gridy = 10;
 		frame.getContentPane().add(btnPay, gbc_btnPay);
 
 		receiptListModel = new DefaultListModel<>();
@@ -298,7 +308,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		gbc_txtEnterAmount.insets = new Insets(0, 0, 5, 5);
 		gbc_txtEnterAmount.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtEnterAmount.gridx = 1;
-		gbc_txtEnterAmount.gridy = 8;
+		gbc_txtEnterAmount.gridy = 9;
 		frame.getContentPane().add(txtEnterAmount, gbc_txtEnterAmount);
 		txtEnterAmount.setColumns(10);
 
@@ -308,7 +318,7 @@ public class PayViewReceiptsViewSwing implements PayViewReceiptsView {
 		GridBagConstraints gbc_lblErrorMsg = new GridBagConstraints();
 		gbc_lblErrorMsg.insets = new Insets(0, 0, 0, 5);
 		gbc_lblErrorMsg.gridx = 1;
-		gbc_lblErrorMsg.gridy = 10;
+		gbc_lblErrorMsg.gridy = 11;
 		frame.getContentPane().add(lblErrorMsg, gbc_lblErrorMsg);
 	}
 

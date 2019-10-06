@@ -2,7 +2,6 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,9 +21,10 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
+import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryViewSwing implements ShowHistoryView {
+public class ShowHistoryViewSwing extends ObservableFrame implements ShowHistoryView {
 
 	private JFrame frame;
 
@@ -152,8 +152,9 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		gbc_btnRmbutton.gridy = 8;
 		frame.getContentPane().add(btnRmbutton, gbc_btnRmbutton);
 
-		JButton btnHomepage = new JButton("Homepage");
+		JButton btnHomepage = new JButton("Home");
 		btnHomepage.setName("homepageBtn");
+		btnHomepage.addActionListener(e -> goToHome());
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
 		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHomepage.gridx = 0;
@@ -213,17 +214,17 @@ public class ShowHistoryViewSwing implements ShowHistoryView {
 		}
 	}
 
-	public Frame getFrame() {
-		return frame;
-	}
-
 	@Override
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
 	}
 
+	@Override
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	public void setController(ShowHistoryController showHistoryController) {
 		this.showHistoryController = showHistoryController;
 	}
-
 }
