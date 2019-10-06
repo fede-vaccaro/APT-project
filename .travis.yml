@@ -28,8 +28,5 @@ matrix:
 
 install: true
 
-before_script:
-   - sh -e /etc/init.d/xvfb start
-
 script:
   -  travis_wait 360 mvn -f com.unifiprojects.app.appichetto/pom.xml clean test verify coveralls:report sonar:sonar $PIT_MAVEN_ARGS
