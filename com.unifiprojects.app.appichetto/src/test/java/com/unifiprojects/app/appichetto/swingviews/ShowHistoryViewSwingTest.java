@@ -6,6 +6,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -267,6 +268,15 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showErrorMsg(msg));
 		
 		window.label("errorMsg").requireText(msg);
+	}
+	
+	@Test
+	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
+		window.button(JButtonMatcher.withText("Home")).click();
+		
+		showHistoryViewSwing.goToHome();
+		assertThat(showHistoryViewSwing.getFrame().isActive()).isFalse();
+		//TODO test call notify observer
 	}
 
 }

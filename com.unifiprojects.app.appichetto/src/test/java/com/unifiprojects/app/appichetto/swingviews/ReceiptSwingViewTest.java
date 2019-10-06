@@ -57,7 +57,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 			receiptSwingView.setReceiptController(receiptController);
 			return receiptSwingView;
 		});
-		window = new FrameFixture(robot(), receiptSwingView);
+		window = new FrameFixture(robot(), receiptSwingView.frame);
 		window.show();
 		nameBox = window.textBox("nameBox");
 		priceBox = window.textBox("priceBox");
@@ -99,7 +99,6 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete")).requireDisabled();
 		window.button(JButtonMatcher.withText("Save Receipt")).requireDisabled();
 		window.button(JButtonMatcher.withText("Home")).requireEnabled();
-		window.button(JButtonMatcher.withText("Exit")).requireEnabled();
 	}
 
 	@Test
@@ -481,6 +480,15 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
 		verify(receiptController).saveReceipt();
+	}
+	
+	@Test
+	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
+		window.button(JButtonMatcher.withText("Home")).click();
+		
+		receiptSwingView.goToHome();
+		assertThat(receiptSwingView.getFrame().isActive()).isFalse();
+		//TODO test call notify observer
 	}
 
 }

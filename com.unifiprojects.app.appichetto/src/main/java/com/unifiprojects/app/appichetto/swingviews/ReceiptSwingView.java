@@ -24,14 +24,15 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptSwingView extends JFrame implements ReceiptView {
+public class ReceiptSwingView extends ObservableFrame implements ReceiptView {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	JFrame frame;
 	private JFormattedTextField txtPrice;
 	private NumberFormat priceFormat;
 	private NumberFormatter priceFormatter;
@@ -47,7 +48,6 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	private JList<Item> itemsList;
 	private DefaultListModel<Item> listItemModel;
 	private JLabel errorMsgLabel;
-
 	private ReceiptController receiptController;
 	private JList<User> usersList;
 
@@ -59,7 +59,6 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	private JLabel lblDate;
 	private JButton btnSaveReceipt;
 	private JButton btnHome;
-	private JButton btnExit;
 	private JLabel lblItem;
 	private JLabel lblReceipt;
 	private JLabel lblUsersList;
@@ -68,14 +67,14 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	public void setReceiptController(ReceiptController receiptController) {
 		this.receiptController = receiptController;
 	}
-	
+
 	public void setUsers() {
-		receiptController.getUsers().stream().forEach(listUsersModel::addElement);		
+		receiptController.getUsers().stream().forEach(listUsersModel::addElement);
 	}
 
 	/**
 	 * Launch the application.
-	 */	
+	 */
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(() -> {
 //			try {
@@ -88,6 +87,12 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 //		});
 //	}
 
+
+	@Override
+	public JFrame getFrame() {
+		return frame;
+	}
+	
 	public DefaultListModel<Item> getListItemModel() {
 		return listItemModel;
 	}
@@ -148,16 +153,16 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 	 * Create the frame.
 	 */
 	public ReceiptSwingView() {
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 450, 300);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 245, 54, 216, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 15, 15, 19, 15, 19, 19, 22, 19, 0, 93, 1, 25, 25, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
-		getContentPane().setLayout(gridBagLayout);
+		frame.getContentPane().setLayout(gridBagLayout);
 
 		KeyAdapter btnSaveEnabled = null;
 		KeyAdapter btnUpdateEnabled = null;
@@ -169,14 +174,14 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblReceipt.insets = new Insets(0, 0, 5, 5);
 		gbc_lblReceipt.gridx = 1;
 		gbc_lblReceipt.gridy = 0;
-		getContentPane().add(lblReceipt, gbc_lblReceipt);
+		frame.getContentPane().add(lblReceipt, gbc_lblReceipt);
 
 		lblItem = new JLabel("ITEM");
 		GridBagConstraints gbc_lblItem = new GridBagConstraints();
 		gbc_lblItem.insets = new Insets(0, 0, 5, 5);
 		gbc_lblItem.gridx = 3;
 		gbc_lblItem.gridy = 0;
-		getContentPane().add(lblItem, gbc_lblItem);
+		frame.getContentPane().add(lblItem, gbc_lblItem);
 
 		JLabel lblName = new JLabel("Name");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
@@ -185,7 +190,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblName.gridx = 3;
 		gbc_lblName.gridy = 1;
-		getContentPane().add(lblName, gbc_lblName);
+		frame.getContentPane().add(lblName, gbc_lblName);
 
 		lblDescription = new JLabel("Description");
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
@@ -193,7 +198,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblDescription.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescription.gridx = 1;
 		gbc_lblDescription.gridy = 1;
-		getContentPane().add(lblDescription, gbc_lblDescription);
+		frame.getContentPane().add(lblDescription, gbc_lblDescription);
 
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
@@ -202,7 +207,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 2;
-		getContentPane().add(textField, gbc_textField);
+		frame.getContentPane().add(textField, gbc_textField);
 		textField.setColumns(10);
 
 		txtName = new JTextField();
@@ -213,7 +218,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_txtName.insets = new Insets(0, 0, 5, 5);
 		gbc_txtName.gridx = 3;
 		gbc_txtName.gridy = 2;
-		getContentPane().add(txtName, gbc_txtName);
+		frame.getContentPane().add(txtName, gbc_txtName);
 		txtName.setColumns(10);
 
 		lblDate = new JLabel("Date");
@@ -222,7 +227,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDate.gridx = 1;
 		gbc_lblDate.gridy = 3;
-		getContentPane().add(lblDate, gbc_lblDate);
+		frame.getContentPane().add(lblDate, gbc_lblDate);
 
 		textField_1 = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
@@ -231,7 +236,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.gridx = 1;
 		gbc_textField_1.gridy = 4;
-		getContentPane().add(textField_1, gbc_textField_1);
+		frame.getContentPane().add(textField_1, gbc_textField_1);
 		textField_1.setColumns(10);
 
 		JLabel lblPrice = new JLabel("Price");
@@ -240,7 +245,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPrice.gridx = 3;
 		gbc_lblPrice.gridy = 3;
-		getContentPane().add(lblPrice, gbc_lblPrice);
+		frame.getContentPane().add(lblPrice, gbc_lblPrice);
 
 		priceFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
 		priceFormatter = new NumberFormatter(priceFormat);
@@ -256,7 +261,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_txtPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_txtPrice.gridx = 3;
 		gbc_txtPrice.gridy = 4;
-		getContentPane().add(txtPrice, gbc_txtPrice);
+		frame.getContentPane().add(txtPrice, gbc_txtPrice);
 		txtPrice.setColumns(10);
 
 		itemsScrollPane = new JScrollPane();
@@ -286,14 +291,14 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblItemsList.insets = new Insets(0, 0, 5, 5);
 		gbc_lblItemsList.gridx = 1;
 		gbc_lblItemsList.gridy = 5;
-		getContentPane().add(lblItemsList, gbc_lblItemsList);
+		frame.getContentPane().add(lblItemsList, gbc_lblItemsList);
 		GridBagConstraints gbc_itemsScrollPane = new GridBagConstraints();
 		gbc_itemsScrollPane.fill = GridBagConstraints.BOTH;
 		gbc_itemsScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_itemsScrollPane.gridheight = 4;
 		gbc_itemsScrollPane.gridx = 1;
 		gbc_itemsScrollPane.gridy = 6;
-		getContentPane().add(itemsScrollPane, gbc_itemsScrollPane);
+		frame.getContentPane().add(itemsScrollPane, gbc_itemsScrollPane);
 
 		lblQuantity = new JLabel("Quantity");
 		GridBagConstraints gbc_lblQuantity = new GridBagConstraints();
@@ -302,7 +307,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblQuantity.insets = new Insets(0, 0, 5, 5);
 		gbc_lblQuantity.gridx = 3;
 		gbc_lblQuantity.gridy = 5;
-		getContentPane().add(lblQuantity, gbc_lblQuantity);
+		frame.getContentPane().add(lblQuantity, gbc_lblQuantity);
 
 		quantityFormat = NumberFormat.getInstance();
 		quantityFormat.setGroupingUsed(false);
@@ -321,7 +326,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_txtQuantity.insets = new Insets(0, 0, 5, 5);
 		gbc_txtQuantity.gridx = 3;
 		gbc_txtQuantity.gridy = 6;
-		getContentPane().add(txtQuantity, gbc_txtQuantity);
+		frame.getContentPane().add(txtQuantity, gbc_txtQuantity);
 
 		usersScrollPane = new JScrollPane();
 		usersList = new JList<>(listUsersModel);
@@ -342,14 +347,14 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_lblUsersList.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsersList.gridx = 3;
 		gbc_lblUsersList.gridy = 8;
-		getContentPane().add(lblUsersList, gbc_lblUsersList);
+		frame.getContentPane().add(lblUsersList, gbc_lblUsersList);
 		usersScrollPane.setViewportView(usersList);
 		GridBagConstraints gbc_usersScrollPane = new GridBagConstraints();
 		gbc_usersScrollPane.fill = GridBagConstraints.BOTH;
 		gbc_usersScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_usersScrollPane.gridx = 3;
 		gbc_usersScrollPane.gridy = 9;
-		getContentPane().add(usersScrollPane, gbc_usersScrollPane);
+		frame.getContentPane().add(usersScrollPane, gbc_usersScrollPane);
 
 		errorMsgLabel = new JLabel("");
 		errorMsgLabel.setName("errorMsgLabel");
@@ -359,7 +364,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_errorMsgLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_errorMsgLabel.gridx = 1;
 		gbc_errorMsgLabel.gridy = 10;
-		getContentPane().add(errorMsgLabel, gbc_errorMsgLabel);
+		frame.getContentPane().add(errorMsgLabel, gbc_errorMsgLabel);
 
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(e -> {
@@ -377,7 +382,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_btnSaveReceipt.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSaveReceipt.gridx = 1;
 		gbc_btnSaveReceipt.gridy = 11;
-		getContentPane().add(btnSaveReceipt, gbc_btnSaveReceipt);
+		frame.getContentPane().add(btnSaveReceipt, gbc_btnSaveReceipt);
 		btnSaveReceipt.addActionListener(e -> {
 			receiptController.saveReceipt();
 		});
@@ -388,7 +393,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_btnSave.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSave.gridx = 3;
 		gbc_btnSave.gridy = 11;
-		getContentPane().add(btnSave, gbc_btnSave);
+		frame.getContentPane().add(btnSave, gbc_btnSave);
 
 		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(e -> {
@@ -402,12 +407,15 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		});
 
 		btnHome = new JButton("Home");
+		btnHome.addActionListener(e -> {
+			goToHome();
+		});
 		GridBagConstraints gbc_btnHome = new GridBagConstraints();
 		gbc_btnHome.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHome.gridx = 1;
 		gbc_btnHome.gridy = 12;
-		getContentPane().add(btnHome, gbc_btnHome);
+		frame.getContentPane().add(btnHome, gbc_btnHome);
 		btnUpdate.setEnabled(false);
 		GridBagConstraints gbc_btnUpdate = new GridBagConstraints();
 		gbc_btnUpdate.anchor = GridBagConstraints.NORTH;
@@ -415,23 +423,13 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_btnUpdate.insets = new Insets(0, 0, 5, 5);
 		gbc_btnUpdate.gridx = 3;
 		gbc_btnUpdate.gridy = 12;
-		getContentPane().add(btnUpdate, gbc_btnUpdate);
+		frame.getContentPane().add(btnUpdate, gbc_btnUpdate);
 
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(e -> {
 			receiptController.deleteItem(itemsList.getSelectedValue());
 			btnSaveReceipt.setEnabled(true);
 		});
-
-		btnExit = new JButton("Exit");
-
-		GridBagConstraints gbc_btnExit = new GridBagConstraints();
-		gbc_btnExit.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnExit.insets = new Insets(0, 0, 5, 5);
-		gbc_btnExit.gridx = 1;
-		gbc_btnExit.gridy = 13;
-
-		getContentPane().add(btnExit, gbc_btnExit);
 
 		btnDelete.setEnabled(false);
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
@@ -440,7 +438,7 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		gbc_btnDelete.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDelete.gridx = 3;
 		gbc_btnDelete.gridy = 13;
-		getContentPane().add(btnDelete, gbc_btnDelete);
+		frame.getContentPane().add(btnDelete, gbc_btnDelete);
 
 		btnSaveEnabled = new KeyAdapter() {
 			@Override
@@ -465,12 +463,8 @@ public class ReceiptSwingView extends JFrame implements ReceiptView {
 		txtName.addKeyListener(btnSaveEnabled);
 		txtName.addKeyListener(btnUpdateEnabled);
 
-		this.pack();
+		this.frame.pack();
 
 	}
 
-	@Override
-	public void goToHome() {
-		// TODO Auto-generated method stub
-	}
 }
