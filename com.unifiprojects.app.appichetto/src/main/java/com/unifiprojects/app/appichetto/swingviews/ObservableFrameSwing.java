@@ -1,13 +1,26 @@
-package com.unifiprojects.app.appichetto.swingviews.utils;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import java.util.Observable;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public abstract class ObservableFrame extends Observable {
+public abstract class ObservableFrameSwing extends Observable {
 	
-	public abstract JFrame getFrame();	
+	protected JButton btnHome;
 	
+	public ObservableFrameSwing() {
+		btnHome = new JButton("Home");
+		btnHome.setName("homeBtn");
+		btnHome.addActionListener(e -> goToHome());
+	}
+	
+	public abstract JFrame getFrame();
+
+	public JButton getBtnHome() {
+		return btnHome;
+	}
+
 	@Override
 	protected synchronized void setChanged() {
 		super.setChanged();
@@ -16,7 +29,7 @@ public abstract class ObservableFrame extends Observable {
 
 	public void goToHome() {
 		setChanged();
-		this.notifyObservers();
+		notifyObservers();
 	}
 	
 	public void show() {
