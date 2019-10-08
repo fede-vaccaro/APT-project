@@ -13,8 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
-	
-	
+
 	private FrameFixture window;
 	@Mock
 	private ObservableFrameSwing loginView;
@@ -26,7 +25,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	private ObservableFrameSwing historyView;
 
 	private HomepageSwingView homepageSwingView;
-	
+
 	@Override
 	protected void onSetUp() {
 		MockitoAnnotations.initMocks(this);
@@ -43,6 +42,12 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.show();
 	}
 
+	@Test
+	public void testUpdateSetFrameVisible() {
+		homepageSwingView.update(null, null);
+		
+		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
+	}
 
 	@Test
 	@GUITest
@@ -57,27 +62,27 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
 		verify(receiptView).show();
-		assertThat(homepageSwingView.getFrame().isActive()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@Test
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
 		verify(payReceiptsView).show();
-		assertThat(homepageSwingView.getFrame().isActive()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@Test
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
 		verify(historyView).show();
-		assertThat(homepageSwingView.getFrame().isActive()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@Test
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
 		verify(loginView).show();
-		assertThat(homepageSwingView.getFrame().isActive()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 }
