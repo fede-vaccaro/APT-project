@@ -24,11 +24,10 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptSwingView extends ObservableFrame implements ReceiptView {
+public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptView {
 	/**
 	 * 
 	 */
@@ -58,7 +57,6 @@ public class ReceiptSwingView extends ObservableFrame implements ReceiptView {
 	private JLabel lblDescription;
 	private JLabel lblDate;
 	private JButton btnSaveReceipt;
-	private JButton btnHome;
 	private JLabel lblItem;
 	private JLabel lblReceipt;
 	private JLabel lblUsersList;
@@ -406,16 +404,13 @@ public class ReceiptSwingView extends ObservableFrame implements ReceiptView {
 			itemsList.clearSelection();
 		});
 
-		btnHome = new JButton("Home");
-		btnHome.addActionListener(e -> {
-			goToHome();
-		});
+
 		GridBagConstraints gbc_btnHome = new GridBagConstraints();
 		gbc_btnHome.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHome.gridx = 1;
 		gbc_btnHome.gridy = 12;
-		frame.getContentPane().add(btnHome, gbc_btnHome);
+		frame.getContentPane().add(getBtnHome(), gbc_btnHome);
 		btnUpdate.setEnabled(false);
 		GridBagConstraints gbc_btnUpdate = new GridBagConstraints();
 		gbc_btnUpdate.anchor = GridBagConstraints.NORTH;

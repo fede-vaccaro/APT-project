@@ -12,20 +12,18 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
-
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	
 	
 	private FrameFixture window;
 	@Mock
-	private ObservableFrame loginView;
+	private ObservableFrameSwing loginView;
 	@Mock
-	private ObservableFrame receiptView;
+	private ObservableFrameSwing receiptView;
 	@Mock
-	private ObservableFrame payReceiptsView;
+	private ObservableFrameSwing payReceiptsView;
 	@Mock
-	private ObservableFrame historyView;
+	private ObservableFrameSwing historyView;
 
 	private HomepageSwingView homepageSwingView;
 	

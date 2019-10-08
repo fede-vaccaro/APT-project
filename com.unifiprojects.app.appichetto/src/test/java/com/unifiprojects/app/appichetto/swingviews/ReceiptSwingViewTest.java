@@ -481,14 +481,5 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
 		verify(receiptController).saveReceipt();
 	}
-	
-	@Test
-	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
-		window.button(JButtonMatcher.withText("Home")).click();
-		
-		receiptSwingView.goToHome();
-		assertThat(receiptSwingView.getFrame().isActive()).isFalse();
-		//TODO test call notify observer
-	}
 
 }

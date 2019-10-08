@@ -1,9 +1,11 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -12,14 +14,10 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.verify;
-
-import java.util.Arrays;
 
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
@@ -111,7 +109,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		window.label(JLabelMatcher.withText("Accountings:"));
 		window.label(JLabelMatcher.withText("Total unpaid accountings:"));
 		
-		window.button("homepageBtn").requireEnabled();
+		window.button("homeBtn").requireEnabled();
 		window.label("errorMsg").requireText("");
 	}
 
@@ -276,15 +274,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showErrorMsg(msg));
 		
 		window.label("errorMsg").requireText(msg);
-	}
-	
-	@Test
-	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
-		window.button(JButtonMatcher.withText("Home")).click();
-		
-		showHistoryViewSwing.goToHome();
-		assertThat(showHistoryViewSwing.getFrame().isActive()).isFalse();
-		//TODO test call notify observer
 	}
 
 	@Test

@@ -24,8 +24,8 @@ import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.swingviews.PayViewReceiptsView;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
+import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
 
 public class PayReceiptControllerIT {
 

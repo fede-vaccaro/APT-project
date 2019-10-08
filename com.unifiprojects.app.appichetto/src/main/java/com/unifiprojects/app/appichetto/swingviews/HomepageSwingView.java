@@ -10,17 +10,15 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
-
 public class HomepageSwingView implements Observer {
 	/**
 	 * 
 	 */
 	private JFrame frame;
-	private ObservableFrame loginView;
-	private ObservableFrame receiptView;
-	private ObservableFrame payReceiptsView;
-	private ObservableFrame showHistoryView;
+	private ObservableFrameSwing loginView;
+	private ObservableFrameSwing receiptView;
+	private ObservableFrameSwing payReceiptsView;
+	private ObservableFrameSwing showHistoryView;
 
 	/**
 	 * Launch the application.
@@ -44,19 +42,19 @@ public class HomepageSwingView implements Observer {
 		return frame;
 	}
 
-	public void setLoginView(ObservableFrame loginView) {
+	public void setLoginView(ObservableFrameSwing loginView) {
 		this.loginView = loginView;
 	}
 
-	public void setReceiptSwingView(ObservableFrame receiptSwingView) {
+	public void setReceiptSwingView(ObservableFrameSwing receiptSwingView) {
 		this.receiptView = receiptSwingView;
 	}
 
-	public void setPayViewReceiptsViewSwing(ObservableFrame payViewReceiptsViewSwing) {
+	public void setPayViewReceiptsViewSwing(ObservableFrameSwing payViewReceiptsViewSwing) {
 		this.payReceiptsView = payViewReceiptsViewSwing;
 	}
 
-	public void setHistoryViewSwing(ObservableFrame historyViewSwing) {
+	public void setHistoryViewSwing(ObservableFrameSwing historyViewSwing) {
 		this.showHistoryView = historyViewSwing;
 	}
 

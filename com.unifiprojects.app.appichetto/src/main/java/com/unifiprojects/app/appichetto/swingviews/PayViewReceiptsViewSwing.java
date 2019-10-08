@@ -36,9 +36,9 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
-import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
+import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
 
-public class PayViewReceiptsViewSwing extends ObservableFrame implements PayViewReceiptsView {
+public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements PayViewReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsViewSwing.class);
 
@@ -94,7 +94,6 @@ public class PayViewReceiptsViewSwing extends ObservableFrame implements PayView
 
 	private List<Receipt> unpaids;
 	private List<Accounting> accountings;
-	private JButton btnHome;
 
 	public Double getEnteredValue() {
 		return enteredAmount;
@@ -211,13 +210,11 @@ public class PayViewReceiptsViewSwing extends ObservableFrame implements PayView
 			txtEnterAmount.setText("");
 		});
 
-		btnHome = new JButton("Home");
 		GridBagConstraints gbc_btnHome = new GridBagConstraints();
 		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHome.gridx = 2;
 		gbc_btnHome.gridy = 12;
-		frame.getContentPane().add(btnHome, gbc_btnHome);
-		btnHome.addActionListener(e -> goToHome());
+		frame.getContentPane().add(getBtnHome(), gbc_btnHome);
 		btnPay.setName("payButton");
 		GridBagConstraints gbc_btnPay = new GridBagConstraints();
 		gbc_btnPay.insets = new Insets(0, 0, 5, 5);

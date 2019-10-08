@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.assertj.swing.annotation.GUITest;
-import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -713,15 +712,6 @@ public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		window.textBox("enterAmountField").requireText("");
 
-	}
-	
-	@Test
-	public void testHomeButtonDisposeTheFrameAndNotifyObserver() {
-		window.button(JButtonMatcher.withText("Home")).click();
-		
-		payViewReceiptsSwing.goToHome();
-		assertThat(payViewReceiptsSwing.getFrame().isActive()).isFalse();
-		//TODO test call notify observer
 	}
 
 }

@@ -21,10 +21,9 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
-import com.unifiprojects.app.appichetto.swingviews.utils.ObservableFrame;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryViewSwing extends ObservableFrame implements ShowHistoryView {
+public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHistoryView {
 
 	private JFrame frame;
 
@@ -152,14 +151,12 @@ public class ShowHistoryViewSwing extends ObservableFrame implements ShowHistory
 		gbc_btnRmbutton.gridy = 8;
 		frame.getContentPane().add(btnRmbutton, gbc_btnRmbutton);
 
-		JButton btnHomepage = new JButton("Home");
-		btnHomepage.setName("homepageBtn");
-		btnHomepage.addActionListener(e -> goToHome());
+
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
 		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHomepage.gridx = 0;
 		gbc_btnHomepage.gridy = 9;
-		frame.getContentPane().add(btnHomepage, gbc_btnHomepage);
+		frame.getContentPane().add(getBtnHome(), gbc_btnHomepage);
 
 		message = new JLabel("");
 		message.setName("errorMsg");
