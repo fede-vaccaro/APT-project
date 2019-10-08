@@ -1,6 +1,5 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,23 +19,19 @@ public class HomepageSwingView implements Observer {
 	private ObservableFrameSwing payReceiptsView;
 	private ObservableFrameSwing showHistoryView;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					HomepageSwingView frame = new HomepageSwingView();
-					frame.getFrame().setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(() -> {
+//			try {
+//				HomepageSwingView frame = new HomepageSwingView();
+//				frame.getFrame().setVisible(true);
+//			} catch (Exception e) {
+//
+//			}
+//		});
+//	}
 
 	public JFrame getFrame() {
 		return frame;
@@ -73,11 +68,10 @@ public class HomepageSwingView implements Observer {
 		frame.getContentPane().setLayout(gridBagLayout);
 
 		JButton btnCreateReceipt = new JButton("Create Receipt");
-		btnCreateReceipt.addActionListener(
-				e->{
-					frame.setVisible(false);
-					receiptView.show();
-				});
+		btnCreateReceipt.addActionListener(e -> {
+			frame.setVisible(false);
+			receiptView.show();
+		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
 		gbc_btnCreateReceipt.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCreateReceipt.gridx = 2;
@@ -85,11 +79,10 @@ public class HomepageSwingView implements Observer {
 		frame.getContentPane().add(btnCreateReceipt, gbc_btnCreateReceipt);
 
 		JButton btnPayReceipt = new JButton("Pay Receipt");
-		btnPayReceipt.addActionListener(
-				e->{
-					frame.setVisible(false);
-					payReceiptsView.show();
-				});
+		btnPayReceipt.addActionListener(e -> {
+			frame.setVisible(false);
+			payReceiptsView.show();
+		});
 		GridBagConstraints gbc_btnPayReceipt = new GridBagConstraints();
 		gbc_btnPayReceipt.insets = new Insets(0, 0, 5, 0);
 		gbc_btnPayReceipt.gridx = 4;
@@ -97,11 +90,10 @@ public class HomepageSwingView implements Observer {
 		frame.getContentPane().add(btnPayReceipt, gbc_btnPayReceipt);
 
 		JButton btnShowHistory = new JButton("Show History");
-		btnShowHistory.addActionListener(
-				e->{
-					frame.setVisible(false);
-					showHistoryView.show();
-				});
+		btnShowHistory.addActionListener(e -> {
+			frame.setVisible(false);
+			showHistoryView.show();
+		});
 		GridBagConstraints gbc_btnShowHistory = new GridBagConstraints();
 		gbc_btnShowHistory.insets = new Insets(0, 0, 5, 5);
 		gbc_btnShowHistory.gridx = 2;
@@ -114,18 +106,17 @@ public class HomepageSwingView implements Observer {
 		gbc_btnNewButton_4.gridx = 4;
 		gbc_btnNewButton_4.gridy = 5;
 		frame.getContentPane().add(btnNewButton_4, gbc_btnNewButton_4);
-		
-				JButton btnLogOut = new JButton("Log Out");
-				btnLogOut.addActionListener(
-						e->{
-							frame.setVisible(false);
-							loginView.show();
-						});
-				GridBagConstraints gbc_btnLogOut = new GridBagConstraints();
-				gbc_btnLogOut.insets = new Insets(0, 0, 0, 5);
-				gbc_btnLogOut.gridx = 3;
-				gbc_btnLogOut.gridy = 8;
-				frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.addActionListener(e -> {
+			frame.setVisible(false);
+			loginView.show();
+		});
+		GridBagConstraints gbc_btnLogOut = new GridBagConstraints();
+		gbc_btnLogOut.insets = new Insets(0, 0, 0, 5);
+		gbc_btnLogOut.gridx = 3;
+		gbc_btnLogOut.gridy = 8;
+		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
 
 	}
 
