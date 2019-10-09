@@ -33,7 +33,7 @@ import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 public class PayReceiptsControllerTest {
 
 	@InjectMocks
-	private PayReceiptsController payViewReceiptsController;
+	private PayReceiptsController payReceiptsController;
 
 	@Mock
 	private ReceiptRepository receiptRepository;
@@ -42,7 +42,7 @@ public class PayReceiptsControllerTest {
 	private AccountingRepository accountingRepository;
 
 	@Mock
-	private PayReceiptsView payViewReceiptsView;
+	private PayReceiptsView payReceiptsView;
 
 	@Captor
 	private ArgumentCaptor<List<Receipt>> listReceiptCaptor;
@@ -50,7 +50,7 @@ public class PayReceiptsControllerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		payViewReceiptsController.setTransactionHandler(new FakeTransaction());
+		payReceiptsController.setTransactionHandler(new FakeTransaction());
 	}
 
 	@Test
@@ -64,8 +64,8 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList(receipt);
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
-		verify(payViewReceiptsView).showReceipts(unpaids);
+		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		verify(payReceiptsView).showReceipts(unpaids);
 	}
 
 	@Test
@@ -83,11 +83,11 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList(receipt2, receipt1, receipt3);
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 
 		List<Receipt> unpaidsOrdered = Arrays.asList(receipt3, receipt2, receipt1);
 
-		verify(payViewReceiptsView).showReceipts(unpaidsOrdered);
+		verify(payReceiptsView).showReceipts(unpaidsOrdered);
 
 	}
 
@@ -98,9 +98,9 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList();
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
-		verify(payViewReceiptsView).showReceipts(unpaids);
-		verifyNoMoreInteractions(payViewReceiptsView);
+		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		verify(payReceiptsView).showReceipts(unpaids);
+		verifyNoMoreInteractions(payReceiptsView);
 
 	}
 
@@ -116,11 +116,11 @@ public class PayReceiptsControllerTest {
 		double exactAmountToPay = accounting.getAmount();
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
-		payViewReceiptsController.payAmount(exactAmountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(exactAmountToPay, loggedUser, payerUser);
 
 		assertThat(accounting.isPaid()).isTrue();
 		verify(accountingRepository).saveAccounting(accounting);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -138,12 +138,12 @@ public class PayReceiptsControllerTest {
 		double difference = 2.0;
 		double amountToPay = accounting.getAmount() - difference;
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
 		assertThat(accounting.isPaid()).isFalse();
 		assertThat(accounting.getAmount()).isEqualTo(difference);
 		verify(accountingRepository).saveAccounting(accounting);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class PayReceiptsControllerTest {
 
 		double amountToPay = newerAccounting.getAmount() + olderAccounting.getAmount();
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
 		assertThat(olderAccounting.isPaid()).isTrue();
 		assertThat(newerAccounting.isPaid()).isTrue();
@@ -174,7 +174,7 @@ public class PayReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class PayReceiptsControllerTest {
 		double difference = 2.0;
 		double amountToPay = newerAccounting.getAmount() + olderAccounting.getAmount() - difference;
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
 		assertThat(olderAccounting.isPaid()).isTrue();
 		assertThat(newerAccounting.isPaid()).isFalse();
@@ -207,7 +207,7 @@ public class PayReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -233,7 +233,7 @@ public class PayReceiptsControllerTest {
 		double amountToPay = newerAccounting.getAmount() + olderAccounting1.getAmount() + olderAccounting2.getAmount()
 				- difference;
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -246,7 +246,7 @@ public class PayReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting2);
 		inOrder.verify(accountingRepository).saveAccounting(newerAccounting);
 		verifyNoMoreInteractions(accountingRepository);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -273,7 +273,7 @@ public class PayReceiptsControllerTest {
 
 		double oldAccounting2Amount = olderAccounting2.getAmount();
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -285,7 +285,7 @@ public class PayReceiptsControllerTest {
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting1);
 		inOrder.verify(accountingRepository).saveAccounting(olderAccounting2);
 		verifyNoMoreInteractions(accountingRepository);
-		verify(payViewReceiptsView).showReceipts(listReceiptCaptor.capture());
+		verify(payReceiptsView).showReceipts(listReceiptCaptor.capture());
 	}
 
 	@Test
@@ -315,11 +315,11 @@ public class PayReceiptsControllerTest {
 			}
 		};
 
-		payViewReceiptsController.setTransactionHandler(throwingExceptionTransaction);
+		payReceiptsController.setTransactionHandler(throwingExceptionTransaction);
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
-		verify(payViewReceiptsView).showErrorMsg("Something went wrong while committing the payment.");
+		verify(payReceiptsView).showErrorMsg("Something went wrong while committing the payment.");
 	}
 
 	@Test
@@ -342,7 +342,7 @@ public class PayReceiptsControllerTest {
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(accountingByPayer1, accountingByPayer2));
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payer1);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payer1);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -361,9 +361,9 @@ public class PayReceiptsControllerTest {
 
 		double amountToPay = -3.0;
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
-		verify(payViewReceiptsView).showErrorMsg("Amount payed should be more than zero.");
+		verify(payReceiptsView).showErrorMsg("Amount payed should be more than zero.");
 		verifyNoMoreInteractions(accountingRepository);
 	}
 
@@ -374,9 +374,9 @@ public class PayReceiptsControllerTest {
 
 		double amountToPay = 0.0;
 
-		payViewReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(amountToPay, loggedUser, payerUser);
 
-		verify(payViewReceiptsView).showErrorMsg("Amount payed should be more than zero.");
+		verify(payReceiptsView).showErrorMsg("Amount payed should be more than zero.");
 		verifyNoMoreInteractions(accountingRepository);
 	}
 
@@ -391,10 +391,10 @@ public class PayReceiptsControllerTest {
 		double superiorAmountToPay = accounting.getAmount() * 2.0;
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
-		payViewReceiptsController.payAmount(superiorAmountToPay, loggedUser, payerUser);
+		payReceiptsController.payAmount(superiorAmountToPay, loggedUser, payerUser);
 
 		verify(accountingRepository).getAccountingsOf(loggedUser);
-		verify(payViewReceiptsView).showErrorMsg("Entered amount more than should be payed.");
+		verify(payReceiptsView).showErrorMsg("Entered amount more than should be payed.");
 		verifyNoMoreInteractions(accountingRepository);
 		assertThat(accounting.isPaid()).isFalse();
 	}

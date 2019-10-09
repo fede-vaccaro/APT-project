@@ -37,7 +37,7 @@ public class PayReceiptControllerIT {
 	private PayReceiptsController payReceiptsController;
 
 	@Mock
-	private PayReceiptsView payViewReceiptsView;
+	private PayReceiptsView payReceiptsView;
 	private User loggedUser;
 	private User payerUser;
 	private Receipt firstReceipt;
@@ -63,7 +63,7 @@ public class PayReceiptControllerIT {
 		accountingRepository = new AccountingRepositoryHibernate(entityManager);
 		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 		payReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
-				payViewReceiptsView);
+				payReceiptsView);
 		payReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
 
 		
@@ -104,14 +104,14 @@ public class PayReceiptControllerIT {
 				.setParameter("paid", false).setParameter("user", loggedUser).getResultList();
 		
 		assertThat(unpaidAccountings).isEmpty();
-		verify(payViewReceiptsView).showReceipts(Arrays.asList());
+		verify(payReceiptsView).showReceipts(Arrays.asList());
 	}
 	
 	@Test
 	public void testShowUnpaidReceipts() {
 		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
 		
-		verify(payViewReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt, firstReceipt));
+		verify(payReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt, firstReceipt));
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class PayReceiptControllerIT {
 		
 		assertThat(unpaidAccountings).containsExactlyInAnyOrder(secondAccounting, thirdAccounting);
 				
-		verify(payViewReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt));
+		verify(payReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt));
 
 	}
 

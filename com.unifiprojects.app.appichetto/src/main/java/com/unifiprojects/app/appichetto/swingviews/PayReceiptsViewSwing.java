@@ -45,10 +45,10 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
 	private static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
-	private PayReceiptsController payViewReceiptsController;
+	private PayReceiptsController payReceiptsController;
 
-	public void setController(PayReceiptsController payViewReceiptsController) {
-		this.payViewReceiptsController = payViewReceiptsController;
+	public void setController(PayReceiptsController payReceiptsController) {
+		this.payReceiptsController = payReceiptsController;
 	}
 
 	private JFrame frame;
@@ -115,7 +115,7 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	 * Create the application.
 	 */
 	public PayReceiptsViewSwing(PayReceiptsController payViewReceiptsController) {
-		this.payViewReceiptsController = payViewReceiptsController;
+		this.payReceiptsController = payViewReceiptsController;
 		initialize();
 	}
 
@@ -205,8 +205,8 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 			LOGGER.info(enteredAmount);
 			LOGGER.info(loggedUser);
 			LOGGER.info((User) userComboBoxModel.getSelectedItem());
-			LOGGER.info(payViewReceiptsController);
-			payViewReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
+			LOGGER.info(payReceiptsController);
+			payReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
 			txtEnterAmount.setText("");
 		});
 

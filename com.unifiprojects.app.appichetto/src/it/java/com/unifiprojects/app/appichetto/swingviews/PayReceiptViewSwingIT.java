@@ -37,8 +37,8 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 
-	private PayReceiptsViewSwing payViewReceiptsView;
-	private PayReceiptsController payViewReceiptsController;
+	private PayReceiptsViewSwing payReceiptsView;
+	private PayReceiptsController payReceiptsController;
 
 	private AccountingRepository accountingRepository;
 	private ReceiptRepository receiptRepository;
@@ -71,13 +71,13 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			accountingRepository = new AccountingRepositoryHibernate(entityManager);
 			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 
-			payViewReceiptsView = new PayReceiptsViewSwing();
+			payReceiptsView = new PayReceiptsViewSwing();
 
-			payViewReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
-					payViewReceiptsView);
-			payViewReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
+			payReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
+					payReceiptsView);
+			payReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
 
-			payViewReceiptsView.setController(payViewReceiptsController);
+			payReceiptsView.setController(payReceiptsController);
 
 			loggedUser = new User("logged", "pw");
 			payer1 = new User("payer", "pw");
@@ -106,12 +106,12 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(firstReceiptPayer2);
 			entityManager.getTransaction().commit();
 
-			payViewReceiptsView.setLoggedUser(loggedUser);
-			GuiActionRunner.execute(() -> payViewReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser));
+			payReceiptsView.setLoggedUser(loggedUser);
+			GuiActionRunner.execute(() -> payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser));
 
-			return payViewReceiptsView;
+			return payReceiptsView;
 		});
-		window = new FrameFixture(robot(), payViewReceiptsView.getFrame());
+		window = new FrameFixture(robot(), payReceiptsView.getFrame());
 		window.show(); // shows the frame to test
 	}
 
