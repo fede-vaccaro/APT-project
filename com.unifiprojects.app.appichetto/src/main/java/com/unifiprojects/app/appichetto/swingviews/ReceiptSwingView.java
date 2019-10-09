@@ -52,8 +52,8 @@ public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptVie
 
 	private DefaultListModel<User> listUsersModel;
 	private JButton btnUpdate;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txtDescription;
+	private JTextField txtDate;
 	private JLabel lblDescription;
 	private JLabel lblDate;
 	private JButton btnSaveReceipt;
@@ -198,15 +198,15 @@ public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptVie
 		gbc_lblDescription.gridy = 1;
 		frame.getContentPane().add(lblDescription, gbc_lblDescription);
 
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.anchor = GridBagConstraints.NORTH;
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 2;
-		frame.getContentPane().add(textField, gbc_textField);
-		textField.setColumns(10);
+		txtDescription = new JTextField();
+		GridBagConstraints gbc_txtDescription = new GridBagConstraints();
+		gbc_txtDescription.anchor = GridBagConstraints.NORTH;
+		gbc_txtDescription.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDescription.insets = new Insets(0, 0, 5, 5);
+		gbc_txtDescription.gridx = 1;
+		gbc_txtDescription.gridy = 2;
+		frame.getContentPane().add(txtDescription, gbc_txtDescription);
+		txtDescription.setColumns(10);
 
 		txtName = new JTextField();
 		txtName.setName("nameBox");
@@ -227,15 +227,15 @@ public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptVie
 		gbc_lblDate.gridy = 3;
 		frame.getContentPane().add(lblDate, gbc_lblDate);
 
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.anchor = GridBagConstraints.NORTH;
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 4;
-		frame.getContentPane().add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		txtDate = new JTextField();
+		GridBagConstraints gbc_txtDate = new GridBagConstraints();
+		gbc_txtDate.anchor = GridBagConstraints.NORTH;
+		gbc_txtDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDate.insets = new Insets(0, 0, 5, 5);
+		gbc_txtDate.gridx = 1;
+		gbc_txtDate.gridy = 4;
+		frame.getContentPane().add(txtDate, gbc_txtDate);
+		txtDate.setColumns(10);
 
 		JLabel lblPrice = new JLabel("Price");
 		GridBagConstraints gbc_lblPrice = new GridBagConstraints();
