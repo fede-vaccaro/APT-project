@@ -100,8 +100,8 @@ public class PayReceiptControllerIT {
 		
 		payReceiptsController.payAmount(totalDebt, loggedUser, payerUser);
 		
-		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where paid=:paid and user=:user", Accounting.class)
-				.setParameter("paid", false).setParameter("user", loggedUser).getResultList();
+		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+				.setParameter("amount", 0.0).setParameter("user", loggedUser).getResultList();
 		
 		assertThat(unpaidAccountings).isEmpty();
 		verify(payReceiptsView).showReceipts(Arrays.asList());
@@ -124,8 +124,8 @@ public class PayReceiptControllerIT {
 		
 		payReceiptsController.payAmount(totalDebt/2.0, loggedUser, payerUser);
 		
-		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where paid=:paid and user=:user", Accounting.class)
-				.setParameter("paid", false).setParameter("user", loggedUser).getResultList();
+		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+				.setParameter("amount", 0.0).setParameter("user", loggedUser).getResultList();
 		
 		
 		Accounting secondAccounting = new Accounting(loggedUser, secondReceipt.getTotalPrice()/4.0);

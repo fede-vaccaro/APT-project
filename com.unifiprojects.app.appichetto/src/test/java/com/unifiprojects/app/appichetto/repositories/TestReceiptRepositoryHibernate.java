@@ -185,7 +185,8 @@ public class TestReceiptRepositoryHibernate {
 		Accounting accountingToDebtorUserForReceipt1 = new Accounting(debtorUser, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUserForReceipt2 = new Accounting(debtorUser, item2.getPrice() / 2.0);
 
-		accountingToDebtorUserForReceipt2.setPaid(true);
+		//accountingToDebtorUserForReceipt2.setPaid(true);
+		accountingToDebtorUserForReceipt2.setAmount(0.0);
 
 		receipt1.setBuyer(creditorUser);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
@@ -286,7 +287,8 @@ public class TestReceiptRepositoryHibernate {
 
 		Receipt receipt = new Receipt();
 		Accounting accountingToDebtor = new Accounting(debtorUser, item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
-		accountingToDebtor.setPaid(true);
+		//accountingToDebtor.setPaid(true);
+		accountingToDebtor.setAmount(0.0);
 
 		receipt.setBuyer(creditorUser);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
