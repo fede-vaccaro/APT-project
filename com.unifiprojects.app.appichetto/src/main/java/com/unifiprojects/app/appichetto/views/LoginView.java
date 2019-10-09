@@ -2,7 +2,7 @@ package com.unifiprojects.app.appichetto.views;
 
 public interface LoginView {
 
-	void goToHomePage();
+	void goToHome();
 
 	void showErrorMsg(String string);
 

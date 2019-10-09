@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
-public class LoginViewSwing implements LoginView{
+public class LoginViewSwing extends ObservableFrameSwing implements LoginView {
 	private LoginController loginController;
 	
 	private JFrame frmAppichetto;
@@ -104,15 +104,10 @@ public class LoginViewSwing implements LoginView{
 	}
 
 	@Override
-	public void goToHomePage() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void showErrorMsg(String message) {
 		SwingUtilities.invokeLater(() -> errorMsg.setText(message));
 	}
+
 
 
 }

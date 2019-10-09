@@ -27,7 +27,7 @@ public class LoginController {
 		User user = userRepository.findByUsername(username);
 		if (user != null) {
 			if (user.getPassword().equals(password)) {
-				loginView.goToHomePage();
+				loginView.goToHome();
 			}else {
 				loginView.showErrorMsg("Wrong password!");
 			}
@@ -41,7 +41,7 @@ public class LoginController {
 		try {
 			User newUser = new User(username, password);
 			transaction.doInTransaction(()->userRepository.save(newUser));
-			loginView.goToHomePage();
+			loginView.goToHome();
 		}catch(AlreadyExistentException e) {
 			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Username already picked. Choice another username.");
