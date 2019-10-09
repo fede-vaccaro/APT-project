@@ -25,7 +25,7 @@ import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHiberna
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
 public class PayReceiptControllerIT {
 
@@ -34,10 +34,10 @@ public class PayReceiptControllerIT {
 
 	private AccountingRepository accountingRepository;
 	private ReceiptRepository receiptRepository;
-	private PayViewReceiptsController payReceiptsController;
+	private PayReceiptsController payReceiptsController;
 
 	@Mock
-	private PayViewReceiptsView payViewReceiptsView;
+	private PayReceiptsView payViewReceiptsView;
 	private User loggedUser;
 	private User payerUser;
 	private Receipt firstReceipt;
@@ -62,7 +62,7 @@ public class PayReceiptControllerIT {
 
 		accountingRepository = new AccountingRepositoryHibernate(entityManager);
 		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-		payReceiptsController = new PayViewReceiptsController(receiptRepository, accountingRepository,
+		payReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
 				payViewReceiptsView);
 		payReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
 

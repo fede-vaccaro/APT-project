@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
-import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -37,8 +37,8 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 
-	private PayViewReceiptsViewSwing payViewReceiptsView;
-	private PayViewReceiptsController payViewReceiptsController;
+	private PayReceiptsViewSwing payViewReceiptsView;
+	private PayReceiptsController payViewReceiptsController;
 
 	private AccountingRepository accountingRepository;
 	private ReceiptRepository receiptRepository;
@@ -71,9 +71,9 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			accountingRepository = new AccountingRepositoryHibernate(entityManager);
 			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 
-			payViewReceiptsView = new PayViewReceiptsViewSwing();
+			payViewReceiptsView = new PayReceiptsViewSwing();
 
-			payViewReceiptsController = new PayViewReceiptsController(receiptRepository, accountingRepository,
+			payViewReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
 					payViewReceiptsView);
 			payViewReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
 

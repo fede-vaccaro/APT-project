@@ -28,12 +28,12 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayViewReceiptsControllerTest {
+public class PayReceiptsControllerTest {
 
 	@InjectMocks
-	private PayViewReceiptsController payViewReceiptsController;
+	private PayReceiptsController payViewReceiptsController;
 
 	@Mock
 	private ReceiptRepository receiptRepository;
@@ -42,7 +42,7 @@ public class PayViewReceiptsControllerTest {
 	private AccountingRepository accountingRepository;
 
 	@Mock
-	private PayViewReceiptsView payViewReceiptsView;
+	private PayReceiptsView payViewReceiptsView;
 
 	@Captor
 	private ArgumentCaptor<List<Receipt>> listReceiptCaptor;

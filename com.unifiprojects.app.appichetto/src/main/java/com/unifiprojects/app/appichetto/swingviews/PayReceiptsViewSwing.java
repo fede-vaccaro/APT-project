@@ -30,24 +30,24 @@ import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements PayViewReceiptsView {
+public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayReceiptsView {
 
-	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsViewSwing.class);
+	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsViewSwing.class);
 
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
 	private static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
-	private PayViewReceiptsController payViewReceiptsController;
+	private PayReceiptsController payViewReceiptsController;
 
-	public void setController(PayViewReceiptsController payViewReceiptsController) {
+	public void setController(PayReceiptsController payViewReceiptsController) {
 		this.payViewReceiptsController = payViewReceiptsController;
 	}
 
@@ -114,12 +114,12 @@ public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements Pa
 	/**
 	 * Create the application.
 	 */
-	public PayViewReceiptsViewSwing(PayViewReceiptsController payViewReceiptsController) {
+	public PayReceiptsViewSwing(PayReceiptsController payViewReceiptsController) {
 		this.payViewReceiptsController = payViewReceiptsController;
 		initialize();
 	}
 
-	public PayViewReceiptsViewSwing() {
+	public PayReceiptsViewSwing() {
 		initialize();
 	}
 

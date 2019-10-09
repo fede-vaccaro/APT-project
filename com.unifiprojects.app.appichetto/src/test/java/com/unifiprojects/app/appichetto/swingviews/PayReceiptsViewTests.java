@@ -21,7 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.controllers.PayViewReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -30,21 +30,21 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
 
 @RunWith(GUITestRunner.class)
-public class PayViewReceiptsViewTests extends AssertJSwingJUnitTestCase {
+public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 
 	@Mock
-	private PayViewReceiptsController payViewReceiptsController;
+	private PayReceiptsController payViewReceiptsController;
 
 	@InjectMocks
-	private PayViewReceiptsViewSwing payViewReceiptsSwing;
+	private PayReceiptsViewSwing payViewReceiptsSwing;
 
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
-			payViewReceiptsSwing = new PayViewReceiptsViewSwing(payViewReceiptsController);
+			payViewReceiptsSwing = new PayReceiptsViewSwing(payViewReceiptsController);
 			return payViewReceiptsSwing;
 		});
 		window = new FrameFixture(robot(), payViewReceiptsSwing.getFrame());

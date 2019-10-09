@@ -16,12 +16,12 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
-import com.unifiprojects.app.appichetto.views.PayViewReceiptsView;
+import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayViewReceiptsController {
+public class PayReceiptsController {
 
 	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LogManager.getLogger(PayViewReceiptsController.class);
+	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsController.class);
 
 	private TransactionHandler transaction;
 
@@ -31,10 +31,10 @@ public class PayViewReceiptsController {
 
 	private ReceiptRepository receiptRepository;
 	private AccountingRepository accountingRepository;
-	private PayViewReceiptsView payViewReceiptsView;
+	private PayReceiptsView payViewReceiptsView;
 
-	public PayViewReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
-			PayViewReceiptsView payViewReceiptsView) {
+	public PayReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
+			PayReceiptsView payViewReceiptsView) {
 		this.receiptRepository = receiptRepository;
 		this.accountingRepository = accountingRepository;
 		this.payViewReceiptsView = payViewReceiptsView;

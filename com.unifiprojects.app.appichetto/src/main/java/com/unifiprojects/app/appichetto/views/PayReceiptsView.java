@@ -5,7 +5,7 @@ import java.util.List;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 
-public interface PayViewReceiptsView {
+public interface PayReceiptsView {
 
 	void showReceipts(List<Receipt> unpaids);
 
