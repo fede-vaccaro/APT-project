@@ -68,7 +68,7 @@ public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements Pa
 		return accountings;
 	}
 
-	public void setAccountings(List<Accounting> accountings) {
+	protected void setAccountings(List<Accounting> accountings) {
 		this.accountings = accountings;
 	}
 
@@ -76,7 +76,7 @@ public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements Pa
 		return unpaids;
 	}
 
-	public void setUnpaids(List<Receipt> unpaids) {
+	protected void setUnpaids(List<Receipt> unpaids) {
 		this.unpaids = unpaids;
 	}
 
@@ -84,11 +84,11 @@ public class PayViewReceiptsViewSwing extends ObservableFrameSwing implements Pa
 		return frame;
 	}
 
-	public DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
+	protected DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
 		return receiptListModel;
 	}
 
-	public DefaultComboBoxModel<User> getUserComboBoxModel() {
+	protected DefaultComboBoxModel<User> getUserComboBoxModel() {
 		return userComboBoxModel;
 	}
 
