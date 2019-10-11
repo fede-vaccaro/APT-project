@@ -53,7 +53,9 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 			toBeRemoved = entityManager.merge(receipt);
 		}
 
+
 		entityManager.remove(toBeRemoved);
+
 	}
 
 }

@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class Receipt {
@@ -28,15 +30,15 @@ public class Receipt {
 	
 	private double totalPrice;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Item> items;
+	@OrderColumn
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE}, orphanRemoval = true)
+	private List<Item> items = new ArrayList<>();
 	
-	@OneToMany(mappedBy="receipt", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Accounting> accountingList;
+	@OrderColumn
+	@OneToMany(mappedBy="receipt", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<Accounting> accountingList = new ArrayList<>();
 
 	public Receipt() {
-		items = new ArrayList<>();
-		accountingList = new ArrayList<>();
 	}
 
 	public Receipt(User buyer) {
@@ -44,6 +46,13 @@ public class Receipt {
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
 		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
+	}
+	
+	public void removeAccounting(Accounting a) {
+		if(!(accountingList instanceof ArrayList<?>))
+			accountingList = new ArrayList<Accounting>(accountingList);
+		this.accountingList.remove(a);
+		a.setReceipt(null);
 	}
 
 	public Long getId() {

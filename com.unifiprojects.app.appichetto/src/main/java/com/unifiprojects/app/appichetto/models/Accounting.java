@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.models;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -58,7 +59,7 @@ public class Accounting {
 
 	private double amount;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Receipt receipt;
 
 	public Accounting() {

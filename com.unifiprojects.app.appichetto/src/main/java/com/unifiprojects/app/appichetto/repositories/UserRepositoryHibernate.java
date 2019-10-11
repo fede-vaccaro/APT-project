@@ -9,6 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
+import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Item;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class UserRepositoryHibernate implements UserRepository {
@@ -54,5 +57,58 @@ public class UserRepositoryHibernate implements UserRepository {
 			LOGGER.debug(String.format("User with username %s not found.", username), e);
 			return null;
 		}
+	}
+
+	@Override
+	public void removeUser(User user) {
+		User toBeRemoved = user;
+		if (!entityManager.contains(toBeRemoved)) {
+			toBeRemoved = entityManager.merge(toBeRemoved);
+		}
+
+		deleteBoughtReceipts(toBeRemoved);
+
+		deleteAccountings(toBeRemoved);
+		
+		deleteItems(toBeRemoved);
+
+		entityManager.remove(toBeRemoved);
+	}
+
+	void deleteAccountings(User toBeRemoved) {
+		List<Accounting> userAccountings = entityManager
+				.createQuery("from Accounting where user=:user", Accounting.class).setParameter("user", toBeRemoved)
+				.getResultList();
+
+		userAccountings.stream().forEach(a -> {
+			Receipt receipt = a.getReceipt();
+			receipt.getItems().forEach( i -> System.out.println(i.getOwners()));
+			entityManager.detach(receipt);
+
+			receipt.removeAccounting(a);
+
+			entityManager.merge(receipt);
+
+			entityManager.remove(a);
+		});
+	}
+
+	void deleteBoughtReceipts(User toBeRemoved) {
+		List<Receipt> receiptsBoughtByUser = entityManager.createQuery("from Receipt where buyer=:buyer", Receipt.class)
+				.setParameter("buyer", toBeRemoved).getResultList();
+
+		receiptsBoughtByUser.stream().forEach(entityManager::remove);
+	}
+
+	void deleteItems(User deletingUser) {
+		List<Item> ownedItems = entityManager
+				.createQuery("select i from Item i join i.owners u where u=:user",Item.class)
+				.setParameter("user", deletingUser).getResultList();
+
+		ownedItems.forEach(item -> {
+			//entityManager.detach(item);
+			item.removeOwner(deletingUser);
+			entityManager.merge(item);
+		});
 	}
 }
