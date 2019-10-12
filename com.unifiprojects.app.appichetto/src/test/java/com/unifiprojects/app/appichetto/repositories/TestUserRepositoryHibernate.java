@@ -79,7 +79,7 @@ public class TestUserRepositoryHibernate {
 	}
 
 	@Test
-	public void testUserNameIsUpdatedWhenSaved() {
+	public void testUserNameIsUpdatedWhenUserIsSaved() {
 		User testUser = persistGetTestUserAndClear(entityManager);
 
 		String newUsername = "NewName";
@@ -98,7 +98,7 @@ public class TestUserRepositoryHibernate {
 	}
 	
 	@Test
-	public void testPasswordIsUpdatedWhenSaved() {
+	public void testPasswordIsUpdatedWhenUserIsSaved() {
 		User testUser = persistGetTestUserAndClear(entityManager);
 
 		String newPassword = "newPassword";
