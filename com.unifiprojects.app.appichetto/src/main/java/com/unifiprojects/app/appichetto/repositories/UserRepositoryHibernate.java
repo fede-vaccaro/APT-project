@@ -27,9 +27,12 @@ public class UserRepositoryHibernate implements UserRepository {
 	public void save(User user) {
 		if ((user.getUsername().trim()).equals(""))
 			throw new IllegalArgumentException("You can't use empty string username.");
-		if (this.findByUsername(user.getUsername()) != null) {
-			throw new AlreadyExistentException(
-					String.format("Username %s has been already picked.", user.getUsername()));
+		User userWithSameName = this.findByUsername(user.getUsername());
+		if (userWithSameName != null) {
+			if (userWithSameName.getId() != user.getId()) {
+				throw new AlreadyExistentException(
+						String.format("Username %s has been already picked.", user.getUsername()));
+			}
 		}
 		if (user.getId() != null) {
 			entityManager.merge(user);
@@ -69,7 +72,7 @@ public class UserRepositoryHibernate implements UserRepository {
 		deleteBoughtReceipts(toBeRemoved);
 
 		deleteAccountings(toBeRemoved);
-		
+
 		deleteItems(toBeRemoved);
 
 		entityManager.remove(toBeRemoved);
@@ -82,7 +85,7 @@ public class UserRepositoryHibernate implements UserRepository {
 
 		userAccountings.stream().forEach(a -> {
 			Receipt receipt = a.getReceipt();
-			receipt.getItems().forEach( i -> System.out.println(i.getOwners()));
+			receipt.getItems().forEach(i -> System.out.println(i.getOwners()));
 			entityManager.detach(receipt);
 
 			receipt.removeAccounting(a);
@@ -102,11 +105,11 @@ public class UserRepositoryHibernate implements UserRepository {
 
 	void deleteItems(User deletingUser) {
 		List<Item> ownedItems = entityManager
-				.createQuery("select i from Item i join i.owners u where u=:user",Item.class)
+				.createQuery("select i from Item i join i.owners u where u=:user", Item.class)
 				.setParameter("user", deletingUser).getResultList();
 
 		ownedItems.forEach(item -> {
-			//entityManager.detach(item);
+			// entityManager.detach(item);
 			item.removeOwner(deletingUser);
 			entityManager.merge(item);
 		});

@@ -79,7 +79,7 @@ public class TestUserRepositoryHibernate {
 	}
 
 	@Test
-	public void testUserIsUpdatedWhenSavedButNotReAddedToDB() {
+	public void testUserNameIsUpdatedWhenSaved() {
 		User testUser = persistGetTestUserAndClear(entityManager);
 
 		String newUsername = "NewName";
@@ -91,12 +91,29 @@ public class TestUserRepositoryHibernate {
 
 		entityManager.clear();
 
-		List<User> extractedUserList = entityManager.createQuery("from users", User.class).getResultList();
+		User extractedUser = entityManager.find(User.class, testUser.getId());
 
-		assertThat(extractedUserList).containsOnly(testUser);
-		User extractedUser = extractedUserList.get(0);
 		assertThat(extractedUser.getId()).isEqualTo(testUser.getId());
-		assertThat(extractedUser.getUsername()).isEqualTo(testUser.getUsername());
+		assertThat(extractedUser).isEqualTo(testUser);
+	}
+	
+	@Test
+	public void testPasswordIsUpdatedWhenSaved() {
+		User testUser = persistGetTestUserAndClear(entityManager);
+
+		String newPassword = "newPassword";
+		testUser.setPassword(newPassword);
+
+		entityManager.getTransaction().begin();
+		userRepository.save(testUser);
+		entityManager.getTransaction().commit();
+
+		entityManager.clear();
+
+		User extractedUser = entityManager.find(User.class, testUser.getId());
+
+		assertThat(extractedUser.getId()).isEqualTo(testUser.getId());
+		assertThat(extractedUser).isEqualTo(testUser);
 	}
 
 	@Test
@@ -268,11 +285,10 @@ public class TestUserRepositoryHibernate {
 		User buyer = new User("buyer", "");
 
 		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(deletingUser, buyer,
-				new GregorianCalendar(2019, 8, 10), Arrays.asList());
+				new GregorianCalendar(2019, 8, 10));
 		Receipt receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(deletingUser, user2,
-				new GregorianCalendar(2019, 8, 11), Arrays.asList());
+				new GregorianCalendar(2019, 8, 11));
 
-		receipt1.setAccountingList(Arrays.asList(new Accounting(deletingUser, 10.0)));
 		receipt2.setAccountingList(Arrays.asList(new Accounting(deletingUser, 10.0), new Accounting(user2, 5.0)));
 
 		entityManager.getTransaction().begin();
@@ -288,6 +304,8 @@ public class TestUserRepositoryHibernate {
 		UserRepositoryHibernate userRepositoryHibernate = (UserRepositoryHibernate) userRepository;
 		userRepositoryHibernate.deleteAccountings(deletingUser);
 		entityManager.getTransaction().commit();
+		
+		entityManager.clear();
 		
 		Receipt reloadedReceipt1 = entityManager.find(Receipt.class, receipt1.getId());
 		Receipt reloadedReceipt2 = entityManager.find(Receipt.class, receipt2.getId());
@@ -330,6 +348,8 @@ public class TestUserRepositoryHibernate {
 		UserRepositoryHibernate userRepositoryHibernate = (UserRepositoryHibernate) userRepository;
 		userRepositoryHibernate.deleteItems(deletingUser);
 		entityManager.getTransaction().commit();
+
+		entityManager.clear();
 
 		Receipt reloadedReceipt1 = entityManager.find(Receipt.class, receipt1.getId());
 		Receipt reloadedReceipt2 = entityManager.find(Receipt.class, receipt2.getId());
@@ -379,6 +399,8 @@ public class TestUserRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		userRepository.removeUser(deletingUser);
 		entityManager.getTransaction().commit();
+		
+		entityManager.clear();
 		
 		Receipt reloadedReceipt1 = entityManager.find(Receipt.class, receipt1.getId());
 		Receipt reloadedReceipt2 = entityManager.find(Receipt.class, receipt2.getId());
