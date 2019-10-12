@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
+import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -35,6 +36,7 @@ public class PayReceiptControllerIT {
 	private AccountingRepository accountingRepository;
 	private ReceiptRepository receiptRepository;
 	private PayReceiptsController payReceiptsController;
+	private PaymentManager paymentManager;
 
 	@Mock
 	private PayReceiptsView payReceiptsView;
@@ -62,9 +64,10 @@ public class PayReceiptControllerIT {
 
 		accountingRepository = new AccountingRepositoryHibernate(entityManager);
 		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-		payReceiptsController = new PayReceiptsController(receiptRepository, accountingRepository,
-				payReceiptsView);
-		payReceiptsController.setTransactionHandler(new HibernateTransaction(entityManager));
+		paymentManager = new PaymentManager();
+		paymentManager.setAccountingRepository(accountingRepository);
+		payReceiptsController = new PayReceiptsController(paymentManager, receiptRepository,
+				payReceiptsView, new HibernateTransaction(entityManager));
 
 		
 		loggedUser = new User("logged", "pw");

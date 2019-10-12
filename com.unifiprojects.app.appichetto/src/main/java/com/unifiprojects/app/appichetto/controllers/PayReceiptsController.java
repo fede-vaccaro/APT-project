@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
+import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -29,15 +30,16 @@ public class PayReceiptsController {
 		this.transaction = transaction;
 	}
 
-	private ReceiptRepository receiptRepository;
-	private AccountingRepository accountingRepository;
+	private PaymentManager paymentManager;
+	private ReceiptRepository receiptRepository;		
 	private PayReceiptsView payViewReceiptsView;
 
-	public PayReceiptsController(ReceiptRepository receiptRepository, AccountingRepository accountingRepository,
-			PayReceiptsView payViewReceiptsView) {
+	public PayReceiptsController(PaymentManager paymentManager, ReceiptRepository receiptRepository,
+			PayReceiptsView payViewReceiptsView, TransactionHandler transaction) {
+		this.paymentManager = paymentManager;
 		this.receiptRepository = receiptRepository;
-		this.accountingRepository = accountingRepository;
 		this.payViewReceiptsView = payViewReceiptsView;
+		this.transaction = transaction;
 	}
 
 	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
@@ -48,56 +50,17 @@ public class PayReceiptsController {
 	}
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {
-		if (enteredAmount <= 0.0) {
-			payViewReceiptsView.showErrorMsg("Amount payed should be more than zero.");
-			return;
-		}
-
-		List<Accounting> accountingsBetweenLoggedAndBuyer = getAccountingsBetweenLoggedAndBuyer(loggedUser, buyerUser);
-
-		Comparator<Accounting> dateReceiptComparator = (Accounting a1, Accounting a2) -> a1.getReceipt().getTimestamp()
-				.compareTo(a2.getReceipt().getTimestamp());
-
-		accountingsBetweenLoggedAndBuyer.sort(dateReceiptComparator);
-
-		Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(Accounting::getAmount).sum();
-
 		try {
 			transaction.doInTransaction(() -> {
-				Double remainingAmount = enteredAmount;
-
-				if (Precision.round(totalAmountToPay,2) < Precision.round(remainingAmount,2)) {
-					payViewReceiptsView.showErrorMsg("Entered amount more than should be payed.");
-					return;
-				}
-
-				for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
-					Double accountingAmount = accounting.getAmount();
-					if (remainingAmount > 0.0) {
-						if (remainingAmount >= accountingAmount) {
-							//accounting.setPaid(true);
-							accounting.setAmount(0.0);
-							remainingAmount -= accountingAmount;
-						} else {
-							accountingAmount -= remainingAmount;
-							accounting.setAmount(accountingAmount);
-							remainingAmount = 0.0;
-						}
-						accountingRepository.saveAccounting(accounting);
-					}
-				}
+				paymentManager.makePayment(enteredAmount, loggedUser, buyerUser);
 			});
 		} catch (UncommittableTransactionException e) {
 			payViewReceiptsView.showErrorMsg("Something went wrong while committing the payment.");
+		} catch (IllegalArgumentException e) {
+			payViewReceiptsView.showErrorMsg(e.getMessage());
 		}
 		showUnpaidReceiptsOfLoggedUser(loggedUser);
 
 	}
 
-	private List<Accounting> getAccountingsBetweenLoggedAndBuyer(User loggedUser, User buyerUser) {
-		List<Accounting> accountings = accountingRepository.getAccountingsOf(loggedUser);
-
-		return accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(buyerUser))
-				.collect(Collectors.toList());
-	}
 }
