@@ -16,6 +16,7 @@ import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -24,15 +25,19 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.services.UpdateReceiptService;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	ShowHistoryViewSwing showHistoryViewSwing;
-	
+
 	@Mock
 	ShowHistoryController showHistoryController;
+
+	@Mock
+	UpdateReceiptService updateReceiptService;
 
 	private FrameFixture window;
 
@@ -55,11 +60,12 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			MockitoAnnotations.initMocks(this);
 			showHistoryViewSwing = new ShowHistoryViewSwing();
 			showHistoryViewSwing.setController(showHistoryController);
+			showHistoryViewSwing.setUpdateReceiptService(updateReceiptService);
 			return showHistoryViewSwing;
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());
 		window.show(); // shows the frame to test
-		
+
 		otherOwner1 = new User("other1", "pw");
 		otherOwner2 = new User("other2", "pw");
 
@@ -67,35 +73,33 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		Item item0 = new Item("tomato", 12.0, Arrays.asList(loggedUser, otherOwner1));
 		Item item1 = new Item("potato", 4.0, Arrays.asList(loggedUser, otherOwner2));
 
-		
 		receipt0 = new Receipt();
-				
+
 		receipt0.setBuyer(loggedUser);
 		receipt0.setTimestamp(new GregorianCalendar(2019, 8, 20));
 		receipt0.setItems(Arrays.asList(item0, item1));
-		
+
 		accounting1ToOtherOwner1 = new Accounting(otherOwner1, item0.getPricePerOwner());
 		accounting1ToOtherOwner2 = new Accounting(otherOwner2, item1.getPricePerOwner());
 
 		receipt0.setAccountingList(Arrays.asList(accounting1ToOtherOwner1, accounting1ToOtherOwner2));
-		
+
 		// receipt1
 		Item item2 = new Item("hamburger", 15.0, Arrays.asList(otherOwner1, otherOwner2));
 		Item item3 = new Item("bread", 5.0, Arrays.asList(loggedUser, otherOwner1, otherOwner2));
-		
+
 		receipt1 = new Receipt();
-		
+
 		receipt1.setBuyer(loggedUser);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 15));
 		receipt1.setItems(Arrays.asList(item2, item3));
-		
-		accounting2ToOtherOwner1 = new Accounting(otherOwner1, item2.getPricePerOwner() + item3.getPricePerOwner()); 
+
+		accounting2ToOtherOwner1 = new Accounting(otherOwner1, item2.getPricePerOwner() + item3.getPricePerOwner());
 		accounting2ToOtherOwner2 = new Accounting(otherOwner2, item2.getPricePerOwner() + item3.getPricePerOwner());
-		
+
 		receipt1.setAccountingList(Arrays.asList(accounting2ToOtherOwner1, accounting2ToOtherOwner2));
 
 	}
-	
 
 	@Test
 	@GUITest
@@ -108,7 +112,9 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		window.label(JLabelMatcher.withText("Items in selected receipt:"));
 		window.label(JLabelMatcher.withText("Accountings:"));
 		window.label(JLabelMatcher.withText("Total unpaid accountings:"));
-		
+
+		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
+		window.button(JButtonMatcher.withText("Update receipt")).requireDisabled();
 		window.button("homeBtn").requireEnabled();
 		window.label("errorMsg").requireText("");
 	}
@@ -140,17 +146,17 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		assertThat(receiptListContent).containsExactlyInAnyOrder(receipt0.toString(), receipt1.toString());
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowShoppingHistoryEmptyEachListIfArgumentIsEmpty() {
-		
+
 		List<Receipt> history = Arrays.asList(receipt0);
 		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
-		});		
+		});
 		String[] receiptListContent = window.list("receiptList").contents();
 		String[] itemListContent = window.list("itemList").contents();
 		String[] accountingListContent = window.list("accountingList").contents();
@@ -160,37 +166,39 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		assertThat(accountingListContent).isEmpty();
 
 	}
+
 	@Test
 	@GUITest
 	public void testShowShoppingHistoryShowCorrectlyTheItems() {
-		
+
 		List<Receipt> history = Arrays.asList(receipt0);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").selectItem(0);
-		
+
 		String[] itemListContent = window.list("itemList").contents();
-		
+
 		Item item0 = receipt0.getItem(0);
 		Item item1 = receipt0.getItem(1);
-		
+
 		assertThat(itemListContent).containsExactlyInAnyOrder(item0.toString(), item1.toString());
 
 	}
-	
+
 	@Test
 	@GUITest
 	public void testShowShoppingHistoryShowCorrectlyTheAccountings() {
 		List<Receipt> history = Arrays.asList(receipt0);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").selectItem(0);
-		
+
 		Accounting accounting0 = receipt0.getAccountings().get(0);
 		Accounting accounting1 = receipt0.getAccountings().get(1);
-		
+
 		String[] accountingListContent = window.list("accountingList").contents();
-		assertThat(accountingListContent).containsExactlyInAnyOrder(AccountingFormatter.format(accounting0), AccountingFormatter.format(accounting1));
+		assertThat(accountingListContent).containsExactlyInAnyOrder(AccountingFormatter.format(accounting0),
+				AccountingFormatter.format(accounting1));
 
 	}
 
@@ -199,35 +207,35 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	public void selectingAnotherReceiptChangeItemsDisplayed() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").selectItem(0);
 		window.list("receiptList").selectItem(1);
 
 		Item item0 = receipt1.getItem(0);
 		Item item1 = receipt1.getItem(1);
-		
+
 		String[] itemListContent = window.list("itemList").contents();
 		assertThat(itemListContent).containsExactlyInAnyOrder(item0.toString(), item1.toString());
 	}
-	
+
 	@Test
 	@GUITest
 	public void selectingAnotherReceiptChangeAccountingsDisplayed() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").selectItem(0);
 		window.list("receiptList").selectItem(1);
 
 		Accounting accounting0 = receipt1.getAccountings().get(0);
 		Accounting accounting1 = receipt1.getAccountings().get(1);
-		
+
 		String[] accountingListContent = window.list("accountingList").contents();
-		
-		
-		assertThat(accountingListContent).containsExactlyInAnyOrder(AccountingFormatter.format(accounting0), AccountingFormatter.format(accounting1));
+
+		assertThat(accountingListContent).containsExactlyInAnyOrder(AccountingFormatter.format(accounting0),
+				AccountingFormatter.format(accounting1));
 	}
-	
+
 	@Test
 	@GUITest
 	public void testTotalUnpaidAccountingsAreEmptiedIfArgumentIsEmpty() {
@@ -237,42 +245,42 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
 		});
-		
+
 		String[] totalAccountingListContent = window.list("totalAccountingList").contents();
-		
+
 		assertThat(totalAccountingListContent).isEmpty();
-		
+
 	}
-	
+
 	@Test
 	@GUITest
 	public void testTotalUnpaidAccountingsAreShownWhenShowShoppingHistoryIsCalled() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
-		
-		accounting1ToOtherOwner1.setPaid(true); // this won't generate debt, so shouldn't be included in the computing of the total accounting
-		
-		
+
+		accounting1ToOtherOwner1.setPaid(true); // this won't generate debt, so shouldn't be included in the computing
+												// of the total accounting
+
 		Double totalCreditFromOwner1 = accounting2ToOtherOwner1.getAmount();
 		Double totalCreditFromOwner2 = accounting1ToOtherOwner2.getAmount() + accounting2ToOtherOwner2.getAmount();
-		
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
 		String[] accountingListContent = window.list("totalAccountingList").contents();
 
-		String accountingFormat = "%s:	%.2f€"; 
-		
-		assertThat(accountingListContent).containsExactlyInAnyOrder(String.format(accountingFormat, otherOwner1.getUsername(), totalCreditFromOwner1), 
+		String accountingFormat = "%s:	%.2f€";
+
+		assertThat(accountingListContent).containsExactlyInAnyOrder(
+				String.format(accountingFormat, otherOwner1.getUsername(), totalCreditFromOwner1),
 				String.format(accountingFormat, otherOwner2, totalCreditFromOwner2));
 	}
-	
+
 	@Test
 	@GUITest
 	public void testErrorMsgDisplayTheMsg() {
 		String msg = "Testing error messages.";
-		
+
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showErrorMsg(msg));
-		
+
 		window.label("errorMsg").requireText(msg);
 	}
 
@@ -282,24 +290,24 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").selectItem(receipt1.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
-		
+
 		verify(showHistoryController).removeReceipt(receipt1);
 	}
-	
+
 	@Test
 	@GUITest
 	public void testButtonIsDisabledWhenListIsEmpty() {
 		List<Receipt> history = Arrays.asList();
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 
 	}
-	
+
 	@Test
 	@GUITest
 	public void testButtonIsEnabledElementIsSelected() {
@@ -307,22 +315,22 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 		window.list("receiptList").selectItem(receipt0.toString());
-		
+
 		window.button(JButtonMatcher.withText("Remove selected")).requireEnabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testButtonIsDisabledWhenNoItemIsSelectedButListIsNotEmpty() {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		
+
 		window.list("receiptList").clearSelection();
-		
+
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testClearingTheReceiptListWhenSomethingIsSelectedDisableTheRemoveButton() {
@@ -331,12 +339,53 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
 
 		window.list("receiptList").selectItem(0);
-		
+
 		List<Receipt> historyAfter = Arrays.asList();
-		
+
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyAfter));
 
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 	}
-	
+
+	@Test
+	@GUITest
+	public void testUpdateButtonIsEnabledWhenAReceiptIsSelected() {
+		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
+
+		window.list("receiptList").selectItem(0);
+
+		window.button(JButtonMatcher.withText("Update receipt")).requireEnabled();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenUpdateButtonIsClickedThisViewIsDispose() {
+		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
+
+		window.list("receiptList").selectItem(0);
+
+		window.button(JButtonMatcher.withText("Update receipt")).click();
+
+		assertThat(showHistoryViewSwing.getFrame().isActive()).isFalse();
+	}
+
+	@Test
+	@GUITest
+	public void testWhenUpdateButtonIsClickedUpdateReceiptServiceIsCalledWithSelectedReceiptAsArgument() {
+		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
+		ArgumentCaptor<Receipt> selectedReceiptCaptor = ArgumentCaptor.forClass(Receipt.class);
+
+		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
+		
+		window.list("receiptList").selectItem(0);
+		
+		window.button(JButtonMatcher.withText("Update receipt")).click();
+		
+		verify(updateReceiptService).start(selectedReceiptCaptor.capture());
+		assertThat(selectedReceiptCaptor.getValue()).isEqualTo(receipt0);
+	}
 }

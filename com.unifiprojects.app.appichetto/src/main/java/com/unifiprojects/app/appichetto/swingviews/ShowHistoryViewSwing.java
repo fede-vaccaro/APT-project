@@ -20,6 +20,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.services.AppIchettoService;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
@@ -35,8 +36,10 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 	private JLabel message;
 
 	private ShowHistoryController showHistoryController;
+	private AppIchettoService updateReceiptService;
 
 	private JButton btnRmbutton;
+	private JButton btnUpdateReceipt;
 
 	private JList<Receipt> receiptList;
 
@@ -53,9 +56,9 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		frame.getContentPane().setLayout(gridBagLayout);
 
@@ -83,7 +86,8 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 				showItemList(selectedReceipt);
 				showAccountingList(selectedReceipt);
 			}
-			btnRmbutton.setEnabled(!receiptListModel.isEmpty());
+			btnRmbutton.setEnabled(!receiptList.isSelectionEmpty());
+			btnUpdateReceipt.setEnabled(!receiptList.isSelectionEmpty());
 		});
 
 		GridBagConstraints gbc_receiptList = new GridBagConstraints();
@@ -136,7 +140,7 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		JList<String> totalAccountingList = new JList<>(totalAccountingsListModel);
 		totalAccountingList.setName("totalAccountingList");
 		GridBagConstraints gbc_totalAccountingList = new GridBagConstraints();
-		gbc_totalAccountingList.gridheight = 5;
+		gbc_totalAccountingList.gridheight = 6;
 		gbc_totalAccountingList.fill = GridBagConstraints.BOTH;
 		gbc_totalAccountingList.gridx = 1;
 		gbc_totalAccountingList.gridy = 6;
@@ -145,17 +149,29 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		btnRmbutton = new JButton("Remove selected");
 		btnRmbutton.setEnabled(false);
 		btnRmbutton.addActionListener(e -> showHistoryController.removeReceipt(receiptList.getSelectedValue()));
+
+		btnUpdateReceipt = new JButton("Update receipt");
+		btnUpdateReceipt.setEnabled(false);
+		GridBagConstraints gbc_btnUpdateReceipt = new GridBagConstraints();
+		gbc_btnUpdateReceipt.insets = new Insets(0, 0, 5, 5);
+		gbc_btnUpdateReceipt.gridx = 0;
+		gbc_btnUpdateReceipt.gridy = 8;
+		frame.getContentPane().add(btnUpdateReceipt, gbc_btnUpdateReceipt);
+		btnUpdateReceipt.addActionListener(e -> {
+			getFrame().dispose();
+			updateReceiptService.start(receiptList.getSelectedValue());
+		});
+
 		GridBagConstraints gbc_btnRmbutton = new GridBagConstraints();
 		gbc_btnRmbutton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRmbutton.gridx = 0;
-		gbc_btnRmbutton.gridy = 8;
+		gbc_btnRmbutton.gridy = 9;
 		frame.getContentPane().add(btnRmbutton, gbc_btnRmbutton);
-
 
 		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
 		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
 		gbc_btnHomepage.gridx = 0;
-		gbc_btnHomepage.gridy = 9;
+		gbc_btnHomepage.gridy = 10;
 		frame.getContentPane().add(getBtnHome(), gbc_btnHomepage);
 
 		message = new JLabel("");
@@ -163,7 +179,7 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		GridBagConstraints gbc_message = new GridBagConstraints();
 		gbc_message.insets = new Insets(0, 0, 0, 5);
 		gbc_message.gridx = 0;
-		gbc_message.gridy = 10;
+		gbc_message.gridy = 11;
 		frame.getContentPane().add(message, gbc_message);
 	}
 
@@ -224,4 +240,9 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 	public void setController(ShowHistoryController showHistoryController) {
 		this.showHistoryController = showHistoryController;
 	}
+
+	public void setUpdateReceiptService(AppIchettoService updateReceiptService) {
+		this.updateReceiptService = updateReceiptService;
+	}
+
 }
