@@ -1,8 +1,7 @@
-package com.unifiprojects.app.appichetto.controllers;
+package com.unifiprojects.app.appichetto.managers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.anyString;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -18,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
+import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -29,14 +29,12 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayReceiptControllerIT {
+public class PaymentManagerIT {
 
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 	private static EntityManager entityManager;
 
 	private AccountingRepository accountingRepository;
-	private ReceiptRepository receiptRepository;
-	private PayReceiptsController payReceiptsController;
 	private PaymentManager paymentManager;
 
 	@Mock
@@ -64,11 +62,8 @@ public class PayReceiptControllerIT {
 		MockitoAnnotations.initMocks(this);
 
 		accountingRepository = new AccountingRepositoryHibernate(entityManager);
-		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 		paymentManager = new PaymentManager();
 		paymentManager.setAccountingRepository(accountingRepository);
-		payReceiptsController = new PayReceiptsController(paymentManager, receiptRepository,
-				payReceiptsView, new HibernateTransaction(entityManager));
 
 		
 		loggedUser = new User("logged", "pw");
@@ -95,36 +90,46 @@ public class PayReceiptControllerIT {
 	}
 	
 	@Test
-	public void testShowUnpaidReceipts() {
-		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
-		
-		verify(payReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt, firstReceipt));
-	}
-	
-	@Test
-	public void testPayAmountShowErrorMsgWhenEnteredAmountIsIllegal() {
+	public void testPayAmount() {
 		Double totalDebt = Arrays.asList(firstReceipt, secondReceipt, thirdReceipt)
 				.stream()
 				.map(r -> r.getAccountings().get(0))
 				.mapToDouble(Accounting::getAmount)
 				.sum();
 		
-		payReceiptsController.payAmount(totalDebt*2.0, loggedUser, payerUser);
+		entityManager.getTransaction().begin();
+		paymentManager.makePayment(totalDebt, loggedUser, payerUser);
+		entityManager.getTransaction().commit();
 		
-		verify(payReceiptsView).showErrorMsg(anyString());
+		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+				.setParameter("amount", 0.0).setParameter("user", loggedUser).getResultList();
+		
+		assertThat(unpaidAccountings).isEmpty();
 	}
 	
 	@Test
-	public void testPayAmountShowErrorMsgWhenAmountIsDoubleOfTheTotalDebt() {
+	public void testPayAmountWhenAmountIsHalfOfTheTotalDebt() {
 		Double totalDebt = Arrays.asList(firstReceipt, secondReceipt, thirdReceipt)
 				.stream()
 				.map(r -> r.getAccountings().get(0))
 				.mapToDouble(Accounting::getAmount)
 				.sum();
 		
-		payReceiptsController.payAmount(totalDebt*2.0, loggedUser, payerUser);
+		entityManager.getTransaction().begin();
+		paymentManager.makePayment(totalDebt/2.0, loggedUser, payerUser);
+		entityManager.getTransaction().commit();
+
+		List<Accounting> unpaidAccountings = entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+				.setParameter("amount", 0.0).setParameter("user", loggedUser).getResultList();
 		
-		verify(payReceiptsView).showErrorMsg(anyString());
+		
+		Accounting secondAccounting = new Accounting(loggedUser, secondReceipt.getTotalPrice()/4.0);
+		secondAccounting.setReceipt(secondReceipt);
+		
+		Accounting thirdAccounting = new Accounting(loggedUser, secondReceipt.getTotalPrice()/2.0);
+		thirdAccounting.setReceipt(thirdReceipt);
+		
+		assertThat(unpaidAccountings).containsExactlyInAnyOrder(secondAccounting, thirdAccounting);
 	}
-	
+
 }
