@@ -7,16 +7,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.math3.util.Precision;
 
 import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 
 public class PaymentManager {
-	
-	private AccountingRepository accountingRepository;
 
-	public AccountingRepository getAccountingRepository() {
-		return accountingRepository;
-	}
+	private AccountingRepository accountingRepository;
 
 	public void setAccountingRepository(AccountingRepository accountingRepository) {
 		this.accountingRepository = accountingRepository;
@@ -27,25 +24,23 @@ public class PaymentManager {
 			throw new IllegalArgumentException("enteredAmount should be greater than zero.");
 		}
 
-		List<Accounting> accountingsBetweenLoggedAndBuyer = getAccountingsBetweenLoggedAndBuyer(loggedUser,
+		List<Accounting> accountingsBetweenLoggedAndBuyer = getAndSortAccountingsBetweenLoggedAndBuyer(loggedUser,
 				buyerUser);
 
-		Comparator<Accounting> dateReceiptComparator = (Accounting a1, Accounting a2) -> a1.getReceipt()
-				.getTimestamp().compareTo(a2.getReceipt().getTimestamp());
+		Double totalAmountToPay = getTotalAmountToPay(accountingsBetweenLoggedAndBuyer);
 
-		accountingsBetweenLoggedAndBuyer.sort(dateReceiptComparator);
-
-		Double totalAmountToPay = accountingsBetweenLoggedAndBuyer.stream().mapToDouble(Accounting::getAmount)
-				.sum();
-
-		Double remainingAmount = enteredAmount;
+		double remainingAmount = enteredAmount;
 
 		if (Precision.round(totalAmountToPay, 2) < Precision.round(remainingAmount, 2)) {
 			throw new IllegalArgumentException("enteredAmount should be > 0");
 		}
 
+		executePayment(accountingsBetweenLoggedAndBuyer, remainingAmount);
+	}
+
+	private void executePayment(List<Accounting> accountingsBetweenLoggedAndBuyer, double remainingAmount) {
 		for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
-			Double accountingAmount = accounting.getAmount();
+			double accountingAmount = accounting.getAmount();
 			if (remainingAmount > 0.0) {
 				if (remainingAmount >= accountingAmount) {
 					// accounting.setPaid(true);
@@ -61,12 +56,38 @@ public class PaymentManager {
 		}
 	}
 
-	List<Accounting> getAccountingsBetweenLoggedAndBuyer(User loggedUser, User buyerUser) {
-		List<Accounting> accountings = accountingRepository.getAccountingsOf(loggedUser);
-
-		return accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(buyerUser))
-				.collect(Collectors.toList());
+	private double getTotalAmountToPay(List<Accounting> accountingsBetweenLoggedAndBuyer) {
+		return accountingsBetweenLoggedAndBuyer.stream().mapToDouble(Accounting::getAmount).sum();
 	}
 
+	List<Accounting> getAndSortAccountingsBetweenLoggedAndBuyer(User loggedUser, User buyerUser) {
+		List<Accounting> accountings = accountingRepository.getAccountingsOf(loggedUser);
+
+		accountings = accountings.stream().filter(a -> a.getReceipt().getBuyer().equals(buyerUser))
+				.collect(Collectors.toList());
+
+		Comparator<Accounting> dateReceiptComparator = (Accounting a1, Accounting a2) -> a1.getReceipt().getTimestamp()
+				.compareTo(a2.getReceipt().getTimestamp());
+
+		accountings.sort(dateReceiptComparator);
+
+		return accountings;
+	}
+
+	public void makePaymentWithReceipt(Receipt loggedUserReceipt, User loggedUser) {
+		loggedUserReceipt.getAccountings().forEach(a -> {
+			List<Accounting> accountingsBetweenLoggedAndBuyer = getAndSortAccountingsBetweenLoggedAndBuyer(loggedUser,
+					a.getUser());
+
+			Double totalAmountToPay = getTotalAmountToPay(accountingsBetweenLoggedAndBuyer);
+
+			double remainingAmount = a.getAmount();
+
+			a.setAmount(Math.max(remainingAmount - totalAmountToPay, 0.0));
+
+			executePayment(accountingsBetweenLoggedAndBuyer, remainingAmount);
+
+		});
+	}
 
 }
