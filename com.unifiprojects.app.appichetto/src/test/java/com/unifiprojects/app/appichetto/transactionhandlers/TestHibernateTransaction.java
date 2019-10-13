@@ -11,6 +11,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.doThrow;
 
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
@@ -23,6 +26,9 @@ public class TestHibernateTransaction {
 	private static EntityManagerFactory entityManagerFactory;
 
 	private TransactionHandler transaction;
+	
+	@Mock
+	TransactionCommands commands;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -46,11 +52,12 @@ public class TestHibernateTransaction {
 		entityManager.createNativeQuery("TRUNCATE SCHEMA public AND COMMIT").executeUpdate();
 		entityManager.getTransaction().commit();
 
+		MockitoAnnotations.initMocks(this);
 		transaction = new HibernateTransaction(entityManager);
 	}
 
 	@Test
-	public void testDoInTransactionExecutesTheCommandsAndReturnsTrue() {
+	public void testDoInTransactionExecutesTheCommandsInside() {
 		User user1 = new User("user", "pw");
 
 		transaction.doInTransaction(() -> {
@@ -63,7 +70,7 @@ public class TestHibernateTransaction {
 	}
 
 	@Test
-	public void testDoInTransactionDoesRollbackIfRollbackExceptionIsThrownAndReturnFalse() {
+	public void testDoInTransactionDoesRollbackIfRollbackExceptionIsThrown() {
 		User user1 = new User("user", "pw");
 
 		assertThatExceptionOfType(UncommittableTransactionException.class).isThrownBy(() -> {
@@ -76,6 +83,27 @@ public class TestHibernateTransaction {
 		entityManager.clear();
 		
 		assertThat(entityManager.find(User.class, user1.getId())).isNull();
+	}
+	
+	@Test
+	public void testTransactionIsClosedWhenOccursARollbackException() {
+		
+		doThrow(new RollbackException()).when(commands).execute();
+		
+		assertThatExceptionOfType(UncommittableTransactionException.class).isThrownBy(() -> transaction.doInTransaction(commands));
+		
+		assertThat(entityManager.getTransaction().isActive()).isFalse();
+	}
+	
+	@Test
+	public void testTransactionIsClosedWhenAnExceptionDifferentFromUncommittableIsThrownToTheOutsideOfTheTransaction() {
+		doThrow(new RuntimeException()).when(commands).execute();
+		
+		assertThatExceptionOfType(RuntimeException.class).isThrownBy(() -> {
+			transaction.doInTransaction(commands);
+		});
+		
+		assertThat(entityManager.getTransaction().isActive()).isFalse();
 	}
 
 }

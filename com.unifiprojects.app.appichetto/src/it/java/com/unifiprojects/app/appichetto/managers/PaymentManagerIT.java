@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.managers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -18,15 +17,11 @@ import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
-import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHibernate;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
 public class PaymentManagerIT {

@@ -1,12 +1,10 @@
 package com.unifiprojects.app.appichetto.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.anyString;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 

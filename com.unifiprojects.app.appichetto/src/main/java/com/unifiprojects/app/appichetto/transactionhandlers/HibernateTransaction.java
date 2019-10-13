@@ -38,6 +38,9 @@ public class HibernateTransaction implements TransactionHandler {
 			entityManager.getTransaction().rollback();
 			LOGGER.log(Level.ERROR, String.format("Unable to commit transaction: %s", re.getMessage()));
 			throw new UncommittableTransactionException("Unable to commit the transaction");
+		} finally {
+			if(entityManager.getTransaction().isActive())
+				entityManager.getTransaction().rollback();
 		}
 
 	}
