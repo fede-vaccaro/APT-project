@@ -37,6 +37,7 @@ public class Receipt {
 	public Receipt() {
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
+		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
 	}
 
 	public Receipt(User buyer) {
