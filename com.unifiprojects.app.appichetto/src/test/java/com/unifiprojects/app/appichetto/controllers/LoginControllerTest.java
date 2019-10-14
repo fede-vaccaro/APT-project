@@ -52,7 +52,7 @@ public class LoginControllerTest {
 
 		loginController.login(username, password);
 
-		verify(loginView).goToHomePage();
+		verify(loginView).goToHome();
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class LoginControllerTest {
 		loginController.login(username, "WrongPassword!");
 
 		verify(loginView).showErrorMsg("Wrong password!");
-		verify(loginView, never()).goToHomePage();
+		verify(loginView, never()).goToHome();
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class LoginControllerTest {
 		loginController.login(username, password);
 
 		verify(loginView).showErrorMsg("User not signed in yet.");
-		verify(loginView, never()).goToHomePage();
+		verify(loginView, never()).goToHome();
 
 	}
 
@@ -84,7 +84,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(userRepository).save(user);
-		verify(loginView).goToHomePage();
+		verify(loginView).goToHome();
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(loginView).showErrorMsg("Username already picked. Choice another username.");
-		verify(loginView, never()).goToHomePage();
+		verify(loginView, never()).goToHome();
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class LoginControllerTest {
 		loginController.signIn(user.getUsername(), password);
 
 		verify(loginView).showErrorMsg(stringCaptor.capture());
-		verify(loginView, never()).goToHomePage();
+		verify(loginView, never()).goToHome();
 
 	}
 
@@ -132,7 +132,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(loginView).showErrorMsg("Something went wrong with the DB connection.");
-		verify(loginView, never()).goToHomePage();
+		verify(loginView, never()).goToHome();
 	}
 
 }

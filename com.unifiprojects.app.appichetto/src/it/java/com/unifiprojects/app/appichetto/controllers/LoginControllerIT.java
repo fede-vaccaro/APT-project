@@ -60,7 +60,7 @@ public class LoginControllerIT {
 		
 		loginController.login("username", "pw");
 		
-		verify(loginView).goToHomePage();
+		verify(loginView).goToHome();
 	}
 	
 	@Test
@@ -70,7 +70,7 @@ public class LoginControllerIT {
 		
 		loginController.signIn(newUsername, newPassword);
 		
-		verify(loginView).goToHomePage();
+		verify(loginView).goToHome();
 	}
 	
 }
