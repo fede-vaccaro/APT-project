@@ -1,22 +1,27 @@
 package com.unifiprojects.app.appichetto.views;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 
 public interface ReceiptView {
-	public void showCurrentItemsList(List<Item> items);
+	void showCurrentItemsList(List<Item> items);
 
-	public void showCurrentUsers(List<User> users);
+	void showCurrentUsers(List<User> users);
 
-	public void showError(String string);
+	void showError(String string);
 
-	public void itemAdded(Item item);
+	void itemAdded(Item item);
 	
-	public void itemDeleted(Item item);
+	void itemDeleted(Item item);
 
-	public void itemUpdated(int index, Item item);
+	void itemUpdated(int index, Item item);
+	
+	void goToHome();
 
-	public void goToHome();
+	void descriptionUploaded(String description);
+
+	void dateUploaded(GregorianCalendar timestamp);
 }

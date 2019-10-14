@@ -25,7 +25,6 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.services.UpdateReceiptService;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
 
 @RunWith(GUITestRunner.class)
@@ -35,9 +34,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Mock
 	ShowHistoryController showHistoryController;
-
-	@Mock
-	UpdateReceiptService updateReceiptService;
 
 	private FrameFixture window;
 
@@ -60,7 +56,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			MockitoAnnotations.initMocks(this);
 			showHistoryViewSwing = new ShowHistoryViewSwing();
 			showHistoryViewSwing.setController(showHistoryController);
-			showHistoryViewSwing.setUpdateReceiptService(updateReceiptService);
 			return showHistoryViewSwing;
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());
@@ -370,7 +365,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
 
-		assertThat(showHistoryViewSwing.getFrame().isActive()).isFalse();
+		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}
 
 	@Test
@@ -385,7 +380,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		
 		window.button(JButtonMatcher.withText("Update receipt")).click();
 		
-		verify(updateReceiptService).start(selectedReceiptCaptor.capture());
+		verify(showHistoryController).startUpdateReceiptService(selectedReceiptCaptor.capture());
 		assertThat(selectedReceiptCaptor.getValue()).isEqualTo(receipt0);
 	}
 }

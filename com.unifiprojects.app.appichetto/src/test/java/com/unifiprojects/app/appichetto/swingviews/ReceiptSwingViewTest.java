@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.assertj.swing.annotation.GUITest;
@@ -16,6 +18,7 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -480,6 +483,23 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
 		verify(receiptController).saveReceipt();
+	}
+
+	@Test
+	public void testDateUploadedShowItInRightTextField() {
+		GregorianCalendar timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+				LocalDate.now().getDayOfMonth());
+
+		GuiActionRunner.execute(() -> receiptSwingView.dateUploaded(timestamp));
+		window.textBox("txtDate").requireText(timestamp.getTime().toString());
+		Pause.pause(10000);
+	}
+
+	@Test
+	public void testDescriptionUploadedShowItInRightTextField() {
+		String description = "This is a fancy receipt";
+		GuiActionRunner.execute(() -> receiptSwingView.descriptionUploaded(description));
+		window.textBox("txtDescription").requireText(description);
 	}
 
 }

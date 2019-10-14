@@ -147,4 +147,14 @@ public class ReceiptControllerTest {
 		verify(userRepository).findAll();		
 		assertThat(users).containsExactlyInAnyOrder(pippo, pluto);
 	}
+	
+	@Test
+	public void testUploadReceiptManagerNotifyReceiptViewToUpdateAttributes() {
+		
+		receiptController.uploadReceiptManager(receiptManager);
+		
+		verify(receiptView).descriptionUploaded(receiptManager.getDescription());
+		verify(receiptView).showCurrentItemsList(receiptManager.getItems());
+		verify(receiptView).dateUploaded(receiptManager.getTimestamp());
+	}
 }

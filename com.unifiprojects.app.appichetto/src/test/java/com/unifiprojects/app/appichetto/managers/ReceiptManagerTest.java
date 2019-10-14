@@ -190,4 +190,23 @@ public class ReceiptManagerTest {
 		inOrder.verify(receiptRepository).saveReceipt(receipt);
 		assertThat(accountingCaptor.getAllValues()).containsExactlyInAnyOrder(accountingPippo, accountingPluto);
 	}
+	
+	@Test
+	public void testUploadReceiptInitializeAccounting(){
+		User pippo = new User("Pippo", "psw");
+		User pluto = new User("Pluto", "psw");
+		Accounting accountingPippo = new Accounting(pippo, 1.1);
+		Accounting accountingPluto = new Accounting(pluto, 1.1);
+		spyAndSetReceipt();
+		spyAndSetAccountings();
+		
+		Receipt receiptToUpload = new Receipt();
+		receiptToUpload.setAccountingList(Arrays.asList(accountingPippo,accountingPluto));
+		
+		receiptManager.uploadReceipt(receiptToUpload);
+		
+		assertThat(accountings.size()).isEqualTo(2);
+		assertThat(accountings.get(pippo)).isEqualTo(accountingPippo);
+		assertThat(accountings.get(pluto)).isEqualTo(accountingPluto);
+	}
 }

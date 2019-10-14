@@ -20,7 +20,6 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.services.AppIchettoService;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
@@ -36,7 +35,6 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 	private JLabel message;
 
 	private ShowHistoryController showHistoryController;
-	private AppIchettoService updateReceiptService;
 
 	private JButton btnRmbutton;
 	private JButton btnUpdateReceipt;
@@ -159,7 +157,7 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		frame.getContentPane().add(btnUpdateReceipt, gbc_btnUpdateReceipt);
 		btnUpdateReceipt.addActionListener(e -> {
 			getFrame().dispose();
-			updateReceiptService.start(receiptList.getSelectedValue());
+			showHistoryController.startUpdateReceiptService(receiptList.getSelectedValue());
 		});
 
 		GridBagConstraints gbc_btnRmbutton = new GridBagConstraints();
@@ -239,10 +237,6 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 
 	public void setController(ShowHistoryController showHistoryController) {
 		this.showHistoryController = showHistoryController;
-	}
-
-	public void setUpdateReceiptService(AppIchettoService updateReceiptService) {
-		this.updateReceiptService = updateReceiptService;
 	}
 
 }

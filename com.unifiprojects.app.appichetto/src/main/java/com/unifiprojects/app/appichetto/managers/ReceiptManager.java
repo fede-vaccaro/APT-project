@@ -1,6 +1,8 @@
 package com.unifiprojects.app.appichetto.managers;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +23,11 @@ public class ReceiptManager {
 	public ReceiptManager(User buyer, ReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
 		this.receipt = new Receipt(buyer);
+		this.accountings = new HashMap<>();
+	}
+
+	public ReceiptManager(ReceiptRepository receiptRepository) {
+		this.receiptRepository = receiptRepository;
 		this.accountings = new HashMap<>();
 	}
 
@@ -69,6 +76,11 @@ public class ReceiptManager {
 		return receipt;
 	}
 
+	public void uploadReceipt(Receipt receipt) {
+		this.receipt = receipt;
+		receipt.getAccountings().stream().forEach(accounting -> accountings.put(accounting.getUser(), accounting));
+	}
+
 	void setAccountings(Map<User, Accounting> accountings) {
 		this.accountings = accountings;
 	}
@@ -76,4 +88,17 @@ public class ReceiptManager {
 	void setReceipt(Receipt receipt) {
 		this.receipt = receipt;
 	}
+
+	public String getDescription() {
+		return receipt.getDescription();
+	}
+
+	public List<Item> getItems() {
+		return receipt.getItems();
+	}
+
+	public GregorianCalendar getTimestamp() {
+		return receipt.getTimestamp();
+	}
+
 }

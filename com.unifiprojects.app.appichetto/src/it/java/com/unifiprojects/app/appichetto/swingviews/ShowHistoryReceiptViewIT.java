@@ -13,6 +13,7 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,6 +27,9 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
+import com.unifiprojects.app.appichetto.repositories.UserRepository;
+import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
+import com.unifiprojects.app.appichetto.services.UpdateReceiptService;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 @RunWith(GUITestRunner.class)
@@ -63,18 +67,20 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
 			ReceiptRepository receiptRepository = new ReceiptRepositoryHibernate(entityManager);
+			UserRepository userRepository = new UserRepositoryHibernate(entityManager);
 
 			showHistoryViewSwing = new ShowHistoryViewSwing();
 			showHistoryController = new ShowHistoryController(receiptRepository, showHistoryViewSwing);
 			showHistoryController.setTransaction(new HibernateTransaction(entityManager));
+			showHistoryController.setUpdateReceiptService(new UpdateReceiptService(receiptRepository, userRepository));
 			showHistoryViewSwing.setController(showHistoryController);
-			
+
 			loggedUser = new User("logged", "pw");
-			
+
 			entityManager.getTransaction().begin();
 			entityManager.persist(loggedUser);
 			entityManager.getTransaction().commit();
-			
+
 			showHistoryController.setLoggedUser(loggedUser);
 
 			debtor1 = new User("payer", "pw");
@@ -104,7 +110,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			showHistoryController.showHistory();
-			
+
 			return showHistoryViewSwing;
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());
@@ -138,34 +144,36 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 	public void testShowErrorMessageWhenReceiptListIsEmpty() {
 
 		GuiActionRunner.execute(() -> {
-			
+
 			entityManager.getTransaction().begin();
 			removeReceipt(firstReceiptDebtor1);
 			removeReceipt(secondReceiptDebtor1);
 			removeReceipt(thirdReceiptDebtor1);
 			removeReceipt(firstReceiptDebtor2);
 			entityManager.getTransaction().commit();
-			
+
 			showHistoryController.showHistory();
 		});
 
 		window.label("errorMsg").requireText("You have no receipts in the history.");
 	}
-	
+
 	@GUITest
 	@Test
 	public void testRemoveReceipt() {
 		GuiActionRunner.execute(() -> {
 			showHistoryController.showHistory();
 		});
-		
+
 		window.list("receiptList").selectItem(thirdReceiptDebtor1.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
-		
-		String [] receiptList = window.list("receiptList").contents();
-		assertThat(receiptList).containsExactlyInAnyOrder(firstReceiptDebtor1.toString(), secondReceiptDebtor1.toString(), firstReceiptDebtor2.toString());
-		
-		window.label("errorMsg").requireText(String.format("Receipt (from %s) deleted.", thirdReceiptDebtor1.getTimestamp().getTime()));
+
+		String[] receiptList = window.list("receiptList").contents();
+		assertThat(receiptList).containsExactlyInAnyOrder(firstReceiptDebtor1.toString(),
+				secondReceiptDebtor1.toString(), firstReceiptDebtor2.toString());
+
+		window.label("errorMsg")
+				.requireText(String.format("Receipt (from %s) deleted.", thirdReceiptDebtor1.getTimestamp().getTime()));
 	}
 
 	@GUITest
@@ -174,7 +182,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			showHistoryController.showHistory();
 		});
-		
+		Pause.pause(20000);
 		window.list("receiptList").selectItem(firstReceiptDebtor1.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
 		window.list("receiptList").selectItem(secondReceiptDebtor1.toString());
@@ -183,11 +191,22 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Remove selected")).click();
 		window.list("receiptList").selectItem(firstReceiptDebtor2.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
-		
-		String [] receiptList = window.list("receiptList").contents();
+
+		String[] receiptList = window.list("receiptList").contents();
 		assertThat(receiptList).isEmpty();
 		window.label("errorMsg").requireText("You have no receipts in the history.");
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 	}
-	
+
+	@GUITest
+	@Test
+	public void testUpdateReceipt() {
+		GuiActionRunner.execute(() -> {
+			showHistoryController.showHistory();
+		});
+		window.list("receiptList").selectItem(firstReceiptDebtor1.toString());
+		window.button(JButtonMatcher.withText("Update receipt")).click();
+		
+		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
+	}
 }

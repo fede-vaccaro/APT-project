@@ -74,7 +74,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			ReceiptManager receiptManager = new ReceiptManager(pippo, new ReceiptRepositoryHibernate(entityManager));
 			receiptController = new ReceiptController(receiptManager, receiptSwingView,
 					new UserRepositoryHibernate(entityManager));
-			receiptController.setTeansactionHandler(new HibernateTransaction(entityManager));
+			receiptController.setTransactionHandler(new HibernateTransaction(entityManager));
 			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 			receiptSwingView.setReceiptController(receiptController);
 			receiptSwingView.setUsers();

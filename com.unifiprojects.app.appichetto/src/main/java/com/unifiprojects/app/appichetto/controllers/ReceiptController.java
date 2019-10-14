@@ -28,14 +28,19 @@ public class ReceiptController {
 		this.userRepository = userRepository;
 	}
 
-	public void setTeansactionHandler(TransactionHandler transactionHandler){
+	public ReceiptController(ReceiptView receiptView, UserRepository userRepository) {
+		this.receiptView = receiptView;
+		this.userRepository = userRepository;
+	}
+
+	public void setTransactionHandler(TransactionHandler transactionHandler) {
 		this.transactionHandler = transactionHandler;
 	}
-	
+
 	public void addItem(Item item) {
 		receiptManager.addItem(item);
 		receiptView.itemAdded(item);
-		LOGGER.debug("{} ADDED BY RECEIPT CONTROLLER",item);
+		LOGGER.debug("{} ADDED BY RECEIPT CONTROLLER", item);
 	}
 
 	public void updateItem(Item item, int index) {
@@ -45,7 +50,7 @@ public class ReceiptController {
 			receiptManager.updateItem(index, item);
 			receiptView.itemUpdated(index, item);
 		}
-		LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER",item);
+		LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 	}
 
 	public List<User> getUsers() {
@@ -55,7 +60,7 @@ public class ReceiptController {
 	public void deleteItem(Item item) {
 		receiptManager.deleteItem(item);
 		receiptView.itemDeleted(item);
-		LOGGER.debug("{} DELETED BY RECEIPT MANAGER",item);
+		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", item);
 	}
 
 	public void saveReceipt() {
@@ -65,6 +70,13 @@ public class ReceiptController {
 		} catch (UncommittableTransactionException e) {
 			receiptView.showError("Something went wrong while saving receipt.");
 		}
+	}
+
+	public void uploadReceiptManager(ReceiptManager receiptManager) {
+		this.receiptManager = receiptManager;
+		receiptView.descriptionUploaded(receiptManager.getDescription());
+		receiptView.showCurrentItemsList(receiptManager.getItems());
+		receiptView.dateUploaded(receiptManager.getTimestamp());
 	}
 
 }
