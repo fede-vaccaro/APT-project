@@ -5,13 +5,15 @@ import java.util.Objects;
 
 import javax.persistence.EntityManager;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class AccountingRepositoryHibernate implements AccountingRepository {
 
-	private EntityManager entityManager;
+	public EntityManager entityManager;
 
+	@Inject
 	public AccountingRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}

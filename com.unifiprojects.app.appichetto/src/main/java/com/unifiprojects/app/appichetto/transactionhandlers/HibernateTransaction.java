@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 
 public class HibernateTransaction implements TransactionHandler {
@@ -24,6 +25,7 @@ public class HibernateTransaction implements TransactionHandler {
 	
 	EntityManager entityManager;
 
+	@Inject
 	public HibernateTransaction(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}

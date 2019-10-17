@@ -9,14 +9,20 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import com.google.inject.Inject;
+
 public class HomepageSwingView implements Observer {
 	/**
 	 * 
 	 */
 	private JFrame frame;
+	
 	private ObservableFrameSwing loginView;
+	
 	private ObservableFrameSwing receiptView;
+	
 	private ObservableFrameSwing payReceiptsView;
+	
 	private ObservableFrameSwing showHistoryView;
 
 //	/**

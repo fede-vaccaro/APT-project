@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.managers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;

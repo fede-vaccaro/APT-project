@@ -1,14 +1,11 @@
 package com.unifiprojects.app.appichetto.controllers;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyDouble;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.anyList;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -18,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -28,7 +24,6 @@ import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;

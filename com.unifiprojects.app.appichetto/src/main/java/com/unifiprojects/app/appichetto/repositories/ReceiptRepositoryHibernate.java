@@ -5,14 +5,16 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
-	private EntityManager entityManager;
+	public EntityManager entityManager;
 
+	@Inject
 	public ReceiptRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}

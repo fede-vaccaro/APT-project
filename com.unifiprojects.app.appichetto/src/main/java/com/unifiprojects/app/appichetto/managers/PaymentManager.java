@@ -6,13 +6,15 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.math3.util.Precision;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 
 public class PaymentManager {
-
+	
+	@Inject
 	private AccountingRepository accountingRepository;
 
 	public void setAccountingRepository(AccountingRepository accountingRepository) {

@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -19,6 +20,7 @@ public class UserRepositoryHibernate implements UserRepository {
 	private EntityManager entityManager;
 	private static final Logger LOGGER = LogManager.getLogger(UserRepositoryHibernate.class);
 
+	@Inject
 	public UserRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
