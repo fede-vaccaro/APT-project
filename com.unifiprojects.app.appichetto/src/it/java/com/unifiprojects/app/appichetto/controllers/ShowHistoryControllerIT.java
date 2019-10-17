@@ -64,8 +64,7 @@ public class ShowHistoryControllerIT {
 		MockitoAnnotations.initMocks(this);
 		entityManager = baseTest.getEntityManager();
 		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-		showHistoryController = new ShowHistoryController(receiptRepository, showHistoryView);
-		showHistoryController.setTransaction(new HibernateTransaction(entityManager));
+		showHistoryController = new ShowHistoryController(receiptRepository, showHistoryView, new HibernateTransaction(entityManager));
 
 		loggedUser = new User("logged", "pw");
 		payerUser = new User("payer", "pw");

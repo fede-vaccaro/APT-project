@@ -11,19 +11,16 @@ import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 public class PayReceiptsModule extends AbstractModule {
 	@Override
 	protected void configure() {
+		bind(PayReceiptsView.class).to(PayReceiptsViewSwing.class);
 		install(new FactoryModuleBuilder().implement(PayReceiptsController.class, PayReceiptsController.class)
 				.build(PayReceiptsControllerFactory.class));
 	}
 
 	@Provides
-	public PayReceiptsView view(PayReceiptsControllerFactory controllerFactory) {
+	public PayReceiptsViewSwing view(PayReceiptsControllerFactory controllerFactory) {
 		PayReceiptsViewSwing view = new PayReceiptsViewSwing();
 		view.setController(controllerFactory.create(view));
 		return view;
 	}
 
-	@Provides
-	PayReceiptsViewSwing viewSwing(PayReceiptsControllerFactory controllerFactory) {
-		return (PayReceiptsViewSwing) view(controllerFactory);
-	}
 }

@@ -3,6 +3,8 @@ package com.unifiprojects.app.appichetto.controllers;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -26,9 +28,11 @@ public class ShowHistoryController {
 		this.loggedUser = loggedUser;
 	}
 
-	public ShowHistoryController(ReceiptRepository receiptRepository, ShowHistoryView showHistoryView) {
+	@Inject
+	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView, TransactionHandler transaction) {
 		this.receiptRepository = receiptRepository;
 		this.showHistoryView = showHistoryView;
+		this.transaction = transaction;
 	}
 
 	public void showHistory() {
