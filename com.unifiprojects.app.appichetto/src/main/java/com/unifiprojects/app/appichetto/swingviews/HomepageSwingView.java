@@ -17,13 +17,13 @@ public class HomepageSwingView implements Observer {
 	 */
 	private JFrame frame;
 	
-	private ObservableFrameSwing loginView;
+	ObservableFrameSwing loginView;
 	
-	private ObservableFrameSwing receiptView;
+	ObservableFrameSwing receiptView;
 	
-	private ObservableFrameSwing payReceiptsView;
+	ObservableFrameSwing payReceiptsView;
 	
-	private ObservableFrameSwing showHistoryView;
+	ObservableFrameSwing showHistoryView;
 
 //	/**
 //	 * Launch the application.
@@ -58,11 +58,23 @@ public class HomepageSwingView implements Observer {
 	public void setHistoryViewSwing(ObservableFrameSwing historyViewSwing) {
 		this.showHistoryView = historyViewSwing;
 	}
+	
+	@Inject
+	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing) {
+		this.payReceiptsView = payReceiptsViewSwing;
+		payReceiptsViewSwing.addObserver(this);
+		
+		initialize();
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public HomepageSwingView() {
+		initialize();
+	}
+
+	private void initialize() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
@@ -123,7 +135,6 @@ public class HomepageSwingView implements Observer {
 		gbc_btnLogOut.gridx = 3;
 		gbc_btnLogOut.gridy = 8;
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
-
 	}
 
 	@Override
