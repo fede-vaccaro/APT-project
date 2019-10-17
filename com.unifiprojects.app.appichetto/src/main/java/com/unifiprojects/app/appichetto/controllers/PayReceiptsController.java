@@ -2,19 +2,16 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.managers.PaymentManager;
-import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
@@ -34,8 +31,9 @@ public class PayReceiptsController {
 	private ReceiptRepository receiptRepository;		
 	private PayReceiptsView payViewReceiptsView;
 
+	@Inject
 	public PayReceiptsController(PaymentManager paymentManager, ReceiptRepository receiptRepository,
-			PayReceiptsView payViewReceiptsView, TransactionHandler transaction) {
+			@Assisted PayReceiptsView payViewReceiptsView, TransactionHandler transaction) {
 		this.paymentManager = paymentManager;
 		this.receiptRepository = receiptRepository;
 		this.payViewReceiptsView = payViewReceiptsView;

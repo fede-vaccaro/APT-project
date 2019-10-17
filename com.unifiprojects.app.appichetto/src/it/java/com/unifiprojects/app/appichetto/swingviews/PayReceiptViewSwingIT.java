@@ -18,19 +18,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
-import com.unifiprojects.app.appichetto.managers.PaymentManager;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
-import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHibernate;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
+import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
+import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
-import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
+import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
 @RunWith(GUITestRunner.class)
 public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
@@ -41,8 +42,6 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	private PayReceiptsViewSwing payReceiptsView;
 	private PayReceiptsController payReceiptsController;
 
-	private AccountingRepository accountingRepository;
-	private ReceiptRepository receiptRepository;
 	private User loggedUser;
 	private User payer1;
 	private Receipt firstReceiptPayer1;
@@ -50,14 +49,25 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	private Receipt thirdReceiptPayer1;
 	private Receipt firstReceiptPayer2;
 	private User payer2;
-	private PaymentManager paymentManager;
 
 	private static EntityManager entityManager;
+	private static Injector injector;
 
 	@BeforeClass
 	public static void setupEntityManager() {
-		baseTest.setupEntityManager();
-		entityManager = baseTest.getEntityManager();
+
+		Module repositoriesModule = new RepositoriesModule();
+		
+		Module entityManagerModule = new EntityManagerModule();
+
+		Module payReceiptModule = new PayReceiptsModule();
+
+		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
+		
+		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
+		entityManager = persistenceInjector.getInstance(EntityManager.class);
+		
+		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule);
 	}
 
 	@AfterClass
@@ -70,18 +80,8 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
 
-			accountingRepository = new AccountingRepositoryHibernate(entityManager);
-			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 
-			payReceiptsView = new PayReceiptsViewSwing();
-			paymentManager = new PaymentManager();
-			paymentManager.setAccountingRepository(accountingRepository);
 			
-			payReceiptsController = new PayReceiptsController(paymentManager, receiptRepository,
-					payReceiptsView, new HibernateTransaction(entityManager));
-
-			payReceiptsView.setController(payReceiptsController);
-
 			loggedUser = new User("logged", "pw");
 			payer1 = new User("payer", "pw");
 			payer2 = new User("payer2", "pw");
@@ -109,11 +109,17 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(firstReceiptPayer2);
 			entityManager.getTransaction().commit();
 
+			entityManager.clear();
+
+			payReceiptsView = (PayReceiptsViewSwing) injector.getInstance(PayReceiptsView.class);
+			payReceiptsController = payReceiptsView.getController();
 			payReceiptsView.setLoggedUser(loggedUser);
+
 			GuiActionRunner.execute(() -> payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser));
 
 			return payReceiptsView;
 		});
+
 		window = new FrameFixture(robot(), payReceiptsView.getFrame());
 		window.show(); // shows the frame to test
 	}

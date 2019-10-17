@@ -30,6 +30,7 @@ import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -50,6 +51,10 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	public void setController(PayReceiptsController payReceiptsController) {
 		this.payReceiptsController = payReceiptsController;
 	}
+	
+	public PayReceiptsController getController() {
+		return payReceiptsController;
+	}
 
 	private JFrame frame;
 	private JTextField txtEnterAmount;
@@ -61,7 +66,10 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	private DefaultListModel<Item> itemListModel;
 	private JLabel lblTotalForThis;
 	private JLabel lblTotaldebttouser;
+	
+	@Inject
 	private User loggedUser;
+	
 	private Double enteredAmount;
 
 	public List<Accounting> getAccountings() {
