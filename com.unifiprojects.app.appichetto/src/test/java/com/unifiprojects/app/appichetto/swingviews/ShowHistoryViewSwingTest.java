@@ -304,6 +304,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testRemoveReceiptDelegateToController() {
+		setupReceiptsAndUsers();
+		
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
