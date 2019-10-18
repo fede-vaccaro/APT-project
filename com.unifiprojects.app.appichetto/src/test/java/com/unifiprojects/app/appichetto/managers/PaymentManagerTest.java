@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 
@@ -33,23 +32,57 @@ public class PaymentManagerTest {
 	@InjectMocks
 	private PaymentManager paymentManager;
 
+	private User loggedUser;
+
+	private User payerUser1;
+
+	// receipts are ordered by date
+	private Receipt receipt3;
+	private Receipt receipt2;
+	private Receipt receipt1;
+
+	private User payerUser2;
+
+	private Receipt receiptByPayer2;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
 
+	private void setUpReceiptsAndUsers() {
+		loggedUser = new User("logged", "pw");
+
+		payerUser1 = new User("payer1", "pw");
+
+		receipt3 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser1,
+				new GregorianCalendar(2019, 8, 14));
+		receipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser1,
+				new GregorianCalendar(2019, 8, 4));
+		receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser1,
+				new GregorianCalendar(2019, 8, 1));
+
+		// additional user
+		payerUser2 = new User("payer2", "pw");
+		receiptByPayer2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser2,
+				new GregorianCalendar(2019, 8, 3));
+
+	}
+
+	private Accounting getAccountingOf(Receipt r, User u) {
+		return r.getAccountings().stream().filter(a -> a.getUser().equals(u)).findFirst().get();
+	}
+
 	@Test
 	public void testMakePaymentThatAccountingIsPaidWhenIfThereIsOnlyOneReceiptAndEnteredAmountIsEqualToDebt() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
 
-		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
-				new GregorianCalendar(2019, 9, 14));
-		Accounting accounting = receipt1.getAccountings().get(0);
+		setUpReceiptsAndUsers();
+
+		Accounting accounting = getAccountingOf(receipt1, loggedUser);
 		double exactAmountToPay = accounting.getAmount();
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
-		paymentManager.makePayment(exactAmountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(exactAmountToPay, loggedUser, payerUser1);
 
 		assertThat(accounting.isPaid()).isTrue();
 		verify(accountingRepository).saveAccounting(accounting);
@@ -57,20 +90,16 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testAccountingIsNotPaidButScaledWhenCalledMakePaymentAndEnteredAmountIsLessThanDebt() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
-				new GregorianCalendar(2019, 9, 14));
-
-		Accounting accounting = receipt1.getAccountings().get(0);
+		Accounting accounting = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
 
 		double difference = 2.0;
 		double amountToPay = accounting.getAmount() - difference;
 
-		paymentManager.makePayment(amountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		assertThat(accounting.isPaid()).isFalse();
 		assertThat(accounting.getAmount()).isEqualTo(difference);
@@ -79,25 +108,19 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testOlderAccountingIsPaidFirstAndNewerLaterWhenCalledMakePaymentAndEnteredAmountIsEqualToDebt() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
-
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 9, 14));
-		Receipt olderReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 9, 4));
+		setUpReceiptsAndUsers();
 
 		InOrder inOrder = inOrder(accountingRepository);
 
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting = olderReceipt.getAccountings().get(0);
+		Accounting olderAccounting = getAccountingOf(receipt1, loggedUser);
+		Accounting newerAccounting = getAccountingOf(receipt2, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting));
 
 		double amountToPay = newerAccounting.getAmount() + olderAccounting.getAmount();
 
-		paymentManager.makePayment(amountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		assertThat(olderAccounting.isPaid()).isTrue();
 		assertThat(newerAccounting.isPaid()).isTrue();
@@ -109,18 +132,13 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testMakePaymentOnlyOlderAccountingIsPaidAndNewerScaledWhenPayAmountIsLessThanDebtButEnoughToPayTheFirstAccounting() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
+		setUpReceiptsAndUsers();
 
 		InOrder inOrder = inOrder(accountingRepository);
 
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting = olderReceipt.getAccountings().get(0);
+		Accounting olderAccounting = getAccountingOf(receipt1, loggedUser);
+		Accounting newerAccounting = getAccountingOf(receipt2, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting));
@@ -128,7 +146,7 @@ public class PaymentManagerTest {
 		double difference = 2.0;
 		double amountToPay = newerAccounting.getAmount() + olderAccounting.getAmount() - difference;
 
-		paymentManager.makePayment(amountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		assertThat(olderAccounting.isPaid()).isTrue();
 		assertThat(newerAccounting.isPaid()).isFalse();
@@ -141,19 +159,11 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testOnlyFirstTwoOlderAccountigArePaidAndNewerScaledWhenCalledMakePaymentAndEnteredAmountIsLessThanDebtButEnoughToPayTheFirstTwoAccountings() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 1));
-
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting2 = olderReceipt2.getAccountings().get(0);
-		Accounting olderAccounting1 = olderReceipt1.getAccountings().get(0);
+		Accounting newerAccounting = getAccountingOf(receipt3, loggedUser);
+		Accounting olderAccounting2 = getAccountingOf(receipt2, loggedUser);
+		Accounting olderAccounting1 = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting2, olderAccounting1));
@@ -162,7 +172,7 @@ public class PaymentManagerTest {
 		double amountToPay = newerAccounting.getAmount() + olderAccounting1.getAmount() + olderAccounting2.getAmount()
 				- difference;
 
-		paymentManager.makePayment(amountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -179,19 +189,11 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testOnlyOlderAccountingIsPaidNewerScaledAndLastUnpaidWhenCalledMakePaymentButEnteredAmountIsLessThanDebtButEnoughToPayJustTheFirstAccounting() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 1));
-
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting2 = olderReceipt2.getAccountings().get(0);
-		Accounting olderAccounting1 = olderReceipt1.getAccountings().get(0);
+		Accounting newerAccounting = getAccountingOf(receipt3, loggedUser);
+		Accounting olderAccounting2 = getAccountingOf(receipt2, loggedUser);
+		Accounting olderAccounting1 = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting2, olderAccounting1));
@@ -201,7 +203,7 @@ public class PaymentManagerTest {
 
 		double oldAccounting2Amount = olderAccounting2.getAmount();
 
-		paymentManager.makePayment(amountToPay, loggedUser, payerUser);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -217,25 +219,17 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testOnlyPayer1DebtArePayedByLoggedUserAndNotPayer2WhenPayingPayer1() {
-		User loggedUser = new User("logged", "pw");
-		User payer1 = new User("payer1", "pw");
-		User payer2 = new User("payer2", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt receiptByPayer1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payer1, new GregorianCalendar(2019, 8, 14));
-
-		Receipt receiptByPayer2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payer2, new GregorianCalendar(2019, 8, 3));
-
-		Accounting accountingByPayer1 = receiptByPayer1.getAccountings().get(0);
-		Accounting accountingByPayer2 = receiptByPayer2.getAccountings().get(0);
+		Accounting accountingByPayer1 = getAccountingOf(receipt1, loggedUser);
+		Accounting accountingByPayer2 = getAccountingOf(receiptByPayer2, loggedUser);
 
 		double amountToPay = accountingByPayer1.getAmount();
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(accountingByPayer1, accountingByPayer2));
 
-		paymentManager.makePayment(amountToPay, loggedUser, payer1);
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
 
 		InOrder inOrder = inOrder(accountingRepository);
 
@@ -271,17 +265,14 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testNothingIsPayedIfEnteredAmountIsMoreThanAmountToPayAndShowErrorMsg() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt receipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
-				new GregorianCalendar(2019, 9, 14));
 		Accounting accounting = receipt1.getAccountings().get(0);
 		double amountToPayHigher = accounting.getAmount() * 2.0;
 
 		when(accountingRepository.getAccountingsOf(loggedUser)).thenReturn(Arrays.asList(accounting));
 		assertThatExceptionOfType(IllegalArgumentException.class)
-				.isThrownBy(() -> paymentManager.makePayment(amountToPayHigher, loggedUser, payerUser));
+				.isThrownBy(() -> paymentManager.makePayment(amountToPayHigher, loggedUser, payerUser1));
 
 		verify(accountingRepository).getAccountingsOf(loggedUser);
 		verifyNoMoreInteractions(accountingRepository);
@@ -290,19 +281,11 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testMakePaymentWithReceiptWhenNewAccountingIsEqualToTheDebtTowardAnotherUser() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 1));
-
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting2 = olderReceipt2.getAccountings().get(0);
-		Accounting olderAccounting1 = olderReceipt1.getAccountings().get(0);
+		Accounting newerAccounting = getAccountingOf(receipt3, loggedUser);
+		Accounting olderAccounting2 = getAccountingOf(receipt2, loggedUser);;
+		Accounting olderAccounting1 = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting2, olderAccounting1));
@@ -312,9 +295,9 @@ public class PaymentManagerTest {
 
 		// loggedUser want to "pay" with a receipt, which some items are shared with
 		// payerUser
-		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Item item2 = new Item("item2", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser,
+		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Item item2 = new Item("item2", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser1,
 				loggedUser, new GregorianCalendar(2018, 8, 20), Arrays.asList(item1, item2));
 		Accounting loggedUserAccounting = loggedUserReceipt.getAccountings().get(0);
 		// this means that the new generated debt is from payerUser to loggedUser, and
@@ -334,19 +317,11 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testMakePaymentWithReceiptWhenNewAccountingIsMoreThanTheDebtTowardAnotherUser() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 1));
-
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting2 = olderReceipt2.getAccountings().get(0);
-		Accounting olderAccounting1 = olderReceipt1.getAccountings().get(0);
+		Accounting newerAccounting = getAccountingOf(receipt3, loggedUser);
+		Accounting olderAccounting2 = getAccountingOf(receipt2, loggedUser);
+		Accounting olderAccounting1 = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting2, olderAccounting1));
@@ -356,10 +331,10 @@ public class PaymentManagerTest {
 
 		// loggedUser want to "pay" with a receipt, which some items are shared with
 		// payerUser
-		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Item item2 = new Item("item2", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Item item3 = new Item("item3", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser,
+		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Item item2 = new Item("item2", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Item item3 = new Item("item3", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser1,
 				loggedUser, new GregorianCalendar(2018, 8, 20), Arrays.asList(item1, item2, item3));
 		Accounting loggedUserAccounting = loggedUserReceipt.getAccountings().get(0);
 		// this means that the new generated debt is from payerUser to loggedUser, and
@@ -382,19 +357,11 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testMakePaymentWithReceiptWhenNewAccountingIsLessThanTheDebtTowardAnotherUser() {
-		User loggedUser = new User("logged", "pw");
-		User payerUser = new User("payer", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt newerReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 14));
-		Receipt olderReceipt2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 4));
-		Receipt olderReceipt1 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payerUser, new GregorianCalendar(2019, 8, 1));
-
-		Accounting newerAccounting = newerReceipt.getAccountings().get(0);
-		Accounting olderAccounting2 = olderReceipt2.getAccountings().get(0);
-		Accounting olderAccounting1 = olderReceipt1.getAccountings().get(0);
+		Accounting newerAccounting = getAccountingOf(receipt3, loggedUser);
+		Accounting olderAccounting2 = getAccountingOf(receipt2, loggedUser);
+		Accounting olderAccounting1 = getAccountingOf(receipt1, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(newerAccounting, olderAccounting2, olderAccounting1));
@@ -404,8 +371,8 @@ public class PaymentManagerTest {
 
 		// loggedUser want to "pay" with a receipt, which some items are shared with
 		// payerUser
-		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser));
-		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser,
+		Item item1 = new Item("item1", amountToPay, Arrays.asList(loggedUser, payerUser1));
+		Receipt loggedUserReceipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payerUser1,
 				loggedUser, new GregorianCalendar(2018, 8, 20), Arrays.asList(item1));
 		Accounting loggedUserAccounting = loggedUserReceipt.getAccountings().get(0);
 		// this means that the new generated debt is from payerUser to loggedUser, and
@@ -426,38 +393,32 @@ public class PaymentManagerTest {
 
 	@Test
 	public void testMakePaymentWithReceiptPayToEachUserTowardTheLoggedHasDebt() {
-		User loggedUser = new User("logged", "pw");
-		User payer1 = new User("payer1", "pw");
-		User payer2 = new User("payer2", "pw");
+		setUpReceiptsAndUsers();
 
-		Receipt payer1Receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payer1, new GregorianCalendar(2018, 9, 10));
-		Receipt payer2Receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
-				payer2, new GregorianCalendar(2018, 9, 9));
-
-		Accounting payer1Accounting = payer1Receipt.getAccountings().get(0);
-		Accounting payer2Accounting = payer2Receipt.getAccountings().get(0);
+		Accounting payer1Accounting = getAccountingOf(receipt1, loggedUser);
+		Accounting payer2Accounting = getAccountingOf(receiptByPayer2, loggedUser);
 
 		when(accountingRepository.getAccountingsOf(loggedUser))
 				.thenReturn(Arrays.asList(payer1Accounting, payer2Accounting));
-		
+
 		double amountToPayToPayer1 = payer1Accounting.getAmount();
 		double amountToPayToPayer2 = payer2Accounting.getAmount();
-		
+
 		Receipt loggedUserReceipt = new Receipt();
+		
 		loggedUserReceipt.setBuyer(loggedUser);
-		Item itemBoughtForPayer1 = new Item("shareWithPayer1", amountToPayToPayer1, Arrays.asList(payer1));
-		Item itemBoughtForPayer2 = new Item("shareWithPayer2", amountToPayToPayer2, Arrays.asList(payer2));
-		Accounting accountingToPayer1 = new Accounting(payer1, amountToPayToPayer1);
-		Accounting accountingToPayer2 = new Accounting(payer2, amountToPayToPayer2);
+		Item itemBoughtForPayer1 = new Item("shareWithPayer1", amountToPayToPayer1, Arrays.asList(payerUser1));
+		Item itemBoughtForPayer2 = new Item("shareWithPayer2", amountToPayToPayer2, Arrays.asList(payerUser2));
+		Accounting accountingToPayer1 = new Accounting(payerUser1, amountToPayToPayer1);
+		Accounting accountingToPayer2 = new Accounting(payerUser2, amountToPayToPayer2);
 		loggedUserReceipt.setItems(Arrays.asList(itemBoughtForPayer1, itemBoughtForPayer2));
 		loggedUserReceipt.setAccountingList(Arrays.asList(accountingToPayer1, accountingToPayer2));
-		
+
 		paymentManager.makePaymentWithReceipt(loggedUserReceipt, loggedUser);
 
 		assertThat(payer1Accounting.isPaid()).isTrue();
 		assertThat(payer2Accounting.isPaid()).isTrue();
-		
+
 		assertThat(accountingToPayer1.isPaid()).isTrue();
 		assertThat(accountingToPayer2.isPaid()).isTrue();
 	}
