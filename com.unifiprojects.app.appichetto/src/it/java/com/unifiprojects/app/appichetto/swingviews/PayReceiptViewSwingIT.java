@@ -110,7 +110,9 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			payReceiptsView.setLoggedUser(loggedUser);
-			GuiActionRunner.execute(() -> payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser));
+			
+			// when the user is entering the view, the controller should call showUnpaidReceipts
+			GuiActionRunner.execute(() -> payReceiptsController.showUnpaidReceipts(loggedUser));
 
 			return payReceiptsView;
 		});

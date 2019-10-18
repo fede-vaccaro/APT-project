@@ -37,7 +37,7 @@ public class PayReceiptsController {
 		this.transaction = transaction;
 	}
 
-	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
+	public void showUnpaidReceipts(User loggedUser) {
 		ArrayList<Receipt> unpaidReceipts = new ArrayList<>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
@@ -54,7 +54,7 @@ public class PayReceiptsController {
 		} catch (IllegalArgumentException e) {
 			payViewReceiptsView.showErrorMsg(e.getMessage());
 		}
-		showUnpaidReceiptsOfLoggedUser(loggedUser);
+		showUnpaidReceipts(loggedUser);
 
 	}
 
