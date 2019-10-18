@@ -51,6 +51,14 @@ public class PaymentManagerTest {
 	}
 
 	private void setUpReceiptsAndUsers() {
+		/*
+		 * This methods instantiates some users and some receipts, 
+		 * from where the accountings (i.e., the debts are taken);
+		 * the receipts have been bought from payerUsers, and the loggedUser is a participant, so
+		 * the loggedUser has debt to both payerUsers;
+		 * Not every accounting from the receipt will be used in each test;
+		 */
+		
 		loggedUser = new User("logged", "pw");
 
 		payerUser1 = new User("payer1", "pw");

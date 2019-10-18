@@ -55,9 +55,9 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
 	private JList<CustomToStringReceipt> receiptList;
-	private DefaultListModel<CustomToStringReceipt> receiptListModel;
+	DefaultListModel<CustomToStringReceipt> receiptListModel;
 	private JComboBox<User> userSelection;
-	private DefaultComboBoxModel<User> userComboBoxModel;
+	DefaultComboBoxModel<User> userComboBoxModel;
 	private DefaultListModel<Item> itemListModel;
 	private JLabel lblTotalForThis;
 	private JLabel lblTotaldebttouser;
@@ -82,14 +82,6 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 
 	public JFrame getFrame() {
 		return frame;
-	}
-
-	public DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
-		return receiptListModel;
-	}
-
-	public DefaultComboBoxModel<User> getUserComboBoxModel() {
-		return userComboBoxModel;
 	}
 
 	private List<Receipt> unpaids;
