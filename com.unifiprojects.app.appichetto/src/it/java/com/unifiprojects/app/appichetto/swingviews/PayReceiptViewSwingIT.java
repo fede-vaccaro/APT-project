@@ -29,7 +29,7 @@ import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptFormatter;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 @RunWith(GUITestRunner.class)
@@ -76,9 +76,9 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			payReceiptsView = new PayReceiptsViewSwing();
 			paymentManager = new PaymentManager();
 			paymentManager.setAccountingRepository(accountingRepository);
-			
-			payReceiptsController = new PayReceiptsController(paymentManager, receiptRepository,
-					payReceiptsView, new HibernateTransaction(entityManager));
+
+			payReceiptsController = new PayReceiptsController(paymentManager, receiptRepository, payReceiptsView,
+					new HibernateTransaction(entityManager));
 
 			payReceiptsView.setController(payReceiptsController);
 
@@ -123,10 +123,8 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	public void testInitialState() {
 		window.comboBox("userSelection").selectItem("payer");
 		String[] receiptListString = window.list("receiptList").contents();
-		assertThat(receiptListString)
-				.isEqualTo(Arrays.asList((new CustomToStringReceipt(thirdReceiptPayer1)).toString(),
-						(new CustomToStringReceipt(secondReceiptPayer1)).toString(),
-						(new CustomToStringReceipt(firstReceiptPayer2)).toString()).toArray());
+		assertThat(receiptListString).isEqualTo(Arrays.asList(ReceiptFormatter.format(thirdReceiptPayer1),
+				ReceiptFormatter.format(secondReceiptPayer1), ReceiptFormatter.format(firstReceiptPayer2)).toArray());
 
 		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
@@ -163,9 +161,9 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 				Precision.round(debtToPayer, 2) - Precision.round(debtToPayer / 2.0, 2)));
 
 		String[] receiptListString = window.list("receiptList").contents();
-		assertThat(receiptListString)
-				.isEqualTo(Arrays.asList((new CustomToStringReceipt(thirdReceiptPayer1)).toString(),
-						(new CustomToStringReceipt(secondReceiptPayer1)).toString()).toArray());
+		assertThat(receiptListString).isEqualTo(
+				Arrays.asList(ReceiptFormatter.format(thirdReceiptPayer1), ReceiptFormatter.format(secondReceiptPayer1))
+						.toArray());
 
 	}
 

@@ -9,8 +9,6 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.google.inject.Inject;
-
 public class HomepageSwingView implements Observer {
 	/**
 	 * 

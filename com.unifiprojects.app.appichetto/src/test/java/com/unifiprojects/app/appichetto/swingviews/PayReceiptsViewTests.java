@@ -27,7 +27,7 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptFormatter;
 
 @RunWith(GUITestRunner.class)
 public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
@@ -130,10 +130,12 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testShowReceiptsVisualizeTheOnlyReceipt() {
 		setUpUsersAndReceipts();
-		GuiActionRunner.execute(() -> payReceiptsSwing.showReceipts(Arrays.asList(receipt1FromPayer1)));
+		Receipt receipt1 = receipt1FromPayer1;
+		
+		GuiActionRunner.execute(() -> payReceiptsSwing.showReceipts(Arrays.asList(receipt1)));
 		String[] receiptListString = window.list("receiptList").contents();
 		assertThat(receiptListString)
-				.containsExactlyInAnyOrder(new CustomToStringReceipt(receipt1FromPayer1).toString());
+				.containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1));
 	}
 
 	@Test
@@ -147,8 +149,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> payReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2, receipt3)));
 		String[] receiptListString = window.list("receiptList").contents();
 
-		assertThat(receiptListString).containsExactlyInAnyOrder(new CustomToStringReceipt(receipt1).toString(),
-				new CustomToStringReceipt(receipt2).toString(), new CustomToStringReceipt(receipt3).toString());
+		assertThat(receiptListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1),
+				ReceiptFormatter.format(receipt2), ReceiptFormatter.format(receipt3));
 
 	}
 
@@ -201,9 +203,9 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		String[] receiptListString = window.list("receiptList").contents();
 		assertThat(receiptListString)
-				.containsExactlyInAnyOrder(new CustomToStringReceipt(receipt1).toString(),
-						new CustomToStringReceipt(receipt2).toString())
-				.doesNotContain(new CustomToStringReceipt(receipt3).toString());
+				.containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1),
+						ReceiptFormatter.format(receipt2))
+				.doesNotContain(ReceiptFormatter.format(receipt3));
 
 	}
 
@@ -218,9 +220,9 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2, receipt3));
 
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt3));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
+			payReceiptsSwing.receiptListModel.addElement(receipt3);
 
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 			payReceiptsSwing.userComboBoxModel.addElement(payer2);
@@ -228,12 +230,12 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		window.comboBox("userSelection").selectItem("payer1");
 		String[] receipt1ListString = window.list("receiptList").contents();
-		assertThat(receipt1ListString).containsExactlyInAnyOrder(new CustomToStringReceipt(receipt1).toString());
+		assertThat(receipt1ListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1));
 
 		window.comboBox("userSelection").selectItem("payer2");
 		String[] receipt1And2ListString = window.list("receiptList").contents();
-		assertThat(receipt1And2ListString).containsExactlyInAnyOrder(new CustomToStringReceipt(receipt2).toString(),
-				new CustomToStringReceipt(receipt3).toString());
+		assertThat(receipt1And2ListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt2),
+				ReceiptFormatter.format(receipt3));
 
 	}
 
@@ -257,8 +259,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1FromPayer1, receipt1FromPayer2));
 
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1FromPayer1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1FromPayer2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1FromPayer1);
+			payReceiptsSwing.receiptListModel.addElement(receipt1FromPayer2);
 
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 			payReceiptsSwing.userComboBoxModel.addElement(payer2);
@@ -282,23 +284,23 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 		});
 
-		window.list("receiptList").selectItem(new CustomToStringReceipt(receipt2).toString());
+		window.list("receiptList").selectItem(ReceiptFormatter.format(receipt2));
 		String[] itemListStringReceipt2 = window.list("itemList").contents();
 		assertThat(itemListStringReceipt2).containsExactlyInAnyOrder(item3.toString(), item2.toString());
 
-		window.list("receiptList").selectItem(new CustomToStringReceipt(receipt1).toString());
+		window.list("receiptList").selectItem(ReceiptFormatter.format(receipt1));
 		String[] itemListStringReceipt1 = window.list("itemList").contents();
 		assertThat(itemListStringReceipt1).containsExactlyInAnyOrder(item1.toString(), item2.toString());
 
 		String[] receiptList = window.list("receiptList").contents();
-		assertThat(receiptList).containsExactlyInAnyOrder(new CustomToStringReceipt(receipt2).toString(),
-				new CustomToStringReceipt(receipt1).toString());
+		assertThat(receiptList).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt2),
+				ReceiptFormatter.format(receipt1));
 	}
 
 	@Test
@@ -312,7 +314,7 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt));
+			payReceiptsSwing.receiptListModel.addElement(receipt);
 
 		});
 
@@ -330,16 +332,16 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 		});
-		window.list("receiptList").selectItem(new CustomToStringReceipt(receipt2).toString());
+		window.list("receiptList").selectItem(ReceiptFormatter.format(receipt2));
 		window.label("totalForSelectedReceipt")
 				.requireText(String.format("Total for this receipt: %.2f", receipt2.getTotalPrice()));
 
-		window.list("receiptList").selectItem(new CustomToStringReceipt(receipt1).toString());
+		window.list("receiptList").selectItem(ReceiptFormatter.format(receipt1));
 		window.label("totalForSelectedReceipt")
 				.requireText(String.format("Total for this receipt: %.2f", receipt1.getTotalPrice()));
 	}
@@ -478,8 +480,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
@@ -507,8 +509,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
@@ -537,8 +539,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
@@ -567,8 +569,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
@@ -602,8 +604,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
@@ -636,8 +638,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt1));
-			payReceiptsSwing.receiptListModel.addElement(new CustomToStringReceipt(receipt2));
+			payReceiptsSwing.receiptListModel.addElement(receipt1);
+			payReceiptsSwing.receiptListModel.addElement(receipt2);
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 
 			payReceiptsSwing.setAccountings(new ArrayList<>());
