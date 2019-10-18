@@ -1,13 +1,11 @@
 package com.unifiprojects.app.appichetto.swingviews.utils;
 
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 
 public class ReceiptCellRenderer extends JLabel implements ListCellRenderer<Receipt> {

@@ -12,7 +12,7 @@ import com.unifiprojects.app.appichetto.models.User;
 
 public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
-	public EntityManager entityManager;
+	private EntityManager entityManager;
 
 	@Inject
 	public ReceiptRepositoryHibernate(EntityManager entityManager) {

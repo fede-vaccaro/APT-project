@@ -26,7 +26,7 @@ public class PayReceiptsController {
 	}
 
 	private PaymentManager paymentManager;
-	private ReceiptRepository receiptRepository;		
+	private ReceiptRepository receiptRepository;
 	private PayReceiptsView payViewReceiptsView;
 
 	public PayReceiptsController(PaymentManager paymentManager, ReceiptRepository receiptRepository,
@@ -46,9 +46,7 @@ public class PayReceiptsController {
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {
 		try {
-			transaction.doInTransaction(() -> {
-				paymentManager.makePayment(enteredAmount, loggedUser, buyerUser);
-			});
+			transaction.doInTransaction(() -> paymentManager.makePayment(enteredAmount, loggedUser, buyerUser));
 		} catch (UncommittableTransactionException e) {
 			payViewReceiptsView.showErrorMsg("Something went wrong while committing the payment.");
 		} catch (IllegalArgumentException e) {
