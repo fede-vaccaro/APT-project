@@ -81,7 +81,7 @@ public class TestReceiptRepositoryHibernate {
 
 	}
 
-	//@Test
+	@Test
 	//TODO: this test is part of the update feature, which is not currently available. before implementing it, this test should be fixed for passing
 	public void testSaveReceiptUpdateCorrectlyTheReceiptWhenAccountingsUsersAndItemsHaveBeenAlreadyPersisted() {
 		User debtorUser = new User("user1", "pw");
@@ -103,11 +103,6 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
-		entityManager.persist(item1);
-		entityManager.persist(item2);
-
-		entityManager.persist(accountingToCreditorUser);
 		entityManager.persist(receipt1);
 
 		entityManager.getTransaction().commit();
@@ -129,6 +124,8 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.clear();
 
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
+		assertThat(entityManager.find(Accounting.class, accountingToCreditorUser.getId())).isNull();
+		assertThat(entityManager.find(Item.class, item2.getId())).isNull();
 		assertThat(foundReceipt.getItems()).containsExactlyInAnyOrder(item1, newItem);
 		assertThat(foundReceipt.getAccountings()).containsExactlyInAnyOrder(newAccounting);
 		assertThat(foundReceipt).isEqualTo(receipt1);

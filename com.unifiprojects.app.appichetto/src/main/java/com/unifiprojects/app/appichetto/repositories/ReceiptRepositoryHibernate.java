@@ -27,7 +27,7 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 			entityManager.persist(receipt);
 		}
 		
-		receipt.getAccountings().forEach(entityManager::merge);
+		// receipt.getAccountings().forEach(entityManager::merge);
 	}
 
 	@Override
