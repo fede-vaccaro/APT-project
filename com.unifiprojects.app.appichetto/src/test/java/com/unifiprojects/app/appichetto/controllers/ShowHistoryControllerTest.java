@@ -1,10 +1,11 @@
 package com.unifiprojects.app.appichetto.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -24,6 +25,8 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.services.AppIchettoService;
+import com.unifiprojects.app.appichetto.services.UpdateReceiptService;
 import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
@@ -158,6 +161,16 @@ public class ShowHistoryControllerTest {
 			
 		verify(showHistoryView).showErrorMsg("Something went wrong with the database.");
 		verify(showHistoryView).showShoppingHistory(receiptListCaptor.capture());
+	}
+	
+	@Test
+	public void testStartUpdateReceiptServiceExecuteTheService() {
+		AppIchettoService updateReceiptService = mock(UpdateReceiptService.class);
+		showHistoryController.setUpdateReceiptService(updateReceiptService);
+		
+		showHistoryController.startUpdateReceiptService(receipt0);
+		
+		verify(updateReceiptService).execute(receipt0);
 	}
 	
 }

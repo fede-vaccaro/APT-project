@@ -77,9 +77,9 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptController.setTransactionHandler(new HibernateTransaction(entityManager));
 			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 			receiptSwingView.setReceiptController(receiptController);
-			receiptSwingView.setUsers();
 			return receiptSwingView;
 		});
+		receiptSwingView.setUsers();
 		window = new FrameFixture(robot(), receiptSwingView.frame);
 		window.show();
 		nameBox = window.textBox("nameBox");

@@ -3,6 +3,7 @@ package com.unifiprojects.app.appichetto.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -86,13 +87,16 @@ public class UpdateReceiptServiceTest {
 	}
 
 	@Test
-	public void testExcecuteCallShowReceiptView() {
+	public void testExcecuteCallShowReceiptViewAndSetUsers() {
 		Receipt receipt = new Receipt();
+		doNothing().when(receiptView).setUsers();
+		
 		updateReceiptService.setReceiptView(receiptView);
 		
 		updateReceiptService.execute(receipt);
 		
 		verify(receiptView).show();
+		verify(receiptView).setUsers();
 	}
 
 }
