@@ -123,7 +123,7 @@ public class Accounting {
 	}
 
 	public void addAmount(double amount) {
-		this.amount += amount;
+		this.amount = Math.round(100 * (this.amount + amount))/100.0;
 	}
 
 }
