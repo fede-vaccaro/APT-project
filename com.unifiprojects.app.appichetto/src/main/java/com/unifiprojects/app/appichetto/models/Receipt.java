@@ -150,7 +150,7 @@ public class Receipt {
 		if (timestamp == null) {
 			if (other.timestamp != null)
 				return false;
-		} else if (!timestamp.equals(other.timestamp))
+		} else if (!timestamp.getTime().equals(other.timestamp.getTime()))
 			return false;
 		if (Double.doubleToLongBits(totalPrice) != Double.doubleToLongBits(other.totalPrice))
 			return false;
