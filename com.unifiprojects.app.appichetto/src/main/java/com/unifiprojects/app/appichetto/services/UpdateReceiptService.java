@@ -11,25 +11,24 @@ public class UpdateReceiptService implements AppIchettoService {
 
 	private ReceiptController receiptController;
 	private ReceiptManager receiptManager;
-	private ReceiptSwingView receiptView;//TODO ReceiptSwingView in a concrete class because some methods are in ObservableFrame 
-	private Receipt receipt;
+	private ReceiptSwingView receiptView;
 
 	public UpdateReceiptService(ReceiptRepository receiptRepository, UserRepository userRepository) {
 		receiptManager = new ReceiptManager(receiptRepository);
 		receiptView = new ReceiptSwingView();
 		receiptController = new ReceiptController(receiptView, userRepository);
 		receiptView.setReceiptController(receiptController);
-		receiptView.setUsers();
 	}
 
 	@Override
 	public void execute(Object object) {
 		if (!(object instanceof Receipt))
 			throw new IllegalArgumentException("Argument must be Receipt");
-		receipt = (Receipt) object;
+		Receipt receipt = (Receipt) object;
 		receiptManager.uploadReceipt(receipt);
 		receiptController.uploadReceiptManager(receiptManager);
 		receiptView.show();
+		receiptView.setUsers();
 	}
 
 	void setReceiptManager(ReceiptManager receiptManager) {

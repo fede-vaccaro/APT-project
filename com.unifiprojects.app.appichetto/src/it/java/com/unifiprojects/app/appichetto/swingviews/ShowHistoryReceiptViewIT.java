@@ -109,6 +109,8 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(thirdReceiptDebtor1);
 			entityManager.getTransaction().commit();
 
+			entityManager.clear();
+			
 			showHistoryController.showHistory();
 
 			return showHistoryViewSwing;
@@ -206,7 +208,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		});
 		window.list("receiptList").selectItem(firstReceiptDebtor1.toString());
 		window.button(JButtonMatcher.withText("Update receipt")).click();
-		
+		Pause.pause(20000);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}
 }
