@@ -8,85 +8,96 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.services.CreateDebtsService;
 
 public class ReceiptManager {
 	private Receipt receipt;
 	private ReceiptRepository receiptRepository;
-	private Map<User, Accounting> accountings;
+	private Map<User, Accounting> accountingsMap;
+	private CreateDebtsService createDebtsService;
 	private static final Logger LOGGER = LogManager.getLogger(ReceiptManager.class);
-
+	
 	public ReceiptManager(User buyer, ReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
 		this.receipt = new Receipt(buyer);
-		this.accountings = new HashMap<>();
+		this.accountingsMap = new HashMap<>();
+		this.createDebtsService = new CreateDebtsService();
 	}
 
 	public ReceiptManager(ReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
-		this.accountings = new HashMap<>();
+		this.accountingsMap = new HashMap<>();
 	}
 
 	public void addItem(Item item) {
 		receipt.addItem(item);
-		double pricePerOwner = Math.round(100 * item.getPrice() * item.getQuantity() / item.getOwners().size()) / 100.0;
-
-		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer())).forEach(user -> {
-			if (accountings.containsKey(user))
-				accountings.get(user).addAmount(pricePerOwner);
-			else
-				accountings.put(user, new Accounting(user, pricePerOwner));
-		});
 		LOGGER.debug("{} ADDED BY RECEIPT MANAGER", item);
 	}
 
 	public void updateItem(int index, Item item) {
-		double oldPrice = receipt.getItem(index).getPricePerOwner();
-		double priceGap = item.getPricePerOwner() - oldPrice;
-		receipt.updateItem(index, item);
-		item.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
-				.forEach(user -> accountings.get(user).addAmount(priceGap));
-		LOGGER.debug("{} UPDATED BY RECEIPT MANAGER", item);
+		if (index < receipt.getItems().size()) {
+			receipt.updateItem(index, item);
+			LOGGER.debug("{} UPDATED BY RECEIPT MANAGER", item);
+		} else
+			throw new IllegalIndex("Index not in list");
 	}
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
-		Double price = -itemToDelete.getPricePerOwner();
-		itemToDelete.getOwners().stream().filter(user -> !user.equals(receipt.getBuyer()))
-				.forEach(user -> accountings.get(user).addAmount(price));
 		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", itemToDelete);
 	}
 
 	public Long saveReceipt() {
-		accountings.values().forEach(accounting -> receipt.addAccounting(accounting));
+		createDebtsService.computeDebts(receipt, accountingsMap);
+		
+		List<Receipt> refoundReceipts = createDebtsService.getRefundReceipts();
+		List<Accounting> accountings = createDebtsService.getAccountings();
+		
+		receipt.setAccountingList(accountings);
+		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
 		receiptRepository.saveReceipt(receipt);
+		
 		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
 		return receipt.getId();
+	}
+	
+	public void uploadReceipt(Receipt receipt) {
+		this.receipt = receipt;
+		for (Item i : receipt.getItems()) {
+			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer()))
+					.forEach(owner -> {
+						if (accountingsMap.containsKey(owner))
+							accountingsMap.get(owner).addAmount(i.getPricePerOwner());
+						else
+							accountingsMap.put(owner, new Accounting(owner, i.getPricePerOwner()));
+					});
+				}
+	}
+
+	void setAccountings(Map<User, Accounting> accountings) {
+		this.accountingsMap = accountings;
+	}
+
+	void setReceipt(Receipt receipt) {
+		this.receipt = receipt;
+	}
+	
+	public void setCreateDebtsService(CreateDebtsService createDebtsService) {
+		this.createDebtsService = createDebtsService;
 	}
 
 	public int getItemsListSize() {
 		return receipt.getItemsListSize();
 	}
-
+	
 	public Receipt getReceipt() {
 		return receipt;
-	}
-
-	public void uploadReceipt(Receipt receipt) {
-		this.receipt = receipt;
-		receipt.getAccountings().stream().forEach(accounting -> accountings.put(accounting.getUser(), accounting));
-	}
-
-	void setAccountings(Map<User, Accounting> accountings) {
-		this.accountings = accountings;
-	}
-
-	void setReceipt(Receipt receipt) {
-		this.receipt = receipt;
 	}
 
 	public String getDescription() {

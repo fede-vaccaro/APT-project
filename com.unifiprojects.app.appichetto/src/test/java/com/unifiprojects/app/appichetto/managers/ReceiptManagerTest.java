@@ -1,38 +1,41 @@
 package com.unifiprojects.app.appichetto.managers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.inOrder;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.services.CreateDebtsService;
 
 public class ReceiptManagerTest {
 
 	private Receipt receipt;
 
-	private Map<User, Accounting> accountings;
+	private Map<User, Accounting> accountingsMap;
 
 	private User buyer;
 
+	@Mock
+	private CreateDebtsService createDebtsService;
+	
 	@Mock
 	private ReceiptRepository receiptRepository;
 
@@ -42,171 +45,105 @@ public class ReceiptManagerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-	}
-
-	private void spyAndSetReceipt() {
 		receipt = spy(new Receipt(buyer));
+		accountingsMap = spy(new HashMap<>());
 		receiptManager.setReceipt(receipt);
-	}
-
-	private void spyAndSetAccountings() {
-		accountings = spy(new HashMap<>());
-		receiptManager.setAccountings(accountings);
+		receiptManager.setAccountings(accountingsMap);
+		receiptManager.setCreateDebtsService(createDebtsService);
 	}
 
 	@Test
-	public void testWhenAnItemIsAddedAndAccountingNotExistThenWillBeCreated() {
+	public void testWhenAnItemIsAddedThenItIsAddedInReceipt() {
 		User pippo = new User("Pippo", "psw");
 		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
-		spyAndSetAccountings();
 
-		receiptManager.addItem(item);
-
-		verify(accountings).put(pippo, new Accounting(pippo, 4.4));
-	}
-
-	@Test
-	public void testWhenAnItemIsAddedAccountingOfReceiptBuyerWillNotBeCreated() {
-		User pippo = new User("Pippo", "psw");
-		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		receipt.setBuyer(pippo);
-
-		receiptManager.addItem(item);
-
-		verifyZeroInteractions(accountings);
-	}
-
-	@Test
-	public void testAddItemWhenAccountingExistsThenItemIsAddedToReceiptAndAccountingsAreUpdatedCorrectly() {
-		User pippo = new User("Pippo", "psw");
-		User pluto = new User("Pluto", "psw");
-		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting(pippo));
-		Accounting accountingPluto = spy(new Accounting(pluto));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		accountings.put(pippo, accountingPippo);
-		accountings.put(pluto, accountingPluto);
 
 		receiptManager.addItem(item);
 
 		verify(receipt).addItem(item);
-		verify(accountings.get(pippo)).addAmount(2.2);
-		verify(accountings.get(pluto)).addAmount(2.2);
 	}
 
 	@Test
-	public void testUpdateItemUpdateItemAndUpdateAccountingsCorrectly() {
+	public void testUpdateItemWithWrongIndexThrownIllegalIndexException() {
+		User pippo = new User("Pippo", "psw");
+		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
+
+		try {
+			receiptManager.updateItem(0, item);
+			fail("Illegal index");
+		} catch (IllegalIndex e) {
+			assertThat(e.getMessage()).isEqualTo("Index not in list");
+		}
+	}
+
+	@Test
+	public void testWhenAnItemIsUpdatedThenIsUpdateInReceipt() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
 		Item oldItem = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
 		Item updatedItem = new Item("Sugo", 2.2, 3, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
-		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
+
 		receipt.addItem(oldItem);
-		accountings.put(pippo, accountingPippo);
-		accountings.put(pluto, accountingPluto);
 
 		receiptManager.updateItem(0, updatedItem);
 
 		verify(receipt).updateItem(0, updatedItem);
-		verify(accountings.get(pippo)).addAmount(1.1);
-		verify(accountings.get(pluto)).addAmount(1.1);
 	}
 
-	@Test
-	public void testWhenAnItemIsUpdatedAccountingOfReceiptBuyerWillNotBeCalled() {
-		User pippo = new User("Pippo", "psw");
-		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		receipt.setBuyer(pippo);
-		receipt.addItem(item);
-
-		receiptManager.updateItem(0, item);
-
-		verifyZeroInteractions(accountings);
-	}
 
 	@Test
-	public void testDeleteItemDeleteItemAndUpdateAccountingsCorrectly() {
+	public void testWhenItemIsDeletedThenItIsDeletedInByReceipt() {
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
 		Item itemToDelete = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
-		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		accountings.put(pippo, accountingPippo);
-		accountings.put(pluto, accountingPluto);
 
 		receiptManager.deleteItem(itemToDelete);
 
 		verify(receipt).deleteItem(itemToDelete);
-		verify(accountings.get(pippo)).addAmount(-2.2);
-		verify(accountings.get(pluto)).addAmount(-2.2);
 	}
 
 	@Test
-	public void testDeleteItemDeleteItemDoesntCallAccountingsOfBuyer() {
+	public void testUploadReceiptInitializeAccounting() {
+		User mario = new User("Mario", "psw");
 		User pippo = new User("Pippo", "psw");
 		User pluto = new User("Pluto", "psw");
-		Item itemToDelete = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto));
-		Accounting accountingPippo = spy(new Accounting(pippo, 2.2));
-		Accounting accountingPluto = spy(new Accounting(pluto, 2.2));
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		receipt.setBuyer(pippo);
-		accountings.put(pippo, accountingPippo);
-		accountings.put(pluto, accountingPluto);
-
-		receiptManager.deleteItem(itemToDelete);
-
-		verify(receipt).deleteItem(itemToDelete);
-		verifyZeroInteractions(accountings.get(pippo));
-		verify(accountings.get(pluto)).addAmount(-2.2);
-	}
-
-	@Test
-	public void testSaveReceiptAddAccountingToReceiptAndCallTheRepository() {
-		User pippo = new User("Pippo", "psw");
-		User pluto = new User("Pluto", "psw");
-		Accounting accountingPippo = new Accounting(pippo, 1.1);
+		Accounting accountingPippo = new Accounting(pippo, 3.3);
 		Accounting accountingPluto = new Accounting(pluto, 1.1);
-		ArgumentCaptor<Accounting> accountingCaptor = ArgumentCaptor.forClass(Accounting.class);
-		spyAndSetReceipt();
-		spyAndSetAccountings();
-		accountings.put(pippo, accountingPippo);
-		accountings.put(pluto, accountingPluto);
-		InOrder inOrder = inOrder(receiptRepository, receipt);
 
-		receiptManager.saveReceipt();
+		Receipt receiptToUpload = new Receipt(mario);
+		receiptToUpload.addItem(new Item("Sugo", 1.1, 2, Arrays.asList(pippo, mario)));
+		receiptToUpload.addItem(new Item("Pesto", 1.1, 2, Arrays.asList(pippo)));
+		receiptToUpload.addItem(new Item("Pasta", 1.1, 1, Arrays.asList(pluto)));
 
-		inOrder.verify(receipt, times(2)).addAccounting(accountingCaptor.capture());
-		inOrder.verify(receiptRepository).saveReceipt(receipt);
-		assertThat(accountingCaptor.getAllValues()).containsExactlyInAnyOrder(accountingPippo, accountingPluto);
+		receiptManager.uploadReceipt(receiptToUpload);
+
+		assertThat(accountingsMap.size()).isEqualTo(2);
+		assertThat(accountingsMap.get(pluto)).isEqualTo(accountingPluto);
+		assertThat(accountingsMap.get(pippo)).isEqualTo(accountingPippo);
 	}
 	
+
 	@Test
-	public void testUploadReceiptInitializeAccounting(){
-		User pippo = new User("Pippo", "psw");
-		User pluto = new User("Pluto", "psw");
-		Accounting accountingPippo = new Accounting(pippo, 1.1);
-		Accounting accountingPluto = new Accounting(pluto, 1.1);
-		spyAndSetReceipt();
-		spyAndSetAccountings();
+	public void testSaveReceiptCallCreateDebtsServiceWithItsGetWithNoRefundReceipt() {
+		when(createDebtsService.getAccountings()).thenReturn(new ArrayList<>());
+		when(createDebtsService.getRefundReceipts()).thenReturn(new ArrayList<>());
+
+		receiptManager.saveReceipt();
 		
-		Receipt receiptToUpload = new Receipt();
-		receiptToUpload.setAccountingList(Arrays.asList(accountingPippo,accountingPluto));
+		verify(createDebtsService).computeDebts(receipt, accountingsMap);
+		verify(createDebtsService).getAccountings();
+		verify(createDebtsService).getRefundReceipts();	
+	}
+
+	@Test
+	public void testSaveReceiptCallCreateDebtsServiceWithItsGet() {
+		when(createDebtsService.getAccountings()).thenReturn(new ArrayList<>());
+		when(createDebtsService.getRefundReceipts()).thenReturn(new ArrayList<>(Arrays.asList(new Receipt())));
 		
-		receiptManager.uploadReceipt(receiptToUpload);
+		receiptManager.saveReceipt();
 		
-		assertThat(accountings.size()).isEqualTo(2);
-		assertThat(accountings.get(pippo)).isEqualTo(accountingPippo);
-		assertThat(accountings.get(pluto)).isEqualTo(accountingPluto);
+		verify(createDebtsService).computeDebts(receipt, accountingsMap);
+		verify(createDebtsService).getAccountings();
+		verify(createDebtsService).getRefundReceipts();	
 	}
 }
