@@ -44,11 +44,12 @@ public class ReceiptController {
 	}
 
 	public void updateItem(Item item, int index) {
-		if (index >= receiptManager.getItemsListSize())
-			throw new IllegalIndex("Index not in list");
-		else {
+		try {
 			receiptManager.updateItem(index, item);
 			receiptView.itemUpdated(index, item);
+		} catch (IllegalIndex e) {
+			receiptView.showError("Item index not in list");
+			LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 		}
 		LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 	}

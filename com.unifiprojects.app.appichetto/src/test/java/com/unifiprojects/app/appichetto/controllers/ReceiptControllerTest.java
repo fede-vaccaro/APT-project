@@ -1,8 +1,6 @@
 package com.unifiprojects.app.appichetto.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,9 +38,9 @@ public class ReceiptControllerTest {
 
 	@Mock
 	private ReceiptView receiptView;
-	
+
 	@Mock
-	private UserRepository userRepository;   
+	private UserRepository userRepository;
 
 	@Mock
 	private TransactionHandler transactionHandler;
@@ -73,13 +71,11 @@ public class ReceiptControllerTest {
 	public void testUpadteItemWithWrongIndex() {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item item = new Item("Item", 2.2, 2, users);
+		doThrow(IllegalIndex.class).when(receiptManager).updateItem(0, item);
+		
+		receiptController.updateItem(item, 0);
+		verify(receiptView).showError("Item index not in list");
 
-		try {
-			receiptController.updateItem(item, 0);
-			fail("Illegal index");
-		} catch (IllegalIndex e) {
-			assertEquals("Index not in list", e.getMessage());
-		}
 	}
 
 	@Test
@@ -90,7 +86,7 @@ public class ReceiptControllerTest {
 		int index = 0;
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item newItem = new Item(name, price, quantity, users);
-		
+
 		when(receiptManager.getItemsListSize()).thenReturn(1);
 
 		receiptController.updateItem(newItem, index);
@@ -134,25 +130,25 @@ public class ReceiptControllerTest {
 		verify(receiptManager).saveReceipt();
 		verify(receiptView).goToHome();
 	}
-	
+
 	@Test
 	public void testGetUserReturnUserListCallingUserRepository() {
-		User pippo = new User("pippo","psw");
-		User pluto = new User("pluto","psw");
-		
+		User pippo = new User("pippo", "psw");
+		User pluto = new User("pluto", "psw");
+
 		when(userRepository.findAll()).thenReturn(Arrays.asList(pippo, pluto));
-		
+
 		List<User> users = receiptController.getUsers();
-		
-		verify(userRepository).findAll();		
+
+		verify(userRepository).findAll();
 		assertThat(users).containsExactlyInAnyOrder(pippo, pluto);
 	}
-	
+
 	@Test
 	public void testUploadReceiptManagerNotifyReceiptViewToUpdateAttributes() {
-		
+
 		receiptController.uploadReceiptManager(receiptManager);
-		
+
 		verify(receiptView).descriptionUploaded(receiptManager.getDescription());
 		verify(receiptView).showCurrentItemsList(receiptManager.getItems());
 		verify(receiptView).dateUploaded(receiptManager.getTimestamp());
