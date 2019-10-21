@@ -13,7 +13,6 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -110,7 +109,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			entityManager.clear();
-			
+
 			showHistoryController.showHistory();
 
 			return showHistoryViewSwing;
@@ -125,9 +124,8 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		window.list("receiptList").selectItem(0);
 		String[] receiptListString = window.list("receiptList").contents();
 		String[] itemListString = window.list("itemList").contents();
-		assertThat(receiptListString)
-				.isEqualTo(Arrays.asList(firstReceiptDebtor2.toString(), thirdReceiptDebtor1.toString(),
-						secondReceiptDebtor1.toString(), firstReceiptDebtor1.toString()).toArray());
+		assertThat(receiptListString).containsExactlyInAnyOrder(firstReceiptDebtor2.toString(),
+				thirdReceiptDebtor1.toString(), secondReceiptDebtor1.toString(), firstReceiptDebtor1.toString());
 		assertThat(itemListString).containsExactlyInAnyOrder(firstReceiptDebtor2.getItem(0).toString(),
 				firstReceiptDebtor2.getItem(1).toString());
 	}
@@ -184,7 +182,6 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			showHistoryController.showHistory();
 		});
-		Pause.pause(20000);
 		window.list("receiptList").selectItem(firstReceiptDebtor1.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
 		window.list("receiptList").selectItem(secondReceiptDebtor1.toString());
@@ -208,7 +205,6 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 		});
 		window.list("receiptList").selectItem(firstReceiptDebtor1.toString());
 		window.button(JButtonMatcher.withText("Update receipt")).click();
-		Pause.pause(20000);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}
 }
