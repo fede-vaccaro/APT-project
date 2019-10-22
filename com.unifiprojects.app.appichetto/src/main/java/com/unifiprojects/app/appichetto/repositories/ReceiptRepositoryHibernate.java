@@ -12,7 +12,7 @@ import com.unifiprojects.app.appichetto.models.User;
 
 public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
-	public EntityManager entityManager;
+	private EntityManager entityManager;
 
 	@Inject
 	public ReceiptRepositoryHibernate(EntityManager entityManager) {
@@ -27,7 +27,7 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 			entityManager.persist(receipt);
 		}
 		
-		receipt.getAccountings().forEach(entityManager::merge);
+		// receipt.getAccountings().forEach(entityManager::merge);
 	}
 
 	@Override

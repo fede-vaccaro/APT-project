@@ -1,6 +1,6 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import javax.persistence.EntityManager;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -14,13 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.*;
-
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
@@ -80,8 +76,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testInjection() {
-		Pause.pause(2000000);
-		
 		assertThat(homepageSwingView.payReceiptsView).isNotNull();
 		PayReceiptsViewSwing payReceiptsViewSwing = (PayReceiptsViewSwing)homepageSwingView.payReceiptsView;
 		assertThat( payReceiptsViewSwing .getController()).isNotNull();

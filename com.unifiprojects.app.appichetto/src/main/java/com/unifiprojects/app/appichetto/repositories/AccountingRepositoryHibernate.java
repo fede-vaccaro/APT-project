@@ -11,7 +11,7 @@ import com.unifiprojects.app.appichetto.models.User;
 
 public class AccountingRepositoryHibernate implements AccountingRepository {
 
-	public EntityManager entityManager;
+	private EntityManager entityManager;
 
 	@Inject
 	public AccountingRepositoryHibernate(EntityManager entityManager) {

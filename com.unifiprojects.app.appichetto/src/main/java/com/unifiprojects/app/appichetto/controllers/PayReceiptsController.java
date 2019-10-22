@@ -28,7 +28,7 @@ public class PayReceiptsController {
 	}
 
 	private PaymentManager paymentManager;
-	private ReceiptRepository receiptRepository;		
+	private ReceiptRepository receiptRepository;
 	private PayReceiptsView payViewReceiptsView;
 
 	@Inject
@@ -40,7 +40,7 @@ public class PayReceiptsController {
 		this.transaction = transaction;
 	}
 
-	public void showUnpaidReceiptsOfLoggedUser(User loggedUser) {
+	public void showUnpaidReceipts(User loggedUser) {
 		ArrayList<Receipt> unpaidReceipts = new ArrayList<>(receiptRepository.getAllUnpaidReceiptsOf(loggedUser));
 		Comparator<Receipt> dateComparator = (Receipt r1, Receipt r2) -> r1.getTimestamp().compareTo(r2.getTimestamp());
 		unpaidReceipts.sort(dateComparator.reversed());
@@ -49,15 +49,13 @@ public class PayReceiptsController {
 
 	public void payAmount(double enteredAmount, User loggedUser, User buyerUser) {
 		try {
-			transaction.doInTransaction(() -> {
-				paymentManager.makePayment(enteredAmount, loggedUser, buyerUser);
-			});
+			transaction.doInTransaction(() -> paymentManager.makePayment(enteredAmount, loggedUser, buyerUser));
 		} catch (UncommittableTransactionException e) {
 			payViewReceiptsView.showErrorMsg("Something went wrong while committing the payment.");
 		} catch (IllegalArgumentException e) {
 			payViewReceiptsView.showErrorMsg(e.getMessage());
 		}
-		showUnpaidReceiptsOfLoggedUser(loggedUser);
+		showUnpaidReceipts(loggedUser);
 
 	}
 

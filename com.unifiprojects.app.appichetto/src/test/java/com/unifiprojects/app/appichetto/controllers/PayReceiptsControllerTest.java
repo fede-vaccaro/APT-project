@@ -69,7 +69,7 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList(receipt);
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		payReceiptsController.showUnpaidReceipts(loggedUser);
 		verify(payReceiptsView).showReceipts(unpaids);
 	}
 
@@ -88,7 +88,7 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList(receipt2, receipt1, receipt3);
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		payReceiptsController.showUnpaidReceipts(loggedUser);
 
 		List<Receipt> unpaidsOrdered = Arrays.asList(receipt3, receipt2, receipt1);
 
@@ -103,7 +103,7 @@ public class PayReceiptsControllerTest {
 		List<Receipt> unpaids = Arrays.asList();
 		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
 
-		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		payReceiptsController.showUnpaidReceipts(loggedUser);
 		verify(payReceiptsView).showReceipts(unpaids);
 		verifyNoMoreInteractions(payReceiptsView);
 

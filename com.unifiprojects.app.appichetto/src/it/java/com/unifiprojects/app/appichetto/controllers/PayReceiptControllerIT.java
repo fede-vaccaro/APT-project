@@ -94,7 +94,7 @@ public class PayReceiptControllerIT {
 	
 	@Test
 	public void testShowUnpaidReceipts() {
-		payReceiptsController.showUnpaidReceiptsOfLoggedUser(loggedUser);
+		payReceiptsController.showUnpaidReceipts(loggedUser);
 		
 		verify(payReceiptsView).showReceipts(Arrays.asList(thirdReceipt, secondReceipt, firstReceipt));
 	}
