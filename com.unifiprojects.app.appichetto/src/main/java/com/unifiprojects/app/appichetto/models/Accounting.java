@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.models;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -10,7 +11,7 @@ public class Accounting {
 
 	@Override
 	public String toString() {
-		return "Accounting [user=" + user.getUsername() + ", amount=" + amount + ", paid=" + paid + "]";
+		return "Accounting [user=" + user.getUsername() + ", amount=" + amount + "]";
 	}
 
 	@Override
@@ -20,7 +21,6 @@ public class Accounting {
 		long temp;
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + (paid ? 1231 : 1237);
 		result = prime * result + ((receipt == null) ? 0 : receipt.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
@@ -36,8 +36,6 @@ public class Accounting {
 			return false;
 		Accounting other = (Accounting) obj;
 		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
-			return false;
-		if (paid != other.paid)
 			return false;
 		if (receipt == null) {
 			if (other.receipt != null)
@@ -60,20 +58,17 @@ public class Accounting {
 	private User user;
 
 	private double amount;
-	boolean paid;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Receipt receipt;
 
 	public Accounting() {
-		this.paid = false;
 		this.amount = 0.0;
 		this.receipt = null;
 		this.user = null;
 	}
 
 	public Accounting(User user) {
-		this.paid = false;
 		this.amount = 0.0;
 		this.receipt = null;
 		this.user = user;
@@ -82,7 +77,6 @@ public class Accounting {
 	public Accounting(User user, double amount) {
 		this.user = user;
 		this.amount = amount;
-		this.paid = false;
 		this.receipt = null;
 	}
 
@@ -98,10 +92,6 @@ public class Accounting {
 		return amount;
 	}
 
-	public boolean isPaid() {
-		return paid;
-	}
-
 	public Receipt getReceipt() {
 		return receipt;
 	}
@@ -114,16 +104,18 @@ public class Accounting {
 		this.amount = amount;
 	}
 
-	public void setPaid(boolean paid) {
-		this.paid = paid;
-	}
-
 	public void setReceipt(Receipt receipt) {
 		this.receipt = receipt;
 	}
 
 	public void addAmount(double amount) {
 		this.amount = Math.round(100 * (this.amount + amount))/100.0;
+	}
+
+	public boolean isPaid() {
+		if (this.amount == 0.0)
+			return true;
+		return false;
 	}
 
 }

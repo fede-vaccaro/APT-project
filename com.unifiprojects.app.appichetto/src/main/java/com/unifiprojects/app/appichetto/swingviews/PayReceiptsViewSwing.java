@@ -30,12 +30,13 @@ import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.utils.CustomToStringReceipt;
+import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptCellRenderer;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
 public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayReceiptsView {
@@ -50,18 +51,25 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	public void setController(PayReceiptsController payReceiptsController) {
 		this.payReceiptsController = payReceiptsController;
 	}
+	
+	public PayReceiptsController getController() {
+		return payReceiptsController;
+	}
 
 	private JFrame frame;
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
-	private JList<CustomToStringReceipt> receiptList;
-	private DefaultListModel<CustomToStringReceipt> receiptListModel;
+	private JList<Receipt> receiptList;
+	DefaultListModel<Receipt> receiptListModel;
 	private JComboBox<User> userSelection;
-	private DefaultComboBoxModel<User> userComboBoxModel;
+	DefaultComboBoxModel<User> userComboBoxModel;
 	private DefaultListModel<Item> itemListModel;
 	private JLabel lblTotalForThis;
 	private JLabel lblTotaldebttouser;
+	
+	@Inject
 	private User loggedUser;
+	
 	private Double enteredAmount;
 
 	public List<Accounting> getAccountings() {
@@ -82,14 +90,6 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 
 	public JFrame getFrame() {
 		return frame;
-	}
-
-	public DefaultListModel<CustomToStringReceipt> getReceiptListModel() {
-		return receiptListModel;
-	}
-
-	public DefaultComboBoxModel<User> getUserComboBoxModel() {
-		return userComboBoxModel;
 	}
 
 	private List<Receipt> unpaids;
@@ -224,11 +224,12 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 
 		receiptListModel = new DefaultListModel<>();
 		receiptList = new JList<>(receiptListModel);
+		receiptList.setCellRenderer(new ReceiptCellRenderer());
 		receiptList.setName("receiptList");
 		receiptList.addListSelectionListener(e -> {
 			int selectedIndex = receiptList.getSelectedIndex();
 			if (selectedIndex >= 0) {
-				Receipt receipt = receiptListModel.get(selectedIndex).getReceipt();
+				Receipt receipt = receiptListModel.get(selectedIndex);
 				showItems(receipt.getItems());
 				displayReceiptAmount(receipt);
 			}
@@ -330,7 +331,7 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 		User selectedUser = (User) userComboBoxModel.getSelectedItem();
 		receiptListModel.clear();
 		unpaids.stream().filter(r -> r.getBuyer().equals(selectedUser))
-				.forEach(r -> receiptListModel.addElement(new CustomToStringReceipt(r)));
+				.forEach(receiptListModel::addElement);
 		receiptList.setSelectedIndex(0);
 	}
 

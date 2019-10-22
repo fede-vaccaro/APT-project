@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
@@ -13,6 +14,7 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
 	private EntityManager entityManager;
 
+	@Inject
 	public ReceiptRepositoryHibernate(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
@@ -24,12 +26,14 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 		} else {
 			entityManager.persist(receipt);
 		}
+		
+		// receipt.getAccountings().forEach(entityManager::merge);
 	}
 
 	@Override
 	public List<Receipt> getAllUnpaidReceiptsOf(User user) {
-		return entityManager.createQuery("from Accounting where paid=:paid and user=:user", Accounting.class)
-				.setParameter("paid", false).setParameter("user", user).getResultList().stream()
+		return entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+				.setParameter("amount", 0.0).setParameter("user", user).getResultList().stream()
 				.map(Accounting::getReceipt).collect(Collectors.toList());
 
 	}
@@ -53,7 +57,9 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 			toBeRemoved = entityManager.merge(receipt);
 		}
 
+
 		entityManager.remove(toBeRemoved);
+
 	}
 
 }

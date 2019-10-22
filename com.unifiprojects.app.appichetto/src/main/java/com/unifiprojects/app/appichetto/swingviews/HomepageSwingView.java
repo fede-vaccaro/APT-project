@@ -9,15 +9,21 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import com.google.inject.Inject;
+
 public class HomepageSwingView implements Observer {
 	/**
 	 * 
 	 */
 	private JFrame frame;
-	private ObservableFrameSwing loginView;
-	private ObservableFrameSwing receiptView;
-	private ObservableFrameSwing payReceiptsView;
-	private ObservableFrameSwing showHistoryView;
+	
+	ObservableFrameSwing loginView;
+	
+	ObservableFrameSwing receiptView;
+	
+	ObservableFrameSwing payReceiptsView;
+	
+	ObservableFrameSwing showHistoryView;
 
 //	/**
 //	 * Launch the application.
@@ -52,11 +58,23 @@ public class HomepageSwingView implements Observer {
 	public void setHistoryViewSwing(ObservableFrameSwing historyViewSwing) {
 		this.showHistoryView = historyViewSwing;
 	}
+	
+	@Inject
+	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing) {
+		this.payReceiptsView = payReceiptsViewSwing;
+		payReceiptsViewSwing.addObserver(this);
+		
+		initialize();
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public HomepageSwingView() {
+		initialize();
+	}
+
+	private void initialize() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
@@ -117,7 +135,6 @@ public class HomepageSwingView implements Observer {
 		gbc_btnLogOut.gridx = 3;
 		gbc_btnLogOut.gridy = 8;
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
-
 	}
 
 	@Override

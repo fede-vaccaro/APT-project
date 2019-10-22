@@ -73,16 +73,17 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
+	public void testLogOutButtonShowOnlyLogInView() {
+		window.button(JButtonMatcher.withText("Log Out")).click();
+		verify(loginView).show();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+	}
+
+	@Test
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
 		verify(historyView).show();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
-	@Test
-	public void testLogOutButtonShowOnlyLogInView() {
-		window.button(JButtonMatcher.withText("Log Out")).click();
-		verify(loginView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-	}
 }

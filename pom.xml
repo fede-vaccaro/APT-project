@@ -17,6 +17,7 @@
 		<javaee-api.version>7.0</javaee-api.version>
 		<testcontainer.version>1.10.5</testcontainer.version>
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
+		<guice.version>4.2.2</guice.version>
 		<sonar.exclusions>**/models/**, **/exceptions/**,
 			**/swingviews/utils/**</sonar.exclusions>
 	</properties>
@@ -93,29 +94,6 @@
 								<sources>
 									<source>src/it/java</source>
 								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<executions>
-						<execution>
-							<id>add-it-resources</id>
-							<phase>pre-integration-test</phase>
-							<goals>
-								<goal>copy-resources</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>target/IT_TEST-classes</outputDirectory>
-								<resources>
-									<resource>
-										<directory>src/it/resources</directory>
-									</resource>
-								</resources>
 							</configuration>
 						</execution>
 					</executions>

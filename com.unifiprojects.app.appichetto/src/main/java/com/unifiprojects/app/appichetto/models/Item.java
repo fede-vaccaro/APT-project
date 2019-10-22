@@ -1,11 +1,13 @@
 package com.unifiprojects.app.appichetto.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class Item {
@@ -40,6 +42,7 @@ public class Item {
 	private Integer quantity;
 	private Double price;
 
+	@OrderColumn
 	@ManyToMany
 	private List<User> owners;
 
@@ -62,6 +65,13 @@ public class Item {
 	 * @Override public String toString() { return this.name + " x" + this.quantity;
 	 * }
 	 */
+	
+	public void removeOwner(User owner) {
+		if(!(owners instanceof ArrayList<?>))
+			this.owners = new ArrayList<User>(owners);
+		this.owners.remove(owner);
+
+	}
 
 	public Integer getQuantity() {
 		return quantity;

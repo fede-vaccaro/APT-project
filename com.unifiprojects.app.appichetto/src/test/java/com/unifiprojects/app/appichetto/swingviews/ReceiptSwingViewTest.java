@@ -18,7 +18,6 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -492,7 +491,6 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> receiptSwingView.dateUploaded(timestamp));
 		window.textBox("txtDate").requireText(timestamp.getTime().toString());
-		Pause.pause(10000);
 	}
 
 	@Test

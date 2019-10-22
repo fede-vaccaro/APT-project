@@ -18,12 +18,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
+import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
+import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
@@ -49,11 +56,23 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 	private User debtor2;
 
 	private static EntityManager entityManager;
+	private static Injector injector;
 
 	@BeforeClass
 	public static void setupEntityManager() {
-		baseTest.setupEntityManager();
-		entityManager = baseTest.getEntityManager();
+
+		Module repositoriesModule = new RepositoriesModule();
+
+		Module entityManagerModule = new EntityManagerModule();
+
+		Module showHistoryModule = new ShowHistoryModule();
+
+		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
+
+		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
+		entityManager = persistenceInjector.getInstance(EntityManager.class);
+
+		injector = persistenceInjector.createChildInjector(repositoriesModule, showHistoryModule);
 	}
 
 	@AfterClass
@@ -65,21 +84,14 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
-			ReceiptRepository receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-			UserRepository userRepository = new UserRepositoryHibernate(entityManager);
-
-			showHistoryViewSwing = new ShowHistoryViewSwing();
-			showHistoryController = new ShowHistoryController(receiptRepository, showHistoryViewSwing);
-			showHistoryController.setTransaction(new HibernateTransaction(entityManager));
-			showHistoryController.setUpdateReceiptService(new UpdateReceiptService(receiptRepository, userRepository));
-			showHistoryViewSwing.setController(showHistoryController);
-
 			loggedUser = new User("logged", "pw");
 
 			entityManager.getTransaction().begin();
 			entityManager.persist(loggedUser);
 			entityManager.getTransaction().commit();
 
+			showHistoryViewSwing = injector.getInstance(ShowHistoryViewSwing.class);
+			showHistoryController = showHistoryViewSwing.getController();
 			showHistoryController.setLoggedUser(loggedUser);
 
 			debtor1 = new User("payer", "pw");

@@ -7,23 +7,16 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 
 public class HibernateTransaction implements TransactionHandler {
 
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
-
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
 	private static final Logger LOGGER = LogManager.getLogger(HibernateTransaction.class);
-
 	
 	EntityManager entityManager;
 
+	@Inject
 	public HibernateTransaction(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
@@ -38,6 +31,9 @@ public class HibernateTransaction implements TransactionHandler {
 			entityManager.getTransaction().rollback();
 			LOGGER.log(Level.ERROR, String.format("Unable to commit transaction: %s", re.getMessage()));
 			throw new UncommittableTransactionException("Unable to commit the transaction");
+		} finally {
+			if(entityManager.getTransaction().isActive())
+				entityManager.getTransaction().rollback();
 		}
 
 	}

@@ -239,4 +239,7 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		this.showHistoryController = showHistoryController;
 	}
 
+	public ShowHistoryController getController() {
+		return showHistoryController;
+	}
 }

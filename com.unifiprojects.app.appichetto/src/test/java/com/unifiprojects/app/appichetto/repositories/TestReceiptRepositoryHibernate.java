@@ -82,6 +82,7 @@ public class TestReceiptRepositoryHibernate {
 	}
 
 	@Test
+	//TODO: this test is part of the update feature, which is not currently available. before implementing it, this test should be fixed for passing
 	public void testSaveReceiptUpdateCorrectlyTheReceiptWhenAccountingsUsersAndItemsHaveBeenAlreadyPersisted() {
 		User debtorUser = new User("user1", "pw");
 		User creditorUser = new User("user2", "pw");
@@ -102,11 +103,6 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.getTransaction().begin();
 		entityManager.persist(debtorUser);
 		entityManager.persist(creditorUser);
-
-		entityManager.persist(item1);
-		entityManager.persist(item2);
-
-		entityManager.persist(accountingToCreditorUser);
 		entityManager.persist(receipt1);
 
 		entityManager.getTransaction().commit();
@@ -128,6 +124,8 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.clear();
 
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
+		assertThat(entityManager.find(Accounting.class, accountingToCreditorUser.getId())).isNull();
+		assertThat(entityManager.find(Item.class, item2.getId())).isNull();
 		assertThat(foundReceipt.getItems()).containsExactlyInAnyOrder(item1, newItem);
 		assertThat(foundReceipt.getAccountings()).containsExactlyInAnyOrder(newAccounting);
 		assertThat(foundReceipt).isEqualTo(receipt1);
@@ -185,7 +183,8 @@ public class TestReceiptRepositoryHibernate {
 		Accounting accountingToDebtorUserForReceipt1 = new Accounting(debtorUser, item1.getPrice() / 2.0);
 		Accounting accountingToDebtorUserForReceipt2 = new Accounting(debtorUser, item2.getPrice() / 2.0);
 
-		accountingToDebtorUserForReceipt2.setPaid(true);
+		//accountingToDebtorUserForReceipt2.setPaid(true);
+		accountingToDebtorUserForReceipt2.setAmount(0.0);
 
 		receipt1.setBuyer(creditorUser);
 		receipt1.setTimestamp(new GregorianCalendar(2019, 8, 10));
@@ -286,7 +285,8 @@ public class TestReceiptRepositoryHibernate {
 
 		Receipt receipt = new Receipt();
 		Accounting accountingToDebtor = new Accounting(debtorUser, item1.getPrice() / 2.0 + item2.getPrice() / 2.0);
-		accountingToDebtor.setPaid(true);
+		//accountingToDebtor.setPaid(true);
+		accountingToDebtor.setAmount(0.0);
 
 		receipt.setBuyer(creditorUser);
 		receipt.setTimestamp(new GregorianCalendar(2019, 8, 10));
