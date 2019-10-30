@@ -44,8 +44,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testUpdateSetFrameVisible() {
-		homepageSwingView.update(null, null);
-		
+		homepageSwingView.update();
 		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
 	}
 

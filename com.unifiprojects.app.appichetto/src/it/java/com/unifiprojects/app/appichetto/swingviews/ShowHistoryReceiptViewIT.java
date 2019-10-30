@@ -28,15 +28,8 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
-import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
-import com.unifiprojects.app.appichetto.services.UpdateReceiptService;
-import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {

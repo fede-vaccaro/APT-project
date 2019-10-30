@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
-import com.unifiprojects.app.appichetto.factories.PayReceiptsControllerFactory;
 import com.unifiprojects.app.appichetto.factories.ShowHistoryControllerFactory;
 import com.unifiprojects.app.appichetto.swingviews.ShowHistoryViewSwing;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
