@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -17,6 +18,7 @@ public class CreateDebtsService {
 	private Map<User, Accounting> accountingsMap;
 	private List<Receipt> refundReceipts;
 
+	@Inject
 	public CreateDebtsService() {
 		this.accountingsMap = new HashMap<>();
 		this.refundReceipts = new ArrayList<>();
