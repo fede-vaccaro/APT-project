@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -17,6 +18,7 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.services.CreateDebtsService;
 
 public class ReceiptManager {
+	
 	private Receipt receipt;
 	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountingsMap;
@@ -29,9 +31,18 @@ public class ReceiptManager {
 		this.accountingsMap = new HashMap<>();
 		this.createDebtsService = new CreateDebtsService();
 	}
-
-	public ReceiptManager(ReceiptRepository receiptRepository) {
+	
+	
+	public ReceiptManager(ReceiptRepository receiptRepository) {														
 		this.receiptRepository = receiptRepository;
+		this.accountingsMap = new HashMap<>();
+	}
+
+	@Inject
+	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, CreateDebtsService createDebtsService) {
+		this.receipt = receipt;
+		this.receiptRepository = receiptRepository;
+		this.createDebtsService = createDebtsService;
 		this.accountingsMap = new HashMap<>();
 	}
 
@@ -90,6 +101,10 @@ public class ReceiptManager {
 	
 	public void setCreateDebtsService(CreateDebtsService createDebtsService) {
 		this.createDebtsService = createDebtsService;
+	}	
+	
+	public void setBuyer(User buyer) {
+		receipt.setBuyer(buyer);
 	}
 
 	public int getItemsListSize() {

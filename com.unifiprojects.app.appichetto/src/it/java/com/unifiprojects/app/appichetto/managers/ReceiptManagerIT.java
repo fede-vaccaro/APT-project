@@ -11,28 +11,31 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.models.Accounting;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 
 public class ReceiptManagerIT {
-	private static MVCBaseTest baseTest = new MVCBaseTest();
+	private static MVCBaseTest baseTest;// = new MVCBaseTest();
 	private static EntityManager entityManager;
-
 	private ReceiptRepository receiptRepository;
-
 	private User buyer;
-
-	@InjectMocks
-	private ReceiptManager receiptManager;
-
+	private static ReceiptManager receiptManager;
+	private static Injector baseTestInjector;
+	
 	@BeforeClass
 	public static void setupEntityManager() {
-		baseTest.setupEntityManager();
+		//baseTest.setupEntityManager();
+		baseTestInjector = Guice.createInjector(new EntityManagerModule());
+		baseTest = baseTestInjector.getInstance(MVCBaseTest.class);
 	}
 
 	@AfterClass
@@ -46,9 +49,11 @@ public class ReceiptManagerIT {
 		baseTest.wipeTablesBeforeTest();
 		entityManager = baseTest.getEntityManager();
 		buyer = new User("Pippo", "psw");
-		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-		receiptManager = new ReceiptManager(buyer, receiptRepository);
-
+		Injector repositoryInjector = baseTestInjector.createChildInjector(new RepositoriesModule());
+		receiptRepository =  repositoryInjector.getInstance(ReceiptRepository.class);
+		receiptManager = repositoryInjector.createChildInjector(new AbstractModule() {}).getInstance(ReceiptManager.class);
+		receiptManager.setBuyer(buyer);
+		
 		entityManager.getTransaction().begin();
 		entityManager.persist(buyer);
 		entityManager.getTransaction().commit();
@@ -67,9 +72,13 @@ public class ReceiptManagerIT {
 		entityManager.persist(mario);
 		entityManager.getTransaction().commit();
 		
+		entityManager.getTransaction().begin();
 		Long receiptId = receiptManager.saveReceipt();
+		entityManager.getTransaction().commit();
+		entityManager.clear();
 		
-		assertThat(receiptRepository.getById(receiptId)).isEqualTo(receiptManager.getReceipt());
+		System.out.println(receiptId);
+		assertThat(entityManager.find(Receipt.class, receiptId)).isEqualTo(receiptManager.getReceipt());
 	}
 
 }

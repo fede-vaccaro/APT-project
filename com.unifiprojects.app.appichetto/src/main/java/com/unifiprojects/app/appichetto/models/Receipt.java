@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 
+import com.google.inject.Inject;
+
 @Entity
 public class Receipt {
 
@@ -32,12 +34,13 @@ public class Receipt {
 	
 	@OrderColumn
 	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<Item> items = new ArrayList<>();
+	private List<Item> items;
 	
 	@OrderColumn
 	@OneToMany(mappedBy="receipt", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<Accounting> accountingList = new ArrayList<>();
+	private List<Accounting> accountingList;
 
+	@Inject
 	public Receipt() {
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
