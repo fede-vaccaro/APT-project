@@ -5,16 +5,19 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Item;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptController {
+public class ReceiptController implements Controller {
 
 	private ReceiptManager receiptManager;
 	private ReceiptView receiptView;
@@ -26,6 +29,15 @@ public class ReceiptController {
 		this.receiptManager = receiptManager;
 		this.receiptView = receiptView;
 		this.userRepository = userRepository;
+	}
+
+	@Inject
+	public ReceiptController(ReceiptManager receiptManager, @Assisted ReceiptView receiptView,
+			UserRepository userRepository, TransactionHandler transactionHandler) {
+		this.receiptManager = receiptManager;
+		this.receiptView = receiptView;
+		this.userRepository = userRepository;
+		this.transactionHandler = transactionHandler;
 	}
 
 	public ReceiptController(ReceiptView receiptView, UserRepository userRepository) {
@@ -54,10 +66,6 @@ public class ReceiptController {
 		LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 	}
 
-	public List<User> getUsers() {
-		return userRepository.findAll();
-	}
-
 	public void deleteItem(Item item) {
 		receiptManager.deleteItem(item);
 		receiptView.itemDeleted(item);
@@ -72,12 +80,20 @@ public class ReceiptController {
 			receiptView.showError("Something went wrong while saving receipt.");
 		}
 	}
-
-	public void uploadReceiptManager(ReceiptManager receiptManager) {
-		this.receiptManager = receiptManager;
+	
+	public void uploadReceipt(Receipt receipt) {
+		receiptManager.uploadReceipt(receipt);
 		receiptView.descriptionUploaded(receiptManager.getDescription());
 		receiptView.showCurrentItemsList(receiptManager.getItems());
 		receiptView.dateUploaded(receiptManager.getTimestamp());
 	}
 
+	public List<User> getUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public void setLoggedUser(User user) {
+		receiptManager.setBuyer(user);
+	}
 }

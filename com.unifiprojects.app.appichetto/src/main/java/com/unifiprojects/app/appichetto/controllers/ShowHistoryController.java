@@ -9,26 +9,15 @@ import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionExcep
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.services.AppIchettoService;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryController {
+public class ShowHistoryController implements Controller{
 
 	private ReceiptRepository receiptRepository;
 	private ShowHistoryView showHistoryView;
 	private TransactionHandler transaction;
-	private AppIchettoService updateReceiptService;
-
-	public void setTransaction(TransactionHandler transaction) {
-		this.transaction = transaction;
-	}
-
 	private User loggedUser;
-
-	public void setLoggedUser(User loggedUser) {
-		this.loggedUser = loggedUser;
-	}
 
 	@Inject
 	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView, TransactionHandler transaction) {
@@ -60,12 +49,11 @@ public class ShowHistoryController {
 		this.showHistory();
 	}
 	
-	public void setUpdateReceiptService(AppIchettoService updateReceiptService) {
-		this.updateReceiptService = updateReceiptService;
+	public void setTransaction(TransactionHandler transaction) {
+		this.transaction = transaction;
 	}
 
-	public void startUpdateReceiptService(Receipt selectedReceipt) {
-		updateReceiptService.execute(selectedReceipt);		
+	public void setLoggedUser(User loggedUser) {
+		this.loggedUser = loggedUser;
 	}
-
 }

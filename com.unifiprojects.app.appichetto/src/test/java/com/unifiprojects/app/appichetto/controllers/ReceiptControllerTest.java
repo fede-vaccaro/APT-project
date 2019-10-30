@@ -24,6 +24,7 @@ import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Item;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionCommands;
@@ -146,9 +147,11 @@ public class ReceiptControllerTest {
 
 	@Test
 	public void testUploadReceiptManagerNotifyReceiptViewToUpdateAttributes() {
+		Receipt receipt = new Receipt();
+		
+		receiptController.uploadReceipt(receipt);
 
-		receiptController.uploadReceiptManager(receiptManager);
-
+		verify(receiptManager).uploadReceipt(receipt);
 		verify(receiptView).descriptionUploaded(receiptManager.getDescription());
 		verify(receiptView).showCurrentItemsList(receiptManager.getItems());
 		verify(receiptView).dateUploaded(receiptManager.getTimestamp());
