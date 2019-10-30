@@ -461,7 +461,7 @@ public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptVie
 		txtPrice.addKeyListener(btnUpdateEnabled);
 		txtName.addKeyListener(btnSaveEnabled);
 		txtName.addKeyListener(btnUpdateEnabled);
-
+		
 		this.frame.pack();
 
 	}
@@ -476,4 +476,14 @@ public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptVie
 		txtDate.setText(timestamp.getTime().toString());				
 	}
 
+	public ReceiptController getController() {
+		return receiptController;
+	}
+
+	@Override
+	public void updateData() {
+		setUsers();
+	}
+	
+	
 }
