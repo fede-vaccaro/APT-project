@@ -3,6 +3,8 @@ package com.unifiprojects.app.appichetto.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.User;
@@ -17,7 +19,8 @@ public class LoginController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 	
-	public LoginController(TransactionHandler transaction, UserRepository userRepository, LoginView loginView) {
+	@Inject
+	public LoginController(TransactionHandler transaction, UserRepository userRepository,@Assisted LoginView loginView) {
 		this.transaction = transaction;
 		this.userRepository = userRepository;
 		this.loginView = loginView;
@@ -27,7 +30,7 @@ public class LoginController {
 		User user = userRepository.findByUsername(username);
 		if (user != null) {
 			if (user.getPassword().equals(password)) {
-				loginView.goToHome();
+				loginView.goToHome(user);
 			}else {
 				loginView.showErrorMsg("Wrong password!");
 			}
@@ -41,7 +44,7 @@ public class LoginController {
 		try {
 			User newUser = new User(username, password);
 			transaction.doInTransaction(()->userRepository.save(newUser));
-			loginView.goToHome();
+			loginView.goToHome(newUser);
 		}catch(AlreadyExistentException e) {
 			LOGGER.info(e.getMessage());
 			loginView.showErrorMsg("Username already picked. Choice another username.");

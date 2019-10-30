@@ -12,7 +12,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+import com.unifiprojects.app.appichetto.controllers.Controller;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
+import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginViewSwing extends ObservableFrameSwing implements LoginView{
@@ -27,6 +30,7 @@ public class LoginViewSwing extends ObservableFrameSwing implements LoginView{
 		return frmAppichetto;
 	}
 
+	@Inject
 	public LoginViewSwing() {
 		initialize();
 	}
@@ -108,4 +112,16 @@ public class LoginViewSwing extends ObservableFrameSwing implements LoginView{
 		SwingUtilities.invokeLater(() -> errorMsg.setText(message));
 	}
 	
+	@Override
+	public void goToHome(User loggedUser) {
+		getHomepageView().update(loggedUser);
+	}
+
+	@Override
+	public Controller getController() {
+		return null;
+	}
+
+	@Override
+	public void updateData() {}
 }

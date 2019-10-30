@@ -388,4 +388,9 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	public void showErrorMsg(String msg) {
 		lblErrorMsg.setText(msg);
 	}
+
+	@Override
+	public void updateData() {
+		
+	}
 }

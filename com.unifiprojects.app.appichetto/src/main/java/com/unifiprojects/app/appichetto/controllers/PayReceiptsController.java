@@ -16,20 +16,20 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayReceiptsController {
+public class PayReceiptsController implements Controller{
 
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsController.class);
 
-	private TransactionHandler transaction;
-
-	public void setTransactionHandler(TransactionHandler transaction) {
-		this.transaction = transaction;
-	}
-
+	private TransactionHandler transaction;	
 	private PaymentManager paymentManager;
 	private ReceiptRepository receiptRepository;
 	private PayReceiptsView payViewReceiptsView;
+	private User loggedUser;
+	
+	public void setTransactionHandler(TransactionHandler transaction) {
+		this.transaction = transaction;
+	}
 
 	@Inject
 	public PayReceiptsController(PaymentManager paymentManager, ReceiptRepository receiptRepository,
@@ -56,7 +56,11 @@ public class PayReceiptsController {
 			payViewReceiptsView.showErrorMsg(e.getMessage());
 		}
 		showUnpaidReceipts(loggedUser);
+	}
 
+	@Override
+	public void setLoggedUser(User user) {
+		this.loggedUser = user;
 	}
 
 }

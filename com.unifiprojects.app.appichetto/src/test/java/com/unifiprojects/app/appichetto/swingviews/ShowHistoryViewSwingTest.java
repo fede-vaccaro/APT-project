@@ -34,6 +34,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Mock
 	ShowHistoryController showHistoryController;
+	@Mock
+	HomepageSwingView homepageSwingView;
 
 	private FrameFixture window;
 
@@ -391,35 +393,28 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenUpdateButtonIsClickedThisViewIsDispose() {
+	public void testWhenUpdateButtonIsClickedUpdateRightReceiptIsPassedAndThisFrameIsDisposed() {
 		setupReceiptsAndUsers();
+		showHistoryViewSwing.setHomepageSwingView(homepageSwingView);
+		ArgumentCaptor<Receipt> receiptCaptor = ArgumentCaptor.forClass(Receipt.class);
 
 		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
-
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
-
+		
 		window.list("receiptList").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
-
+		verify(homepageSwingView).update(receiptCaptor.capture());
+		
+		assertThat(receiptCaptor.getValue()).isEqualTo(receipt0);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}
-
+	
 	@Test
-	@GUITest
-	public void testWhenUpdateButtonIsClickedUpdateReceiptServiceIsCalledWithSelectedReceiptAsArgument() {
-		setupReceiptsAndUsers();
+	public void testUpdateDataCallControllerShowHistory() {
 		
-		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
-		ArgumentCaptor<Receipt> selectedReceiptCaptor = ArgumentCaptor.forClass(Receipt.class);
-
-		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
+		showHistoryViewSwing.updateData();
 		
-		window.list("receiptList").selectItem(0);
-		
-		window.button(JButtonMatcher.withText("Update receipt")).click();
-		
-		verify(showHistoryController).startUpdateReceiptService(selectedReceiptCaptor.capture());
-		assertThat(selectedReceiptCaptor.getValue()).isEqualTo(receipt0);
+		verify(showHistoryController).showHistory();
 	}
 }

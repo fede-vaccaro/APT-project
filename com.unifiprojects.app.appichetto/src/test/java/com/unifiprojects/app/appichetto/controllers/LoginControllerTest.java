@@ -52,7 +52,7 @@ public class LoginControllerTest {
 
 		loginController.login(username, password);
 
-		verify(loginView).goToHome();
+		verify(loginView).goToHome(testUser);
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(userRepository).save(user);
-		verify(loginView).goToHome();
+		verify(loginView).goToHome(user);
 	}
 
 	@Test

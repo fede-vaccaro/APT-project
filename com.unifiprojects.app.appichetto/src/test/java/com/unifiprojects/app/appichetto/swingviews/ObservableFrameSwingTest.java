@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 
 import javax.swing.JFrame;
 
@@ -11,18 +12,24 @@ import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.swingviews.ObservableFrameSwing;
+import com.unifiprojects.app.appichetto.controllers.Controller;
 
 @RunWith(GUITestRunner.class)
 public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
-	private ObservableFrameSwing observableFrame;
+	@Mock
+	private HomepageSwingView homepageSwingView;
 
+	private ObservableFrameSwing observableFrame;
+	
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
+			MockitoAnnotations.initMocks(this);
 			observableFrame = new ObservableFrameSwing() {
 
 				JFrame frame = new JFrame();
@@ -30,6 +37,16 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 				@Override
 				public JFrame getFrame() {
 					return frame;
+				}
+
+				@Override
+				public Controller getController() {
+					return null;
+				}
+
+				@Override
+				public void updateData() {
+
 				}
 			};
 			return observableFrame;
@@ -48,8 +65,11 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testWhenClickHomeButtonThemGoToHomePageIsCalled() {
-		window.button(JButtonMatcher.withName("homeBtn")).click();
+		observableFrame.setHomepageSwingView(homepageSwingView);
+		doNothing().when(homepageSwingView).update();
 
+		window.button(JButtonMatcher.withName("homeBtn")).click();
+		
 		assertThat(observableFrame.getFrame().isDisplayable()).isFalse();
 	}
 

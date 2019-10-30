@@ -156,8 +156,7 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		gbc_btnUpdateReceipt.gridy = 8;
 		frame.getContentPane().add(btnUpdateReceipt, gbc_btnUpdateReceipt);
 		btnUpdateReceipt.addActionListener(e -> {
-			getFrame().dispose();
-			showHistoryController.startUpdateReceiptService(receiptList.getSelectedValue());
+			goToHome(receiptList.getSelectedValue());
 		});
 
 		GridBagConstraints gbc_btnRmbutton = new GridBagConstraints();
@@ -241,5 +240,15 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 
 	public ShowHistoryController getController() {
 		return showHistoryController;
+	}
+
+	@Override
+	public void updateData() {
+		showHistoryController.showHistory();
+	}
+	
+	public void goToHome(Receipt receipt) {
+		getHomepageView().update(receipt);
+		getFrame().dispose();
 	}
 }

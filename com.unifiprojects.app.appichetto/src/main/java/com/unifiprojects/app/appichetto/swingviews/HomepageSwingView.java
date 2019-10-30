@@ -3,19 +3,29 @@ package com.unifiprojects.app.appichetto.swingviews;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.unifiprojects.app.appichetto.controllers.HomePageController;
+import com.unifiprojects.app.appichetto.models.Receipt;
+import com.unifiprojects.app.appichetto.models.User;
 
-public class HomepageSwingView implements Observer {
+@Singleton
+public class HomepageSwingView{
 	/**
 	 * 
 	 */
 	private JFrame frame;
+	
+	HomePageController homePageController;
+	
+	List<ObservableFrameSwing> views;
 	
 	ObservableFrameSwing loginView;
 	
@@ -60,9 +70,16 @@ public class HomepageSwingView implements Observer {
 	}
 	
 	@Inject
-	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing) {
+	public HomepageSwingView(LoginViewSwing loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView) {
 		this.payReceiptsView = payReceiptsViewSwing;
-		payReceiptsViewSwing.addObserver(this);
+		this.showHistoryView = showHistoryViewSwing;
+		this.receiptView = receiptSwingView;
+		this.loginView = loginViewSwing;
+		
+		views = new ArrayList<>();
+		homePageController = new HomePageController();
+		
+		views.addAll(Arrays.asList(loginViewSwing, payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView));
 		
 		initialize();
 	}
@@ -137,9 +154,29 @@ public class HomepageSwingView implements Observer {
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
+	public void update() {
 		this.frame.setVisible(true);
 	}
 
+	public void update(User loggedUser) {
+		setLoggedUser(loggedUser);
+		this.frame.setVisible(true);
+	}
+
+	public void update(Receipt receipt) {
+		startReceiptUpload(receipt);
+	}
+	
+	private void startReceiptUpload(Receipt receipt) {//TODO maybe in controller
+		receiptView.show();
+		((ReceiptSwingView)receiptView).getController().uploadReceipt(receipt);
+	}
+	
+	private void setLoggedUser(User loggedUser) {
+		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
+	}
+	
+	public ObservableFrameSwing getLoginView() {
+		return loginView;
+	}
 }
