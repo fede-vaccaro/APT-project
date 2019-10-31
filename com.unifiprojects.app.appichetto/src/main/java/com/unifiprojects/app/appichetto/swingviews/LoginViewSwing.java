@@ -118,11 +118,17 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 		frmAppichetto.dispose();
 	}
 
-	@Override
-	public UserController getController() {
-		return null;
+	public LoginController getLoginController() {
+		return loginController;
 	}
 
 	@Override
-	public void updateData() {}
+	public void updateData() {
+	}
+
+	@Override
+	public UserController getController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

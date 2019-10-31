@@ -439,7 +439,7 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void enterAmountFieldShowErrorIfNonDoubleAreWritten() {
 		window.textBox("enterAmountField").deleteText();
-		window.textBox("enterAmountField").enterText("this is a not-numeric text");
+		window.textBox("enterAmountField").enterText("not num");
 		window.label("errorMsg").requireText("Not valid entered amount.");
 	}
 

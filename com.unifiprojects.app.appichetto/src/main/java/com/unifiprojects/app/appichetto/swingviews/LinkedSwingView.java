@@ -41,8 +41,8 @@ public abstract class LinkedSwingView{
 	}
 
 	public void show() {
-		getFrame().setVisible(true);
 		updateData();
+		getFrame().setVisible(true);
 	}
 	
 }

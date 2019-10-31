@@ -404,8 +404,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		window.list("receiptList").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
-		// verify(homepageSwingView).update(receiptCaptor.capture());
 		
+		verify(showHistoryController).updateReceipt(receiptCaptor.capture());
 		assertThat(receiptCaptor.getValue()).isEqualTo(receipt0);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}

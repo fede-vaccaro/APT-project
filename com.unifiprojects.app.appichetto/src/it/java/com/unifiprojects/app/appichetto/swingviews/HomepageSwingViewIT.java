@@ -63,14 +63,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
 
-		Module homepageModule = new AbstractModule() {
-
-			@Override
-			public void configure() {
-				bind(HomepageSwingView.class).asEagerSingleton();
-			}
-		};
-
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 

@@ -60,7 +60,7 @@ public class LoginControllerIT {
 		
 		loginController.login("username", "pw");
 		
-		verify(loginView).goToHome();
+		verify(loginView).goToHome(user);
 	}
 	
 	@Test
@@ -69,8 +69,8 @@ public class LoginControllerIT {
 		String newPassword = "pw";
 		
 		loginController.signIn(newUsername, newPassword);
-		
-		verify(loginView).goToHome();
+		User newUser = new User(newUsername, newPassword);
+		verify(loginView).goToHome(newUser);
 	}
 	
 }

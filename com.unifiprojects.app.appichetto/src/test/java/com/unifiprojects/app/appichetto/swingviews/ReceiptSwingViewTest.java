@@ -100,7 +100,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 		window.button(JButtonMatcher.withText("Delete")).requireDisabled();
 		window.button(JButtonMatcher.withText("Save Receipt")).requireDisabled();
-		window.button(JButtonMatcher.withText("Home")).requireEnabled();
+		window.button(JButtonMatcher.withText("Back")).requireEnabled();
 	}
 
 	@Test

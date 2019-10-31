@@ -110,7 +110,6 @@ public class HomepageSwingView extends LinkedSwingView {
 		JButton btnCreateReceipt = new JButton("Create Receipt");
 		btnCreateReceipt.addActionListener(e -> {
 			frame.setVisible(false);
-			receiptView.getController().update();
 			receiptView.show();
 		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
@@ -121,7 +120,6 @@ public class HomepageSwingView extends LinkedSwingView {
 
 		JButton btnPayReceipt = new JButton("Pay Receipt");
 		btnPayReceipt.addActionListener(e -> {
-			payReceiptsView.getController().update();
 			frame.setVisible(false);
 			payReceiptsView.show();
 		});
@@ -134,7 +132,6 @@ public class HomepageSwingView extends LinkedSwingView {
 		JButton btnShowHistory = new JButton("Show History");
 		btnShowHistory.addActionListener(e -> {
 			frame.setVisible(false);
-			showHistoryView.getController().update();
 			showHistoryView.show();
 		});
 		GridBagConstraints gbc_btnShowHistory = new GridBagConstraints();
@@ -196,7 +193,6 @@ public class HomepageSwingView extends LinkedSwingView {
 
 	@Override
 	public void updateData() {
-		// TODO Auto-generated method stub
-		
+		getController().update();		
 	}
 }

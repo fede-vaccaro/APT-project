@@ -10,14 +10,24 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.LoginModule;
+import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
+import com.unifiprojects.app.appichetto.modules.ReceiptModule;
+import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
+import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
@@ -33,13 +43,27 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 	private LoginController loginController;
 
 	private UserRepository userRepository;
+	private HomepageSwingView homepageSwingView;
 
 	private static EntityManager entityManager;
+	private static Injector injector;
 
 	@BeforeClass
 	public static void setupEntityManager() {
-		baseTest.setupEntityManager();
-		entityManager = baseTest.getEntityManager();
+		Module repositoriesModule = new RepositoriesModule();
+
+		Module entityManagerModule = new EntityManagerModule();
+
+		Module payReceiptModule = new PayReceiptsModule();
+
+		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
+
+		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
+		entityManager = persistenceInjector.getInstance(EntityManager.class);
+
+		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
+				new ShowHistoryModule(), new LoginModule());
+
 	}
 
 	@AfterClass
@@ -52,12 +76,13 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
 			
-			userRepository = new UserRepositoryHibernate(entityManager);
-			loginViewSwing = new LoginViewSwing();
-
-			loginController = new LoginController(new HibernateTransaction(entityManager), userRepository,
-					loginViewSwing);
-			loginViewSwing.setLoginController(loginController);
+			loginViewSwing = injector.getInstance(LoginViewSwing.class);
+			homepageSwingView = injector.getInstance(HomepageSwingView.class);
+			
+			homepageSwingView.setLoginView(loginViewSwing);
+			loginViewSwing.setLinkedSwingView(homepageSwingView);
+			
+			loginController = loginViewSwing.getLoginController();
 			return loginViewSwing;
 		});
 		window = new FrameFixture(robot(), loginViewSwing.getFrame());
@@ -66,7 +91,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 	
 	@GUITest
 	@Test
-	public void testSignInSaveTheUserOnDB() {
+	public void testSignInSaveTheUserOnDBAndGoToHomepage() {
 		String username = "newUser";
 		String password = "newPassword";
 				
@@ -80,6 +105,9 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		
 		assertThat(newUser).isEqualTo(new User(username, password));
 		
+		assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
+		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 	
 	@GUITest
@@ -106,14 +134,19 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		String password = "newPassword";
 		
 		entityManager.getTransaction().begin();
-		entityManager.persist(new User(username, password));
+		User newUser = new User(username, password);
+		entityManager.persist(newUser);
 		entityManager.getTransaction().commit();
 		
 		window.textBox("usernameTextbox").enterText(username);
 		window.textBox("passwordField").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
 
-		//TODO: implement go to home page
+		assertThat(newUser).isEqualTo(new User(username, password));
+		
+		assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
+		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 
 }

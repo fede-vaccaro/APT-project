@@ -28,6 +28,7 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 
@@ -60,12 +61,14 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 
 		Module showHistoryModule = new ShowHistoryModule();
 
+		Module receiptModule = new ReceiptModule();
+		
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
 
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
-		injector = persistenceInjector.createChildInjector(repositoriesModule, showHistoryModule);
+		injector = persistenceInjector.createChildInjector(repositoriesModule, showHistoryModule, receiptModule);
 	}
 
 	@AfterClass

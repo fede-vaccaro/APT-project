@@ -482,6 +482,7 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 
 	@Override
 	public void updateData() {
+		getController().update();
 		setUsers();
 	}
 	
