@@ -16,7 +16,7 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayReceiptsController implements Controller{
+public class PayReceiptsController extends UserController{
 
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsController.class);
@@ -25,7 +25,6 @@ public class PayReceiptsController implements Controller{
 	private PaymentManager paymentManager;
 	private ReceiptRepository receiptRepository;
 	private PayReceiptsView payViewReceiptsView;
-	private User loggedUser;
 	
 	public void setTransactionHandler(TransactionHandler transaction) {
 		this.transaction = transaction;
@@ -58,9 +57,9 @@ public class PayReceiptsController implements Controller{
 		showUnpaidReceipts(loggedUser);
 	}
 
-	@Override
-	public void setLoggedUser(User user) {
-		this.loggedUser = user;
+	public void update() {
+		System.out.println("showing unpaid receipts of: " + loggedUser);
+		showUnpaidReceipts(loggedUser);
 	}
 
 }

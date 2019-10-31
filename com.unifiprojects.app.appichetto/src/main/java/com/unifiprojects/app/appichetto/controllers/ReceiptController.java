@@ -17,12 +17,13 @@ import com.unifiprojects.app.appichetto.repositories.UserRepository;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptController implements Controller {
+public class ReceiptController extends UserController {
 
 	private ReceiptManager receiptManager;
 	private ReceiptView receiptView;
 	private UserRepository userRepository;
 	private TransactionHandler transactionHandler;
+	
 	private static final Logger LOGGER = LogManager.getLogger(ReceiptController.class);
 
 	public ReceiptController(ReceiptManager receiptManager, ReceiptView receiptView, UserRepository userRepository) {
@@ -93,7 +94,7 @@ public class ReceiptController implements Controller {
 	}
 
 	@Override
-	public void setLoggedUser(User user) {
-		receiptManager.setBuyer(user);
+	public void update() {
+		receiptManager.setBuyer(loggedUser);
 	}
 }

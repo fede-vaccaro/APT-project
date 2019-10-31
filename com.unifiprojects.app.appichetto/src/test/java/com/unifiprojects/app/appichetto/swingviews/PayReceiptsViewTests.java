@@ -2,6 +2,7 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,12 +70,15 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing = new PayReceiptsViewSwing(payReceiptsController);
 			return payReceiptsSwing;
 		});
+		
+		logged = new User("logged", "pw");
+		when(payReceiptsController.getLoggedUser()).thenReturn(logged);
+		
 		window = new FrameFixture(robot(), payReceiptsSwing.getFrame());
 		window.show(); // shows the frame to test
 	}
 
 	private void setUpUsersAndReceipts() {
-		logged = new User("logged", "pw");
 
 		payer1 = new User("payer1", "pw2");
 		payer2 = new User("payer2", "pw3");
@@ -376,8 +380,6 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		Receipt receipt1 = receipt1FromPayer1;
 		Receipt receipt2 = receipt2FromPayer1;
 
-		payReceiptsSwing.setLoggedUser(logged);
-
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.setUnpaids(Arrays.asList(receipt1, receipt2));
 			List<Accounting> accountings = new ArrayList<>();
@@ -405,8 +407,6 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		double debtToPayer1 = (receipt1.getTotalPrice() + receipt2.getTotalPrice()) / 2.0;
 
-		payReceiptsSwing.setLoggedUser(logged);
-
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2));
 		});
@@ -422,8 +422,6 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		double debtToPayer1 = receipt1.getTotalPrice() / 2.0;
 		double debtToPayer2 = receipt2.getTotalPrice() / 2.0;
-
-		payReceiptsSwing.setLoggedUser(logged);
 
 		GuiActionRunner.execute(() -> {
 			payReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2));
@@ -613,7 +611,6 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
 			payReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
 
-			payReceiptsSwing.setLoggedUser(logged);
 		});
 
 		payReceiptsSwing.userComboBoxModel.setSelectedItem(payer1);
@@ -647,7 +644,6 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.getAccountings().add(receipt1.getAccountings().get(0));
 			payReceiptsSwing.getAccountings().add(receipt2.getAccountings().get(0));
 
-			payReceiptsSwing.setLoggedUser(logged);
 		});
 
 		payReceiptsSwing.userComboBoxModel.setSelectedItem(payer1);

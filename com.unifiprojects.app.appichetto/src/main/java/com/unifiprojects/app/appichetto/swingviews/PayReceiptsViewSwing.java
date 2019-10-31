@@ -67,9 +67,6 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	private JLabel lblTotalForThis;
 	private JLabel lblTotaldebttouser;
 	
-	@Inject
-	private User loggedUser;
-	
 	private Double enteredAmount;
 
 	public List<Accounting> getAccountings() {
@@ -97,10 +94,6 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 
 	public Double getEnteredValue() {
 		return enteredAmount;
-	}
-
-	public void setLoggedUser(User loggedUser) {
-		this.loggedUser = loggedUser;
 	}
 
 	/**
@@ -202,6 +195,8 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 		JButton btnPay = new JButton("Pay");
 		btnPay.setEnabled(false);
 		btnPay.addActionListener(e -> {
+			
+			User loggedUser = payReceiptsController.getLoggedUser();
 			LOGGER.info(enteredAmount);
 			LOGGER.info(loggedUser);
 			LOGGER.info((User) userComboBoxModel.getSelectedItem());
@@ -371,6 +366,7 @@ public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayRec
 	private void extractEachAccountingOfLoggedUser(List<Receipt> receipts) {
 		accountings = new ArrayList<>();
 		receipts.stream().forEach(r -> accountings.addAll(r.getAccountings()));
+		User loggedUser = payReceiptsController.getLoggedUser();
 		accountings = accountings.stream().filter(a -> a.getUser().equals(loggedUser)).collect(Collectors.toList());
 	}
 

@@ -9,21 +9,27 @@ import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionExcep
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.swingviews.HomepageSwingView;
+import com.unifiprojects.app.appichetto.swingviews.ObservableFrameSwing;
+import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryController implements Controller{
+public class ShowHistoryController extends UserController {
 
 	private ReceiptRepository receiptRepository;
 	private ShowHistoryView showHistoryView;
 	private TransactionHandler transaction;
 	private User loggedUser;
+	private ReceiptSwingView receiptsView;
 
 	@Inject
-	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView, TransactionHandler transaction) {
+	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView,
+			TransactionHandler transaction, ReceiptSwingView receiptsView) {
 		this.receiptRepository = receiptRepository;
 		this.showHistoryView = showHistoryView;
 		this.transaction = transaction;
+		this.receiptsView = receiptsView;
 	}
 
 	public void showHistory() {
@@ -48,12 +54,21 @@ public class ShowHistoryController implements Controller{
 		}
 		this.showHistory();
 	}
-	
+
 	public void setTransaction(TransactionHandler transaction) {
 		this.transaction = transaction;
 	}
 
-	public void setLoggedUser(User loggedUser) {
-		this.loggedUser = loggedUser;
+	public void updateReceipt(Receipt selected) {
+		receiptsView.getController().setLoggedUser(loggedUser);
+		(receiptsView).getController().uploadReceipt(selected);
+		HomepageSwingView homepage = ((ObservableFrameSwing) showHistoryView).getHomepageSwingView();
+		receiptsView.setHomepageSwingView(homepage);
+		receiptsView.show();
+	}
+
+	@Override
+	public void update() {
+		showHistory();
 	}
 }

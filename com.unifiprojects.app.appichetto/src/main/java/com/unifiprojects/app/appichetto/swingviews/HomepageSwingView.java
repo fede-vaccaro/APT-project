@@ -12,27 +12,27 @@ import javax.swing.JFrame;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.unifiprojects.app.appichetto.controllers.HomePageController;
+// import com.unifiprojects.app.appichetto.controllers.HomePageController;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 @Singleton
-public class HomepageSwingView{
+public class HomepageSwingView {
 	/**
 	 * 
 	 */
 	private JFrame frame;
-	
-	HomePageController homePageController;
-	
+
+	// HomePageController homePageController;
+
 	List<ObservableFrameSwing> views;
-	
+
 	ObservableFrameSwing loginView;
-	
+
 	ObservableFrameSwing receiptView;
-	
+
 	ObservableFrameSwing payReceiptsView;
-	
+
 	ObservableFrameSwing showHistoryView;
 
 //	/**
@@ -68,19 +68,23 @@ public class HomepageSwingView{
 	public void setHistoryViewSwing(ObservableFrameSwing historyViewSwing) {
 		this.showHistoryView = historyViewSwing;
 	}
-	
+
 	@Inject
-	public HomepageSwingView(LoginViewSwing loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView) {
+	public HomepageSwingView(LoginViewSwing loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing,
+			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.receiptView = receiptSwingView;
 		this.loginView = loginViewSwing;
-		
+
 		views = new ArrayList<>();
-		homePageController = new HomePageController();
-		
-		views.addAll(Arrays.asList(loginViewSwing, payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView));
-		
+		// homePageController = new HomePageController();
+
+		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView));
+
+		views.forEach(v -> v.setHomepageSwingView(this));
+		loginViewSwing.setHomepageSwingView(this);
+
 		initialize();
 	}
 
@@ -105,6 +109,7 @@ public class HomepageSwingView{
 		JButton btnCreateReceipt = new JButton("Create Receipt");
 		btnCreateReceipt.addActionListener(e -> {
 			frame.setVisible(false);
+			receiptView.getController().update();
 			receiptView.show();
 		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
@@ -115,6 +120,7 @@ public class HomepageSwingView{
 
 		JButton btnPayReceipt = new JButton("Pay Receipt");
 		btnPayReceipt.addActionListener(e -> {
+			payReceiptsView.getController().update();
 			frame.setVisible(false);
 			payReceiptsView.show();
 		});
@@ -127,6 +133,7 @@ public class HomepageSwingView{
 		JButton btnShowHistory = new JButton("Show History");
 		btnShowHistory.addActionListener(e -> {
 			frame.setVisible(false);
+			showHistoryView.getController().update();
 			showHistoryView.show();
 		});
 		GridBagConstraints gbc_btnShowHistory = new GridBagConstraints();
@@ -166,16 +173,16 @@ public class HomepageSwingView{
 	public void update(Receipt receipt) {
 		startReceiptUpload(receipt);
 	}
-	
-	private void startReceiptUpload(Receipt receipt) {//TODO maybe in controller
+
+	private void startReceiptUpload(Receipt receipt) {// TODO maybe in controller
 		receiptView.show();
-		((ReceiptSwingView)receiptView).getController().uploadReceipt(receipt);
+		((ReceiptSwingView) receiptView).getController().uploadReceipt(receipt);
 	}
-	
-	private void setLoggedUser(User loggedUser) {
+
+	public void setLoggedUser(User loggedUser) {
 		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
-	
+
 	public ObservableFrameSwing getLoginView() {
 		return loginView;
 	}

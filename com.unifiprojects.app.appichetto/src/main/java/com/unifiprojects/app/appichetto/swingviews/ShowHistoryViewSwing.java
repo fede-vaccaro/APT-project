@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -41,6 +42,8 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 
 	private JList<Receipt> receiptList;
 
+
+	@Inject
 	public ShowHistoryViewSwing() {
 		initialize();
 	}
@@ -156,7 +159,10 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		gbc_btnUpdateReceipt.gridy = 8;
 		frame.getContentPane().add(btnUpdateReceipt, gbc_btnUpdateReceipt);
 		btnUpdateReceipt.addActionListener(e -> {
-			goToHome(receiptList.getSelectedValue());
+			
+			Receipt selected = receiptList.getSelectedValue();
+			showHistoryController.updateReceipt(selected);
+			getFrame().dispose();
 		});
 
 		GridBagConstraints gbc_btnRmbutton = new GridBagConstraints();

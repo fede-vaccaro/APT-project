@@ -26,7 +26,7 @@ public class UpdateReceiptService implements AppIchettoService {
 			throw new IllegalArgumentException("Argument must be Receipt");
 		Receipt receipt = (Receipt) object;
 		receiptManager.uploadReceipt(receipt);
-		receiptController.uploadReceiptManager(receiptManager);
+		// receiptController.uploadReceiptManager(receiptManager);
 		receiptView.show();
 		receiptView.setUsers();
 	}
