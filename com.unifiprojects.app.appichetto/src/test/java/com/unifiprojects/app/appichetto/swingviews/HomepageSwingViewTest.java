@@ -16,13 +16,13 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	@Mock
-	private ObservableFrameSwing loginView;
+	private LinkedSwingView loginView;
 	@Mock
-	private ObservableFrameSwing receiptView;
+	private LinkedSwingView receiptView;
 	@Mock
-	private ObservableFrameSwing payReceiptsView;
+	private LinkedSwingView payReceiptsView;
 	@Mock
-	private ObservableFrameSwing historyView;
+	private LinkedSwingView historyView;
 
 	private HomepageSwingView homepageSwingView;
 
@@ -44,7 +44,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testUpdateSetFrameVisible() {
-		homepageSwingView.update();
+		homepageSwingView.show();
 		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
 	}
 

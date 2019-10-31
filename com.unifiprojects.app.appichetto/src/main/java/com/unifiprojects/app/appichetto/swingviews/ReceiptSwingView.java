@@ -28,7 +28,7 @@ import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptSwingView extends ObservableFrameSwing implements ReceiptView {
+public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 	/**
 	 * 
 	 */

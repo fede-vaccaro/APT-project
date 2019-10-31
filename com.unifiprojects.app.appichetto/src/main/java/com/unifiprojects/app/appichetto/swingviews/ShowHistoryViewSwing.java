@@ -24,7 +24,7 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHistoryView {
+public class ShowHistoryViewSwing extends LinkedSwingView implements ShowHistoryView {
 
 	private JFrame frame;
 
@@ -253,8 +253,8 @@ public class ShowHistoryViewSwing extends ObservableFrameSwing implements ShowHi
 		showHistoryController.showHistory();
 	}
 	
-	public void goToHome(Receipt receipt) {
-		getHomepageView().update(receipt);
-		getFrame().dispose();
-	}
+	//public void goToHome(Receipt receipt) {
+	//	//getHomepageView().update(receipt);
+	//	getFrame().dispose();
+	//}
 }

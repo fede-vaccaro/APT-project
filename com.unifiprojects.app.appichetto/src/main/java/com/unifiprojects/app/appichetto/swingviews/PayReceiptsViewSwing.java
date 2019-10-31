@@ -39,7 +39,7 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptCellRenderer;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayReceiptsViewSwing extends ObservableFrameSwing implements PayReceiptsView {
+public class PayReceiptsViewSwing extends LinkedSwingView implements PayReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsViewSwing.class);
 

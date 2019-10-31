@@ -18,7 +18,7 @@ import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
-public class LoginViewSwing extends ObservableFrameSwing implements LoginView{
+public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	private LoginController loginController;
 	
 	private JFrame frmAppichetto;
@@ -114,7 +114,7 @@ public class LoginViewSwing extends ObservableFrameSwing implements LoginView{
 	
 	@Override
 	public void goToHome(User loggedUser) {
-		getHomepageView().update(loggedUser);
+		((HomepageSwingView) getLinkedSwingView()).update(loggedUser);
 		frmAppichetto.dispose();
 	}
 

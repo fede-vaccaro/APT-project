@@ -6,20 +6,23 @@ import javax.swing.JFrame;
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.UserController;
 
-public abstract class ObservableFrameSwing{
+public abstract class LinkedSwingView{
 
 	protected JButton btnHome;
 	
-	@Inject
-	protected HomepageSwingView homepageSwingView;
+	protected LinkedSwingView linkedSwingView;
 	
-	public HomepageSwingView getHomepageSwingView() {
-		return homepageSwingView;
+	public void setLinkedSwingView(LinkedSwingView linkedSwingView) {
+		this.linkedSwingView = linkedSwingView;
+	}
+
+	public LinkedSwingView getLinkedSwingView() {
+		return linkedSwingView;
 		
 	}
 	
-	public ObservableFrameSwing() {
-		btnHome = new JButton("Home");
+	public LinkedSwingView() {
+		btnHome = new JButton("Back");
 		btnHome.setName("homeBtn");
 		btnHome.addActionListener(e -> goToHome());
 	}
@@ -33,7 +36,7 @@ public abstract class ObservableFrameSwing{
 	}
 	
 	public void goToHome() {
-		homepageSwingView.update();
+		linkedSwingView.show();
 		getFrame().dispose();
 	}
 
@@ -41,14 +44,5 @@ public abstract class ObservableFrameSwing{
 		getFrame().setVisible(true);
 		updateData();
 	}
-	
-	public HomepageSwingView getHomepageView() {
-		return homepageSwingView;
-	}
-
-	public void setHomepageSwingView(HomepageSwingView homepageSwingView) {
-		this.homepageSwingView = homepageSwingView;
-	}
-	
 	
 }

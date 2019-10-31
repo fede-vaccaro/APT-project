@@ -24,13 +24,13 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 	@Mock
 	private HomepageSwingView homepageSwingView;
 
-	private ObservableFrameSwing observableFrame;
+	private LinkedSwingView observableFrame;
 	
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
-			observableFrame = new ObservableFrameSwing() {
+			observableFrame = new LinkedSwingView() {
 
 				JFrame frame = new JFrame();
 
@@ -65,8 +65,8 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testWhenClickHomeButtonThemGoToHomePageIsCalled() {
-		observableFrame.setHomepageSwingView(homepageSwingView);
-		doNothing().when(homepageSwingView).update();
+		observableFrame.setLinkedSwingView(homepageSwingView);
+		doNothing().when(homepageSwingView).show();
 
 		window.button(JButtonMatcher.withName("homeBtn")).click();
 		

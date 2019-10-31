@@ -46,11 +46,11 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 
 	@Mock
-	private ObservableFrameSwing loginView;
+	private LinkedSwingView loginView;
 	@Mock
-	private ObservableFrameSwing receiptView;
+	private LinkedSwingView receiptView;
 	@Mock
-	private ObservableFrameSwing historyView;
+	private LinkedSwingView historyView;
 
 	@BeforeClass
 	public static void setUpInjectors() {
@@ -113,8 +113,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testHomepageViewIsEqualEverywhere() {
-		for (ObservableFrameSwing view : homepageSwingView.views) {
-			assertThat(view.getHomepageSwingView()).isEqualTo(homepageSwingView);
+		for (LinkedSwingView view : homepageSwingView.views) {
+			assertThat(view.getLinkedSwingView()).isEqualTo(homepageSwingView);
 		}
 	}
 

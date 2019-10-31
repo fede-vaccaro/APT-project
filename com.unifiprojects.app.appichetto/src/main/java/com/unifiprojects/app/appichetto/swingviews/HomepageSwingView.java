@@ -12,12 +12,13 @@ import javax.swing.JFrame;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.unifiprojects.app.appichetto.controllers.UserController;
 // import com.unifiprojects.app.appichetto.controllers.HomePageController;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 @Singleton
-public class HomepageSwingView {
+public class HomepageSwingView extends LinkedSwingView {
 	/**
 	 * 
 	 */
@@ -25,15 +26,15 @@ public class HomepageSwingView {
 
 	// HomePageController homePageController;
 
-	List<ObservableFrameSwing> views;
+	List<LinkedSwingView> views;
 
-	ObservableFrameSwing loginView;
+	LinkedSwingView loginView;
 
-	ObservableFrameSwing receiptView;
+	LinkedSwingView receiptView;
 
-	ObservableFrameSwing payReceiptsView;
+	LinkedSwingView payReceiptsView;
 
-	ObservableFrameSwing showHistoryView;
+	LinkedSwingView showHistoryView;
 
 //	/**
 //	 * Launch the application.
@@ -53,19 +54,19 @@ public class HomepageSwingView {
 		return frame;
 	}
 
-	public void setLoginView(ObservableFrameSwing loginView) {
+	public void setLoginView(LinkedSwingView loginView) {
 		this.loginView = loginView;
 	}
 
-	public void setReceiptSwingView(ObservableFrameSwing receiptSwingView) {
+	public void setReceiptSwingView(LinkedSwingView receiptSwingView) {
 		this.receiptView = receiptSwingView;
 	}
 
-	public void setPayViewReceiptsViewSwing(ObservableFrameSwing payViewReceiptsViewSwing) {
+	public void setPayViewReceiptsViewSwing(LinkedSwingView payViewReceiptsViewSwing) {
 		this.payReceiptsView = payViewReceiptsViewSwing;
 	}
 
-	public void setHistoryViewSwing(ObservableFrameSwing historyViewSwing) {
+	public void setHistoryViewSwing(LinkedSwingView historyViewSwing) {
 		this.showHistoryView = historyViewSwing;
 	}
 
@@ -82,8 +83,8 @@ public class HomepageSwingView {
 
 		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView));
 
-		views.forEach(v -> v.setHomepageSwingView(this));
-		loginViewSwing.setHomepageSwingView(this);
+		views.forEach(v -> v.setLinkedSwingView(this));
+		loginViewSwing.setLinkedSwingView(this);
 
 		initialize();
 	}
@@ -161,7 +162,7 @@ public class HomepageSwingView {
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
 	}
 
-	public void update() {
+	public void show() {
 		this.frame.setVisible(true);
 	}
 
@@ -170,9 +171,9 @@ public class HomepageSwingView {
 		this.frame.setVisible(true);
 	}
 
-	public void update(Receipt receipt) {
-		startReceiptUpload(receipt);
-	}
+	//public void update(Receipt receipt) {
+	//	startReceiptUpload(receipt);
+	//}
 
 	private void startReceiptUpload(Receipt receipt) {// TODO maybe in controller
 		receiptView.show();
@@ -183,7 +184,19 @@ public class HomepageSwingView {
 		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
 
-	public ObservableFrameSwing getLoginView() {
+	public LinkedSwingView getLoginView() {
 		return loginView;
+	}
+
+	@Override
+	public UserController getController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateData() {
+		// TODO Auto-generated method stub
+		
 	}
 }

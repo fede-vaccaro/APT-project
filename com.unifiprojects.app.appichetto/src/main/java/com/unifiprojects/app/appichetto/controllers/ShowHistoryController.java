@@ -10,7 +10,7 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.swingviews.HomepageSwingView;
-import com.unifiprojects.app.appichetto.swingviews.ObservableFrameSwing;
+import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
@@ -20,7 +20,6 @@ public class ShowHistoryController extends UserController {
 	private ReceiptRepository receiptRepository;
 	private ShowHistoryView showHistoryView;
 	private TransactionHandler transaction;
-	private User loggedUser;
 	private ReceiptSwingView receiptsView;
 
 	@Inject
@@ -62,8 +61,8 @@ public class ShowHistoryController extends UserController {
 	public void updateReceipt(Receipt selected) {
 		receiptsView.getController().setLoggedUser(loggedUser);
 		(receiptsView).getController().uploadReceipt(selected);
-		HomepageSwingView homepage = ((ObservableFrameSwing) showHistoryView).getHomepageSwingView();
-		receiptsView.setHomepageSwingView(homepage);
+		//HomepageSwingView homepage = ((LinkedSwingView) showHistoryView).getHomepageSwingView();
+		receiptsView.setLinkedSwingView((LinkedSwingView) showHistoryView);
 		receiptsView.show();
 	}
 
