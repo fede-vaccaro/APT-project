@@ -32,12 +32,6 @@ public class ReceiptManager {
 		this.createDebtsService = new CreateDebtsService();
 	}
 	
-	
-	public ReceiptManager(ReceiptRepository receiptRepository) {														
-		this.receiptRepository = receiptRepository;
-		this.accountingsMap = new HashMap<>();
-	}
-
 	@Inject
 	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, CreateDebtsService createDebtsService) {
 		this.receipt = receipt;

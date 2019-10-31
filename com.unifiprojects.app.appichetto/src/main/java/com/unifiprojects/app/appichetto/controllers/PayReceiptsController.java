@@ -58,7 +58,6 @@ public class PayReceiptsController extends UserController{
 	}
 
 	public void update() {
-		System.out.println("showing unpaid receipts of: " + loggedUser);
 		showUnpaidReceipts(loggedUser);
 	}
 

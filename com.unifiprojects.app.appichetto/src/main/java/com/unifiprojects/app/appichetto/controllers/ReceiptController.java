@@ -41,11 +41,6 @@ public class ReceiptController extends UserController {
 		this.transactionHandler = transactionHandler;
 	}
 
-	public ReceiptController(ReceiptView receiptView, UserRepository userRepository) {
-		this.receiptView = receiptView;
-		this.userRepository = userRepository;
-	}
-
 	public void setTransactionHandler(TransactionHandler transactionHandler) {
 		this.transactionHandler = transactionHandler;
 	}

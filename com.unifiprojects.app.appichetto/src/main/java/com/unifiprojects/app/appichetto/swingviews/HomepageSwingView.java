@@ -168,15 +168,6 @@ public class HomepageSwingView extends LinkedSwingView {
 		this.frame.setVisible(true);
 	}
 
-	//public void update(Receipt receipt) {
-	//	startReceiptUpload(receipt);
-	//}
-
-	private void startReceiptUpload(Receipt receipt) {// TODO maybe in controller
-		receiptView.show();
-		((ReceiptSwingView) receiptView).getController().uploadReceipt(receipt);
-	}
-
 	public void setLoggedUser(User loggedUser) {
 		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}

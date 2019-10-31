@@ -159,4 +159,15 @@ public class ShowHistoryControllerTest {
 		verify(showHistoryView).showErrorMsg("Something went wrong with the database.");
 		verify(showHistoryView).showShoppingHistory(receiptListCaptor.capture());
 	}
+	
+	@Test
+	public void testUpdate() {
+		List<Receipt> history = Arrays.asList(receipt1, receipt0);
+		when(receiptRepository.getAllReceiptsBoughtBy(loggedUser)).thenReturn(history);
+		
+		showHistoryController.update();
+		
+		verify(showHistoryView).showShoppingHistory(history);
+		verifyNoMoreInteractions(showHistoryView);
+	}
 }

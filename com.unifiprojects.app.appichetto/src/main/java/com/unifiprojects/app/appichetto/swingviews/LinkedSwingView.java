@@ -3,7 +3,6 @@ package com.unifiprojects.app.appichetto.swingviews;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.UserController;
 
 public abstract class LinkedSwingView{

@@ -10,7 +10,6 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,8 +28,6 @@ import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
-import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 @RunWith(GUITestRunner.class)
 public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
@@ -40,9 +37,6 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 
 	private LoginViewSwing loginViewSwing;
 
-	private LoginController loginController;
-
-	private UserRepository userRepository;
 	private HomepageSwingView homepageSwingView;
 
 	private static EntityManager entityManager;
@@ -75,75 +69,73 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
-			
+
 			loginViewSwing = injector.getInstance(LoginViewSwing.class);
 			homepageSwingView = injector.getInstance(HomepageSwingView.class);
-			
+
 			homepageSwingView.setLoginView(loginViewSwing);
 			loginViewSwing.setLinkedSwingView(homepageSwingView);
-			
-			loginController = loginViewSwing.getLoginController();
+
 			return loginViewSwing;
 		});
 		window = new FrameFixture(robot(), loginViewSwing.getFrame());
 		window.show(); // shows the frame to test
 	}
-	
+
 	@GUITest
 	@Test
 	public void testSignInSaveTheUserOnDBAndGoToHomepage() {
 		String username = "newUser";
 		String password = "newPassword";
-				
+
 		window.textBox("usernameTextbox").enterText(username);
 		window.textBox("passwordField").enterText(password);
 		window.button(JButtonMatcher.withText("Sign-in")).click();
-		
-		User newUser = entityManager
-				.createQuery("from users where username=:username", User.class)
+
+		User newUser = entityManager.createQuery("from users where username=:username", User.class)
 				.setParameter("username", username).getSingleResult();
-		
+
 		assertThat(newUser).isEqualTo(new User(username, password));
-		
+
 		assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
-	
+
 	@GUITest
 	@Test
 	public void testSignInWhenUserIsAlreadyPickedShowError() {
 		String username = "newUser";
 		String password = "newPassword";
-		
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(new User(username, password));
 		entityManager.getTransaction().commit();
-		
+
 		window.textBox("usernameTextbox").enterText(username);
 		window.textBox("passwordField").enterText("otherPW");
 		window.button(JButtonMatcher.withText("Sign-in")).click();
 
 		window.label("errorMsg").requireText("Username already picked. Choice another username.");
 	}
-	
+
 	@GUITest
 	@Test
 	public void testLogIn() {
 		String username = "newUser";
 		String password = "newPassword";
-		
+
 		entityManager.getTransaction().begin();
 		User newUser = new User(username, password);
 		entityManager.persist(newUser);
 		entityManager.getTransaction().commit();
-		
+
 		window.textBox("usernameTextbox").enterText(username);
 		window.textBox("passwordField").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
 
 		assertThat(newUser).isEqualTo(new User(username, password));
-		
+
 		assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));

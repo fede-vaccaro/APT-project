@@ -26,7 +26,6 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 public class ReceiptManagerIT {
 	private static MVCBaseTest baseTest;// = new MVCBaseTest();
 	private static EntityManager entityManager;
-	private ReceiptRepository receiptRepository;
 	private User buyer;
 	private static ReceiptManager receiptManager;
 	private static Injector baseTestInjector;
@@ -50,7 +49,7 @@ public class ReceiptManagerIT {
 		entityManager = baseTest.getEntityManager();
 		buyer = new User("Pippo", "psw");
 		Injector repositoryInjector = baseTestInjector.createChildInjector(new RepositoriesModule());
-		receiptRepository =  repositoryInjector.getInstance(ReceiptRepository.class);
+		repositoryInjector.getInstance(ReceiptRepository.class);
 		receiptManager = repositoryInjector.createChildInjector(new AbstractModule() {}).getInstance(ReceiptManager.class);
 		receiptManager.setBuyer(buyer);
 		

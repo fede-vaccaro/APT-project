@@ -170,5 +170,13 @@ public class PayReceiptsControllerTest {
 
 		verify(payReceiptsView).showReceipts(Arrays.asList(new Receipt(payerUser)));
 	}
+	
+	@Test
+	public void testUpdate() {
+		payReceiptsController.update();
+		
+		// test that showUnpaidReceipts is called
+		testRepositoryAndViewAreDelegatedWhenShowUnpaidReceiptsThenShowItems();
+	}
 
 }
