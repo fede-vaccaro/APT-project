@@ -221,7 +221,7 @@
 					<configuration>
 						<archive>
 							<manifest>
-								<mainClass>com.unifiprojects.app.appichetto.App</mainClass>
+								<mainClass>com.unifiprojects.app.appichetto.main</mainClass>
 							</manifest>
 						</archive>
 					</configuration>
