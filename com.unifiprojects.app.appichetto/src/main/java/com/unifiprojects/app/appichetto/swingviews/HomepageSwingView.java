@@ -13,8 +13,6 @@ import javax.swing.JFrame;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.controllers.UserController;
-// import com.unifiprojects.app.appichetto.controllers.HomePageController;
-import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
 @Singleton
@@ -110,6 +108,7 @@ public class HomepageSwingView extends LinkedSwingView {
 		JButton btnCreateReceipt = new JButton("Create Receipt");
 		btnCreateReceipt.addActionListener(e -> {
 			frame.setVisible(false);
+			((ReceiptSwingView) receiptView).clearFields();
 			receiptView.show();
 		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
@@ -172,10 +171,6 @@ public class HomepageSwingView extends LinkedSwingView {
 		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
 
-	public LinkedSwingView getLoginView() {
-		return loginView;
-	}
-
 	@Override
 	public UserController getController() {
 		// TODO Auto-generated method stub
@@ -185,5 +180,9 @@ public class HomepageSwingView extends LinkedSwingView {
 	@Override
 	public void updateData() {
 		getController().update();		
+	}
+
+	public LoginViewSwing getLoginView() {
+		return (LoginViewSwing) loginView;
 	}
 }

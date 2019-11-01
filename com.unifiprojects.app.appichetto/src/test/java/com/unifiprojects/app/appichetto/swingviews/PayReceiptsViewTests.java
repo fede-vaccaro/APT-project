@@ -657,5 +657,12 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		window.textBox("enterAmountField").requireText("");
 
 	}
+	
+	@Test
+	public void testUpdatedData() {
+		payReceiptsSwing.updateData();
+		
+		verify(payReceiptsController).update();
+	}
 
 }
