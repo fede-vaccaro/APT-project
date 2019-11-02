@@ -1,23 +1,21 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
+import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import com.unifiprojects.app.appichetto.controllers.UserController;
-import com.unifiprojects.app.appichetto.controllers.UserPanelController;
-import com.unifiprojects.app.appichetto.views.UserPanelView;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextPane;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
-import java.awt.Color;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import com.unifiprojects.app.appichetto.controllers.UserController;
+import com.unifiprojects.app.appichetto.controllers.UserPanelController;
+import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView {
 
@@ -257,6 +255,10 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 	@Override
 	public void updateData() {
 		userPanelController.update();
+	}
+
+	public void setUserPanelController(UserPanelController controller) {
+		this.userPanelController = controller;
 	}
 
 }
