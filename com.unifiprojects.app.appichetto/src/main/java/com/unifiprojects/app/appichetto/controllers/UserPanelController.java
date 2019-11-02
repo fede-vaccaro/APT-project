@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.controllers;
 
+import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
@@ -14,9 +15,17 @@ public class UserPanelController extends UserController {
 	private TransactionHandler transaction;
 	private HomepageView homepageView;
 
+	@Inject
+	public UserPanelController(UserPanelView userPanelView, UserRepository userRepository,
+			TransactionHandler transaction, HomepageView homepageView) {
+		this.userPanelView = userPanelView;
+		this.userRepository = userRepository;
+		this.transaction = transaction;
+		this.homepageView = homepageView;
+	}
+
 	@Override
 	public void update() {
-
 		showUser();
 	}
 
@@ -27,7 +36,6 @@ public class UserPanelController extends UserController {
 	public void changeCredential(String newName, String newPassword) {
 		if (newName != null)
 			loggedUser.setUsername(newName);
-
 		if (newPassword != null)
 			loggedUser.setPassword(newPassword);
 		try {

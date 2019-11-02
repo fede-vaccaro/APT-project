@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 
 @RunWith(GUITestRunner.class)
-public class UserPanelSwingViewTest extends AssertJSwingJUnitTestCase {
+public class UserPanelViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 

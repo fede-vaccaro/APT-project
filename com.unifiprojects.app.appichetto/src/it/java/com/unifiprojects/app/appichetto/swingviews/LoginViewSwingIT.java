@@ -19,7 +19,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
-import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.LoginModule;
@@ -27,7 +26,6 @@ import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
-import com.unifiprojects.app.appichetto.repositories.UserRepository;
 
 @RunWith(GUITestRunner.class)
 public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
