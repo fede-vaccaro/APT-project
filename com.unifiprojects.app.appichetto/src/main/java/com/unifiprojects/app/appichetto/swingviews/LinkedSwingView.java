@@ -3,12 +3,10 @@ package com.unifiprojects.app.appichetto.swingviews;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.unifiprojects.app.appichetto.controllers.UserController;
-
 public abstract class LinkedSwingView{
 
 	protected JButton btnHome;
-	
+	public JFrame frame;
 	protected LinkedSwingView linkedSwingView;
 	
 	public void setLinkedSwingView(LinkedSwingView linkedSwingView) {
@@ -22,24 +20,23 @@ public abstract class LinkedSwingView{
 	public LinkedSwingView() {
 		btnHome = new JButton("Back");
 		btnHome.setName("homeBtn");
-		btnHome.addActionListener(e -> goToHome());
+		btnHome.addActionListener(e -> goBack());
 	}
 
-	public abstract JFrame getFrame();
-	public abstract UserController getController();
-	public abstract void updateData();
-	
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	public JButton getBtnHome() {
 		return btnHome;
 	}
 	
-	public void goToHome() {
+	public void goBack() {
 		linkedSwingView.show();
 		getFrame().dispose();
 	}
 
 	public void show() {
-		updateData();
 		getFrame().setVisible(true);
 	}
 	

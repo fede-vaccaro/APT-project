@@ -22,11 +22,10 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
-public class ShowHistoryViewSwing extends LinkedSwingView implements ShowHistoryView {
-
-	private JFrame frame;
+public class ShowHistoryViewSwing extends LinkedControlledSwingView implements ShowHistoryView {
 
 	private DefaultListModel<Receipt> receiptListModel;
 	private DefaultListModel<Item> itemListModel;
@@ -233,11 +232,6 @@ public class ShowHistoryViewSwing extends LinkedSwingView implements ShowHistory
 	@Override
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
-	}
-
-	@Override
-	public JFrame getFrame() {
-		return frame;
 	}
 
 	public void setController(ShowHistoryController showHistoryController) {

@@ -12,8 +12,8 @@ import javax.swing.JFrame;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 @Singleton
@@ -21,11 +21,9 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	/**
 	 * 
 	 */
-	private JFrame frame;
-
 	// HomePageController homePageController;
 
-	List<LinkedSwingView> views;
+	List<LinkedControlledSwingView> views;
 
 	LinkedSwingView loginView;
 
@@ -51,10 +49,6 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 //		});
 //	}
 
-	public JFrame getFrame() {
-		return frame;
-	}
-
 	public void setLoginView(LinkedSwingView loginView) {
 		this.loginView = loginView;
 	}
@@ -73,7 +67,8 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Inject
 	public HomepageSwingView(LoginViewSwing loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing,
-			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing) {
+			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView,
+			UserPanelViewSwing userPanelViewSwing) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.userPanelView = userPanelViewSwing;
@@ -176,22 +171,9 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Override
 	public void setLoggedUser(User loggedUser) {
-		views.stream().forEach(view -> {
-			if (view != null && view.getController() != null)
-				view.getController().setLoggedUser(loggedUser);
-		});
+		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
 
-	@Override
-	public UserController getController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updateData() {
-		getController().update();
-	}
 
 	public LoginViewSwing getLoginView() {
 		return (LoginViewSwing) loginView;
@@ -200,4 +182,5 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	void setUserPanelView(LinkedSwingView userPanelView) {
 		this.userPanelView = userPanelView;
 	}
+
 }

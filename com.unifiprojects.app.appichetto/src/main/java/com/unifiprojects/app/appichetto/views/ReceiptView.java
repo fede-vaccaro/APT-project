@@ -19,7 +19,7 @@ public interface ReceiptView {
 
 	void itemUpdated(int index, Item item);
 	
-	void goToHome();
+	void goBack();
 
 	void descriptionUploaded(String description);
 

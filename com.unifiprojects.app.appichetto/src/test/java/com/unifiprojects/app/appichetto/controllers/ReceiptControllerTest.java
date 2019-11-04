@@ -129,7 +129,7 @@ public class ReceiptControllerTest {
 		receiptManagerCallSaveReceipt.execute();
 
 		verify(receiptManager).saveReceipt();
-		verify(receiptView).goToHome();
+		verify(receiptView).goBack();
 	}
 
 	@Test

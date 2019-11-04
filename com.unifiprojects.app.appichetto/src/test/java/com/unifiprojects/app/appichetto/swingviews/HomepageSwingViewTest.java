@@ -100,5 +100,5 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(historyView).show();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
-
+	
 }

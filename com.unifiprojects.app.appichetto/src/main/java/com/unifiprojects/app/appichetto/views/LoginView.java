@@ -4,7 +4,6 @@ import com.unifiprojects.app.appichetto.models.User;
 
 public interface LoginView {
 
-	void goToHome();
 	void goToHome(User loggedUser);
 
 	void showErrorMsg(String string);

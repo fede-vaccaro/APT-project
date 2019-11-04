@@ -4,6 +4,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class LoginControllerTest {
 		loginController.login(username, "WrongPassword!");
 
 		verify(loginView).showErrorMsg("Wrong password!");
-		verify(loginView, never()).goToHome();
+		verify(loginView, never()).goToHome(any(User.class));
 	}
 
 	@Test
@@ -73,7 +74,7 @@ public class LoginControllerTest {
 		loginController.login(username, password);
 
 		verify(loginView).showErrorMsg("User not signed in yet.");
-		verify(loginView, never()).goToHome();
+		verify(loginView, never()).goToHome(any(User.class));
 
 	}
 
@@ -96,7 +97,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(loginView).showErrorMsg("Username already picked. Choice another username.");
-		verify(loginView, never()).goToHome();
+		verify(loginView, never()).goToHome(any(User.class));
 	}
 
 	@Test
@@ -108,7 +109,7 @@ public class LoginControllerTest {
 		loginController.signIn(user.getUsername(), password);
 
 		verify(loginView).showErrorMsg(stringCaptor.capture());
-		verify(loginView, never()).goToHome();
+		verify(loginView, never()).goToHome(any(User.class));
 
 	}
 
@@ -132,7 +133,7 @@ public class LoginControllerTest {
 		loginController.signIn(username, password);
 
 		verify(loginView).showErrorMsg("Something went wrong with the DB connection.");
-		verify(loginView, never()).goToHome();
+		verify(loginView, never()).goToHome(any(User.class));
 	}
 
 }

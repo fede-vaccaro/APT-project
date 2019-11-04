@@ -4,18 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.EntityManager;
 
-import org.assertj.swing.annotation.GUITest;
-import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.timing.Pause;
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

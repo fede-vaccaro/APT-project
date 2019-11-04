@@ -71,7 +71,7 @@ public class ReceiptController extends UserController {
 	public void saveReceipt() {
 		try {
 			transactionHandler.doInTransaction(() -> receiptManager.saveReceipt());
-			receiptView.goToHome();
+			receiptView.goBack();
 		} catch (UncommittableTransactionException e) {
 			receiptView.showError("Something went wrong while saving receipt.");
 		}

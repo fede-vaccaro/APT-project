@@ -1,5 +1,7 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.assertj.swing.annotation.GUITest;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
+import com.unifiprojects.app.appichetto.models.User;
 
 @RunWith(GUITestRunner.class)
 public class LoginViewTest extends AssertJSwingJUnitTestCase {
@@ -103,6 +106,19 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		loginViewSwing.showErrorMsg(expectedMsg);
 		
 		window.label("errorMsg").requireText(expectedMsg);
+	}
+	
+	@Test
+	public void testGoToHome() {
+		HomepageSwingView homepage = mock(HomepageSwingView.class);
+		loginViewSwing.setHomepage(homepage);
+		
+		User user = new User("username", "pw");
+		
+		loginViewSwing.goToHome(user);
+		
+		verify(homepage).update(user);
+		assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
 	}
 
 

@@ -8,7 +8,6 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
-import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.AfterClass;
@@ -36,7 +35,6 @@ import com.unifiprojects.app.appichetto.views.HomepageView;
 @RunWith(GUITestRunner.class)
 public class UserPanelControllerIT extends AssertJSwingJUnitTestCase {
 
-	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 
 	@Mock

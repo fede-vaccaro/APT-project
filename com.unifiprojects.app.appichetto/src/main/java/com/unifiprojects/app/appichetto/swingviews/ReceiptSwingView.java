@@ -25,14 +25,14 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
-public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
+public class ReceiptSwingView extends LinkedControlledSwingView implements ReceiptView {
 	/**
 	 * 
 	 */
-	JFrame frame;
 	private JFormattedTextField txtPrice;
 	private NumberFormat priceFormat;
 	private NumberFormatter priceFormatter;
@@ -67,7 +67,7 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 		this.receiptController = receiptController;
 	}
 
-	//TODO passare lista di utenti, vedi showCurrentUsers
+	// TODO passare lista di utenti, vedi showCurrentUsers
 	public void setUsers() {
 		receiptController.getUsers().stream().forEach(listUsersModel::addElement);
 	}
@@ -87,12 +87,6 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 //		});
 //	}
 
-
-	@Override
-	public JFrame getFrame() {
-		return frame;
-	}
-	
 	public DefaultListModel<Item> getListItemModel() {
 		return listItemModel;
 	}
@@ -408,7 +402,6 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 			itemsList.clearSelection();
 		});
 
-
 		GridBagConstraints gbc_btnHome = new GridBagConstraints();
 		gbc_btnHome.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
@@ -461,19 +454,19 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 		txtPrice.addKeyListener(btnUpdateEnabled);
 		txtName.addKeyListener(btnSaveEnabled);
 		txtName.addKeyListener(btnUpdateEnabled);
-		
+
 		this.frame.pack();
 
 	}
 
 	@Override
 	public void descriptionUploaded(String description) {
-		txtDescription.setText(description);				
+		txtDescription.setText(description);
 	}
 
 	@Override
 	public void dateUploaded(GregorianCalendar timestamp) {
-		txtDate.setText(timestamp.getTime().toString());				
+		txtDate.setText(timestamp.getTime().toString());
 	}
 
 	public ReceiptController getController() {
@@ -485,6 +478,5 @@ public class ReceiptSwingView extends LinkedSwingView implements ReceiptView {
 		getController().update();
 		setUsers();
 	}
-	
-	
+
 }

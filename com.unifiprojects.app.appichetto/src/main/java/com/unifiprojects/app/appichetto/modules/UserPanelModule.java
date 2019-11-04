@@ -2,13 +2,10 @@ package com.unifiprojects.app.appichetto.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.factories.UserPanelControllerFactory;
-import com.unifiprojects.app.appichetto.swingviews.HomepageSwingView;
 import com.unifiprojects.app.appichetto.swingviews.UserPanelViewSwing;
-import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelModule extends AbstractModule {

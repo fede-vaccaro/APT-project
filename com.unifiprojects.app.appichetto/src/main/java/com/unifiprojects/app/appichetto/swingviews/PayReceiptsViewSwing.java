@@ -35,10 +35,11 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptCellRenderer;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
-public class PayReceiptsViewSwing extends LinkedSwingView implements PayReceiptsView {
+public class PayReceiptsViewSwing extends LinkedControlledSwingView implements PayReceiptsView {
 
 	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsViewSwing.class);
 
@@ -55,7 +56,6 @@ public class PayReceiptsViewSwing extends LinkedSwingView implements PayReceipts
 		return payReceiptsController;
 	}
 
-	private JFrame frame;
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
 	private JList<Receipt> receiptList;
@@ -82,10 +82,6 @@ public class PayReceiptsViewSwing extends LinkedSwingView implements PayReceipts
 
 	public void setUnpaids(List<Receipt> unpaids) {
 		this.unpaids = unpaids;
-	}
-
-	public JFrame getFrame() {
-		return frame;
 	}
 
 	private List<Receipt> unpaids;

@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -13,23 +14,20 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import com.google.inject.Inject;
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	private LoginController loginController;
 	
-	private JFrame frmAppichetto;
 	private JTextField usernameTextbox;
 	private JPasswordField passwordField;
 	private JLabel errorMsg;
-	
-	public JFrame getFrame() {
-		return frmAppichetto;
-	}
 
+	private HomepageSwingView homepage;
+	
 	@Inject
 	public LoginViewSwing() {
 		initialize();
@@ -43,42 +41,41 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmAppichetto = new JFrame();
-		frmAppichetto.setTitle("AppIchetto 0.0.1");
+		frame = new JFrame();
+		frame.setTitle("AppIchetto 0.0.1");
 		int width = 450;
-		frmAppichetto.setMinimumSize(new Dimension(width, 300));
-		frmAppichetto.setBounds(100, 100, width, 300);
-		frmAppichetto.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmAppichetto.getContentPane().setLayout(null);
+		frame.setMinimumSize(new Dimension(width, 300));
+		frame.setBounds(100, 100, width, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setBounds(115, 53, 72, 15);
-		frmAppichetto.getContentPane().add(lblUsername);
+		frame.getContentPane().add(lblUsername);
 		
 		usernameTextbox = new JTextField();
 		usernameTextbox.setName("usernameTextbox");
 		usernameTextbox.setBounds(197, 51, 114, 19);
-		frmAppichetto.getContentPane().add(usernameTextbox);
+		frame.getContentPane().add(usernameTextbox);
 		usernameTextbox.setColumns(10);
 		
 		passwordField = new JPasswordField();
 		passwordField.setName("passwordField");
 		passwordField.setBounds(197, 121, 114, 19);
-		frmAppichetto.getContentPane().add(passwordField);
+		frame.getContentPane().add(passwordField);
 
-		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(115, 121, 70, 15);
-		frmAppichetto.getContentPane().add(lblPassword);
-		
-		int buttonWidthHalf = (int)(118/2.);
-		
+		frame.getContentPane().add(lblPassword);
+
+		int buttonWidthHalf = (int) (118 / 2.);
+
 		JButton btnLogin = new JButton("Log-in");
-		btnLogin.addActionListener(e -> loginController.login(usernameTextbox.getText(), getPasswordFromPasswordField()));
-			
-		
+		btnLogin.addActionListener(
+				e -> loginController.login(usernameTextbox.getText(), getPasswordFromPasswordField()));
+
 		btnLogin.setEnabled(false);
-		btnLogin.setBounds((int)(width*1./3.) - buttonWidthHalf, 200, buttonWidthHalf*2, 25);
+		btnLogin.setBounds((int) (width * 1. / 3.) - buttonWidthHalf, 200, buttonWidthHalf * 2, 25);
 		usernameTextbox.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -87,22 +84,23 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 
 		});
 
-		frmAppichetto.getContentPane().add(btnLogin);
-		
+		frame.getContentPane().add(btnLogin);
+
 		JButton btnSignin = new JButton("Sign-in");
-		btnSignin.setBounds((int)(width*2./3.) - buttonWidthHalf, 200, buttonWidthHalf*2, 25);
-		frmAppichetto.getContentPane().add(btnSignin);
-		
-		btnSignin.addActionListener(e -> loginController.signIn(usernameTextbox.getText(), getPasswordFromPasswordField()));
-		
+		btnSignin.setBounds((int) (width * 2. / 3.) - buttonWidthHalf, 200, buttonWidthHalf * 2, 25);
+		frame.getContentPane().add(btnSignin);
+
+		btnSignin.addActionListener(
+				e -> loginController.signIn(usernameTextbox.getText(), getPasswordFromPasswordField()));
+
 		errorMsg = new JLabel("");
 		errorMsg.setName("errorMsg");
 		errorMsg.setForeground(Color.RED);
 		errorMsg.setBounds(115, 162, 176, 15);
-		frmAppichetto.getContentPane().add(errorMsg);
-		
+		frame.getContentPane().add(errorMsg);
+
 	}
-	
+
 	private String getPasswordFromPasswordField() {
 		return String.copyValueOf(passwordField.getPassword());
 	}
@@ -111,24 +109,15 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	public void showErrorMsg(String message) {
 		SwingUtilities.invokeLater(() -> errorMsg.setText(message));
 	}
-	
+
 	@Override
 	public void goToHome(User loggedUser) {
-		((HomepageSwingView) getLinkedSwingView()).update(loggedUser);
-		frmAppichetto.dispose();
+		homepage.update(loggedUser);
+		frame.dispose();
 	}
 
-	public LoginController getLoginController() {
-		return loginController;
+	public void setHomepage(HomepageSwingView homepage) {
+		this.homepage = homepage;
 	}
 
-	@Override
-	public void updateData() {
-	}
-
-	@Override
-	public UserController getController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

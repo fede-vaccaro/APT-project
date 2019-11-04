@@ -1,7 +1,6 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -15,19 +14,14 @@ import javax.swing.JLabel;
 
 import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
-public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView {
-
-	private JFrame frame;
+public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
 
 	private UserPanelController userPanelController;
 
 	private LinkedSwingView loginViewSwing;
-
-	public LinkedSwingView getLoginViewSwing() {
-		return loginViewSwing;
-	}
 
 	public void setLoginViewSwing(LinkedSwingView loginViewSwing) {
 		this.loginViewSwing = loginViewSwing;
@@ -53,6 +47,8 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 	/**
 	 * Launch the application.
 	 */
+	
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,7 +61,7 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the application.
 	 */
@@ -255,11 +251,6 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 	public void goToLoginView() {
 		this.frame.dispose();
 		loginViewSwing.show();
-	}
-
-	@Override
-	public JFrame getFrame() {
-		return frame;
 	}
 
 	@Override

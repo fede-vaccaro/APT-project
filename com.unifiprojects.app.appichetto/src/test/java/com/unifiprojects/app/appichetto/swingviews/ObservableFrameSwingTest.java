@@ -15,8 +15,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.controllers.UserController;
-
 @RunWith(GUITestRunner.class)
 public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 
@@ -37,16 +35,6 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 				@Override
 				public JFrame getFrame() {
 					return frame;
-				}
-
-				@Override
-				public UserController getController() {
-					return null;
-				}
-
-				@Override
-				public void updateData() {
-
 				}
 			};
 			return observableFrame;

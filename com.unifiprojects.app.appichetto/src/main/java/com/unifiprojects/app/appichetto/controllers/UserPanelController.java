@@ -19,10 +19,6 @@ public class UserPanelController extends UserController {
 		this.homepageView = homepageView;
 	}
 
-	public HomepageView getHomepageView() {
-		return homepageView;
-	}
-
 	@Inject
 	public UserPanelController(UserPanelView userPanelView, UserRepository userRepository,
 			TransactionHandler transaction) {
