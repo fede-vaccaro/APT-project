@@ -108,7 +108,7 @@ public class HomepageSwingView extends LinkedSwingView {
 		JButton btnCreateReceipt = new JButton("Create Receipt");
 		btnCreateReceipt.addActionListener(e -> {
 			frame.setVisible(false);
-			((ReceiptSwingView) receiptView).clearFields();
+			// ((ReceiptSwingView) receiptView).clearFields();
 			receiptView.show();
 		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
