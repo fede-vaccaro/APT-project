@@ -386,6 +386,6 @@ public class PayReceiptsViewSwing extends LinkedSwingView implements PayReceipts
 
 	@Override
 	public void updateData() {
-		
+		getController().update();
 	}
 }

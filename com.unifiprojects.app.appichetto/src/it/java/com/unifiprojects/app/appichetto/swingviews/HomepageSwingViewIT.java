@@ -31,7 +31,6 @@ import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 
 @RunWith(GUITestRunner.class)
-
 public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	private static Injector injector;
@@ -99,33 +98,34 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			assertThat(view.getLinkedSwingView()).isEqualTo(homepageSwingView);
 		}
 	}
+	
 	/*
-	@GUITest
 	@Test
+	@GUITest
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.receiptView.getFrame().isVisible()).isTrue();
 
 	}
-	@GUITest
 	@Test
+	@GUITest
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.payReceiptsView.getFrame().isVisible()).isTrue();
 
 	}
-	@GUITest
 	@Test
+	@GUITest
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.loginView.getFrame().isVisible()).isTrue();
 
 	}
-	@GUITest
 	@Test
+	@GUITest
 	public void testUserPanelButtonShowOnlyUserPanelView() {
 		window.button(JButtonMatcher.withText("User panel")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
@@ -133,8 +133,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	}
 
-	@GUITest
 	@Test
+	@GUITest
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
@@ -142,6 +142,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	}
 	*/
+	
 	//@Test
 	public void test() {
 		Pause.pause(1000000000);

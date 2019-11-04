@@ -26,6 +26,7 @@ import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
+import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 
 @RunWith(GUITestRunner.class)
 public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
@@ -54,7 +55,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
-				new ShowHistoryModule(), new LoginModule());
+				new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
 
 	}
 

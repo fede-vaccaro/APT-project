@@ -15,13 +15,20 @@ public class UserPanelController extends UserController {
 	private TransactionHandler transaction;
 	private HomepageView homepageView;
 
+	public void setHomepageView(HomepageView homepageView) {
+		this.homepageView = homepageView;
+	}
+
+	public HomepageView getHomepageView() {
+		return homepageView;
+	}
+
 	@Inject
 	public UserPanelController(UserPanelView userPanelView, UserRepository userRepository,
-			TransactionHandler transaction, HomepageView homepageView) {
+			TransactionHandler transaction) {
 		this.userPanelView = userPanelView;
 		this.userRepository = userRepository;
 		this.transaction = transaction;
-		this.homepageView = homepageView;
 	}
 
 	@Override

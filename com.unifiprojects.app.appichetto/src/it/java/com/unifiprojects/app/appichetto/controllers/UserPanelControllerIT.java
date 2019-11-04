@@ -119,7 +119,8 @@ public class UserPanelControllerIT extends AssertJSwingJUnitTestCase {
 		userRepository = injector.getInstance(UserRepository.class);
 		TransactionHandler transaction = injector.getInstance(HibernateTransaction.class);
 
-		userPanelController = new UserPanelController(userPanelViewSwing, userRepository, transaction, homepageView);
+		userPanelController = new UserPanelController(userPanelViewSwing, userRepository, transaction);
+		userPanelController.setHomepageView(homepageView);
 		userPanelController.setLoggedUser(loggedUser);
 	}
 

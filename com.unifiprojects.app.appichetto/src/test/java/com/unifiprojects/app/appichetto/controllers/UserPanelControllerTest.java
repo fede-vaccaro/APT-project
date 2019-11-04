@@ -54,6 +54,7 @@ public class UserPanelControllerTest {
 
 		loggedUser = spy(new User("logged", "pw"));
 
+		userPanelController.setHomepageView(homepageView);
 		userPanelController.setLoggedUser(loggedUser);
 
 		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
