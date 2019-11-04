@@ -25,6 +25,14 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 
 	private LinkedSwingView loginViewSwing;
 
+	public LinkedSwingView getLoginViewSwing() {
+		return loginViewSwing;
+	}
+
+	public void setLoginViewSwing(LinkedSwingView loginViewSwing) {
+		this.loginViewSwing = loginViewSwing;
+	}
+
 	private JLabel lblUsername;
 
 	private JLabel lblErrorMessage;
@@ -42,8 +50,6 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 	private JLabel lblConfirm;
 
 	private JButton btnNoButton;
-	private JButton btnBack;
-
 	/**
 	 * Launch the application.
 	 */
@@ -151,7 +157,7 @@ public class UserPanelViewSwing extends LinkedSwingView implements UserPanelView
 		btnUpdateCredential.setEnabled(false);
 		btnUpdateCredential.addActionListener(e -> changeCredential());
 		
-		btnBack = new JButton("Back");
+		new JButton("Back");
 		GridBagConstraints gbc_btnBack = new GridBagConstraints();
 		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBack.gridx = 2;

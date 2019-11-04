@@ -169,7 +169,10 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Override
 	public void setLoggedUser(User loggedUser) {
-		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
+		views.stream().forEach(view -> {
+			if (view != null && view.getController() != null)
+				view.getController().setLoggedUser(loggedUser);
+		});
 	}
 
 	@Override
@@ -180,7 +183,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Override
 	public void updateData() {
-		getController().update();		
+		getController().update();
 	}
 
 	public LoginViewSwing getLoginView() {

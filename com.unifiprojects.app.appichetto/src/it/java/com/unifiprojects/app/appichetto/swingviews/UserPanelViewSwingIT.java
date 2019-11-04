@@ -7,14 +7,12 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.math3.util.Precision;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,7 +24,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
-import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -34,12 +31,9 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.LoginModule;
-import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
-import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptFormatter;
 import com.unifiprojects.app.appichetto.views.HomepageView;
-import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 @RunWith(GUITestRunner.class)
@@ -58,6 +52,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	private Receipt thirdReceiptPayer1;
 	private Receipt firstReceiptPayer2;
 	private User payer2;
+	private HomepageSwingView homepage;
+	private Receipt firstReceiptLoggedUser;
 
 	private static EntityManager entityManager;
 	private static Injector injector;
@@ -80,7 +76,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
-		injector = persistenceInjector.createChildInjector(new RepositoriesModule(), new UserPanelModule(), new LoginModule(), homepageModule);
+		injector = persistenceInjector.createChildInjector(new RepositoriesModule(), new UserPanelModule(),
+				new LoginModule(), homepageModule);
 	}
 
 	@AfterClass
@@ -103,6 +100,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 					payer1, new GregorianCalendar(2019, 8, 11));
 			firstReceiptPayer2 = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser,
 					payer2, new GregorianCalendar(2019, 8, 10));
+			firstReceiptLoggedUser = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payer1,
+					loggedUser);
 
 			Item tomato = new Item("tomato", 1.35, Arrays.asList(loggedUser, payer1));
 			Item hamburger = new Item("hamburger", 4.45, Arrays.asList(loggedUser, payer1));
@@ -118,6 +117,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(secondReceiptPayer1);
 			entityManager.persist(thirdReceiptPayer1);
 			entityManager.persist(firstReceiptPayer2);
+			entityManager.persist(firstReceiptLoggedUser);
 			entityManager.getTransaction().commit();
 
 			entityManager.clear();
@@ -126,8 +126,10 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 			userPanelController = (UserPanelController) userPanelViewSwing.getController();
 			userPanelController.setLoggedUser(loggedUser);
 
-			// when the user is entering the view, the controller should call
-			// showUnpaidReceipts
+			homepage = (HomepageSwingView) injector.getInstance(HomepageView.class);
+			userPanelViewSwing.setLinkedSwingView(homepage);
+			userPanelViewSwing.setLoginViewSwing(homepage.getLoginView());
+
 			GuiActionRunner.execute(() -> userPanelController.update());
 
 			return userPanelViewSwing;
@@ -140,30 +142,59 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testInitialState() {
-		Pause.pause(1000000);
-		
 		window.label("userLabel").requireText("Hello logged!");
 	}
-	
+
 	@GUITest
 	@Test
 	public void testGoBackHome() {
-		HomepageSwingView homepage = (HomepageSwingView) injector.getInstance(HomepageView.class);
-		userPanelViewSwing.setLinkedSwingView(homepage);
-		
 		window.button(JButtonMatcher.withText("Back")).click();
 		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
 		assertThat(homepage.getFrame().isVisible()).isTrue();
 	}
-	
+
+	@GUITest
+	@Test
+	public void testRemoveUserGoToLoginView() {
+		window.button(JButtonMatcher.withText("Remove user")).click();
+		window.button(JButtonMatcher.withText("Yes")).click();
+
+		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
+		assertThat(homepage.getLoginView().getFrame().isVisible()).isTrue();
+	}
+
+	@GUITest
+	@Test
+	public void testChangeCredential() {
+		String testNewName = "newName";
+		String newPassword = "newPw";
+
+		window.textBox("newName").enterText(testNewName);
+		window.textBox("newPW").enterText(newPassword);
+
+		window.button(JButtonMatcher.withText("Update credential")).click();
+
+		window.label("userLabel").requireText("Hello newName!");
+
+		User loggedUserReloaded = entityManager.find(User.class, loggedUser.getId());
+
+		assertThat(loggedUserReloaded).isEqualTo(loggedUser);
+	}
 	
 	@GUITest
 	@Test
-	public void test() {
-		HomepageSwingView homepage = (HomepageSwingView) injector.getInstance(HomepageView.class);
-		userPanelViewSwing.setLinkedSwingView(homepage);
+	public void testShowErrorMessageIfChangeCredentialFails() {
+		String testNewName = "payer";
+
+		window.textBox("newName").enterText(testNewName);
+
+		window.button(JButtonMatcher.withText("Update credential")).click();
 		
-		Pause.pause(1000000);
+		User loggedUserReloaded = entityManager.find(User.class, loggedUser.getId());
+
+		window.label("userLabel").requireText(String.format("Hello %s!", loggedUserReloaded.getUsername()));
+
+		window.label("errorMsg").requireText(String.format("Username %s has been already picked.", testNewName));
 	}
 
 }
