@@ -23,6 +23,8 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	private LinkedSwingView payReceiptsView;
 	@Mock
 	private LinkedSwingView historyView;
+	@Mock
+	private LinkedSwingView userPanelView;
 
 	private HomepageSwingView homepageSwingView;
 
@@ -36,12 +38,14 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 			homepageSwingView.setReceiptSwingView(receiptView);
 			homepageSwingView.setPayViewReceiptsViewSwing(payReceiptsView);
 			homepageSwingView.setHistoryViewSwing(historyView);
+			homepageSwingView.setUserPanelView(userPanelView);
 			return homepageSwingView;
 		});
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
 		window.show();
 	}
 
+	@GUITest
 	@Test
 	public void testUpdateSetFrameVisible() {
 		homepageSwingView.show();
@@ -57,6 +61,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Log Out")).requireEnabled();
 	}
 
+	@GUITest
 	@Test
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
@@ -64,6 +69,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
+	@GUITest
 	@Test
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
@@ -71,6 +77,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
+	@GUITest
 	@Test
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
@@ -78,6 +85,15 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
+	@GUITest
+	@Test
+	public void testUserPanelButtonShowOnlyUserPanelView() {
+		window.button(JButtonMatcher.withText("User panel")).click();
+		verify(userPanelView).show();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+	}
+
+	@GUITest
 	@Test
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();

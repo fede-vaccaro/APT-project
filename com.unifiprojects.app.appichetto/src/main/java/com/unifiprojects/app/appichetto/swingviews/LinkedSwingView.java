@@ -17,7 +17,6 @@ public abstract class LinkedSwingView{
 
 	public LinkedSwingView getLinkedSwingView() {
 		return linkedSwingView;
-		
 	}
 	
 	public LinkedSwingView() {

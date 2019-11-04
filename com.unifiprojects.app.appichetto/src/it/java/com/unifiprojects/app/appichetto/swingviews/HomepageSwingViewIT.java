@@ -5,15 +5,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.persistence.EntityManager;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.timing.Pause;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.google.inject.Guice;
@@ -27,6 +28,7 @@ import com.unifiprojects.app.appichetto.modules.PayReceiptsModule;
 import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
+import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 
 @RunWith(GUITestRunner.class)
 
@@ -42,13 +44,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 
-	@Mock
-	private LinkedSwingView loginView;
-	@Mock
-	private LinkedSwingView receiptView;
-	@Mock
-	private LinkedSwingView historyView;
-
 	@BeforeClass
 	public static void setUpInjectors() {
 
@@ -58,20 +53,20 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 		Module payReceiptModule = new PayReceiptsModule();
 
+		Module userPanelModule = new UserPanelModule();
+
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
 
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
-				new ShowHistoryModule(), new LoginModule());
+				userPanelModule, new ShowHistoryModule(), new LoginModule());
 
 	}
 
 	@Override
 	protected void onSetUp() {
-		MockitoAnnotations.initMocks(this);
-
 		baseTest.wipeTablesBeforeTest();
 
 		GuiActionRunner.execute(() -> {
@@ -91,8 +86,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		window.show();
 
 	}
-
-	@GUITest
 	@Test
 	public void testInjection() {
 		assertThat(homepageSwingView.payReceiptsView).isNotNull();
@@ -106,7 +99,49 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			assertThat(view.getLinkedSwingView()).isEqualTo(homepageSwingView);
 		}
 	}
+	/*
+	@GUITest
+	@Test
+	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
+		window.button(JButtonMatcher.withText("Create Receipt")).click();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.receiptView.getFrame().isVisible()).isTrue();
 
+	}
+	@GUITest
+	@Test
+	public void testPayDebtButtonShowOnlyPayDebtView() {
+		window.button(JButtonMatcher.withText("Pay Receipt")).click();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.payReceiptsView.getFrame().isVisible()).isTrue();
+
+	}
+	@GUITest
+	@Test
+	public void testLogOutButtonShowOnlyLogInView() {
+		window.button(JButtonMatcher.withText("Log Out")).click();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.loginView.getFrame().isVisible()).isTrue();
+
+	}
+	@GUITest
+	@Test
+	public void testUserPanelButtonShowOnlyUserPanelView() {
+		window.button(JButtonMatcher.withText("User panel")).click();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.userPanelView.getFrame().isVisible()).isTrue();
+
+	}
+
+	@GUITest
+	@Test
+	public void testShowHistoryButtonShowOnlyShowHistoryView() {
+		window.button(JButtonMatcher.withText("Show History")).click();
+		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
+		assertThat(homepageSwingView.showHistoryView.getFrame().isVisible()).isTrue();
+
+	}
+	*/
 	//@Test
 	public void test() {
 		Pause.pause(1000000000);

@@ -35,6 +35,8 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	LinkedSwingView showHistoryView;
 
+	LinkedSwingView userPanelView;
+
 //	/**
 //	 * Launch the application.
 //	 */
@@ -71,16 +73,17 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Inject
 	public HomepageSwingView(LoginViewSwing loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing,
-			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView) {
+			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
+		this.userPanelView = userPanelViewSwing;
 		this.receiptView = receiptSwingView;
 		this.loginView = loginViewSwing;
 
 		views = new ArrayList<>();
 		// homePageController = new HomePageController();
 
-		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView));
+		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView, userPanelViewSwing));
 
 		views.forEach(v -> v.setLinkedSwingView(this));
 		loginViewSwing.setLinkedSwingView(this);
@@ -139,12 +142,16 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		gbc_btnShowHistory.gridy = 5;
 		frame.getContentPane().add(btnShowHistory, gbc_btnShowHistory);
 
-		JButton btnNewButton_4 = new JButton("New button");
+		JButton btnUserPanel = new JButton("User panel");
 		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
 		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton_4.gridx = 4;
 		gbc_btnNewButton_4.gridy = 5;
-		frame.getContentPane().add(btnNewButton_4, gbc_btnNewButton_4);
+		frame.getContentPane().add(btnUserPanel, gbc_btnNewButton_4);
+		btnUserPanel.addActionListener(e -> {
+			frame.setVisible(false);
+			userPanelView.show();
+		});
 
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(e -> {
@@ -188,5 +195,9 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	public LoginViewSwing getLoginView() {
 		return (LoginViewSwing) loginView;
+	}
+
+	void setUserPanelView(LinkedSwingView userPanelView) {
+		this.userPanelView = userPanelView;
 	}
 }

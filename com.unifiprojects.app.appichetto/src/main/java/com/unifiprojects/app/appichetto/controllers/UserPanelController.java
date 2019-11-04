@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.AlreadyExistentException;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.repositories.UserRepository;
-import com.unifiprojects.app.appichetto.swingviews.UserPanelViewSwing;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
