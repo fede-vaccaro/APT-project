@@ -33,6 +33,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
 	private static EntityManager entityManager;
+	private HomepageSwingView homepageSwingView;
 	private ReceiptSwingView receiptSwingView;
 	private ReceiptController receiptController;
 	private ReceiptRepository receiptRepository;
@@ -70,6 +71,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(mario);
 			entityManager.getTransaction().commit();
 			entityManager.clear();
+			homepageSwingView = new HomepageSwingView();
 			receiptSwingView = new ReceiptSwingView();
 			ReceiptManager receiptManager = new ReceiptManager(pippo, new ReceiptRepositoryHibernate(entityManager));
 			receiptController = new ReceiptController(receiptManager, receiptSwingView,
@@ -77,6 +79,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptController.setTransactionHandler(new HibernateTransaction(entityManager));
 			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 			receiptSwingView.setReceiptController(receiptController);
+			receiptSwingView.setLinkedSwingView(homepageSwingView);
 			receiptSwingView.setUsers();
 			return receiptSwingView;
 		});
@@ -144,7 +147,6 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testSaveReceipt() {
-		System.out.println(pippo.getId());
 		Item sugo = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto, mario));
 		Receipt receipt = new Receipt(pippo);
 		receipt.addItem(sugo);
@@ -162,5 +164,4 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
 		assertThat(receiptRepository.getAllReceiptsBoughtBy(pippo)).contains(receipt);
 	}
-
 }
