@@ -69,7 +69,9 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 	// TODO passare lista di utenti, vedi showCurrentUsers
 	public void setUsers() {
-		receiptController.getUsers().stream().forEach(listUsersModel::addElement);
+		// TODO: test filter
+		receiptController.getUsers().stream().filter(user -> !listUsersModel.contains(user))
+				.forEach(listUsersModel::addElement);
 	}
 
 	/**
@@ -101,7 +103,10 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 	@Override
 	public void showCurrentItemsList(List<Item> items) {
-		items.stream().forEach(listItemModel::addElement);
+		if (items == null)
+			listItemModel.clear();
+		else
+			items.stream().forEach(listItemModel::addElement);
 	}
 
 	@Override
@@ -477,6 +482,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	public void updateData() {
 		getController().update();
 		setUsers();
+
 	}
 
 }
