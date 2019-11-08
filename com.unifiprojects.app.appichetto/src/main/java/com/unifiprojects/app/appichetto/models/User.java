@@ -3,9 +3,13 @@ package com.unifiprojects.app.appichetto.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Version;
 
 @Entity(name = "users")
 public class User {
+	
+	@Version
+	private int version;
 
 	@Id
 	@GeneratedValue
@@ -76,5 +80,11 @@ public class User {
 	/*public List<Receipt> getBoughtReceipt() {
 		return boughtReceipts;
 	}*/
+	public long getVersion() {
+		return version;
+	}
 
+	public void setVersion(int version) {
+		this.version = version;
+	}
 }

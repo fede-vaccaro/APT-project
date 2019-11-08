@@ -5,9 +5,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 @Entity
 public class Accounting {
+	
+	@Version
+	private int version;
 
 	@Override
 	public String toString() {
@@ -116,6 +120,14 @@ public class Accounting {
 		if (this.amount == 0.0)
 			return true;
 		return false;
+	}
+	
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 }

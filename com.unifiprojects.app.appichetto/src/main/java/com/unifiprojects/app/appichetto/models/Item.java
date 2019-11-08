@@ -8,9 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.Version;
 
 @Entity
 public class Item {
+	
+	@Version
+	private int version;
 
 	public Item() {
 
@@ -131,6 +135,14 @@ public class Item {
 
 	public double getPricePerOwner() {
 		return price * quantity / owners.size();
+	}
+	
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 }

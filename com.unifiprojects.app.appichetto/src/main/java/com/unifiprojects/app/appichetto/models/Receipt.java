@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.Version;
 
 import com.google.inject.Inject;
 
@@ -26,6 +27,9 @@ public class Receipt {
 	private Long id;
 	private String description;
 	private GregorianCalendar timestamp;
+
+    @Version
+    private int version;
 	
 	@ManyToOne
 	private User buyer;
@@ -37,7 +41,7 @@ public class Receipt {
 	private List<Item> items;
 	
 	@OrderColumn
-	@OneToMany(mappedBy="receipt", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="receipt", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Accounting> accountingList;
 
 	@Inject
@@ -109,7 +113,8 @@ public class Receipt {
 	}
 
 	public void setAccountingList(List<Accounting> accountingList) {
-		this.accountingList = accountingList;
+		this.accountingList.clear();
+		this.accountingList.addAll(accountingList);
 		accountingList.forEach(a -> a.setReceipt(this));
 	}
 
@@ -193,7 +198,15 @@ public class Receipt {
 	
 	@Override
 	public String toString() {
-		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "]";
+		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() +"items"+ items + "]";
+	}
+
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	
 	
