@@ -75,6 +75,7 @@ public class ReceiptController extends UserController {
 		} catch (UncommittableTransactionException e) {
 			receiptView.showError("Something went wrong while saving receipt.");
 		}
+		clear();
 	}
 	
 	public void uploadReceipt(Receipt receipt) {
@@ -82,6 +83,10 @@ public class ReceiptController extends UserController {
 		receiptView.descriptionUploaded(receiptManager.getDescription());
 		receiptView.showCurrentItemsList(receiptManager.getItems());
 		receiptView.dateUploaded(receiptManager.getTimestamp());
+	}
+	
+	protected void clear() {
+		receiptView.showCurrentItemsList(null);
 	}
 
 	public List<User> getUsers() {
