@@ -65,8 +65,8 @@ public class ReceiptManager {
 		List<Accounting> accountings = createDebtsService.getAccountings();
 		
 		receipt.setAccountingList(accountings);
-		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
 		receiptRepository.saveReceipt(receipt);
+		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
 		
 		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
 		return receipt.getId();
@@ -74,6 +74,7 @@ public class ReceiptManager {
 	
 	public void uploadReceipt(Receipt receipt) {
 		this.receipt = receipt;
+		accountingsMap = new HashMap<>();
 		for (Item i : receipt.getItems()) {
 			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer()))
 					.forEach(owner -> {
@@ -119,6 +120,10 @@ public class ReceiptManager {
 
 	public GregorianCalendar getTimestamp() {
 		return receipt.getTimestamp();
+	}
+
+	public void clear() {
+		receipt = new Receipt(this.receipt.getBuyer());
 	}
 
 }
