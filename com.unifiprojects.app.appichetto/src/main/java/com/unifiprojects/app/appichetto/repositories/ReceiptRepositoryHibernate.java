@@ -26,20 +26,21 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 		} else {
 			entityManager.persist(receipt);
 		}
-		
-		// receipt.getAccountings().forEach(entityManager::merge);
 	}
 
 	@Override
 	public List<Receipt> getAllUnpaidReceiptsOf(User user) {
-		return entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
+		entityManager.clear();
+		List<Receipt> receipts = entityManager
+				.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
 				.setParameter("amount", 0.0).setParameter("user", user).getResultList().stream()
 				.map(Accounting::getReceipt).collect(Collectors.toList());
-
+		return receipts;
 	}
 
 	@Override
 	public List<Receipt> getAllReceiptsBoughtBy(User user) {
+		entityManager.clear();
 		return entityManager.createQuery("from Receipt where buyer=:buyer", Receipt.class).setParameter("buyer", user)
 				.getResultList();
 
@@ -56,7 +57,6 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 		if (!entityManager.contains(receipt)) {
 			toBeRemoved = entityManager.merge(receipt);
 		}
-
 
 		entityManager.remove(toBeRemoved);
 
