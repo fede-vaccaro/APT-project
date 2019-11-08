@@ -43,7 +43,7 @@ public class CreateDebtsService {
 		Set<User> users = new HashSet<>();
 		users.addAll(oldAIPM.keySet());
 		users.addAll(aIPM.keySet());
-
+		
 		users.stream().forEach(user -> {
 			Double amount = Math.round(100 * (oldAM.getOrDefault(user, defaultAccountig).getAmount()
 					- oldAIPM.getOrDefault(user, defaultAccountig).getAmount()
@@ -51,7 +51,7 @@ public class CreateDebtsService {
 			if (amount != 0.0)// TODO da decidere
 				accountingsMap.put(user, new Accounting(user, amount));
 		});
-
+		
 		return accountingsMap;
 	}
 

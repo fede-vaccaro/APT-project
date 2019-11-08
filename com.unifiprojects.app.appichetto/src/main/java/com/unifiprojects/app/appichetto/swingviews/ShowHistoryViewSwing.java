@@ -244,7 +244,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 	@Override
 	public void updateData() {
-		showHistoryController.showHistory();
+		showHistoryController.update();
 	}
 	
 	//public void goToHome(Receipt receipt) {

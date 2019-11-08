@@ -17,5 +17,11 @@ public abstract class LinkedControlledSwingView extends LinkedSwingView implemen
 	public void updateData() {
 		controller.update();
 	}
+	
+	@Override
+	public void show() {
+		getFrame().setVisible(true);
+		updateData();
+	}
 
 }

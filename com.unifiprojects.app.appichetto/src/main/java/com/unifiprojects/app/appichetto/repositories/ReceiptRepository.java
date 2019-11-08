@@ -15,5 +15,4 @@ public interface ReceiptRepository {
 	public List<Receipt> getAllReceiptsBoughtBy(User user);
 
 	public Receipt getById(Long id);
-
 }

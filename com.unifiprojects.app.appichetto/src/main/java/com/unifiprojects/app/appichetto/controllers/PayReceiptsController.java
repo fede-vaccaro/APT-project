@@ -57,6 +57,7 @@ public class PayReceiptsController extends UserController{
 		showUnpaidReceipts(loggedUser);
 	}
 
+	@Override
 	public void update() {
 		showUnpaidReceipts(loggedUser);
 	}
