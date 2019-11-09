@@ -415,6 +415,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		
 		showHistoryViewSwing.updateData();
 		
-		verify(showHistoryController).showHistory();
+		verify(showHistoryController).update();
 	}
 }
