@@ -37,11 +37,11 @@ public class Receipt {
 	private double totalPrice;
 	
 	@OrderColumn
-	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Item> items;
 	
 	@OrderColumn
-	@OneToMany(mappedBy="receipt", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="receipt", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Accounting> accountingList;
 
 	@Inject

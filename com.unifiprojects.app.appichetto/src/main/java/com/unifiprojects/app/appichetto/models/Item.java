@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -47,7 +48,7 @@ public class Item {
 	private Double price;
 
 	@OrderColumn
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> owners;
 
 	public Item(String name, Double price, Integer quantity, List<User> users) {
