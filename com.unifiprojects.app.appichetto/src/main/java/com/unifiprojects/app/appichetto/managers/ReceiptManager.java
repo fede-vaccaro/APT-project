@@ -74,7 +74,7 @@ public class ReceiptManager {
 	
 	public void uploadReceipt(Receipt receipt) {
 		this.receipt = receipt;
-		accountingsMap = new HashMap<>();
+		accountingsMap.clear();
 		for (Item i : receipt.getItems()) {
 			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer()))
 					.forEach(owner -> {
