@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.unifiprojects.app</groupId>
 	<artifactId>appichetto-parent</artifactId>
@@ -212,7 +214,7 @@
 											<limit>
 												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.5</minimum>
+												<minimum>0.0</minimum>
 											</limit>
 										</limits>
 									</rule>
@@ -227,11 +229,11 @@
 					<version>1.4.3</version>
 					<configuration>
 						<targetClasses>
-							<param>com.unifiprojects.app.appichetto/src/main/**/controllers/*</param>
-							<param>com.unifiprojects.app.appichetto/src/main/**/repositories/*</param>
-							<param>com.unifiprojects.app.appichetto/src/main/**/swingviews/*</param>
-							<param>com.unifiprojects.app.appichetto/src/main/**/transactionhandlers/*</param>
-							<param>com.unifiprojects.app.appichetto/src/main/**/managers/*</param>
+							<param>**/controllers/*</param>
+							<param>**/repositories/*</param>
+							<param>**/swingviews/*</param>
+							<param>**/transactionhandlers/*</param>
+							<param>**/managers/*</param>
 						</targetClasses>
 						<targetTests>
 							<param>com.unifiprojects.app.appichetto/src/test/**</param>
@@ -268,10 +270,10 @@
 		<module>pay-receipt-MVC</module>
 		<module>login-MVC</module>
 		<module>user-panel-MVC</module>
-    <module>appichetto-guice</module>
-    <module>main</module>
-    <module>homepage</module>
-    <module>IT</module>
-    <module>appichetto-IT</module>
-  </modules>
+		<module>appichetto-guice</module>
+		<module>main</module>
+		<module>homepage</module>
+		<module>appichetto-IT</module>
+		<module>appichetto</module>
+	</modules>
 </project>
