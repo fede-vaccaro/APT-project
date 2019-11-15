@@ -20,7 +20,7 @@ public class ObservableFrameSwingTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	@Mock
-	private HomepageSwingView homepageSwingView;
+	private LinkedSwingView homepageSwingView;
 
 	private LinkedSwingView observableFrame;
 	

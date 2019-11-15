@@ -134,7 +134,7 @@ public class TestUserRepositoryHibernate {
 
 	}
 
-	static User persistGetTestUserAndClear(EntityManager entityManager) {
+	private User persistGetTestUserAndClear(EntityManager entityManager) {
 		String username = "TestUser";
 		String userPassword = "TestPassword";
 
