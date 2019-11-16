@@ -18,15 +18,15 @@ public class ShowHistoryController extends UserController {
 	private ReceiptRepository receiptRepository;
 	private ShowHistoryView showHistoryView;
 	private TransactionHandler transaction;
-	private ReceiptSwingView receiptsView;
+	private ReceiptSwingView receiptView;
 
 	@Inject
 	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView,
-			TransactionHandler transaction, ReceiptSwingView receiptsView) {
+			TransactionHandler transaction, ReceiptSwingView receiptView) {
 		this.receiptRepository = receiptRepository;
 		this.showHistoryView = showHistoryView;
 		this.transaction = transaction;
-		this.receiptsView = receiptsView;
+		this.receiptView = receiptView;
 	}
 
 	public void showHistory() {
@@ -57,11 +57,10 @@ public class ShowHistoryController extends UserController {
 	}
 
 	public void updateReceipt(Receipt selected) {
-		receiptsView.getController().setLoggedUser(loggedUser);
-		(receiptsView).getController().uploadReceipt(selected);
-		//HomepageSwingView homepage = ((LinkedSwingView) showHistoryView).getHomepageSwingView();
-		receiptsView.setLinkedSwingView((LinkedSwingView) showHistoryView);
-		receiptsView.show();
+		receiptView.getController().setLoggedUser(loggedUser);
+		receiptView.getController().uploadReceipt(selected);
+		receiptView.setLinkedSwingView((LinkedSwingView) showHistoryView);
+		receiptView.show();
 	}
 
 	@Override
