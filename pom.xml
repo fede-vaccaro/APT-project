@@ -146,12 +146,12 @@
 	</dependencies>
 
 	<build>
-<!-- 		<pluginManagement> -->
+		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.31.2</version>
+					<version>0.31.0</version>
 					<configuration>
 						<images>
 							<image>
@@ -339,7 +339,7 @@
 					</configuration>
 				</plugin>
 			</plugins>
-<!-- 		</pluginManagement> -->
+		</pluginManagement>
 	</build>
 	
 	<modules>
