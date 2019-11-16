@@ -342,7 +342,6 @@
 		</pluginManagement>
 	</build>
 	
-	
 	<modules>
 		<module>receipt-MVC</module>
 		<module>show-history-MVC</module>
