@@ -103,7 +103,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testSetLoggedUserSetItInAllViews() {
 		User loggedUser = new User("loggedUser", "");
 	
-		homepageSwingView.setLoggedUser(loggedUser);
+		//homepageSwingView.setLoggedUser(loggedUser);
 
 		//TODO to test
 	}
