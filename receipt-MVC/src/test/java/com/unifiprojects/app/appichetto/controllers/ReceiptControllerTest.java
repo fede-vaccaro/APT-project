@@ -156,4 +156,15 @@ public class ReceiptControllerTest {
 		verify(receiptView).showCurrentItemsList(receiptManager.getItems());
 		verify(receiptView).dateUploaded(receiptManager.getTimestamp());
 	}
+	
+	@Test
+	public void testUpdateSetLoggedUserInReceiptManager() {
+		User loggedUser = new User("loggedUser", "password");
+		receiptController.setLoggedUser(loggedUser);
+		
+		receiptController.update();
+		
+		verify(receiptManager).setBuyer(loggedUser);
+	}
+	
 }

@@ -9,8 +9,12 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
@@ -18,27 +22,21 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Mock
 	private LinkedSwingView loginView;
 	@Mock
-	private LinkedSwingView receiptView;
+	private LinkedControlledSwingView receiptView;
 	@Mock
-	private LinkedSwingView payReceiptsView;
+	private LinkedControlledSwingView payReceiptsView;
 	@Mock
-	private LinkedSwingView historyView;
+	private LinkedControlledSwingView historyView;
 	@Mock
-	private LinkedSwingView userPanelView;
+	private LinkedControlledSwingView userPanelView;
 
+	@InjectMocks
 	private HomepageSwingView homepageSwingView;
 
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
-			homepageSwingView = new HomepageSwingView();
-
-			homepageSwingView.setLoginView(loginView);
-			homepageSwingView.setReceiptSwingView(receiptView);
-			homepageSwingView.setPayViewReceiptsViewSwing(payReceiptsView);
-			homepageSwingView.setHistoryViewSwing(historyView);
-			homepageSwingView.setUserPanelView(userPanelView);
 			return homepageSwingView;
 		});
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
@@ -100,5 +98,21 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(historyView).show();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
+	
+	@Test
+	public void testSetLoggedUserSetItInAllViews() {
+		User loggedUser = new User("loggedUser", "");
+	
+		homepageSwingView.setLoggedUser(loggedUser);
+
+		//TODO to test
+	}
+	
+	@Test
+	public void testUpdateMakeFrameTrue() {
+		//TODO to test
+	}
+	
+	
 	
 }

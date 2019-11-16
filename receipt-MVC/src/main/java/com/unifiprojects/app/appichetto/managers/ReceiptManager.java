@@ -25,13 +25,6 @@ public class ReceiptManager {
 	private CreateDebtsService createDebtsService;
 	private static final Logger LOGGER = LogManager.getLogger(ReceiptManager.class);
 	
-	public ReceiptManager(User buyer, ReceiptRepository receiptRepository) {
-		this.receiptRepository = receiptRepository;
-		this.receipt = new Receipt(buyer);
-		this.accountingsMap = new HashMap<>();
-		this.createDebtsService = new CreateDebtsService();
-	}
-	
 	@Inject
 	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, CreateDebtsService createDebtsService) {
 		this.receipt = receipt;
@@ -122,8 +115,8 @@ public class ReceiptManager {
 		return receipt.getTimestamp();
 	}
 
-	public void clear() {
-		receipt = new Receipt(this.receipt.getBuyer());
-	}
+//	public void clear() {
+//		receipt = new Receipt(this.receipt.getBuyer());
+//	}
 
 }

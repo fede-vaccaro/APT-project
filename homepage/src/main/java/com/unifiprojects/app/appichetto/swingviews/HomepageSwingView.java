@@ -52,23 +52,23 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	public void setLoginView(LinkedSwingView loginView) {
 		this.loginView = loginView;
 	}
-
-	public void setReceiptSwingView(LinkedSwingView receiptSwingView) {
-		this.receiptView = receiptSwingView;
-	}
-
-	public void setPayViewReceiptsViewSwing(LinkedSwingView payViewReceiptsViewSwing) {
-		this.payReceiptsView = payViewReceiptsViewSwing;
-	}
-
-	public void setHistoryViewSwing(LinkedSwingView historyViewSwing) {
-		this.showHistoryView = historyViewSwing;
-	}
+//
+//	public void setReceiptSwingView(LinkedSwingView receiptSwingView) {
+//		this.receiptView = receiptSwingView;
+//	}
+//
+//	public void setPayViewReceiptsViewSwing(LinkedSwingView payViewReceiptsViewSwing) {
+//		this.payReceiptsView = payViewReceiptsViewSwing;
+//	}
+//
+//	public void setHistoryViewSwing(LinkedSwingView historyViewSwing) {
+//		this.showHistoryView = historyViewSwing;
+//	}
 
 	@Inject
-	public HomepageSwingView(LinkedSwingView loginViewSwing, PayReceiptsViewSwing payReceiptsViewSwing,
-			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView,
-			UserPanelViewSwing userPanelViewSwing) {
+	public HomepageSwingView(LinkedSwingView loginViewSwing, LinkedControlledSwingView payReceiptsViewSwing,
+			LinkedControlledSwingView showHistoryViewSwing, LinkedControlledSwingView receiptSwingView,
+			LinkedControlledSwingView userPanelViewSwing) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.userPanelView = userPanelViewSwing;
@@ -89,9 +89,9 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	/**
 	 * Create the frame.
 	 */
-	public HomepageSwingView() {
-		initialize();
-	}
+//	public HomepageSwingView() {
+//		initialize();
+//	}
 
 	private void initialize() {
 		frame = new JFrame();

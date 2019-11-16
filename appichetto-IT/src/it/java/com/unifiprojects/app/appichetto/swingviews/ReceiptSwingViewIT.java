@@ -1,7 +1,9 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.persistence.EntityManager;
@@ -16,23 +18,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
-import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
+import com.unifiprojects.app.appichetto.modules.ReceiptModule;
+import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
-import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
-import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
 
 public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();
-	private static EntityManager entityManager;
 	private HomepageSwingView homepageSwingView;
 	private ReceiptSwingView receiptSwingView;
 	private ReceiptController receiptController;
@@ -43,11 +47,24 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 	private User pippo;
 	private User pluto;
 	private User mario;
+	private static EntityManager entityManager;
+	private static Injector injector;
 
 	@BeforeClass
 	public static void setupEntityManager() {
-		baseTest.setupEntityManager();
-		entityManager = baseTest.getEntityManager();
+
+		Module repositoriesModule = new RepositoriesModule();
+		
+		Module entityManagerModule = new EntityManagerModule();
+
+		Module receiptModule = new ReceiptModule();
+
+		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
+		
+		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
+		entityManager = persistenceInjector.getInstance(EntityManager.class);
+		
+		injector = persistenceInjector.createChildInjector(repositoriesModule, receiptModule);
 	}
 
 	@AfterClass
@@ -71,14 +88,13 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.persist(mario);
 			entityManager.getTransaction().commit();
 			entityManager.clear();
-			homepageSwingView = new HomepageSwingView();
-			receiptSwingView = new ReceiptSwingView();
-			ReceiptManager receiptManager = new ReceiptManager(pippo, new ReceiptRepositoryHibernate(entityManager));
-			receiptController = new ReceiptController(receiptManager, receiptSwingView,
-					new UserRepositoryHibernate(entityManager));
-			receiptController.setTransactionHandler(new HibernateTransaction(entityManager));
-			receiptRepository = new ReceiptRepositoryHibernate(entityManager);
-			receiptSwingView.setReceiptController(receiptController);
+			homepageSwingView = mock(HomepageSwingView.class);
+			
+			receiptRepository = injector.getInstance(ReceiptRepositoryHibernate.class);
+			receiptSwingView = injector.getInstance(ReceiptSwingView.class);
+			
+			receiptController = receiptSwingView.getController();
+			receiptController.setLoggedUser(pippo);
 			receiptSwingView.setLinkedSwingView(homepageSwingView);
 			receiptSwingView.setUsers();
 			return receiptSwingView;
@@ -147,7 +163,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testSaveReceipt() {
-		Item sugo = new Item("Sugo", 2.2, 2, Arrays.asList(pippo, pluto, mario));
+		Item sugo = new Item("Sugo", 2.2, 2, new ArrayList<>(Arrays.asList(pippo, pluto, mario)));
 		Receipt receipt = new Receipt(pippo);
 		receipt.addItem(sugo);
 		receipt.addAccounting(new Accounting(pluto, 2.2));
@@ -162,6 +178,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).click();
 
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
+		//TODO StackOverflowError on hashCode
 		assertThat(receiptRepository.getAllReceiptsBoughtBy(pippo)).contains(receipt);
 	}
 }

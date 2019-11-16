@@ -3,6 +3,7 @@ package com.unifiprojects.app.appichetto.swingviews;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -319,6 +320,19 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
+	public void testThatShowCurrentItemListWithNullArgumentClearTheList() {
+		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
+
+		Item item1 = new Item("Sugo", 1., 1, users);
+		Item item2 = new Item("Pasta", 2., 1, users);
+		
+		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
+		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(null));
+		String[] listContents = window.list("itemsList").contents();
+		assertThat(listContents).containsExactly();
+	}
+
+	@Test
 	public void testShowCurrentUsersListShouldAddUserDescriptionsToTheList() {
 		User user1 = new User("Pippo", "psw");
 		User user2 = new User("Pluto", "psw");
@@ -327,6 +341,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		String[] listContents = window.list("usersList").contents();
 		assertThat(listContents).containsExactly(user1.toString(), user2.toString());
 	}
+
 
 	@Test
 	public void testShowErrorMessage() {
@@ -498,6 +513,25 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		String description = "This is a fancy receipt";
 		GuiActionRunner.execute(() -> receiptSwingView.descriptionUploaded(description));
 		window.textBox("txtDescription").requireText(description);
+	}
+
+	@Test
+	public void testSetUserUpdateListUserModel() {
+		User pippo = new User("pippo", "");
+		User pluto = new User("pluto", "");
+
+		GuiActionRunner.execute(() -> {
+			receiptSwingView.getListUsersModel().addElement(pippo);
+			receiptSwingView.getListUsersModel().addElement(pluto);
+		});
+
+		when(receiptController.getUsers()).thenReturn(Arrays.asList(pippo, pluto));
+
+		receiptSwingView.setUsers();
+
+		verify(receiptController).getUsers();
+		assertThat(receiptSwingView.getListUsersModel().toArray()).containsExactlyInAnyOrder(pippo, pluto);
+
 	}
 
 }

@@ -67,27 +67,10 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		this.receiptController = receiptController;
 	}
 
-	// TODO passare lista di utenti, vedi showCurrentUsers
 	public void setUsers() {
-		// TODO: test filter
 		receiptController.getUsers().stream().filter(user -> !listUsersModel.contains(user))
 				.forEach(listUsersModel::addElement);
 	}
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(() -> {
-//			try {
-//				ReceiptSwingView frame = new ReceiptSwingView();
-//				frame.setReceiptController(new ReceiptController(new Receipt(), frame));
-//				frame.setVisible(true);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		});
-//	}
 
 	public DefaultListModel<Item> getListItemModel() {
 		return listItemModel;
@@ -482,7 +465,6 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	public void updateData() {
 		getController().update();
 		setUsers();
-
 	}
 
 }

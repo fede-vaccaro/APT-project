@@ -9,10 +9,10 @@
 	<persistence-unit name="test-persistence-unit"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<class>com.unifiprojects.app.appichetto.models.User</class>
+		<class>com.unifiprojects.app.appichetto.models.Accounting</class>
 		<class>com.unifiprojects.app.appichetto.models.Item</class>
 		<class>com.unifiprojects.app.appichetto.models.Receipt</class>
-		<class>com.unifiprojects.app.appichetto.models.Accounting</class>
+		<class>com.unifiprojects.app.appichetto.models.User</class>
 		<properties>
 			<property name="javax.persistence.validation.mode"
 				value="none" />

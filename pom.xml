@@ -21,8 +21,6 @@
 		<testcontainer.version>1.10.5</testcontainer.version>
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
 		<guice.version>4.2.2</guice.version>
-		<sonar.exclusions>**/models/**, **/exceptions/**,
-			**/swingviews/utils/**</sonar.exclusions>
 	</properties>
 
 	<dependencyManagement>
@@ -66,6 +64,7 @@
 			<version>3.9.2</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -74,7 +73,7 @@
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.27.2</version>
+					<version>0.31.2</version>
 					<configuration>
 						<images>
 							<image>
@@ -181,12 +180,13 @@
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco.version}</version>
 					<configuration>
-
 						<excludes>
-							<esclude>**/Main.*</esclude>
+							<esclude>**/main/*</esclude>
 							<esclude>**/models/**</esclude>
 							<esclude>**/exceptions/**</esclude>
 							<esclude>**/swingviews/utils/**</esclude>
+							<esclude>**/modules/**</esclude>
+							<esclude>**/factories/**</esclude>
 						</excludes>
 					</configuration>
 
@@ -263,7 +263,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 	<modules>
 		<module>receipt-MVC</module>
 		<module>show-history-MVC</module>
