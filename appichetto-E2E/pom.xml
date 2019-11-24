@@ -9,23 +9,26 @@
 		<artifactId>appichetto-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
-	<artifactId>appichetto-IT</artifactId>
-	<name>appichetto-IT</name>
+	<artifactId>appichetto-E2E</artifactId>
+	<name>appichetto-E2E</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
