@@ -457,10 +457,6 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		txtDate.setText(timestamp.getTime().toString());
 	}
 
-	public ReceiptController getController() {
-		return receiptController;
-	}
-
 	@Override
 	public void updateData() {
 		getController().update();

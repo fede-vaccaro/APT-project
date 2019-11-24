@@ -98,21 +98,22 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(historyView).show();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
-	
-	@Test
-	public void testSetLoggedUserSetItInAllViews() {
-		User loggedUser = new User("loggedUser", "");
-	
-		//homepageSwingView.setLoggedUser(loggedUser);
 
-		//TODO to test
-	}
-	
-	@Test
-	public void testUpdateMakeFrameTrue() {
-		//TODO to test
-	}
-	
+	//TODO
+//	@Test
+//	public void testSetLoggedUserSetItInAllViews() {
+//		User loggedUser = new User("loggedUser", "");
+//	
+//		homepageSwingView.setLoggedUser(loggedUser);
+//
+//		//TODO to test
+//	}
+//	
+//	@Test
+//	public void testUpdateMakeFrameTrue() {
+//		//TODO to test
+//	}
+//	
 	
 	
 }

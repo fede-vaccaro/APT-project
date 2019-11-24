@@ -25,12 +25,6 @@ public class ReceiptController extends UserController {
 	private TransactionHandler transactionHandler;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ReceiptController.class);
-//
-//	public ReceiptController(ReceiptManager receiptManager, ReceiptView receiptView, UserRepository userRepository) {
-//		this.receiptManager = receiptManager;
-//		this.receiptView = receiptView;
-//		this.userRepository = userRepository;
-//	}
 
 	@Inject
 	public ReceiptController(ReceiptManager receiptManager, @Assisted ReceiptView receiptView,
@@ -80,9 +74,9 @@ public class ReceiptController extends UserController {
 	
 	public void uploadReceipt(Receipt receipt) {
 		receiptManager.uploadReceipt(receipt);
-		receiptView.descriptionUploaded(receiptManager.getDescription());
-		receiptView.showCurrentItemsList(receiptManager.getItems());
-		receiptView.dateUploaded(receiptManager.getTimestamp());
+		receiptView.descriptionUploaded(receipt.getDescription());
+		receiptView.showCurrentItemsList(receipt.getItems());
+		receiptView.dateUploaded(receipt.getTimestamp());
 	}
 	
 	protected void clear() {

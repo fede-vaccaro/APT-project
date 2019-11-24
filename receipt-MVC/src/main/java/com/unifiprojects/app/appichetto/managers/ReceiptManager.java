@@ -1,6 +1,5 @@
 package com.unifiprojects.app.appichetto.managers;
 
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,21 +101,5 @@ public class ReceiptManager {
 	public Receipt getReceipt() {
 		return receipt;
 	}
-
-	public String getDescription() {
-		return receipt.getDescription();
-	}
-
-	public List<Item> getItems() {
-		return receipt.getItems();
-	}
-
-	public GregorianCalendar getTimestamp() {
-		return receipt.getTimestamp();
-	}
-
-//	public void clear() {
-//		receipt = new Receipt(this.receipt.getBuyer());
-//	}
 
 }

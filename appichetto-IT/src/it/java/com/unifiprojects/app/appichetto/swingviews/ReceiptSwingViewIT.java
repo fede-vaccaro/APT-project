@@ -93,7 +93,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptRepository = injector.getInstance(ReceiptRepositoryHibernate.class);
 			receiptSwingView = injector.getInstance(ReceiptSwingView.class);
 			
-			receiptController = receiptSwingView.getController();
+			receiptController = (ReceiptController) receiptSwingView.getController();
 			receiptController.setLoggedUser(pippo);
 			receiptSwingView.setLinkedSwingView(homepageSwingView);
 			receiptSwingView.setUsers();
@@ -178,7 +178,6 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Save")).click();
 
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
-		//TODO StackOverflowError on hashCode
 		assertThat(receiptRepository.getAllReceiptsBoughtBy(pippo)).contains(receipt);
 	}
 }

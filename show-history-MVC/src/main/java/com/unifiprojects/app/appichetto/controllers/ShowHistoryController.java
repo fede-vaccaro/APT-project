@@ -56,9 +56,10 @@ public class ShowHistoryController extends UserController {
 		this.transaction = transaction;
 	}
 
+	//TODO
 	public void updateReceipt(Receipt selected) {
 		receiptView.getController().setLoggedUser(loggedUser);
-		receiptView.getController().uploadReceipt(selected);
+		((ReceiptController)receiptView.getController()).uploadReceipt(selected);
 		receiptView.setLinkedSwingView((LinkedSwingView) showHistoryView);
 		receiptView.show();
 	}

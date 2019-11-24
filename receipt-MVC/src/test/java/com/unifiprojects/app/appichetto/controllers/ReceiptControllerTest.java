@@ -152,9 +152,9 @@ public class ReceiptControllerTest {
 		receiptController.uploadReceipt(receipt);
 
 		verify(receiptManager).uploadReceipt(receipt);
-		verify(receiptView).descriptionUploaded(receiptManager.getDescription());
-		verify(receiptView).showCurrentItemsList(receiptManager.getItems());
-		verify(receiptView).dateUploaded(receiptManager.getTimestamp());
+		verify(receiptView).descriptionUploaded(receipt.getDescription());
+		verify(receiptView).showCurrentItemsList(receipt.getItems());
+		verify(receiptView).dateUploaded(receipt.getTimestamp());
 	}
 	
 	@Test

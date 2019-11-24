@@ -2,6 +2,7 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -24,7 +25,10 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
+import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
+import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryControllerTest {
@@ -37,6 +41,9 @@ public class ShowHistoryControllerTest {
 	
 	@Mock
 	private ShowHistoryView showHistoryView;
+	
+	@Mock
+	private ReceiptView receiptSwingView;
 	
 	@Captor
 	ArgumentCaptor<String> stringCaptor;
@@ -170,4 +177,19 @@ public class ShowHistoryControllerTest {
 		verify(showHistoryView).showShoppingHistory(history);
 		verifyNoMoreInteractions(showHistoryView);
 	}
+	
+//TODO
+//	@Test
+//	public void testUpdateReceipt() {
+//		ReceiptController receiptController = mock(ReceiptController.class);
+//		
+//		when(receiptSwingView.getController()).thenReturn(receiptController);
+//		
+//		showHistoryController.updateReceipt(receipt0);
+//		
+//		verify(receiptController).setLoggedUser(receipt0.getBuyer());
+//		verify(receiptController).uploadReceipt(receipt0);
+////		verify(receiptSwingView).setLinkedSwingView((LinkedSwingView)showHistoryView);
+//		assertThat(receiptSwingView.getFrame().isVisible()).isTrue();
+//	}
 }

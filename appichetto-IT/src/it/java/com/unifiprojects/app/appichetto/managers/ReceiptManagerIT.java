@@ -79,5 +79,4 @@ public class ReceiptManagerIT {
 		System.out.println(receiptId);
 		assertThat(entityManager.find(Receipt.class, receiptId)).isEqualTo(receiptManager.getReceipt());
 	}
-
 }
