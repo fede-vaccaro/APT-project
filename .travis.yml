@@ -15,4 +15,4 @@ jdk: openjdk8
 install: true
 
 script:
- - mvn -f com.unifiprojects.app.appichetto/pom.xml clean verify coveralls:report sonar:sonar
+ - mvn -f pom.xml clean verify coveralls:report sonar:sonar
