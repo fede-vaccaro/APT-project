@@ -160,10 +160,6 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
 	}
 
-	public void show() {
-		this.frame.setVisible(true);
-	}
-
 	public void update(User loggedUser) {
 		setLoggedUser(loggedUser);
 		this.frame.setVisible(true);

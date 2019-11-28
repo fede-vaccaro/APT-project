@@ -20,47 +20,48 @@ import com.google.inject.Inject;
 @Entity
 public class Receipt {
 
-
-
 	@Id
 	@GeneratedValue
 	private Long id;
 	private String description;
 	private GregorianCalendar timestamp;
 
-    @Version
-    private int version;
-	
+	@Version
+	private int version;
+
 	@ManyToOne
 	private User buyer;
-	
+
 	private double totalPrice;
-	
+
 	@OrderColumn
-	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Item> items;
-	
+
 	@OrderColumn
-	@OneToMany(mappedBy="receipt", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "receipt", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,
+			CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Accounting> accountingList;
 
 	@Inject
 	public Receipt() {
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
-		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
+		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+				LocalDate.now().getDayOfMonth());
 	}
 
 	public Receipt(User buyer) {
 		this.buyer = buyer;
 		items = new ArrayList<>();
 		accountingList = new ArrayList<>();
-		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),LocalDate.now().getDayOfMonth());
+		timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+				LocalDate.now().getDayOfMonth());
 	}
-	
+
 	public void removeAccounting(Accounting a) {
-		if(!(accountingList instanceof ArrayList<?>))
-			accountingList = new ArrayList<Accounting>(accountingList);
+		if (!(accountingList instanceof ArrayList<?>))
+			accountingList = new ArrayList<>(accountingList);
 		this.accountingList.remove(a);
 		a.setReceipt(null);
 	}
@@ -68,14 +69,16 @@ public class Receipt {
 	public Long getId() {
 		return id;
 
-  }
+	}
+
 	public List<Item> getItems() {
 		return items;
 	}
 
 	public void addItem(Item item) {
 		items.add(item);
-}
+	}
+
 	public GregorianCalendar getTimestamp() {
 		return timestamp;
 	}
@@ -122,7 +125,7 @@ public class Receipt {
 		accountingList.add(accounting);
 		accounting.setReceipt(this);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -147,30 +150,37 @@ public class Receipt {
 		if (getClass() != obj.getClass())
 			return false;
 		Receipt other = (Receipt) obj;
-		if (accountingList == null) {
-			if (other.accountingList != null)
-				return false;
+		if (accountingList == null && other.accountingList != null) {
+			return false;
 		}
 		if (buyer == null) {
 			if (other.buyer != null)
 				return false;
-		} else if (!buyer.equals(other.buyer))
-			return false;
+		} else {
+			if (!buyer.equals(other.buyer))
+				return false;
+		}
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
-			return false;
+		} else {
+			if (!description.equals(other.description))
+				return false;
+		}
 		if (items == null) {
 			if (other.items != null)
 				return false;
-		} else if (!(items.containsAll(other.items) && other.items.containsAll(this.items)))
-			return false;
+		} else {
+			if (!(items.containsAll(other.items) && other.items.containsAll(this.items)))
+				return false;
+		}
 		if (timestamp == null) {
 			if (other.timestamp != null)
 				return false;
-		} else if (!timestamp.getTime().equals(other.timestamp.getTime()))
-			return false;
+		} else {
+			if (!timestamp.getTime().equals(other.timestamp.getTime()))
+				return false;
+		}
 		if (Double.doubleToLongBits(totalPrice) != Double.doubleToLongBits(other.totalPrice))
 			return false;
 		return true;
@@ -195,10 +205,10 @@ public class Receipt {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() +"items"+ items + "]";
+		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "items" + items + "]";
 	}
 
 	public long getVersion() {
@@ -208,6 +218,5 @@ public class Receipt {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
-	
+
 }

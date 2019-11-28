@@ -13,7 +13,7 @@ import javax.persistence.Version;
 
 @Entity
 public class Item {
-	
+
 	@Version
 	private int version;
 
@@ -61,19 +61,13 @@ public class Item {
 	public Item(String name, double price, List<User> users) {
 		this.price = price;
 		this.name = name;
-		this.price = price;
 		this.owners = users;
 		this.quantity = 1;
 	}
 
-	/*
-	 * @Override public String toString() { return this.name + " x" + this.quantity;
-	 * }
-	 */
-	
 	public void removeOwner(User owner) {
-		if(!(owners instanceof ArrayList<?>))
-			this.owners = new ArrayList<User>(owners);
+		if (!(owners instanceof ArrayList<?>))
+			this.owners = new ArrayList<>(owners);
 		this.owners.remove(owner);
 
 	}
@@ -137,7 +131,7 @@ public class Item {
 	public double getPricePerOwner() {
 		return price * quantity / owners.size();
 	}
-	
+
 	public long getVersion() {
 		return version;
 	}

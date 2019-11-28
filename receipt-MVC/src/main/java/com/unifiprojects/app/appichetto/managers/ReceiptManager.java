@@ -17,13 +17,13 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.services.CreateDebtsService;
 
 public class ReceiptManager {
-	
+
 	private Receipt receipt;
 	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountingsMap;
 	private CreateDebtsService createDebtsService;
 	private static final Logger LOGGER = LogManager.getLogger(ReceiptManager.class);
-	
+
 	@Inject
 	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, CreateDebtsService createDebtsService) {
 		this.receipt = receipt;
@@ -41,7 +41,8 @@ public class ReceiptManager {
 		if (index < receipt.getItems().size()) {
 			receipt.updateItem(index, item);
 			LOGGER.debug("{} UPDATED BY RECEIPT MANAGER", item);
-		} else
+		} 
+		else
 			throw new IllegalIndex("Index not in list");
 	}
 
@@ -52,30 +53,29 @@ public class ReceiptManager {
 
 	public Long saveReceipt() {
 		createDebtsService.computeDebts(receipt, accountingsMap);
-		
+
 		List<Receipt> refoundReceipts = createDebtsService.getRefundReceipts();
 		List<Accounting> accountings = createDebtsService.getAccountings();
-		
+
 		receipt.setAccountingList(accountings);
 		receiptRepository.saveReceipt(receipt);
 		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
-		
+
 		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
 		return receipt.getId();
 	}
-	
+
 	public void uploadReceipt(Receipt receipt) {
 		this.receipt = receipt;
 		accountingsMap.clear();
 		for (Item i : receipt.getItems()) {
-			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer()))
-					.forEach(owner -> {
-						if (accountingsMap.containsKey(owner))
-							accountingsMap.get(owner).addAmount(i.getPricePerOwner());
-						else
-							accountingsMap.put(owner, new Accounting(owner, i.getPricePerOwner()));
-					});
-				}
+			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer())).forEach(owner -> {
+				if (accountingsMap.containsKey(owner))
+					accountingsMap.get(owner).addAmount(i.getPricePerOwner());
+				else
+					accountingsMap.put(owner, new Accounting(owner, i.getPricePerOwner()));
+			});
+		}
 	}
 
 	void setAccountings(Map<User, Accounting> accountings) {
@@ -85,11 +85,11 @@ public class ReceiptManager {
 	void setReceipt(Receipt receipt) {
 		this.receipt = receipt;
 	}
-	
+
 	public void setCreateDebtsService(CreateDebtsService createDebtsService) {
 		this.createDebtsService = createDebtsService;
-	}	
-	
+	}
+
 	public void setBuyer(User buyer) {
 		receipt.setBuyer(buyer);
 	}
@@ -97,7 +97,7 @@ public class ReceiptManager {
 	public int getItemsListSize() {
 		return receipt.getItemsListSize();
 	}
-	
+
 	public Receipt getReceipt() {
 		return receipt;
 	}

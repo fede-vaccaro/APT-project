@@ -9,7 +9,7 @@ import javax.persistence.Version;
 
 @Entity
 public class Accounting {
-	
+
 	@Version
 	private int version;
 
@@ -44,13 +44,17 @@ public class Accounting {
 		if (receipt == null) {
 			if (other.receipt != null)
 				return false;
-		} else if (!receipt.equals(other.receipt))
-			return false;
+		} else {
+			if (!receipt.equals(other.receipt))
+				return false;
+		}
 		if (user == null) {
 			if (other.user != null)
 				return false;
-		} else if (!user.equals(other.user))
-			return false;
+		} else {
+			if (!user.equals(other.user))
+				return false;
+		}
 		return true;
 	}
 
@@ -113,7 +117,7 @@ public class Accounting {
 	}
 
 	public void addAmount(double amount) {
-		this.amount = Math.round(100 * (this.amount + amount))/100.0;
+		this.amount = Math.round(100 * (this.amount + amount)) / 100.0;
 	}
 
 	public boolean isPaid() {
@@ -121,7 +125,7 @@ public class Accounting {
 			return true;
 		return false;
 	}
-	
+
 	public long getVersion() {
 		return version;
 	}

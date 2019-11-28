@@ -6,15 +6,15 @@ import javax.swing.JFrame;
 public abstract class LinkedSwingView{
 
 	protected JButton btnHome;
-	public JFrame frame;
-	protected LinkedSwingView linkedSwingView;
+	protected JFrame frame;
+	protected LinkedSwingView previousLinkedSwingView;
 	
 	public void setLinkedSwingView(LinkedSwingView linkedSwingView) {
-		this.linkedSwingView = linkedSwingView;
+		this.previousLinkedSwingView = linkedSwingView;
 	}
 
 	public LinkedSwingView getLinkedSwingView() {
-		return linkedSwingView;
+		return previousLinkedSwingView;
 	}
 	
 	public LinkedSwingView() {
@@ -32,7 +32,7 @@ public abstract class LinkedSwingView{
 	}
 	
 	public void goBack() {
-		linkedSwingView.show();
+		previousLinkedSwingView.show();
 		getFrame().dispose();
 	}
 
