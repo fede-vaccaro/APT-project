@@ -15,4 +15,4 @@ jdk: openjdk8
 install: true
 
 script:
- - mvn -f pom.xml clean verify coveralls:report sonar:sonar
+ - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=fede-vaccaro_APT-project
