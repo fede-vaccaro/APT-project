@@ -21,6 +21,18 @@
 		<testcontainer.version>1.10.5</testcontainer.version>
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
 		<guice.version>4.2.2</guice.version>
+		<sonar.coverage.exclusions>
+			**/main/*.*,
+			**/models/*.*,
+			**/exceptions/*.*,
+			**/swingviews/utils/*.*,
+			**/modules/*.*,
+			**/factories/*.*,
+<!-- 			TODO -->
+			**/FakeTransaction.java,
+			**/UserController.java,
+			**/ReceiptGenerator.java
+		</sonar.coverage.exclusions>
 	</properties>
 
 	<dependencyManagement>
@@ -37,13 +49,6 @@
 
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.codehaus.sonar/sonar-maven3-plugin -->
-		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
-			<artifactId>sonar-maven3-plugin</artifactId>
-			<version>5.1</version>
-			<type>pom</type>
-		</dependency>
 
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -174,9 +179,9 @@
 										<POSTGRES_PASSWORD>docker</POSTGRES_PASSWORD>
 										<POSTGRES_DB>docker</POSTGRES_DB>
 									</env>
-									<wait>
-										<log>database system is ready to accept connections</log>
-									</wait>
+									<!-- <wait> -->
+									<!-- <log>database system is ready to accept connections</log> -->
+									<!-- </wait> -->
 								</run>
 							</image>
 						</images>
@@ -280,54 +285,54 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>${jacoco.version}</version>
-					<configuration>
-						<excludes>
-							<esclude>**/main/*</esclude>
-							<esclude>**/models/**</esclude>
-							<esclude>**/exceptions/**</esclude>
-							<esclude>**/swingviews/utils/**</esclude>
-							<esclude>**/modules/**</esclude>
-							<esclude>**/factories/**</esclude>
-						</excludes>
-					</configuration>
+				<!-- <plugin> -->
+				<!-- <groupId>org.jacoco</groupId> -->
+				<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
+				<!-- <version>${jacoco.version}</version> -->
+				<!-- <configuration> -->
+				<!-- <excludes> -->
+				<!-- <esclude>**/main/*</esclude> -->
+				<!-- <esclude>**/models/**</esclude> -->
+				<!-- <esclude>**/exceptions/**</esclude> -->
+				<!-- <esclude>**/swingviews/utils/**</esclude> -->
+				<!-- <esclude>**/modules/**</esclude> -->
+				<!-- <esclude>**/factories/**</esclude> -->
+				<!-- </excludes> -->
+				<!-- </configuration> -->
 
-					<executions>
-						<execution>
-							<goals>
-								<!-- binds by default to the phase "initialize" -->
-								<goal>prepare-agent</goal>
-								<!-- binds by default to the phase "verify" -->
-								<goal>report</goal>
-							</goals>
-						</execution>
+				<!-- <executions> -->
+				<!-- <execution> -->
+				<!-- <goals> -->
+				<!-- binds by default to the phase "initialize" -->
+				<!-- <goal>prepare-agent</goal> -->
+				<!-- binds by default to the phase "verify" -->
+				<!-- <goal>report</goal> -->
+				<!-- </goals> -->
+				<!-- </execution> -->
 
-						<execution>
-							<id>jacoco-check</id>
-							<goals>
-								<goal>check</goal>
-							</goals>
-							<configuration>
+				<!-- <execution> -->
+				<!-- <id>jacoco-check</id> -->
+				<!-- <goals> -->
+				<!-- <goal>check</goal> -->
+				<!-- </goals> -->
+				<!-- <configuration> -->
 
-								<rules>
-									<rule>
-										<element>PACKAGE</element>
-										<limits>
-											<limit>
-												<counter>LINE</counter>
-												<value>COVEREDRATIO</value>
-												<minimum>0.0</minimum>
-											</limit>
-										</limits>
-									</rule>
-								</rules>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+				<!-- <rules> -->
+				<!-- <rule> -->
+				<!-- <element>PACKAGE</element> -->
+				<!-- <limits> -->
+				<!-- <limit> -->
+				<!-- <counter>LINE</counter> -->
+				<!-- <value>COVEREDRATIO</value> -->
+				<!-- <minimum>0.0</minimum> -->
+				<!-- </limit> -->
+				<!-- </limits> -->
+				<!-- </rule> -->
+				<!-- </rules> -->
+				<!-- </configuration> -->
+				<!-- </execution> -->
+				<!-- </executions> -->
+				<!-- </plugin> -->
 				<plugin>
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>
@@ -365,13 +370,63 @@
 						</archive>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.sonarsource.scanner.maven</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.6.0.1398</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.6.0.1398</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<esclude>**/main/*.*</esclude>
+						<esclude>**/models/*.*</esclude>
+						<esclude>**/exceptions/*.*</esclude>
+						<esclude>**/swingviews/utils/*.*</esclude>
+						<esclude>**/modules/*.*</esclude>
+						<esclude>**/factories/*.*</esclude>
+					</excludes>
+				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<!-- binds by default to the phase "initialize" -->
+							<goal>prepare-agent</goal>
+							<!-- binds by default to the phase "verify" -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>jacoco-check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+
+							<rules>
+								<rule>
+									<element>PACKAGE</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.0</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 
