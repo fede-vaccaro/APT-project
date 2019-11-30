@@ -14,6 +14,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cucumber.version>4.8.0</cucumber.version>
 	</properties>
 
 	<build>
@@ -33,6 +34,23 @@
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>appichetto-guice</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.unifiprojects.app</groupId>
+			<artifactId>main</artifactId>
 			<version>${revision}</version>
 		</dependency>
 	</dependencies>
