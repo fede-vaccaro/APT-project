@@ -46,9 +46,9 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testControlsInitialStates() {
 		window.label(JLabelMatcher.withText("Username"));
-		window.textBox("usernameTextbox").requireEnabled();
+		window.textBox("Username").requireEnabled();
 		window.label(JLabelMatcher.withText("Password"));
-		window.textBox("passwordField").requireEnabled();
+		window.textBox("Password").requireEnabled();
 
 		window.button(JButtonMatcher.withText("Log-in")).requireDisabled();
 		window.button(JButtonMatcher.withText("Sign-in")).requireEnabled();
@@ -57,8 +57,8 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testLoginButtonEnabledWhenUsernameTextboxIsNotEmpty() {
-		window.textBox("usernameTextbox").enterText("user");
-		window.textBox("passwordField").enterText("password");
+		window.textBox("Username").enterText("user");
+		window.textBox("Password").enterText("password");
 
 		window.button(JButtonMatcher.withText("Log-in")).requireEnabled();
 	}
@@ -66,8 +66,8 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testLoginButtonDisabledWhenUsernameTextboxBecomesEmptyFromNonEmpty() {
-		window.textBox("usernameTextbox").enterText("user");
-		window.textBox("usernameTextbox").deleteText();
+		window.textBox("Username").enterText("user");
+		window.textBox("Username").deleteText();
 
 		window.button(JButtonMatcher.withText("Log-in")).requireDisabled();
 	}
@@ -78,8 +78,8 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		String username = "user";
 		String password = "password";
 		
-		window.textBox("usernameTextbox").enterText(username);
-		window.textBox("passwordField").enterText(password);
+		window.textBox("Username").enterText(username);
+		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
 		
 		verify(loginController).login(username, password);
@@ -91,8 +91,8 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		String username = "newUser";
 		String password = "pword";
 		
-		window.textBox("usernameTextbox").enterText(username);
-		window.textBox("passwordField").enterText(password);
+		window.textBox("Username").enterText(username);
+		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Sign-in")).click();
 		
 		verify(loginController).signIn(username, password);

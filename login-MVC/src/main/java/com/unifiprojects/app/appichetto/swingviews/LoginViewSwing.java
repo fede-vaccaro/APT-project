@@ -40,7 +40,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("AppIchetto 0.0.1");
+		frame.setTitle("Login View");
 		int width = 450;
 		frame.setMinimumSize(new Dimension(width, 300));
 		frame.setBounds(100, 100, width, 300);
@@ -52,13 +52,13 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 		frame.getContentPane().add(lblUsername);
 		
 		usernameTextbox = new JTextField();
-		usernameTextbox.setName("usernameTextbox");
+		usernameTextbox.setName("Username");
 		usernameTextbox.setBounds(197, 51, 114, 19);
 		frame.getContentPane().add(usernameTextbox);
 		usernameTextbox.setColumns(10);
 		
 		passwordField = new JPasswordField();
-		passwordField.setName("passwordField");
+		passwordField.setName("Password");
 		passwordField.setBounds(197, 121, 114, 19);
 		frame.getContentPane().add(passwordField);
 
