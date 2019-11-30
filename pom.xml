@@ -28,7 +28,7 @@
 			**/swingviews/utils/*.*,
 			**/modules/*.*,
 			**/factories/*.*,
-<!-- 			TODO -->
+			<!-- TODO -->
 			**/FakeTransaction.java,
 			**/UserController.java,
 			**/ReceiptGenerator.java
@@ -213,14 +213,13 @@
 						<target>1.8</target>
 					</configuration>
 				</plugin>
-
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>3.0.0</version>
 					<executions>
 						<execution>
-							<id>add-it-source</id>
+							<id>add-test-source</id>
 							<phase>generate-test-sources</phase>
 							<goals>
 								<goal>add-test-source</goal>
@@ -228,8 +227,22 @@
 							<configuration>
 								<sources>
 									<source>src/it/java</source>
-									<source>src/e2e/java</source>
+									<source>src/bdd/java</source>
 								</sources>
+							</configuration>
+						</execution>
+						<execution>
+							<id>add-test-resource</id>
+							<phase>generate-test-resources</phase>
+							<goals>
+								<goal>add-test-resource</goal>
+							</goals>
+							<configuration>
+								<resources>
+									<resource>
+										<directory>src/bdd/resources</directory>
+									</resource>
+								</resources>
 							</configuration>
 						</execution>
 					</executions>
@@ -247,21 +260,21 @@
 								<goal>verify</goal>
 							</goals>
 						</execution>
-						<!-- <execution> -->
-						<!-- <id>e2e-tests</id> -->
-						<!-- <goals> -->
-						<!-- <goal>integration-test</goal> -->
-						<!-- <goal>verify</goal> -->
-						<!-- </goals> -->
-						<!-- <configuration> -->
-						<!-- <excludes> -->
-						<!-- <exclude>**/*IT.java</exclude> -->
-						<!-- </excludes> -->
-						<!-- <includes> -->
-						<!-- <include>**/*E2E.java</include> -->
-						<!-- </includes> -->
-						<!-- </configuration> -->
-						<!-- </execution> -->
+						<execution>
+							<id>bdd-tests</id>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+							<configuration>
+								<excludes>
+									<exclude>**/*IT.java</exclude>
+								</excludes>
+								<includes>
+									<include>**/*BDD.java</include>
+								</includes>
+							</configuration>
+						</execution>
 					</executions>
 				</plugin>
 
