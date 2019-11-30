@@ -2,7 +2,6 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -25,8 +24,6 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
-import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.FakeTransaction;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
