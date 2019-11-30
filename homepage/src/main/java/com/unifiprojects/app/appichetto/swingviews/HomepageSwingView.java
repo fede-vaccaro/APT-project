@@ -15,6 +15,7 @@ import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
+import com.unifiprojects.app.appichetto.views.LoginView;
 
 @Singleton
 public class HomepageSwingView extends LinkedSwingView implements HomepageView {
@@ -66,14 +67,14 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 //	}
 
 	@Inject
-	public HomepageSwingView(LinkedSwingView loginViewSwing, LinkedControlledSwingView payReceiptsViewSwing,
-			LinkedControlledSwingView showHistoryViewSwing, LinkedControlledSwingView receiptSwingView,
-			LinkedControlledSwingView userPanelViewSwing) {
+	public HomepageSwingView(LoginView loginView, PayReceiptsViewSwing payReceiptsViewSwing,
+			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView,
+			UserPanelViewSwing userPanelViewSwing) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.userPanelView = userPanelViewSwing;
 		this.receiptView = receiptSwingView;
-		this.loginView = loginViewSwing;
+		this.loginView = (LinkedSwingView) loginView;
 
 		views = new ArrayList<>();
 		// homePageController = new HomePageController();
@@ -81,7 +82,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView, userPanelViewSwing));
 
 		views.forEach(v -> v.setLinkedSwingView(this));
-		loginViewSwing.setLinkedSwingView(this);
+		this.loginView.setLinkedSwingView(this);
 
 		initialize();
 	}
