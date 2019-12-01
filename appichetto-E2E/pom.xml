@@ -53,6 +53,11 @@
 			<artifactId>main</artifactId>
 			<version>${revision}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.unifiprojects.app</groupId>
+			<artifactId>appichetto-guice</artifactId>
+			<version>${revision}</version>
+		</dependency>
 	</dependencies>
 
 </project>
