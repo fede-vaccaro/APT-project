@@ -40,7 +40,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Login View");
+		frame.setTitle("Login");
 		int width = 450;
 		frame.setMinimumSize(new Dimension(width, 300));
 		frame.setBounds(100, 100, width, 300);

@@ -28,12 +28,15 @@ public class Main {
 
 		Injector injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule,
 				new ReceiptModule(), new ShowHistoryModule(), new LoginModule());
-		HomepageSwingView homepage = injector.getInstance(HomepageSwingView.class);
-		LoginViewSwing loginView = (LoginViewSwing) homepage.getLoginView();
+		LoginViewSwing loginViewSwing = injector.getInstance(LoginViewSwing.class);
+		HomepageSwingView homepageSwingView = injector.getInstance(HomepageSwingView.class);
 
+		homepageSwingView.setLoginView(loginViewSwing);
+		loginViewSwing.setHomepage(homepageSwingView);
+		
 		EventQueue.invokeLater(() -> {
 			try {
-				loginView.getFrame().setVisible(true);
+				loginViewSwing.getFrame().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

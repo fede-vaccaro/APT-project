@@ -96,6 +96,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("Homepage");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
 		GridBagLayout gridBagLayout = new GridBagLayout();

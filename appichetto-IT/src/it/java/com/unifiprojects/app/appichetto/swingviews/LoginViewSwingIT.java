@@ -10,6 +10,7 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -128,7 +129,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		User newUser = new User(username, password);
 		entityManager.persist(newUser);
 		entityManager.getTransaction().commit();
-
+		Pause.pause(200000);
 		window.textBox("usernameTextbox").enterText(username);
 		window.textBox("passwordField").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
