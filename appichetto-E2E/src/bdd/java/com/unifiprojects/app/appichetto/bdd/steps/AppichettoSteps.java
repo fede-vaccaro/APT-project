@@ -3,11 +3,16 @@ package com.unifiprojects.app.appichetto.bdd.steps;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
 
-import javax.persistence.EntityManager;
-import javax.swing.JFrame;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import javax.persistence.EntityManager;
+
+import org.assertj.core.util.Arrays;
 import org.assertj.swing.core.BasicRobot;
-import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.ComponentLookupScope;
+import org.assertj.swing.core.Robot;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JTextComponentMatcher;
 import org.assertj.swing.finder.WindowFinder;
@@ -20,6 +25,7 @@ import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -31,6 +37,7 @@ public class AppichettoSteps {
 	private UserRepositoryHibernate userRepository;
 	private EntityManager entityManager;
 	private FrameFixture window;
+	Robot robot;
 
 	public void wipeTablesBeforeTest() {
 		entityManager.getTransaction().begin();
@@ -41,40 +48,41 @@ public class AppichettoSteps {
 		entityManager.getTransaction().commit();
 		entityManager.clear();
 	}
-	
+
 	@Before
 	public void setUp() {
 		Injector entityManagerInjector = Guice.createInjector(new EntityManagerModule());
 		Injector repositoryInjector = entityManagerInjector.createChildInjector(new RepositoriesModule());
 		entityManager = entityManagerInjector.getInstance(EntityManager.class);
 		userRepository = repositoryInjector.getInstance(UserRepositoryHibernate.class);
+		wipeTablesBeforeTest();
 	}
-	
+
 	@After
 	public void cleanAndTearDown() {
-		wipeTablesBeforeTest();
-//		window.close();
 		window.cleanUp();
 	}
 
-	@Given("The database contains user {string} with {string} password")
-	public void the_database_contains_user_with_password(String string, String string2) {
+	@Given("The database contains user")
+	public void the_database_contains_user(List<User> users) {
 		entityManager.getTransaction().begin();
-		userRepository.save(new User(string, string2));
+		users.stream().forEach(user -> {
+			userRepository.save(user);
+		});
 		entityManager.getTransaction().commit();
 	}
 
 	@When("{string} view shows")
-	public void view_shows(String string) {
-
+	public void view_shows(String viewToShow) {
+		robot = BasicRobot.robotWithNewAwtHierarchy();
+		robot.settings().componentLookupScope(ComponentLookupScope.ALL);
 		application("com.unifiprojects.app.appichetto.main.Main").start();
+		window = WindowFinder.findFrame(viewToShow).using(robot);
+	}
 
-		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
-			@Override
-			protected boolean isMatching(JFrame frame) {
-				return string.equals(frame.getTitle()) && frame.isShowing();
-			}
-		}).using(BasicRobot.robotWithCurrentAwtHierarchy());
+	@When("{string} view shown")
+	public void view_shown(String actualView) {
+		//TODO
 	}
 
 	@When("Write {string} in {string} text box")
@@ -85,31 +93,50 @@ public class AppichettoSteps {
 	@When("Click {string} button")
 	public void click_button(String string) {
 		window.button(JButtonMatcher.withText(string)).click();
+		if(string.equals("Save Receipt"))
+			window = WindowFinder.findFrame("Homepage").using(robot);
+	}
+
+	@When("Click {string} button on homepage")
+	public void click_button_on_homepage(String buttonName) {
+		window.button(JButtonMatcher.withText(buttonName)).click();
+		window = WindowFinder.findFrame(buttonName).using(robot);
 	}
 
 	@Then("The view contain the following message {string}")
 	public void the_view_contain_the_following_message(String string) {
 		assertThat(window.label("errorMsg").text()).contains(string);
 	}
-	
-	@Then("{string} view disappear and {string} view shows")
-	public void view_disappear_and_view_shows(String string, String string2) {
+
+	@Given("User {string} is logged")
+	public void user_is_logged(String usernameToLog) {
+		User userToLog = userRepository.findByUsername(usernameToLog);
+
+		window.textBox(JTextComponentMatcher.withName("Username")).enterText(userToLog.getUsername());
+		window.textBox(JTextComponentMatcher.withName("Password")).enterText(userToLog.getPassword());
+		window.button(JButtonMatcher.withText("Log-in")).click();
+		window = WindowFinder.findFrame("Homepage").using(robot);
+	}
+
+	@When("Add new item")
+	public void add_new_item(DataTable items) {
+		List<Map<String, String>> itemsList = items.asMaps(String.class, String.class);
+
+		itemsList.stream().forEach(item -> {
+			window.textBox(JTextComponentMatcher.withName("nameBox")).enterText(item.get("name"));
+			window.textBox(JTextComponentMatcher.withName("priceBox")).enterText(item.get("price"));
+			window.textBox(JTextComponentMatcher.withName("quantityBox")).enterText(item.get("quantity"));
+			List<Object> owners = new ArrayList<>(Arrays.asList(item.get("owners").split(" ")));
+			owners.stream().forEach(owner -> window.list("usersList").selectItem(owner.toString()));
+			window.button(JButtonMatcher.withText("Save")).click();
+		});
+	}
+
+	@Then("{string} contains")
+	public void contains(String listName, DataTable dataTable) {
+	    List<String> itemsString = dataTable.asList();
+	    String[] itemListContents = window.list(listName).contents();
+	    
+	    assertThat(itemListContents).containsExactlyInAnyOrderElementsOf(itemsString);
 	}
 }
-
-//Scenario: The initial state
-//Given The database contain the following users
-//  | Giuseppe | Gpsw |
-//  | Federico | Fpsw |
-//  | Pasquale | Ppsw |
-//  | Checco   | Cpsw |
-//And The database contain a receipt bought by "Giuseppe" with the following items
-//  | name        | price | quantity | list of users                     |
-//  | pasta mista |   0.7 |        1 | Giuseppe Federico Pasquale Checco |
-//  | fagioli     |   1.7 |        3 | Giuseppe Federico Pasquale Checco |
-//  | detersivo   |   1.5 |        2 | Federico Pasquale Checco          |
-//And The database contain a receipt bought by "Federico" with the following items
-//  | name      | price | quantity | list of users              |
-//  | spaghetti |   0.7 |        1 | Giuseppe Pasquale Checco   |
-//  | carne     |   4.7 |        1 | Giuseppe Federico Checco   |
-//  | sugo      |   1.5 |        2 | Giuseppe Federico Pasquale |
