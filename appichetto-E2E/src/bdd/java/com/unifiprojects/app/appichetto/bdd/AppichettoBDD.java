@@ -7,7 +7,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/bdd/resources", monochrome = true)
+@CucumberOptions(features = "src/bdd/resources/features", glue = "com.unifiprojects.app.appichetto.bdd.steps", monochrome = true)
 public class AppichettoBDD {
 
 	@BeforeClass
