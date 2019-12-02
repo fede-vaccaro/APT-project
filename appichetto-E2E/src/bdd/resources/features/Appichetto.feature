@@ -9,9 +9,13 @@ Feature: Appichetto Application Frame
     Then The view contain the following message "User not signed in yet"
 
   Scenario: Log in success
-    Given The database contains user "Giuseppe" with "Gpsw" password
-    When "Login" view shows
-    And Write "Giuseppe" in "Username" text box
+    Given The database contains user
+      | name     | password |
+      | Giuseppe | Gpsw     |
+    And "Login" view shows
+    When Write "Giuseppe" in "Username" text box
     And Write "Gpsw" in "Password" text box
     And Click "Log-in" button
-    Then "Login" view disappear and "Homepage" view shows
+    Then "Homepage" view shown
+
+
