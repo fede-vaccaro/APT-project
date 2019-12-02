@@ -29,4 +29,4 @@ matrix:
 install: true
 
 script:
-  -  travis_wait 360 mvn -f pom.xml clean test verify coveralls:report sonar:sonar $PIT_MAVEN_ARGS
+  -  mvn clean test verify coveralls:report sonar:sonar -Dsonar.projectKey=fede-vaccaro_APT-project $PIT_MAVEN_ARGS
