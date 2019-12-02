@@ -329,7 +329,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(null));
 		String[] listContents = window.list("Items list").contents();
-		assertThat(listContents).containsExactly(item1.toString(), item2.toString());
+		assertThat(listContents).containsExactly();
 	}
 
 	@Test

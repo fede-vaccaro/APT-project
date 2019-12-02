@@ -21,10 +21,5 @@
 			<artifactId>appichetto</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>homepage</artifactId>
-			<version>${revision}</version>
-		</dependency>
 	</dependencies>
 </project>

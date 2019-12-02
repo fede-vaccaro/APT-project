@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginViewSwing extends LinkedSwingView implements LoginView{
@@ -24,7 +25,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	private JPasswordField passwordField;
 	private JLabel errorMsg;
 
-	private HomepageSwingView homepage;
+	private HomepageView homepage;
 	
 	@Inject
 	public LoginViewSwing() {
@@ -115,7 +116,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 		frame.dispose();
 	}
 
-	public void setHomepage(HomepageSwingView homepage) {
+	public void setHomepage(HomepageView homepage) {
 		this.homepage = homepage;
 	}
 

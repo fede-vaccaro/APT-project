@@ -13,21 +13,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
-
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
+	//TODO
 	@Mock
-	private LinkedSwingView loginView;
+	private LoginViewSwing loginView;
 	@Mock
-	private LinkedControlledSwingView receiptView;
+	private PayReceiptsViewSwing payReceiptsView;
 	@Mock
-	private LinkedControlledSwingView payReceiptsView;
+	private ShowHistoryViewSwing historyView;
 	@Mock
-	private LinkedControlledSwingView historyView;
+	private UserPanelViewSwing userPanelView;
 	@Mock
-	private LinkedControlledSwingView userPanelView;
+	private ReceiptSwingView receiptView;
 
 	@InjectMocks
 	private HomepageSwingView homepageSwingView;

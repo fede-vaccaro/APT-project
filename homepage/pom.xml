@@ -18,6 +18,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
+			<artifactId>login-MVC</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>receipt-MVC</artifactId>
 			<version>${revision}</version>
 		</dependency>

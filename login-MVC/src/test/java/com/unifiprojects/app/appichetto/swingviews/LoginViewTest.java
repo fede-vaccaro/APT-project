@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.views.HomepageView;
 
 @RunWith(GUITestRunner.class)
 public class LoginViewTest extends AssertJSwingJUnitTestCase {
@@ -110,7 +111,7 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	public void testGoToHome() {
-		HomepageSwingView homepage = mock(HomepageSwingView.class);
+		HomepageView homepage = mock(HomepageView.class);
 		loginViewSwing.setHomepage(homepage);
 		
 		User user = new User("username", "pw");

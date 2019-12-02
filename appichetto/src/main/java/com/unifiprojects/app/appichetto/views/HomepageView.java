@@ -6,4 +6,6 @@ public interface HomepageView {
 
 	void setLoggedUser(User loggedUser);
 
+	void update(User user);
+
 }
