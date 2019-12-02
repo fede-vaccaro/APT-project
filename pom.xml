@@ -453,6 +453,5 @@
 		<module>appichetto-IT</module>
 		<module>appichetto</module>
 		<module>appichetto-E2E</module>
-    <module>appichetto-BDD-E2E</module>
   </modules>
 </project>
