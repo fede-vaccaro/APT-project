@@ -19,52 +19,22 @@ import com.unifiprojects.app.appichetto.views.LoginView;
 
 @Singleton
 public class HomepageSwingView extends LinkedSwingView implements HomepageView {
-	/**
-	 * 
-	 */
-	// HomePageController homePageController;
 
 	List<LinkedControlledSwingView> views;
 
 	LinkedSwingView loginView;
 
-	LinkedSwingView receiptView;
+	LinkedControlledSwingView receiptView;
 
-	LinkedSwingView payReceiptsView;
+	LinkedControlledSwingView payReceiptsView;
 
-	LinkedSwingView showHistoryView;
+	LinkedControlledSwingView showHistoryView;
 
-	LinkedSwingView userPanelView;
-
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(() -> {
-//			try {
-//				HomepageSwingView frame = new HomepageSwingView();
-//				frame.getFrame().setVisible(true);
-//			} catch (Exception e) {
-//
-//			}
-//		});
-//	}
+	LinkedControlledSwingView userPanelView;
 
 	public void setLoginView(LinkedSwingView loginView) {
 		this.loginView = loginView;
 	}
-//
-//	public void setReceiptSwingView(LinkedSwingView receiptSwingView) {
-//		this.receiptView = receiptSwingView;
-//	}
-//
-//	public void setPayViewReceiptsViewSwing(LinkedSwingView payViewReceiptsViewSwing) {
-//		this.payReceiptsView = payViewReceiptsViewSwing;
-//	}
-//
-//	public void setHistoryViewSwing(LinkedSwingView historyViewSwing) {
-//		this.showHistoryView = historyViewSwing;
-//	}
 
 	@Inject
 	public HomepageSwingView(LoginView loginView, PayReceiptsViewSwing payReceiptsViewSwing,
@@ -77,7 +47,6 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		this.loginView = (LinkedSwingView) loginView;
 
 		views = new ArrayList<>();
-		// homePageController = new HomePageController();
 
 		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView, userPanelViewSwing));
 
@@ -87,16 +56,10 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		initialize();
 	}
 
-	/**
-	 * Create the frame.
-	 */
-//	public HomepageSwingView() {
-//		initialize();
-//	}
-
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Homepage");
+		frame.setName("Homepage");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -176,9 +139,4 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	public LinkedSwingView getLoginView() {
 		return loginView;
 	}
-
-	void setUserPanelView(LinkedSwingView userPanelView) {
-		this.userPanelView = userPanelView;
-	}
-
 }

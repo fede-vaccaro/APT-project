@@ -52,6 +52,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		this.payReceiptsController = payReceiptsController;
 	}
 	
+	@Override
 	public PayReceiptsController getController() {
 		return payReceiptsController;
 	}
@@ -215,7 +216,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		receiptListModel = new DefaultListModel<>();
 		receiptList = new JList<>(receiptListModel);
 		receiptList.setCellRenderer(new ReceiptCellRenderer());
-		receiptList.setName("receiptList");
+		receiptList.setName("Receipts list");
 		receiptList.addListSelectionListener(e -> {
 			int selectedIndex = receiptList.getSelectedIndex();
 			if (selectedIndex >= 0) {

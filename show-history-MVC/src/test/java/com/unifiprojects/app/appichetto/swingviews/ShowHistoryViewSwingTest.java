@@ -107,7 +107,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	public void testInititialState() {
 		setupReceiptsAndUsers();
 		
-		window.list("receiptList").requireEnabled();
+		window.list("Receipts list").requireEnabled();
 		window.list("itemList").requireEnabled();
 		window.list("accountingList").requireEnabled();
 		window.list("totalAccountingList").requireEnabled();
@@ -131,7 +131,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		String[] receiptListContent = window.list("receiptList").contents();
+		String[] receiptListContent = window.list("Receipts list").contents();
 
 		assertThat(receiptListContent).containsExactlyInAnyOrder(receipt0.toString());
 	}
@@ -148,7 +148,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
 		});
 
-		String[] receiptListContent = window.list("receiptList").contents();
+		String[] receiptListContent = window.list("Receipts list").contents();
 
 		assertThat(receiptListContent).containsExactlyInAnyOrder(receipt0.toString(), receipt1.toString());
 	}
@@ -165,7 +165,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			showHistoryViewSwing.showShoppingHistory(history);
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
 		});
-		String[] receiptListContent = window.list("receiptList").contents();
+		String[] receiptListContent = window.list("Receipts list").contents();
 		String[] itemListContent = window.list("itemList").contents();
 		String[] accountingListContent = window.list("accountingList").contents();
 
@@ -184,7 +184,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").selectItem(0);
+		window.list("Receipts list").selectItem(0);
 
 		String[] itemListContent = window.list("itemList").contents();
 
@@ -203,7 +203,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").selectItem(0);
+		window.list("Receipts list").selectItem(0);
 
 		Accounting accounting0 = receipt0.getAccountings().get(0);
 		Accounting accounting1 = receipt0.getAccountings().get(1);
@@ -222,8 +222,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").selectItem(0);
-		window.list("receiptList").selectItem(1);
+		window.list("Receipts list").selectItem(0);
+		window.list("Receipts list").selectItem(1);
 
 		Item item0 = receipt1.getItem(0);
 		Item item1 = receipt1.getItem(1);
@@ -240,8 +240,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").selectItem(0);
-		window.list("receiptList").selectItem(1);
+		window.list("Receipts list").selectItem(0);
+		window.list("Receipts list").selectItem(1);
 
 		Accounting accounting0 = receipt1.getAccountings().get(0);
 		Accounting accounting1 = receipt1.getAccountings().get(1);
@@ -315,7 +315,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").selectItem(receipt1.toString());
+		window.list("Receipts list").selectItem(receipt1.toString());
 		window.button(JButtonMatcher.withText("Remove selected")).click();
 
 		verify(showHistoryController).removeReceipt(receipt1);
@@ -340,7 +340,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> history = Arrays.asList(receipt0);
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
-		window.list("receiptList").selectItem(receipt0.toString());
+		window.list("Receipts list").selectItem(receipt0.toString());
 
 		window.button(JButtonMatcher.withText("Remove selected")).requireEnabled();
 	}
@@ -354,7 +354,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
-		window.list("receiptList").clearSelection();
+		window.list("Receipts list").clearSelection();
 
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 	}
@@ -368,7 +368,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
 
-		window.list("receiptList").selectItem(0);
+		window.list("Receipts list").selectItem(0);
 
 		List<Receipt> historyAfter = Arrays.asList();
 
@@ -386,7 +386,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
 
-		window.list("receiptList").selectItem(0);
+		window.list("Receipts list").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Update receipt")).requireEnabled();
 	}
@@ -401,7 +401,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
 		
-		window.list("receiptList").selectItem(0);
+		window.list("Receipts list").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
 		

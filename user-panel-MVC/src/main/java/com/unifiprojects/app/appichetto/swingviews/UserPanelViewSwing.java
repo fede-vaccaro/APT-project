@@ -12,7 +12,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
@@ -254,7 +253,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	}
 
 	@Override
-	public UserController getController() {
+	public UserPanelController getController() {
 		return userPanelController;
 	}
 

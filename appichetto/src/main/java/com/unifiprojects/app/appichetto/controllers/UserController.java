@@ -8,7 +8,7 @@ public abstract class UserController {
 	
 	public void setLoggedUser(User user) {
 		this.loggedUser = user;
-	};
+	}
 	
 	public User getLoggedUser() {
 		return loggedUser;

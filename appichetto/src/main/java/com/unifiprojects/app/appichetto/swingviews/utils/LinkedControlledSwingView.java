@@ -6,16 +6,13 @@ import com.unifiprojects.app.appichetto.views.ControlledView;
 
 public abstract class LinkedControlledSwingView extends LinkedSwingView implements ControlledView {
 
-	UserController controller;
 	
 	@Override
-	public UserController getController() {
-		return controller;
-	}
+	public abstract UserController getController();
 
 	@Override
 	public void updateData() {
-		controller.update();
+		getController().update();
 	}
 	
 	@Override

@@ -136,6 +136,8 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	 */
 	public ReceiptSwingView() {
 		frame = new JFrame();
+		frame.setTitle("Create Receipt");
+		frame.setName("Create Receipt");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 300);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -250,7 +252,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 		itemsScrollPane = new JScrollPane();
 		itemsList = new JList<>(listItemModel);
-		itemsList.setName("itemsList");
+		itemsList.setName("Items list");
 		itemsList.setSelectionModel(new ItemsListSelectionModel());
 		itemsScrollPane.setViewportView(itemsList);
 		itemsList.addListSelectionListener(arg0 -> {
@@ -461,6 +463,11 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	public void updateData() {
 		getController().update();
 		setUsers();
+	}
+
+	@Override
+	public ReceiptController getController() {
+		return receiptController;
 	}
 
 }

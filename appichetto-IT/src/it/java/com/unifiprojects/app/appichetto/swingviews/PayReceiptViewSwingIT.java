@@ -129,7 +129,7 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testInitialState() {
 		window.comboBox("userSelection").selectItem("payer");
-		String[] receiptListString = window.list("receiptList").contents();
+		String[] receiptListString = window.list("Receipts list").contents();
 		assertThat(receiptListString).isEqualTo(Arrays.asList(ReceiptFormatter.format(thirdReceiptPayer1),
 				ReceiptFormatter.format(secondReceiptPayer1), ReceiptFormatter.format(firstReceiptPayer2)).toArray());
 
@@ -167,7 +167,7 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f",
 				Precision.round(debtToPayer, 2) - Precision.round(debtToPayer / 2.0, 2)));
 
-		String[] receiptListString = window.list("receiptList").contents();
+		String[] receiptListString = window.list("Receipts list").contents();
 		assertThat(receiptListString).isEqualTo(
 				Arrays.asList(ReceiptFormatter.format(thirdReceiptPayer1), ReceiptFormatter.format(secondReceiptPayer1))
 						.toArray());

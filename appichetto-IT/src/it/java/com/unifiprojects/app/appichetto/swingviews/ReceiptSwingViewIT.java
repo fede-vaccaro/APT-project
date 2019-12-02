@@ -118,7 +118,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Save")).click();
 
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactly(item.toString());
 	}
 
@@ -133,13 +133,13 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptController.addItem(sugo);
 		});
 
-		window.list("itemsList").selectItem(1);
+		window.list("Items list").selectItem(1);
 		window.list("usersList").selectItem(1);
 		priceBox.deleteText().enterText("1.1");
 
 		window.button(JButtonMatcher.withText("Update")).click();
 
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactlyInAnyOrder(pasta.toString(), updatedItem.toString());
 	}
 
@@ -153,11 +153,11 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			receiptController.addItem(sugo);
 		});
 
-		window.list("itemsList").selectItem(1);
+		window.list("Items list").selectItem(1);
 
 		window.button(JButtonMatcher.withText("Delete")).click();
 
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactlyInAnyOrder(pasta.toString());
 	}
 

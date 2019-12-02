@@ -50,6 +50,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("History");
+		frame.setName("Show History");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setMinimumSize(new Dimension(800, 600));
 
@@ -78,7 +79,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 		receiptListModel = new DefaultListModel<>();
 		receiptList = new JList<>(receiptListModel);
-		receiptList.setName("receiptList");
+		receiptList.setName("Receipts list");
 
 		receiptList.addListSelectionListener(e -> {
 			Receipt selectedReceipt = receiptList.getSelectedValue();

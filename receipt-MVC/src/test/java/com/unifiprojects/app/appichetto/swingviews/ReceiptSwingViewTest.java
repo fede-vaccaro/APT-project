@@ -273,7 +273,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
-		window.list("itemsList").selectItem(0);
+		window.list("Items list").selectItem(0);
 		nameBox.setText("");
 		nameBox.enterText("   ");
 
@@ -287,7 +287,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		User user = addUserToListUserModel("Pippo", "psw");
 		addItemToItemListModel("Sugo", 2.0, 2, Arrays.asList(user));
 
-		window.list("itemsList").selectItem(0);
+		window.list("Items list").selectItem(0);
 		nameBox.setText("");
 		nameBox.enterText("Sugo");
 
@@ -299,7 +299,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 
 		addItemToItemListModel("Sugo", 2.0, 2, users);
-		window.list("itemsList").selectItem(0);
+		window.list("Items list").selectItem(0);
 		JButtonFixture saveButton = window.button(JButtonMatcher.withText("Save"));
 		JButtonFixture updateButton = window.button(JButtonMatcher.withText("Update"));
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete"));
@@ -315,7 +315,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		Item item1 = new Item("Sugo", 1., 1, users);
 		Item item2 = new Item("Pasta", 2., 1, users);
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactly(item1.toString(), item2.toString());
 	}
 
@@ -328,8 +328,8 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(Arrays.asList(item1, item2)));
 		GuiActionRunner.execute(() -> receiptSwingView.showCurrentItemsList(null));
-		String[] listContents = window.list("itemsList").contents();
-		assertThat(listContents).containsExactly();
+		String[] listContents = window.list("Items list").contents();
+		assertThat(listContents).containsExactly(item1.toString(), item2.toString());
 	}
 
 	@Test
@@ -355,7 +355,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		Item item = new Item("Sugo", 1., 1, users);
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemAdded(item));
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactly(item.toString());
 		window.label("errorMsgLabel").requireText(" ");
 	}
@@ -373,7 +373,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemDeleted(item1));
 
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactly(item2.toString());
 		window.label("errorMsgLabel").requireText(" ");
 	}
@@ -390,7 +390,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> receiptSwingView.itemUpdated(0, item2));
 
-		String[] listContents = window.list("itemsList").contents();
+		String[] listContents = window.list("Items list").contents();
 		assertThat(listContents).containsExactly(item2.toString());
 		window.label("errorMsgLabel").requireText(" ");
 	}
@@ -405,7 +405,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		User user1 = addUserToListUserModel("Pluto", "psw");
 		addItemToItemListModel("Sugo", 2.2, 2, Arrays.asList(user, user1));
 
-		window.list("itemsList").selectItem(0);
+		window.list("Items list").selectItem(0);
 		nameBox.requireText("Sugo");
 		priceBox.requireText("2.2");
 		quantityBox.requireText("2");
@@ -413,7 +413,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		saveButton.requireEnabled();
 		updateButton.requireEnabled();
 		deleteButton.requireEnabled();
-		window.list("itemsList").clearSelection();
+		window.list("Items list").clearSelection();
 		saveButton.requireDisabled();
 		updateButton.requireDisabled();
 		deleteButton.requireDisabled();
@@ -437,7 +437,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		priceBox.requireText("");
 		quantityBox.requireText("");
 		window.list("usersList").requireNoSelection();
-		window.list("itemsList").requireNoSelection();
+		window.list("Items list").requireNoSelection();
 	}
 
 	@Test
@@ -448,12 +448,12 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		addItemToItemListModel("Sugo", 1., 1, Arrays.asList(user1, user2));
 		addItemToItemListModel("Pasta", 1., 1, Arrays.asList(user1, user2));
 
-		window.list("itemsList").selectItem(1);
+		window.list("Items list").selectItem(1);
 
 		window.button(JButtonMatcher.withText("Update")).click();
 		verify(receiptController).updateItem(new Item("Pasta", 1., 1, Arrays.asList(user1, user2)), 1);
 		window.list("usersList").requireNoSelection();
-		window.list("itemsList").requireNoSelection();
+		window.list("Items list").requireNoSelection();
 	}
 
 	@Test
@@ -461,7 +461,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item item = addItemToItemListModel("Sugo", 1., 1, users);
 
-		window.list("itemsList").selectItem(0);
+		window.list("Items list").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Delete")).click();
 		verify(receiptController).deleteItem(item);

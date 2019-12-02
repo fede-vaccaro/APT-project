@@ -31,9 +31,13 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [name=" + name + ", quantity=" + quantity + String.format(", price=%.2f", price) + ", owners="
-				+ owners + "]";
+		return name  + ", EUR: " + price + ", x" + quantity;
 	}
+//	@Override
+//	public String toString() {
+//		return "Item [name=" + name + ", quantity=" + quantity + String.format(", price=%.2f", price) + ", owners="
+//				+ owners + "]";
+//	}
 
 	public Long getId() {
 		return id;
