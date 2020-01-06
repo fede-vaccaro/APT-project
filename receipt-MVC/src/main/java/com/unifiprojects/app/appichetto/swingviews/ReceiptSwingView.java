@@ -25,7 +25,6 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
@@ -392,12 +391,12 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 			itemsList.clearSelection();
 		});
 
-		GridBagConstraints gbc_btnHome = new GridBagConstraints();
-		gbc_btnHome.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHome.gridx = 1;
-		gbc_btnHome.gridy = 12;
-		frame.getContentPane().add(getBtnHome(), gbc_btnHome);
+		GridBagConstraints gbc_btnBack = new GridBagConstraints();
+		gbc_btnBack.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBack.gridx = 1;
+		gbc_btnBack.gridy = 12;
+		frame.getContentPane().add(getBtnBack(), gbc_btnBack);
 		btnUpdate.setEnabled(false);
 		GridBagConstraints gbc_btnUpdate = new GridBagConstraints();
 		gbc_btnUpdate.anchor = GridBagConstraints.NORTH;
