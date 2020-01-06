@@ -1,5 +1,5 @@
-Feature: Appichetto Application Frame
-  Specifications of the behavior of Appichetto
+Feature: Login behaviour
+  Specifications of the behavior of Appichetto on login
 
   Scenario: Log in error because not signed
     When "Login" view shows

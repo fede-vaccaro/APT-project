@@ -4,14 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.swing.JFrame;
 
 import org.assertj.core.util.Arrays;
 import org.assertj.swing.core.BasicRobot;
 import org.assertj.swing.core.ComponentLookupScope;
+import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.Robot;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JTextComponentMatcher;
@@ -34,6 +37,7 @@ import io.cucumber.java.en.When;
 
 public class AppichettoSteps {
 
+	private Map<String, String> usersOnDb = new HashMap<String, String>();
 	private UserRepositoryHibernate userRepository;
 	private EntityManager entityManager;
 	private FrameFixture window;
@@ -68,21 +72,26 @@ public class AppichettoSteps {
 		entityManager.getTransaction().begin();
 		users.stream().forEach(user -> {
 			userRepository.save(user);
+			usersOnDb.putIfAbsent(user.getUsername(), user.getPassword());
 		});
 		entityManager.getTransaction().commit();
+	}
+	
+	@When("Application start")
+	public void application_start() {
+		robot = BasicRobot.robotWithNewAwtHierarchy();
+		robot.settings().componentLookupScope(ComponentLookupScope.ALL);
+		application("com.unifiprojects.app.appichetto.main.Main").start();		
 	}
 
 	@When("{string} view shows")
 	public void view_shows(String viewToShow) {
-		robot = BasicRobot.robotWithNewAwtHierarchy();
-		robot.settings().componentLookupScope(ComponentLookupScope.ALL);
-		application("com.unifiprojects.app.appichetto.main.Main").start();
 		window = WindowFinder.findFrame(viewToShow).using(robot);
 	}
 
 	@When("{string} view shown")
 	public void view_shown(String actualView) {
-		//TODO
+		// TODO
 	}
 
 	@When("Write {string} in {string} text box")
@@ -93,7 +102,7 @@ public class AppichettoSteps {
 	@When("Click {string} button")
 	public void click_button(String string) {
 		window.button(JButtonMatcher.withText(string)).click();
-		if(string.equals("Save Receipt"))
+		if (string.equals("Save Receipt"))
 			window = WindowFinder.findFrame("Homepage").using(robot);
 	}
 
@@ -110,10 +119,8 @@ public class AppichettoSteps {
 
 	@Given("User {string} is logged")
 	public void user_is_logged(String usernameToLog) {
-		User userToLog = userRepository.findByUsername(usernameToLog);
-
-		window.textBox(JTextComponentMatcher.withName("Username")).enterText(userToLog.getUsername());
-		window.textBox(JTextComponentMatcher.withName("Password")).enterText(userToLog.getPassword());
+		window.textBox(JTextComponentMatcher.withName("Username")).deleteText().enterText(usernameToLog);
+		window.textBox(JTextComponentMatcher.withName("Password")).enterText(usersOnDb.get(usernameToLog));
 		window.button(JButtonMatcher.withText("Log-in")).click();
 		window = WindowFinder.findFrame("Homepage").using(robot);
 	}
@@ -134,9 +141,43 @@ public class AppichettoSteps {
 
 	@Then("{string} contains")
 	public void contains(String listName, DataTable dataTable) {
-	    List<String> itemsString = dataTable.asList();
-	    String[] itemListContents = window.list(listName).contents();
-	    
-	    assertThat(itemListContents).containsExactlyInAnyOrderElementsOf(itemsString);
+		List<String> itemsString = dataTable.asList();
+		String[] itemListContents = window.list(listName).contents();
+
+		assertThat(itemListContents).containsExactlyInAnyOrderElementsOf(itemsString);
+	}
+
+	@Then("Going back")
+	public void going_back() {
+		window.button(JButtonMatcher.withText("Back")).click();
+		window = WindowFinder.findFrame("Homepage").using(robot);
+	}
+
+	@Then("Log out")
+	public void log_out() {
+		window.button(JButtonMatcher.withText("Log out")).click();
+		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
+			@Override
+			protected boolean isMatching(JFrame frame) {
+				return "Login".equals(frame.getTitle()) && frame.isShowing();
+			}
+		}).using(robot);
+	}
+
+	@Then("Set {string} in {string}")
+	public void set_in(String user, String list) {
+		window.list(list).selectItem(user);
+	}
+
+	@Given("The database contains receipt of {string} with")
+	public void the_database_contains_receipt_of_with(String string, io.cucumber.datatable.DataTable dataTable) {
+		// Write code here that turns the phrase above into concrete actions
+		// For automatic transformation, change DataTable to one of
+		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
+		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
+		// Double, Byte, Short, Long, BigInteger or BigDecimal.
+		//
+		// For other transformations you can register a DataTableType.
+		throw new cucumber.api.PendingException();
 	}
 }
