@@ -89,7 +89,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testHomepageViewIsEqualEverywhere() {
-		for (LinkedSwingView view : homepageSwingView.views) {
+		for (LinkedControlledSwingView view : homepageSwingView.views) {
 			assertThat(view.getLinkedSwingView()).isEqualTo(homepageSwingView);
 		}
 	}
