@@ -120,4 +120,12 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 		this.homepage = homepage;
 	}
 
+	public void show() {
+		frame.setVisible(true);
+	}
+
+	@Override
+	public JFrame getFrame() {
+		return frame;
+	}
 }
