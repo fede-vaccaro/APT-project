@@ -110,9 +110,9 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		window.label(JLabelMatcher.withText("Total for this receipt: "));
 		window.label("errorMsg");
 
-		window.comboBox("userSelection").requireEnabled();
+		window.comboBox("User selection").requireEnabled();
 		window.list("Receipts list").requireEnabled();
-		window.list("itemList").requireEnabled();
+		window.list("Items list").requireEnabled();
 		window.button("payButton").requireDisabled();
 	}
 
@@ -232,11 +232,11 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.userComboBoxModel.addElement(payer2);
 		});
 
-		window.comboBox("userSelection").selectItem("payer1");
+		window.comboBox("User selection").selectItem("payer1");
 		String[] receipt1ListString = window.list("Receipts list").contents();
 		assertThat(receipt1ListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1));
 
-		window.comboBox("userSelection").selectItem("payer2");
+		window.comboBox("User selection").selectItem("payer2");
 		String[] receipt1And2ListString = window.list("Receipts list").contents();
 		assertThat(receipt1And2ListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt2),
 				ReceiptFormatter.format(receipt3));
@@ -251,7 +251,7 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		GuiActionRunner.execute(() -> payReceiptsSwing.showReceipts(Arrays.asList(receipt)));
 
-		String[] itemListString = window.list("itemList").contents();
+		String[] itemListString = window.list("Items list").contents();
 		assertThat(itemListString).containsExactlyInAnyOrder(item1.toString(), item2.toString());
 	}
 
@@ -269,12 +269,12 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.userComboBoxModel.addElement(payer1);
 			payReceiptsSwing.userComboBoxModel.addElement(payer2);
 		});
-		window.comboBox("userSelection").selectItem("payer1");
-		String[] itemListStringByPayer1 = window.list("itemList").contents();
+		window.comboBox("User selection").selectItem("payer1");
+		String[] itemListStringByPayer1 = window.list("Items list").contents();
 		assertThat(itemListStringByPayer1).containsExactlyInAnyOrder(item1.toString(), item2.toString());
 
-		window.comboBox("userSelection").selectItem("payer2");
-		String[] itemListStringByPayer2 = window.list("itemList").contents();
+		window.comboBox("User selection").selectItem("payer2");
+		String[] itemListStringByPayer2 = window.list("Items list").contents();
 		assertThat(itemListStringByPayer2).containsExactlyInAnyOrder(item2.toString(), item3.toString());
 	}
 
@@ -295,11 +295,11 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		});
 
 		window.list("Receipts list").selectItem(ReceiptFormatter.format(receipt2));
-		String[] itemListStringReceipt2 = window.list("itemList").contents();
+		String[] itemListStringReceipt2 = window.list("Items list").contents();
 		assertThat(itemListStringReceipt2).containsExactlyInAnyOrder(item3.toString(), item2.toString());
 
 		window.list("Receipts list").selectItem(ReceiptFormatter.format(receipt1));
-		String[] itemListStringReceipt1 = window.list("itemList").contents();
+		String[] itemListStringReceipt1 = window.list("Items list").contents();
 		assertThat(itemListStringReceipt1).containsExactlyInAnyOrder(item1.toString(), item2.toString());
 
 		String[] receiptList = window.list("Receipts list").contents();
@@ -365,8 +365,8 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		window.label("errorMsg").requireText("You have no accountings.");
 
 		String[] receiptStringList = window.list("Receipts list").contents();
-		String[] itemStringList = window.list("itemList").contents();
-		String[] userComboBoxStringList = window.comboBox("userSelection").contents();
+		String[] itemStringList = window.list("Items list").contents();
+		String[] userComboBoxStringList = window.comboBox("User selection").contents();
 
 		assertThat(receiptStringList).isEmpty();
 		assertThat(itemStringList).isEmpty();
@@ -427,10 +427,10 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.showReceipts(Arrays.asList(receipt1, receipt2));
 		});
 
-		window.comboBox("userSelection").selectItem("payer1");
+		window.comboBox("User selection").selectItem("payer1");
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debtToPayer1));
 
-		window.comboBox("userSelection").selectItem("payer2");
+		window.comboBox("User selection").selectItem("payer2");
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f", debtToPayer2));
 
 	}

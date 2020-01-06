@@ -35,7 +35,6 @@ import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.ReceiptCellRenderer;
 import com.unifiprojects.app.appichetto.views.PayReceiptsView;
 
@@ -60,6 +59,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
 	private JList<Receipt> receiptList;
+	private JList<Item> itemList;
 	DefaultListModel<Receipt> receiptListModel;
 	private JComboBox<User> userSelection;
 	DefaultComboBoxModel<User> userComboBoxModel;
@@ -138,6 +138,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 		frame = new JFrame();
 		frame.setTitle("Pay and View receipts bought by others");
+		frame.setName("Pay Receipt");
 		frame.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 14));
 		frame.setBounds(100, 100, 450, 300);
 		frame.setMinimumSize(new Dimension(800, 600));
@@ -161,7 +162,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 		userComboBoxModel = new DefaultComboBoxModel<>();
 		userSelection = new JComboBox<>(userComboBoxModel);
-		userSelection.setName("userSelection");
+		userSelection.setName("User selection");
 
 		userSelection.addActionListener(e -> refreshReceiptList());
 
@@ -201,11 +202,11 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 			txtEnterAmount.setText("");
 		});
 
-		GridBagConstraints gbc_btnHome = new GridBagConstraints();
-		gbc_btnHome.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHome.gridx = 2;
-		gbc_btnHome.gridy = 12;
-		frame.getContentPane().add(getBtnHome(), gbc_btnHome);
+		GridBagConstraints gbc_btnBack = new GridBagConstraints();
+		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBack.gridx = 2;
+		gbc_btnBack.gridy = 12;
+		frame.getContentPane().add(getBtnBack(), gbc_btnBack);
 		btnPay.setName("payButton");
 		GridBagConstraints gbc_btnPay = new GridBagConstraints();
 		gbc_btnPay.insets = new Insets(0, 0, 5, 5);
@@ -239,8 +240,8 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		frame.getContentPane().add(receiptList, gbc_receiptList);
 
 		itemListModel = new DefaultListModel<>();
-		JList<Item> itemList = new JList<>(itemListModel);
-		itemList.setName("itemList");
+		itemList = new JList<>(itemListModel);
+		itemList.setName("Items list");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);
 		gbc_itemList.gridheight = 2;

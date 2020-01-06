@@ -131,7 +131,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 	public void testInitialState() {
 		window.list("Receipts list").selectItem(0);
 		String[] receiptListString = window.list("Receipts list").contents();
-		String[] itemListString = window.list("itemList").contents();
+		String[] itemListString = window.list("Items list").contents();
 		assertThat(receiptListString).containsExactlyInAnyOrder(firstReceiptDebtor2.toString(),
 				thirdReceiptDebtor1.toString(), secondReceiptDebtor1.toString(), firstReceiptDebtor1.toString());
 		assertThat(itemListString).containsExactlyInAnyOrder(firstReceiptDebtor2.getItem(0).toString(),
