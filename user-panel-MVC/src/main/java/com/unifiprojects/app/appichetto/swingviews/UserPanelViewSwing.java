@@ -13,17 +13,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
 
 	private UserPanelController userPanelController;
 
-	private LinkedSwingView loginViewSwing;
+	private IView loginViewSwing;
 
-	public void setLoginViewSwing(LinkedSwingView loginViewSwing) {
-		this.loginViewSwing = loginViewSwing;
+	public void setLoginViewSwing(IView loginView) {
+		this.loginViewSwing = loginView;
 	}
 
 	private JLabel lblUsername;
@@ -157,7 +156,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBack.gridx = 2;
 		gbc_btnBack.gridy = 9;
-		frame.getContentPane().add(super.btnHome, gbc_btnBack);
+		frame.getContentPane().add(super.btnBack, gbc_btnBack);
 		
 		GridBagConstraints gbc_btnUpdateCredential = new GridBagConstraints();
 		gbc_btnUpdateCredential.insets = new Insets(0, 0, 5, 5);

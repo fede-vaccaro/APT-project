@@ -108,7 +108,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		setupReceiptsAndUsers();
 		
 		window.list("Receipts list").requireEnabled();
-		window.list("itemList").requireEnabled();
+		window.list("Items list").requireEnabled();
 		window.list("accountingList").requireEnabled();
 		window.list("totalAccountingList").requireEnabled();
 		window.label(JLabelMatcher.withText("Receipts you bought:"));
@@ -118,7 +118,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Remove selected")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update receipt")).requireDisabled();
-		window.button("homeBtn").requireEnabled();
+		window.button("backBtn").requireEnabled();
 		window.label("errorMsg").requireText("");
 	}
 
@@ -166,7 +166,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 			showHistoryViewSwing.showShoppingHistory(updatedHistory);
 		});
 		String[] receiptListContent = window.list("Receipts list").contents();
-		String[] itemListContent = window.list("itemList").contents();
+		String[] itemListContent = window.list("Items list").contents();
 		String[] accountingListContent = window.list("accountingList").contents();
 
 		assertThat(receiptListContent).isEmpty();
@@ -186,7 +186,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		window.list("Receipts list").selectItem(0);
 
-		String[] itemListContent = window.list("itemList").contents();
+		String[] itemListContent = window.list("Items list").contents();
 
 		Item item0 = receipt0.getItem(0);
 		Item item1 = receipt0.getItem(1);
@@ -228,7 +228,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		Item item0 = receipt1.getItem(0);
 		Item item1 = receipt1.getItem(1);
 
-		String[] itemListContent = window.list("itemList").contents();
+		String[] itemListContent = window.list("Items list").contents();
 		assertThat(itemListContent).containsExactlyInAnyOrder(item0.toString(), item1.toString());
 	}
 

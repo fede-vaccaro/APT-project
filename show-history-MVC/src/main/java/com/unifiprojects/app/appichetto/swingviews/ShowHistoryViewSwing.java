@@ -22,7 +22,6 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryViewSwing extends LinkedControlledSwingView implements ShowHistoryView {
@@ -101,7 +100,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 		itemListModel = new DefaultListModel<>();
 		JList<Item> itemList = new JList<>(itemListModel);
-		itemList.setName("itemList");
+		itemList.setName("Items list");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);
 		gbc_itemList.fill = GridBagConstraints.BOTH;
@@ -171,11 +170,11 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		gbc_btnRmbutton.gridy = 9;
 		frame.getContentPane().add(btnRmbutton, gbc_btnRmbutton);
 
-		GridBagConstraints gbc_btnHomepage = new GridBagConstraints();
-		gbc_btnHomepage.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHomepage.gridx = 0;
-		gbc_btnHomepage.gridy = 10;
-		frame.getContentPane().add(getBtnHome(), gbc_btnHomepage);
+		GridBagConstraints gbc_btnBackpage = new GridBagConstraints();
+		gbc_btnBackpage.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBackpage.gridx = 0;
+		gbc_btnBackpage.gridy = 10;
+		frame.getContentPane().add(getBtnBack(), gbc_btnBackpage);
 
 		message = new JLabel("");
 		message.setName("errorMsg");

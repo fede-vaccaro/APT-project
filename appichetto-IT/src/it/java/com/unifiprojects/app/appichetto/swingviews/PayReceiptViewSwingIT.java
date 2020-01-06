@@ -128,7 +128,7 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testInitialState() {
-		window.comboBox("userSelection").selectItem("payer");
+		window.comboBox("User selection").selectItem("payer");
 		String[] receiptListString = window.list("Receipts list").contents();
 		assertThat(receiptListString).isEqualTo(Arrays.asList(ReceiptFormatter.format(thirdReceiptPayer1),
 				ReceiptFormatter.format(secondReceiptPayer1), ReceiptFormatter.format(firstReceiptPayer2)).toArray());
@@ -141,14 +141,14 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testPayAllReceiptsToPayer1() {
-		window.comboBox("userSelection").selectItem("payer");
+		window.comboBox("User selection").selectItem("payer");
 
 		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
 		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer));
 		window.button("payButton").click();
 
-		String[] userComboBoxString = window.comboBox("userSelection").contents();
+		String[] userComboBoxString = window.comboBox("User selection").contents();
 
 		assertThat(userComboBoxString).doesNotContain("payer");
 	}
@@ -156,14 +156,14 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testPayHalfReceiptsToPayer1() {
-		window.comboBox("userSelection").selectItem("payer");
+		window.comboBox("User selection").selectItem("payer");
 
 		Double debtToPayer = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
 		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer / 2.0));
 		window.button("payButton").click();
 
-		window.comboBox("userSelection").selectItem("payer");
+		window.comboBox("User selection").selectItem("payer");
 		window.label("totalDebtToUser").requireText(String.format("Total debt to user: %.2f",
 				Precision.round(debtToPayer, 2) - Precision.round(debtToPayer / 2.0, 2)));
 
@@ -177,14 +177,14 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	@Test
 	public void testPayEachUserShowMessage() {
-		window.comboBox("userSelection").selectItem("payer");
+		window.comboBox("User selection").selectItem("payer");
 
 		Double debtToPayer1 = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
 		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer1));
 		window.button("payButton").click();
 
-		window.comboBox("userSelection").selectItem("payer2");
+		window.comboBox("User selection").selectItem("payer2");
 
 		Double debtToPayer2 = Arrays.asList(firstReceiptPayer2).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
