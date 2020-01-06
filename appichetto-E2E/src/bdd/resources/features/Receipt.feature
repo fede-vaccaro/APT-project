@@ -8,6 +8,7 @@ Feature: Receipt features
       | Federico | Fpsw     |
       | Pasquale | Ppsw     |
       | Checco   | Cpsw     |
+    And Application start
     And "Login" view shows
     And User "Giuseppe" is logged
     And Click "Create Receipt" button on homepage
@@ -26,6 +27,7 @@ Feature: Receipt features
       | Federico | Fpsw     |
       | Pasquale | Ppsw     |
       | Checco   | Cpsw     |
+    And Application start  
     And "Login" view shows
     And User "Giuseppe" is logged
     And Click "Create Receipt" button on homepage
@@ -45,8 +47,10 @@ Feature: Receipt features
       | Federico | Fpsw     |
       | Pasquale | Ppsw     |
       | Checco   | Cpsw     |
+      
     And The database contains receipt of "Giuseppe" with
       | name  | price | quantity | owners                            |
       | birra |     1 |        4 | Giuseppe Federico Pasquale Checco |
+    And Application start
     And "Login" view shows
     And User "Giuseppe" is logged

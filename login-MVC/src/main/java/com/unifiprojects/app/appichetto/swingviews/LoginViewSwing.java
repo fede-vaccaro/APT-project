@@ -113,7 +113,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 	@Override
 	public void goToHome(User loggedUser) {
 		homepage.update(loggedUser);
-		frame.dispose();
+		frame.setVisible(false);
 	}
 
 	public void setHomepage(HomepageView homepage) {

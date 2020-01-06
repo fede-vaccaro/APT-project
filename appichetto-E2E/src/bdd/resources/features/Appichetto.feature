@@ -2,6 +2,10 @@ Feature: Login behaviour
   Specifications of the behavior of Appichetto on login
 
   Scenario: Log in error because not signed
+    Given The database contains user
+      | name     | password |
+      | Random   | Rpsw     |
+    And Application start  
     When "Login" view shows
     And Write "Giuseppe" in "Username" text box
     And Write "Gpsw" in "Password" text box
@@ -12,6 +16,7 @@ Feature: Login behaviour
     Given The database contains user
       | name     | password |
       | Giuseppe | Gpsw     |
+    And Application start  
     And "Login" view shows
     When Write "Giuseppe" in "Username" text box
     And Write "Gpsw" in "Password" text box

@@ -109,6 +109,10 @@ public class AppichettoSteps {
 	@When("Click {string} button on homepage")
 	public void click_button_on_homepage(String buttonName) {
 		window.button(JButtonMatcher.withText(buttonName)).click();
+		if(buttonName.equals("Log Out")){
+			buttonName = "Login";
+			System.out.println(String.format("Changed 'Log Out' to %s", buttonName));
+		}
 		window = WindowFinder.findFrame(buttonName).using(robot);
 	}
 
@@ -116,11 +120,16 @@ public class AppichettoSteps {
 	public void the_view_contain_the_following_message(String string) {
 		assertThat(window.label("errorMsg").text()).contains(string);
 	}
+	
+	@Then("debt to user is {float}")
+	public void debt_to_user_is(float value) {
+		assertThat(window.label("totalDebtToUser").text()).contains(String.format("Total debt to user: %.2f", value));
+	}
 
 	@Given("User {string} is logged")
 	public void user_is_logged(String usernameToLog) {
 		window.textBox(JTextComponentMatcher.withName("Username")).deleteText().enterText(usernameToLog);
-		window.textBox(JTextComponentMatcher.withName("Password")).enterText(usersOnDb.get(usernameToLog));
+		window.textBox(JTextComponentMatcher.withName("Password")).deleteText().enterText(usersOnDb.get(usernameToLog));
 		window.button(JButtonMatcher.withText("Log-in")).click();
 		window = WindowFinder.findFrame("Homepage").using(robot);
 	}
@@ -153,20 +162,21 @@ public class AppichettoSteps {
 		window = WindowFinder.findFrame("Homepage").using(robot);
 	}
 
-	@Then("Log out")
+	// @Then("Log out")
+	@When("Log out")
 	public void log_out() {
-		window.button(JButtonMatcher.withText("Log out")).click();
-		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
-			@Override
-			protected boolean isMatching(JFrame frame) {
-				return "Login".equals(frame.getTitle()) && frame.isShowing();
-			}
-		}).using(robot);
+		window.button(JButtonMatcher.withText("Log Out")).click();
+//		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
+//			@Override
+//			protected boolean isMatching(JFrame frame) {
+//				return "Login".equals(frame.getTitle()) && frame.isShowing();
+//			}
+//		}).using(robot);
 	}
 
 	@Then("Set {string} in {string}")
 	public void set_in(String user, String list) {
-		window.list(list).selectItem(user);
+		window.comboBox(list).selectItem(user);
 	}
 
 	@Given("The database contains receipt of {string} with")
