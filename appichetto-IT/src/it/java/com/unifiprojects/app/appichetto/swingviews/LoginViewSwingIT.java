@@ -88,8 +88,8 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		String username = "newUser";
 		String password = "newPassword";
 
-		window.textBox("usernameTextbox").enterText(username);
-		window.textBox("passwordField").enterText(password);
+		window.textBox("Username").enterText(username);
+		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Sign-in")).click();
 
 		User newUser = entityManager.createQuery("from users where username=:username", User.class)
@@ -112,8 +112,8 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		entityManager.persist(new User(username, password));
 		entityManager.getTransaction().commit();
 
-		window.textBox("usernameTextbox").enterText(username);
-		window.textBox("passwordField").enterText("otherPW");
+		window.textBox("Username").enterText(username);
+		window.textBox("Password").enterText("otherPW");
 		window.button(JButtonMatcher.withText("Sign-in")).click();
 
 		window.label("errorMsg").requireText("Username already picked. Choice another username.");
@@ -129,9 +129,8 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		User newUser = new User(username, password);
 		entityManager.persist(newUser);
 		entityManager.getTransaction().commit();
-		Pause.pause(200000);
-		window.textBox("usernameTextbox").enterText(username);
-		window.textBox("passwordField").enterText(password);
+		window.textBox("Username").enterText(username);
+		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
 
 		assertThat(newUser).isEqualTo(new User(username, password));
