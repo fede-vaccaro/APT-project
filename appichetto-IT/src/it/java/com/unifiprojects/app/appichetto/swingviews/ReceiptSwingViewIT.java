@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -95,6 +96,8 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 			
 			receiptController = (ReceiptController) receiptSwingView.getController();
 			receiptController.setLoggedUser(pippo);
+			receiptController.update();
+			
 			receiptSwingView.setLinkedSwingView(homepageSwingView);
 			receiptSwingView.setUsers();
 			return receiptSwingView;
@@ -172,12 +175,15 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 		nameBox.enterText("Sugo");
 		priceBox.enterText("2.2");
 		quantityBox.enterText("2");
+		
 		window.list("usersList").selectItem(0);
 		window.list("usersList").selectItem(1);
 		window.list("usersList").selectItem(2);
+		
 		window.button(JButtonMatcher.withText("Save")).click();
 
 		window.button(JButtonMatcher.withText("Save Receipt")).click();
-		assertThat(receiptRepository.getAllReceiptsBoughtBy(pippo)).contains(receipt);
+		List<Receipt> allReceiptsBoughtBy = receiptRepository.getAllReceiptsBoughtBy(pippo);
+		assertThat(allReceiptsBoughtBy).contains(receipt);
 	}
 }

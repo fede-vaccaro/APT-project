@@ -154,7 +154,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		btnUpdateCredential.setEnabled(false);
 		btnUpdateCredential.addActionListener(e -> changeCredential());
 		
-		new JButton("Back");
+		// new JButton("Back");
 		GridBagConstraints gbc_btnBack = new GridBagConstraints();
 		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBack.gridx = 2;

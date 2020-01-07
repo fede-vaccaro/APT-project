@@ -129,7 +129,9 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 
 			userPanelViewSwing = injector.getInstance(UserPanelViewSwing.class);
 			userPanelViewSwing.setLoginViewSwing(homepage.loginView);
-
+			userPanelViewSwing.setLinkedSwingView(homepage);
+			
+			
 			userPanelController = (UserPanelController) userPanelViewSwing.getController();
 			userPanelController.setHomepageView(homepage);
 			userPanelController.setLoggedUser(loggedUser);
@@ -149,14 +151,13 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.label("userLabel").requireText("Hello logged!");
 	}
 
-	/*
-	 * @GUITest
-	 * 
-	 * @Test public void testGoBackHome() {
-	 * window.button(JButtonMatcher.withText("Back")).click();
-	 * assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
-	 * assertThat(homepage.getFrame().isVisible()).isTrue(); }
-	 */
+	@GUITest
+	@Test
+	public void testGoBackHome() {
+		window.button(JButtonMatcher.withText("Back")).click();
+		assertThat(homepage.getFrame().isVisible()).isTrue();
+		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
+	}
 
 	@GUITest
 	@Test

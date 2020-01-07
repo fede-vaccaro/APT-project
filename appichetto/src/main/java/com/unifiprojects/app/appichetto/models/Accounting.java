@@ -25,7 +25,7 @@ public class Accounting {
 		long temp;
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((receipt == null) ? 0 : receipt.hashCode());
+//		result = prime * result + ((receipt == null) ? 0 : receipt.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
