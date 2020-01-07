@@ -53,6 +53,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	private User payer2;
 	private HomepageSwingView homepage;
 	private Receipt firstReceiptLoggedUser;
+	private LoginViewSwing loginView;
 
 	private static EntityManager entityManager;
 	private static Injector injector;
@@ -121,11 +122,14 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 
 			entityManager.clear();
 
-			
+			loginView = injector.getInstance(LoginViewSwing.class);
 			homepage = injector.getInstance(HomepageSwingView.class);
+
+			homepage.loginView = loginView;
+
 			userPanelViewSwing = injector.getInstance(UserPanelViewSwing.class);
 			userPanelViewSwing.setLoginViewSwing(homepage.loginView);
-			
+
 			userPanelController = (UserPanelController) userPanelViewSwing.getController();
 			userPanelController.setHomepageView(homepage);
 			userPanelController.setLoggedUser(loggedUser);
@@ -146,13 +150,13 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	}
 
 	/*
-	@GUITest
-	@Test
-	public void testGoBackHome() {
-		window.button(JButtonMatcher.withText("Back")).click();
-		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
-		assertThat(homepage.getFrame().isVisible()).isTrue();
-	}*/
+	 * @GUITest
+	 * 
+	 * @Test public void testGoBackHome() {
+	 * window.button(JButtonMatcher.withText("Back")).click();
+	 * assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
+	 * assertThat(homepage.getFrame().isVisible()).isTrue(); }
+	 */
 
 	@GUITest
 	@Test
@@ -162,6 +166,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 
 		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
 		assertThat(homepage.getLoginView().getFrame().isVisible()).isTrue();
+
+		return;
 	}
 
 	@GUITest
@@ -180,8 +186,9 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		User loggedUserReloaded = entityManager.find(User.class, loggedUser.getId());
 
 		assertThat(loggedUserReloaded).isEqualTo(loggedUser);
+
 	}
-	
+
 	@GUITest
 	@Test
 	public void testShowErrorMessageIfChangeCredentialFails() {
@@ -190,7 +197,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.textBox("newName").enterText(testNewName);
 
 		window.button(JButtonMatcher.withText("Update credential")).click();
-		
+
 		User loggedUserReloaded = entityManager.find(User.class, loggedUser.getId());
 
 		window.label("userLabel").requireText(String.format("Hello %s!", loggedUserReloaded.getUsername()));

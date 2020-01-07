@@ -72,6 +72,9 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("User panel");
+		frame.setName("User panel");
+
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -247,7 +250,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 
 	@Override
 	public void goToLoginView() {
-		this.frame.dispose();
+		this.frame.setVisible(false);
 		loginViewSwing.show();
 	}
 

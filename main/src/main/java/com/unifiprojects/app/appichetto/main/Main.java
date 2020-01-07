@@ -29,6 +29,7 @@ public class Main {
 
 		Injector injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule,
 				new ReceiptModule(), new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
+		
 		LoginViewSwing loginViewSwing = injector.getInstance(LoginViewSwing.class);
 		HomepageSwingView homepageSwingView = injector.getInstance(HomepageSwingView.class);
 
