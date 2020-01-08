@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
-@Singleton
+// @Singleton
 public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 	
 	List<LinkedControlledSwingView> views;

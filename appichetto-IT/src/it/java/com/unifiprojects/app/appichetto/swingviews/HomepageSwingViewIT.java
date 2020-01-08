@@ -4,10 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.EntityManager;
 
+import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.BasicRobot;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.util.RobotFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,13 +65,12 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	}
 
-	@Override
-	protected void onSetUp() {
+	@Before
+	public void onSetUp() {
 		baseTest.wipeTablesBeforeTest();
-
 		GuiActionRunner.execute(() -> {
 			homepageSwingView = injector.getInstance(HomepageSwingView.class);
-
+			System.out.println(homepageSwingView.toString());
 			entityManager.getTransaction().begin();
 			User logged = new User("Federico", "");
 			User another = new User("Pasquale", "");
@@ -74,12 +79,19 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			homepageSwingView.setLoggedUser(logged);
+			homepageSwingView.setLoginView(injector.getInstance(LoginViewSwing.class));
 
 		});
+		// this.setUpRobot();
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
 		window.show();
-
 	}
+	
+	@Before
+	public void cleanHomepage() {
+		homepageSwingView = null;
+	}
+
 	@Test
 	public void testInjection() {
 		assertThat(homepageSwingView.payReceiptsView).isNotNull();
@@ -93,8 +105,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			assertThat(view.getLinkedSwingView()).isEqualTo(homepageSwingView);
 		}
 	}
-	
-	/*
+
 	@Test
 	@GUITest
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
@@ -103,14 +114,15 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		assertThat(homepageSwingView.receiptView.getFrame().isVisible()).isTrue();
 
 	}
+
 	@Test
 	@GUITest
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.payReceiptsView.getFrame().isVisible()).isTrue();
-
 	}
+
 	@Test
 	@GUITest
 	public void testLogOutButtonShowOnlyLogInView() {
@@ -119,6 +131,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		assertThat(homepageSwingView.loginView.getFrame().isVisible()).isTrue();
 
 	}
+
 	@Test
 	@GUITest
 	public void testUserPanelButtonShowOnlyUserPanelView() {
@@ -134,15 +147,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Show History")).click();
 		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 		assertThat(homepageSwingView.showHistoryView.getFrame().isVisible()).isTrue();
-
-	}
-	*/
-	
-	//@Test
-	public void test() {
-		//Pause.pause(1000000000);
-
-		assertThat(true).isTrue();
 	}
 
 }
