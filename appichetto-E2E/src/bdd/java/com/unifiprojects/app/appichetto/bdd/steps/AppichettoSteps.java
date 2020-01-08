@@ -32,6 +32,7 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
+import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 import com.unifiprojects.app.appichetto.swingviews.PayReceiptsViewSwing;
 
 import io.cucumber.datatable.DataTable;
@@ -109,10 +110,10 @@ public class AppichettoSteps {
 	@When("Click {string} button")
 	public void click_button(String string) {
 		window.button(JButtonMatcher.withText(string)).click();
-		if (string.equals("Save Receipt"))
-			window = WindowFinder.findFrame("Homepage").using(robot);
-		else if(string.equals("Update receipt"))
-			window = WindowFinder.findFrame("Create Receipt").using(robot);
+//		if (string.equals("Save Receipt"))
+//			window = WindowFinder.findFrame("Homepage").using(robot);
+//		else if(string.equals("Update receipt"))
+//			window = WindowFinder.findFrame("Create Receipt").using(robot);
 
 	}
 

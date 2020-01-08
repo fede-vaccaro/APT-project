@@ -19,6 +19,7 @@ Feature: Receipt features
       | name  | price | quantity | owners            |
       | pasta |   3.0 |        3 | Giuseppe Federico |
     And Click "Save Receipt" button
+    And Click "Back" button
     And Click "Log Out" button
     And "Login" view shows
     And User "Federico" is logged

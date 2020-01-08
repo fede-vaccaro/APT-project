@@ -41,11 +41,11 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.show();
 	}
 
-	@GUITest
-	@Test
-	public void testUpdateSetFrameVisible() {
-		homepageSwingView.show();
-	}
+//	@GUITest
+//	@Test
+//	public void testUpdateSetFrameVisible() {
+//		homepageSwingView.show();
+//	}
 
 	@Test
 	@GUITest

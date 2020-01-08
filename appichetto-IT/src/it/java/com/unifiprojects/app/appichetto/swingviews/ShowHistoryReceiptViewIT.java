@@ -119,6 +119,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.clear();
 
 			showHistoryController.showHistory();
+			LinkedSwingView.initializeMainFrame();
 
 			return showHistoryViewSwing;
 		});

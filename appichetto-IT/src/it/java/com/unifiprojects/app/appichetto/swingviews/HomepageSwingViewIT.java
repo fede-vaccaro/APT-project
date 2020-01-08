@@ -81,6 +81,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			homepageSwingView.setLoggedUser(logged);
 			homepageSwingView.setLoginView(injector.getInstance(LoginViewSwing.class));
 
+			LinkedSwingView.initializeMainFrame();
 		});
 		// this.setUpRobot();
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());

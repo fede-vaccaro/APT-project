@@ -13,6 +13,7 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 import com.unifiprojects.app.appichetto.swingviews.HomepageSwingView;
+import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 import com.unifiprojects.app.appichetto.swingviews.LoginViewSwing;
 
 public class Main {
@@ -38,6 +39,8 @@ public class Main {
 		
 		EventQueue.invokeLater(() -> {
 			try {
+				LinkedSwingView.initializeMainFrame();
+				System.out.println("Showing login view");
 				loginViewSwing.show();
 			} catch (Exception e) {
 				e.printStackTrace();

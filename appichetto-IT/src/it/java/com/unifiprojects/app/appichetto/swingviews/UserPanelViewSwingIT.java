@@ -136,7 +136,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 			userPanelController.setHomepageView(homepage);
 			userPanelController.setLoggedUser(loggedUser);
 
-			GuiActionRunner.execute(() -> userPanelController.update());
+			userPanelController.update();
+			LinkedSwingView.initializeMainFrame();
 
 			return userPanelViewSwing;
 		});

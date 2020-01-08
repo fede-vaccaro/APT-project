@@ -1,17 +1,19 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import java.awt.Container;
-
 import javax.swing.JFrame;
 
 public abstract class LinkedSwingView implements IView {
 
 	protected JFrame frame;
-	protected static JFrame mainFrame = new JFrame();
+	public static JFrame mainFrame;
 
-	static {
+//	static {
+//		initializeMainFrame();
+//	}
+
+	public static void initializeMainFrame() {
+		mainFrame = new JFrame();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setVisible(true);
 	}
 
 	public JFrame getFrame() {
@@ -22,6 +24,7 @@ public abstract class LinkedSwingView implements IView {
 	public void show() {
 		frame.setVisible(false);
 		
+		mainFrame.setVisible(true);
 		mainFrame.getContentPane().removeAll();
 		mainFrame.revalidate();
 		mainFrame.getContentPane().add(frame.getContentPane());

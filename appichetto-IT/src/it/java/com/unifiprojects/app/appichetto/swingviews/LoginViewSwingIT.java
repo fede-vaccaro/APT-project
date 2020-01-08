@@ -75,6 +75,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 
 			homepageSwingView.setLoginView(loginViewSwing);
 			loginViewSwing.setHomepage(homepageSwingView);
+			LinkedSwingView.initializeMainFrame();
 
 			return loginViewSwing;
 		});
@@ -98,7 +99,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		assertThat(newUser).isEqualTo(new User(username, password));
 
 		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-		.isEqualTo(homepageSwingView.getFrame().getContentPane());	
+				.isEqualTo(homepageSwingView.getFrame().getContentPane());
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 
@@ -136,7 +137,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		assertThat(newUser).isEqualTo(new User(username, password));
 
 		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-		.isEqualTo(homepageSwingView.getFrame().getContentPane());	
+				.isEqualTo(homepageSwingView.getFrame().getContentPane());
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 
