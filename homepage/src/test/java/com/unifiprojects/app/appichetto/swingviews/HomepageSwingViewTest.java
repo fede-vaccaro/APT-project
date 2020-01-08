@@ -45,7 +45,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testUpdateSetFrameVisible() {
 		homepageSwingView.show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isTrue();
 	}
 
 	@Test
@@ -62,7 +61,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
 		verify(receiptView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@GUITest
@@ -70,7 +68,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
 		verify(payReceiptsView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@GUITest
@@ -78,7 +75,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
 		verify(loginView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@GUITest
@@ -86,7 +82,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testUserPanelButtonShowOnlyUserPanelView() {
 		window.button(JButtonMatcher.withText("User panel")).click();
 		verify(userPanelView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	@GUITest
@@ -94,7 +89,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
 		verify(historyView).show();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
 	}
 
 	//TODO
