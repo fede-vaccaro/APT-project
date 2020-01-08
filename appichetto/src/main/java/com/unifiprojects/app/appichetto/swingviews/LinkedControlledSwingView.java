@@ -33,7 +33,7 @@ public abstract class LinkedControlledSwingView extends LinkedSwingView {
 	
 	public void goBack() {
 		previousLinkedSwingView.show();
-		getFrame().dispose();
+		// getFrame().dispose();
 	}
 
 
@@ -48,7 +48,7 @@ public abstract class LinkedControlledSwingView extends LinkedSwingView {
 	
 	@Override
 	public void show() {
-		getFrame().setVisible(true);
+		super.show();
 		updateData();
 	}	
 }

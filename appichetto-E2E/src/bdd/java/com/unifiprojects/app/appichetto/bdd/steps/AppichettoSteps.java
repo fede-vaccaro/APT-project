@@ -23,10 +23,16 @@ import org.assertj.swing.fixture.FrameFixture;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
+import com.unifiprojects.app.appichetto.managers.ReceiptManager;
+import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
+import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
+import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
+import com.unifiprojects.app.appichetto.swingviews.PayReceiptsViewSwing;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
@@ -42,6 +48,7 @@ public class AppichettoSteps {
 	private EntityManager entityManager;
 	private FrameFixture window;
 	Robot robot;
+	private double receipt_debt;
 
 	public void wipeTablesBeforeTest() {
 		entityManager.getTransaction().begin();
@@ -76,12 +83,12 @@ public class AppichettoSteps {
 		});
 		entityManager.getTransaction().commit();
 	}
-	
+
 	@When("Application start")
 	public void application_start() {
 		robot = BasicRobot.robotWithNewAwtHierarchy();
 		robot.settings().componentLookupScope(ComponentLookupScope.ALL);
-		application("com.unifiprojects.app.appichetto.main.Main").start();		
+		application("com.unifiprojects.app.appichetto.main.Main").start();
 	}
 
 	@When("{string} view shows")
@@ -104,12 +111,15 @@ public class AppichettoSteps {
 		window.button(JButtonMatcher.withText(string)).click();
 		if (string.equals("Save Receipt"))
 			window = WindowFinder.findFrame("Homepage").using(robot);
+		else if(string.equals("Update receipt"))
+			window = WindowFinder.findFrame("Create Receipt").using(robot);
+
 	}
 
 	@When("Click {string} button on homepage")
 	public void click_button_on_homepage(String buttonName) {
 		window.button(JButtonMatcher.withText(buttonName)).click();
-		if(buttonName.equals("Log Out")){
+		if (buttonName.equals("Log Out")) {
 			buttonName = "Login";
 			System.out.println(String.format("Changed 'Log Out' to %s", buttonName));
 		}
@@ -120,7 +130,7 @@ public class AppichettoSteps {
 	public void the_view_contain_the_following_message(String string) {
 		assertThat(window.label("errorMsg").text()).contains(string);
 	}
-	
+
 	@Then("debt to user is {float}")
 	public void debt_to_user_is(float value) {
 		assertThat(window.label("totalDebtToUser").text()).contains(String.format("Total debt to user: %.2f", value));
@@ -179,15 +189,31 @@ public class AppichettoSteps {
 		window.comboBox(list).selectItem(user);
 	}
 
-	@Given("The database contains receipt of {string} with")
-	public void the_database_contains_receipt_of_with(String string, io.cucumber.datatable.DataTable dataTable) {
-		// Write code here that turns the phrase above into concrete actions
-		// For automatic transformation, change DataTable to one of
-		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		// Double, Byte, Short, Long, BigInteger or BigDecimal.
-		//
-		// For other transformations you can register a DataTableType.
-		throw new cucumber.api.PendingException();
+	@When("Select the receipt")
+	public void select_the_receipt() {
+		window.list("Receipts list").clickItem(0);
+	}
+
+	@Given("The user {string} has a receipt shared with {string}")
+	public void the_database_contains_receipt_of_with(String string, String string2) {
+		User buyer = entityManager.createQuery("from users where username = :username", User.class)
+				.setParameter("username", string).getSingleResult();
+		User payer = entityManager.createQuery("from users where username = :username", User.class)
+				.setParameter("username", string2).getSingleResult();
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(payer, buyer);
+		ReceiptRepository receiptRepository = new ReceiptRepositoryHibernate(entityManager);
+		entityManager.getTransaction().begin();
+		receiptRepository.saveReceipt(receipt);
+		entityManager.getTransaction().commit();
+
+		receipt_debt = receipt.getAccountings().get(0).getAmount();
+
+	}
+
+	@Then("debt increased of {float}")
+	public void the_debt_is_increased_of(float value) {
+		window = WindowFinder.findFrame("Pay Receipt").using(robot);
+		window.label("totalDebtToUser")
+				.requireText(String.format(PayReceiptsViewSwing.TOTALDEBTTOUSERMESSAGE + "%.2f", receipt_debt + value));
 	}
 }

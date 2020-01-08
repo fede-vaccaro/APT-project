@@ -38,7 +38,7 @@ public class Main {
 		
 		EventQueue.invokeLater(() -> {
 			try {
-				loginViewSwing.getFrame().setVisible(true);
+				loginViewSwing.show();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -16,8 +16,8 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 // @Singleton
-public class HomepageSwingView extends LinkedSwingView implements HomepageView{
-	
+public class HomepageSwingView extends LinkedSwingView implements HomepageView {
+
 	List<LinkedControlledSwingView> views;
 
 	LinkedSwingView loginView;
@@ -35,14 +35,13 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 	}
 
 	@Inject
-	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing,
-			ShowHistoryViewSwing showHistoryViewSwing, ReceiptSwingView receiptSwingView,
-			UserPanelViewSwing userPanelViewSwing) {
+	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing,
+			ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing) {
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.userPanelView = userPanelViewSwing;
 		this.receiptView = receiptSwingView;
-		
+
 		views = new ArrayList<>();
 
 		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView, userPanelViewSwing));
@@ -67,7 +66,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 
 		JButton btnCreateReceipt = new JButton("Create Receipt");
 		btnCreateReceipt.addActionListener(e -> {
-			frame.setVisible(false);
+			//frame.setVisible(false);
 			receiptView.show();
 		});
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
@@ -78,7 +77,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 
 		JButton btnPayReceipt = new JButton("Pay Receipt");
 		btnPayReceipt.addActionListener(e -> {
-			frame.setVisible(false);
+			//frame.setVisible(false);
 			payReceiptsView.show();
 		});
 		GridBagConstraints gbc_btnPayReceipt = new GridBagConstraints();
@@ -89,7 +88,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 
 		JButton btnShowHistory = new JButton("Show History");
 		btnShowHistory.addActionListener(e -> {
-			frame.setVisible(false);
+			//frame.setVisible(false);
 			showHistoryView.show();
 		});
 		GridBagConstraints gbc_btnShowHistory = new GridBagConstraints();
@@ -105,13 +104,13 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 		gbc_btnNewButton_4.gridy = 5;
 		frame.getContentPane().add(btnUserPanel, gbc_btnNewButton_4);
 		btnUserPanel.addActionListener(e -> {
-			frame.setVisible(false);
+			//frame.setVisible(false);
 			userPanelView.show();
 		});
 
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(e -> {
-			frame.setVisible(false);
+			//frame.setVisible(false);
 			loginView.show();
 		});
 		GridBagConstraints gbc_btnLogOut = new GridBagConstraints();
@@ -122,15 +121,17 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView{
 	}
 
 	public void update(User loggedUser) {
+		this.show();
 		setLoggedUser(loggedUser);
-		this.frame.setVisible(true);
 	}
 
 	@Override
 	public void setLoggedUser(User loggedUser) {
-		views.stream().forEach(view -> {if(view.getController() != null) view.getController().setLoggedUser(loggedUser); });
+		views.stream().forEach(view -> {
+			if (view.getController() != null)
+				view.getController().setLoggedUser(loggedUser);
+		});
 	}
-
 
 	public IView getLoginView() {
 		return loginView;

@@ -86,7 +86,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
 		window.show();
 	}
-	
+
 	@Before
 	public void cleanHomepage() {
 		homepageSwingView = null;
@@ -110,25 +110,24 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-		assertThat(homepageSwingView.receiptView.getFrame().isVisible()).isTrue();
-
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+				.isEqualTo(homepageSwingView.receiptView.getFrame().getContentPane());
 	}
 
 	@Test
 	@GUITest
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-		assertThat(homepageSwingView.payReceiptsView.getFrame().isVisible()).isTrue();
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+				.isEqualTo(homepageSwingView.payReceiptsView.getFrame().getContentPane());
 	}
 
 	@Test
 	@GUITest
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-		assertThat(homepageSwingView.loginView.getFrame().isVisible()).isTrue();
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+				.isEqualTo(homepageSwingView.loginView.getFrame().getContentPane());
 
 	}
 
@@ -136,17 +135,18 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testUserPanelButtonShowOnlyUserPanelView() {
 		window.button(JButtonMatcher.withText("User panel")).click();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-		assertThat(homepageSwingView.userPanelView.getFrame().isVisible()).isTrue();
-
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+				.isEqualTo(homepageSwingView.userPanelView.getFrame().getContentPane());
 	}
+
+	
 
 	@Test
 	@GUITest
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
-		assertThat(homepageSwingView.getFrame().isVisible()).isFalse();
-		assertThat(homepageSwingView.showHistoryView.getFrame().isVisible()).isTrue();
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+		.isEqualTo(homepageSwingView.showHistoryView.getFrame().getContentPane());	
 	}
 
 }

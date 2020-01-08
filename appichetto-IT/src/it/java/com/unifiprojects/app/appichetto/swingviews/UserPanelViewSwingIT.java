@@ -155,8 +155,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testGoBackHome() {
 		window.button(JButtonMatcher.withText("Back")).click();
-		assertThat(homepage.getFrame().isVisible()).isTrue();
-		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+		.isEqualTo(homepage.getFrame().getContentPane());
 	}
 
 	@GUITest
@@ -165,8 +165,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Remove user")).click();
 		window.button(JButtonMatcher.withText("Yes")).click();
 
-		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
-		assertThat(homepage.getLoginView().getFrame().isVisible()).isTrue();
+		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
+		.isEqualTo(homepage.loginView.getFrame().getContentPane());
 
 		return;
 	}

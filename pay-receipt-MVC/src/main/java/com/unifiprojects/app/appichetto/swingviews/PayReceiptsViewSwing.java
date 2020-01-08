@@ -43,7 +43,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private static final Logger LOGGER = LogManager.getLogger(PayReceiptsViewSwing.class);
 
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
-	private static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
+	public static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
 	private PayReceiptsController payReceiptsController;
 
