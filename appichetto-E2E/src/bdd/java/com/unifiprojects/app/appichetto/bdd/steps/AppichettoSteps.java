@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.swing.JFrame;
+import javax.swing.ListModel;
 
 import org.assertj.core.util.Arrays;
 import org.assertj.swing.core.BasicRobot;
@@ -20,6 +21,7 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JTextComponentMatcher;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableList;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -209,6 +211,46 @@ public class AppichettoSteps {
 
 		receipt_debt = receipt.getAccountings().get(0).getAmount();
 
+	}
+
+	@When("Write the import and pay")
+	public void write_the_import_and_pay() {
+		window.textBox("enterAmountField").enterText(String.format("%.2f", receipt_debt));
+		click_button("Pay");
+	}
+
+	@When("Edit the items discharging {string}")
+	public void edit_the_items_discharging_user(String string) {
+		List<String> itemList = ImmutableList.copyOf(window.list("Items list").contents());
+		List<String> usersList = ImmutableList.copyOf(window.list("usersList").contents());
+
+		int indexOfUser = usersList.indexOf(string);
+
+		itemList.forEach(item -> {
+			window.list("Items list").selectItem(item);
+			window.list("usersList").unselectItem(indexOfUser);
+			click_button("Update");
+		});
+	}
+
+	@Then("Has a refund receipt with the amount already paid with {string}")
+	public void has_a_refund_receipt_with(String string) {
+		window.comboBox("User selection").selectItem(string);
+		assertThat(window.list("Receipts list").contents()[0]).contains("Refund");
+		window.label("totalDebtToUser")
+				.requireText(String.format(PayReceiptsViewSwing.TOTALDEBTTOUSERMESSAGE + "%.2f", receipt_debt));
+
+	}
+
+	@Then("The debt with {string} is paid")
+	public void the_debt_with_user_is_paid(String string) {
+		String[] accountingListStrings = window.list("accountingList").contents();
+		assertThat(accountingListStrings[0]).contains(string).contains("paid").contains("true");
+	}
+
+	@Then("A message is shown saying there are no more receipts to pay")
+	public void a_message_is_shown_saying_no_receipts_to_pay() {
+		window.label("errorMsg").requireText("You have no accountings.");
 	}
 
 	@Then("debt increased of {float}")
