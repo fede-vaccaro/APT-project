@@ -13,7 +13,7 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.AccountingRepository;
 
 public class PaymentManager {
-	
+
 	@Inject
 	private AccountingRepository accountingRepository;
 
@@ -34,7 +34,9 @@ public class PaymentManager {
 		double remainingAmount = enteredAmount;
 
 		if (Precision.round(totalAmountToPay, 2) < Precision.round(remainingAmount, 2)) {
-			throw new IllegalArgumentException("enteredAmount should be > 0");
+			throw new IllegalArgumentException(
+					String.format("enteredAmount (%.2f) should be lower than the amount to pay (%.2f).", enteredAmount,
+							totalAmountToPay));
 		}
 
 		executePayment(accountingsBetweenLoggedAndBuyer, remainingAmount);

@@ -57,16 +57,16 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 	public static void setupEntityManager() {
 
 		Module repositoriesModule = new RepositoriesModule();
-		
+
 		Module entityManagerModule = new EntityManagerModule();
 
 		Module payReceiptModule = new PayReceiptsModule();
 
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
-		
+
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
-		
+
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule);
 	}
 
@@ -80,8 +80,6 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			baseTest.wipeTablesBeforeTest();
 
-
-			
 			loggedUser = new User("logged", "pw");
 			payer1 = new User("payer", "pw");
 			payer2 = new User("payer2", "pw");
@@ -114,8 +112,9 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			payReceiptsView = (PayReceiptsViewSwing) injector.getInstance(PayReceiptsView.class);
 			payReceiptsController = payReceiptsView.getController();
 			payReceiptsController.setLoggedUser(loggedUser);
-			
-			// when the user is entering the view, the controller should call showUnpaidReceipts
+
+			// when the user is entering the view, the controller should call
+			// showUnpaidReceipts
 			GuiActionRunner.execute(() -> payReceiptsController.showUnpaidReceipts(loggedUser));
 
 			return payReceiptsView;
@@ -189,6 +188,35 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 		Double debtToPayer2 = Arrays.asList(firstReceiptPayer2).stream()
 				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
 		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer2));
+		window.button("payButton").click();
+
+		window.label("errorMsg").requireText("You have no accountings.");
+
+	}
+
+	@GUITest
+	@Test
+	public void testPayingDeleteReceiptShowsMessage() {
+		window.comboBox("User selection").selectItem("payer");
+
+		Double debtToPayer1 = Arrays.asList(thirdReceiptPayer1, secondReceiptPayer1, firstReceiptPayer1).stream()
+				.mapToDouble(r -> r.getAccountings().get(0).getAmount()).sum();
+
+		GuiActionRunner.execute(() -> {
+			entityManager.getTransaction().begin();
+			firstReceiptPayer1 = entityManager.merge(firstReceiptPayer1);
+			entityManager.remove(firstReceiptPayer1);
+			
+			secondReceiptPayer1 = entityManager.merge(secondReceiptPayer1);
+			entityManager.remove(secondReceiptPayer1);
+			
+			thirdReceiptPayer1 = entityManager.merge(thirdReceiptPayer1);
+			entityManager.remove(thirdReceiptPayer1);
+
+			entityManager.getTransaction().commit();
+		});
+		
+		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer1));
 		window.button("payButton").click();
 
 		window.label("errorMsg").requireText("You have no accountings.");
