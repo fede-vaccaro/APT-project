@@ -33,9 +33,11 @@ public class Main {
 		
 		LoginViewSwing loginViewSwing = injector.getInstance(LoginViewSwing.class);
 		HomepageSwingView homepageSwingView = injector.getInstance(HomepageSwingView.class);
-
+		
+		
 		homepageSwingView.setLoginView(loginViewSwing);
 		loginViewSwing.setHomepage(homepageSwingView);
+		
 		
 		EventQueue.invokeLater(() -> {
 			try {
