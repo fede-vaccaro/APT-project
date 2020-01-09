@@ -219,7 +219,7 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.textBox("enterAmountField").enterText(String.format("%.2f", debtToPayer1));
 		window.button("payButton").click();
 
-		window.label("errorMsg").requireText("You have no accountings.");
+		window.label("errorMsg").requireText("enteredAmount (19.85) should be lower than the amount to pay (0.00).");
 
 	}
 

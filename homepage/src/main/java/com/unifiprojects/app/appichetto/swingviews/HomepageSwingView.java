@@ -23,15 +23,18 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	LinkedSwingView loginView;
 
 	LinkedControlledSwingView receiptView;
-
 	LinkedControlledSwingView payReceiptsView;
-
 	LinkedControlledSwingView showHistoryView;
-
 	LinkedControlledSwingView userPanelView;
 
 	public void setLoginView(LinkedSwingView loginView) {
 		this.loginView = loginView;
+		
+	}
+	
+	public void setHomepageAndLoginToUserPanelView() {
+		((UserPanelViewSwing)userPanelView).setLoginViewSwing(loginView);
+		((UserPanelViewSwing)userPanelView).getController().setHomepageView(this);
 	}
 
 	@Inject
@@ -45,9 +48,11 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		views = new ArrayList<>();
 
 		views.addAll(Arrays.asList(payReceiptsViewSwing, showHistoryViewSwing, receiptSwingView, userPanelViewSwing));
-
+		
 		views.forEach(v -> v.setLinkedSwingView(this));
+		
 
+	
 		initialize();
 	}
 

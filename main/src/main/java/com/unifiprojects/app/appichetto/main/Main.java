@@ -37,7 +37,7 @@ public class Main {
 		
 		homepageSwingView.setLoginView(loginViewSwing);
 		loginViewSwing.setHomepage(homepageSwingView);
-		
+		homepageSwingView.setHomepageAndLoginToUserPanelView();
 		
 		EventQueue.invokeLater(() -> {
 			try {

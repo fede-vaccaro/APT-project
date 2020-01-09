@@ -250,7 +250,6 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 
 	@Override
 	public void goToLoginView() {
-		this.frame.setVisible(false);
 		loginViewSwing.show();
 	}
 
