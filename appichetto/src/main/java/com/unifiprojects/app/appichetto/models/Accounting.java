@@ -25,7 +25,6 @@ public class Accounting {
 		long temp;
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-//		result = prime * result + ((receipt == null) ? 0 : receipt.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -121,9 +120,7 @@ public class Accounting {
 	}
 
 	public boolean isPaid() {
-		if (this.amount == 0.0)
-			return true;
-		return false;
+		return (this.amount == 0.0);
 	}
 
 	public long getVersion() {

@@ -10,13 +10,7 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 public class ReceiptCellRenderer extends DefaultListCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-
-	/*
-	 * @Override public Component getListCellRendererComponent(JList<? extends
-	 * Receipt> list, Receipt value, int index, boolean isSelected, boolean
-	 * cellHasFocus) { setText(ReceiptFormatter.format(value)); return this; }
-	 */
-
+	
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {

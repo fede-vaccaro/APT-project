@@ -210,10 +210,6 @@ public class Receipt {
 	public String toString() {
 		return "Receipt [description= " + description + " items " + items + "]";
 	}
-//	@Override
-//	public String toString() {
-//		return "Receipt [description=" + description + ", timestamp=" + timestamp.getTime() + "items" + items + "]";
-//	}
 
 	public long getVersion() {
 		return version;

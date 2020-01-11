@@ -66,10 +66,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		frame.getContentPane().setLayout(gridBagLayout);
 
 		JButton btnCreateReceipt = new JButton("Create Receipt");
-		btnCreateReceipt.addActionListener(e -> {
-			// frame.setVisible(false);
-			receiptView.show();
-		});
+		btnCreateReceipt.addActionListener(e -> receiptView.show());
 		GridBagConstraints gbc_btnCreateReceipt = new GridBagConstraints();
 		gbc_btnCreateReceipt.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCreateReceipt.gridx = 2;
@@ -77,10 +74,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		frame.getContentPane().add(btnCreateReceipt, gbc_btnCreateReceipt);
 
 		JButton btnPayReceipt = new JButton("Pay Receipt");
-		btnPayReceipt.addActionListener(e -> {
-			// frame.setVisible(false);
-			payReceiptsView.show();
-		});
+		btnPayReceipt.addActionListener(e -> payReceiptsView.show());
 		GridBagConstraints gbc_btnPayReceipt = new GridBagConstraints();
 		gbc_btnPayReceipt.insets = new Insets(0, 0, 5, 0);
 		gbc_btnPayReceipt.gridx = 4;
@@ -88,10 +82,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		frame.getContentPane().add(btnPayReceipt, gbc_btnPayReceipt);
 
 		JButton btnShowHistory = new JButton("Show History");
-		btnShowHistory.addActionListener(e -> {
-			// frame.setVisible(false);
-			showHistoryView.show();
-		});
+		btnShowHistory.addActionListener(e -> showHistoryView.show());
 		GridBagConstraints gbc_btnShowHistory = new GridBagConstraints();
 		gbc_btnShowHistory.insets = new Insets(0, 0, 5, 5);
 		gbc_btnShowHistory.gridx = 2;
@@ -104,16 +95,10 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		gbc_btnNewButton_4.gridx = 4;
 		gbc_btnNewButton_4.gridy = 5;
 		frame.getContentPane().add(btnUserPanel, gbc_btnNewButton_4);
-		btnUserPanel.addActionListener(e -> {
-			// frame.setVisible(false);
-			userPanelView.show();
-		});
+		btnUserPanel.addActionListener(e -> userPanelView.show());
 
 		JButton btnLogOut = new JButton("Log Out");
-		btnLogOut.addActionListener(e -> {
-			// frame.setVisible(false);
-			loginView.show();
-		});
+		btnLogOut.addActionListener(e -> loginView.show());
 		GridBagConstraints gbc_btnLogOut = new GridBagConstraints();
 		gbc_btnLogOut.insets = new Insets(0, 0, 0, 5);
 		gbc_btnLogOut.gridx = 3;
@@ -123,9 +108,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Override
 	public void setLoggedUser(User loggedUser) {
-		views.stream().forEach(view -> {
-			view.getController().setLoggedUser(loggedUser);
-		});
+		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
 
 	public IView getLoginView() {

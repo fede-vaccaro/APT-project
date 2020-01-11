@@ -47,7 +47,6 @@ public class PaymentManager {
 			double accountingAmount = accounting.getAmount();
 			if (remainingAmount > 0.0) {
 				if (remainingAmount >= accountingAmount) {
-					// accounting.setPaid(true);
 					accounting.setAmount(0.0);
 					remainingAmount -= accountingAmount;
 				} else {

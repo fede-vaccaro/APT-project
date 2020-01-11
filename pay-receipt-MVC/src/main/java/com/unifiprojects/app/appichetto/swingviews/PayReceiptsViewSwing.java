@@ -57,7 +57,6 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
 	private JList<Receipt> receiptList;
-	private JList<Item> itemList;
 	DefaultListModel<Receipt> receiptListModel;
 	private JComboBox<User> userSelection;
 	DefaultComboBoxModel<User> userComboBoxModel;
@@ -89,18 +88,6 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	public Double getEnteredValue() {
 		return enteredAmount;
 	}
-
-	/**
-	 * Launch the application. public static void main(String[] args) {
-	 * EventQueue.invokeLater(new Runnable() { public void run() { try {
-	 * PayViewReceiptsViewSwing window = new PayViewReceiptsViewSwing();
-	 * window.frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); }
-	 * } }); }
-	 */
-
-	/**
-	 * Create the application.
-	 */
 
 	public PayReceiptsViewSwing() {
 		initialize();
@@ -190,7 +177,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 			User loggedUser = payReceiptsController.getLoggedUser();
 			LOGGER.info(enteredAmount);
 			LOGGER.info(loggedUser);
-			LOGGER.info((User) userComboBoxModel.getSelectedItem());
+			LOGGER.info(userComboBoxModel.getSelectedItem());
 			LOGGER.info(payReceiptsController);
 			payReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
 			txtEnterAmount.setText("");
@@ -234,7 +221,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		frame.getContentPane().add(receiptList, gbc_receiptList);
 
 		itemListModel = new DefaultListModel<>();
-		itemList = new JList<>(itemListModel);
+		JList<Item> itemList = new JList<>(itemListModel);
 		itemList.setName("Items list");
 		GridBagConstraints gbc_itemList = new GridBagConstraints();
 		gbc_itemList.insets = new Insets(0, 0, 5, 0);

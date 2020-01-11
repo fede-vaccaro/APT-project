@@ -7,10 +7,6 @@ public abstract class LinkedSwingView implements IView {
 	protected JFrame frame;
 	public static JFrame mainFrame;
 
-//	static {
-//		initializeMainFrame();
-//	}
-
 	public static void initializeMainFrame() {
 		mainFrame = new JFrame();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
