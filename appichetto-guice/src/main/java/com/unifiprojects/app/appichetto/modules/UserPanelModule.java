@@ -19,7 +19,7 @@ public class UserPanelModule extends AbstractModule {
 	@Provides
 	public UserPanelViewSwing view(UserPanelControllerFactory controllerFactory) {
 		UserPanelViewSwing view = new UserPanelViewSwing();
-		view.setUserPanelController(controllerFactory.create(view));
+		view.userPanelController = controllerFactory.create(view);
 		return view;
 	}
 }

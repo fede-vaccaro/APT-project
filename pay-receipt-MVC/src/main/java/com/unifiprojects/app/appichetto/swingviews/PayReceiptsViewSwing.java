@@ -47,12 +47,8 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
 	public static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
-	private PayReceiptsController payReceiptsController;
+	public PayReceiptsController payReceiptsController;
 
-	public void setController(PayReceiptsController payReceiptsController) {
-		this.payReceiptsController = payReceiptsController;
-	}
-	
 	@Override
 	public UserController getController() {
 		return payReceiptsController;

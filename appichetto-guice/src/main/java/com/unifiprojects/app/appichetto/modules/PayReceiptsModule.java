@@ -19,7 +19,7 @@ public class PayReceiptsModule extends AbstractModule {
 	@Provides
 	public PayReceiptsViewSwing view(PayReceiptsControllerFactory controllerFactory) {
 		PayReceiptsViewSwing view = new PayReceiptsViewSwing();
-		view.setController(controllerFactory.create(view));
+		view.payReceiptsController = controllerFactory.create(view);
 		return view;
 	}
 

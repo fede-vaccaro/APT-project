@@ -19,7 +19,7 @@ public class ShowHistoryModule extends AbstractModule {
 	@Provides
 	public ShowHistoryViewSwing view(ShowHistoryControllerFactory controllerFactory) {
 		ShowHistoryViewSwing view = new ShowHistoryViewSwing();
-		view.setController(controllerFactory.create(view));
+		view.showHistoryController = controllerFactory.create(view);
 		return view;
 	}
 

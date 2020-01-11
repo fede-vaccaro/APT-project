@@ -49,7 +49,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	private JList<Item> itemsList;
 	private DefaultListModel<Item> listItemModel;
 	private JLabel errorMsgLabel;
-	private ReceiptController receiptController;
+	public ReceiptController receiptController;
 	private JList<User> usersList;
 
 	private DefaultListModel<User> listUsersModel;
@@ -63,10 +63,6 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	private JLabel lblReceipt;
 	private JLabel lblUsersList;
 	private JLabel lblItemsList;
-
-	public void setReceiptController(ReceiptController receiptController) {
-		this.receiptController = receiptController;
-	}
 
 	public void setUsers() {
 		receiptController.getUsers().stream().filter(user -> !listUsersModel.contains(user))

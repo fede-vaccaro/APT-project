@@ -58,7 +58,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			showHistoryViewSwing = new ShowHistoryViewSwing();
-			showHistoryViewSwing.setController(showHistoryController);
+			showHistoryViewSwing.showHistoryController = showHistoryController;
 			return showHistoryViewSwing;
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());

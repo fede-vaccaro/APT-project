@@ -20,7 +20,7 @@ import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
 
-	private UserPanelController userPanelController;
+	public UserPanelController userPanelController;
 
 	private IView loginViewSwing;
 
@@ -48,21 +48,13 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	/**
 	 * Launch the application.
 	 */
-	
+
 	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UserPanelViewSwing window = new UserPanelViewSwing();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { UserPanelViewSwing window = new
+	 * UserPanelViewSwing(); window.frame.setVisible(true); } catch (Exception e) {
+	 * e.printStackTrace(); } } }); }
+	 */
 	/**
 	 * Create the application.
 	 */
@@ -105,7 +97,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 
 		nameTextField = new JFormattedTextField();
 		nameTextField.setName("newName");
-		
+
 		KeyAdapter updateCredentialKeyListener = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -116,7 +108,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 				}
 			}
 		};
-		
+
 		nameTextField.addKeyListener(updateCredentialKeyListener);
 		GridBagConstraints gbc_formattedTextField_1 = new GridBagConstraints();
 		gbc_formattedTextField_1.insets = new Insets(0, 0, 5, 5);
@@ -156,14 +148,14 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		btnUpdateCredential = new JButton("Update credential");
 		btnUpdateCredential.setEnabled(false);
 		btnUpdateCredential.addActionListener(e -> changeCredential());
-		
+
 		// new JButton("Back");
 		GridBagConstraints gbc_btnBack = new GridBagConstraints();
 		gbc_btnBack.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBack.gridx = 2;
 		gbc_btnBack.gridy = 9;
 		frame.getContentPane().add(super.btnBack, gbc_btnBack);
-		
+
 		GridBagConstraints gbc_btnUpdateCredential = new GridBagConstraints();
 		gbc_btnUpdateCredential.insets = new Insets(0, 0, 5, 5);
 		gbc_btnUpdateCredential.gridx = 3;
@@ -202,15 +194,15 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		btnYesButton.setVisible(false);
 		btnNoButton.setVisible(false);
 		lblConfirm.setVisible(false);
-		
+
 		btnRemoveUser.addActionListener(e -> {
 			showConfirm(true);
 		});
-		
+
 		btnNoButton.addActionListener(e -> {
 			showConfirm(false);
 		});
-		
+
 		btnYesButton.addActionListener(e -> {
 			userPanelController.deleteUser();
 			loginViewSwing.show();
@@ -264,10 +256,6 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	@Override
 	public void updateData() {
 		userPanelController.update();
-	}
-
-	public void setUserPanelController(UserPanelController controller) {
-		this.userPanelController = controller;
 	}
 
 }

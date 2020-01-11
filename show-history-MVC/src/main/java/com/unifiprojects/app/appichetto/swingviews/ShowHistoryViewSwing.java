@@ -35,7 +35,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 	private JLabel message;
 
-	private ShowHistoryController showHistoryController;
+	public ShowHistoryController showHistoryController;
 
 	private JButton btnRmbutton;
 	private JButton btnUpdateReceipt;
@@ -234,10 +234,6 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	@Override
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
-	}
-
-	public void setController(ShowHistoryController showHistoryController) {
-		this.showHistoryController = showHistoryController;
 	}
 
 	public UserController getController() {

@@ -35,7 +35,7 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			loginViewSwing = new LoginViewSwing();
-			loginViewSwing.setLoginController(loginController);
+			loginViewSwing.loginController = loginController;
 			return loginViewSwing;
 		});
 		window = new FrameFixture(robot(), loginViewSwing.getFrame());
