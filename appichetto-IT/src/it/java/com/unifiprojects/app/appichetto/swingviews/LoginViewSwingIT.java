@@ -74,7 +74,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 			loginViewSwing = injector.getInstance(LoginViewSwing.class);
 			homepageSwingView = injector.getInstance(HomepageSwingView.class);
 
-			homepageSwingView.setLoginView(loginViewSwing);
+			homepageSwingView.loginView = loginViewSwing;
 			loginViewSwing.setHomepage(homepageSwingView);
 			LinkedSwingView.initializeMainFrame();
 

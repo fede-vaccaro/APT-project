@@ -81,7 +81,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			homepageSwingView.setLoggedUser(logged);
-			homepageSwingView.setLoginView(injector.getInstance(LoginViewSwing.class));
+			homepageSwingView.loginView = injector.getInstance(LoginViewSwing.class);
 
 			LinkedSwingView.initializeMainFrame();
 		});

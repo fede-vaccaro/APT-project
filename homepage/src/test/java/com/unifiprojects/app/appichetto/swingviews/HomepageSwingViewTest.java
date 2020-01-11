@@ -1,9 +1,8 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -11,17 +10,17 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
+import com.unifiprojects.app.appichetto.models.User;
 
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
-	// TODO
+
 	@Mock
 	private LoginViewSwing loginView;
 	@Mock
@@ -33,7 +32,9 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Mock
 	private ReceiptSwingView receiptView;
 	@Mock
-	private UserPanelController userController;
+	private UserPanelController userPanelController;
+	@Mock
+	private UserController userController;
 
 	private HomepageSwingView homepageSwingView;
 
@@ -41,7 +42,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
-			when(userPanelView.getController()).thenReturn(userController);
+			when(userPanelView.getController()).thenReturn((UserPanelController)userPanelController);
 			homepageSwingView = new HomepageSwingView(payReceiptsView, historyView, receiptView, userPanelView,
 					loginView);
 
@@ -101,15 +102,18 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(historyView).show();
 	}
 
-	// TODO
-//	@Test
-//	public void testSetLoggedUserSetItInAllViews() {
-//		User loggedUser = new User("loggedUser", "");
-//	
-//		homepageSwingView.setLoggedUser(loggedUser);
-//
-//		//TODO to test
-//	}
+	@Test
+	public void testSetLoggedUserSetItInAllViews() {
+		User loggedUser = new User("loggedUser", "");
+	
+		homepageSwingView.views.forEach(view -> when(view.getController()).thenReturn(userController));
+	
+		homepageSwingView.setLoggedUser(loggedUser);
+
+		verify(userController, times(4)).setLoggedUser(loggedUser);
+	}
+
+	
 //	
 //	@Test
 //	public void testUpdateMakeFrameTrue() {

@@ -17,6 +17,7 @@ import javax.swing.JList;
 
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
+import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -239,7 +240,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		this.showHistoryController = showHistoryController;
 	}
 
-	public ShowHistoryController getController() {
+	public UserController getController() {
 		return showHistoryController;
 	}
 

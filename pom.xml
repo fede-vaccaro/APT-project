@@ -357,7 +357,7 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<esclude>**/ReceiptGenerator.java</esclude>
+						<esclude>**/ReceiptGenerator.*</esclude>
 						<esclude>**/main/*.*</esclude>
 						<esclude>**/models/*.*</esclude>
 						<esclude>**/exceptions/*.*</esclude>
@@ -430,6 +430,14 @@
 						<artifactId>jacoco-maven-plugin</artifactId>
 						<configuration>
 							<excludes>
+								<esclude>**/ReceiptGenerator.*</esclude>
+								<esclude>**/main/*.*</esclude>
+								<esclude>**/models/*.*</esclude>
+								<esclude>**/exceptions/*.*</esclude>
+								<esclude>**/swingviews/utils/*.*</esclude>
+								<esclude>**/modules/*.*</esclude>
+								<esclude>**/factories/*.*</esclude>
+
 								<esclude>**/swingviews/**</esclude>
 							</excludes>
 						</configuration>
@@ -438,6 +446,14 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<excludes>
+								<esclude>**/ReceiptGenerator.*</esclude>
+								<esclude>**/main/*.*</esclude>
+								<esclude>**/models/*.*</esclude>
+								<esclude>**/exceptions/*.*</esclude>
+								<esclude>**/swingviews/utils/*.*</esclude>
+								<esclude>**/modules/*.*</esclude>
+								<esclude>**/factories/*.*</esclude>
+
 								<exclude>**/swingviews/**</exclude>
 							</excludes>
 						</configuration>

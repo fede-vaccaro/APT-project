@@ -88,7 +88,7 @@ public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			showHistoryViewSwing = injector.getInstance(ShowHistoryViewSwing.class);
-			showHistoryController = showHistoryViewSwing.getController();
+			showHistoryController = (ShowHistoryController) showHistoryViewSwing.getController();
 			showHistoryController.setLoggedUser(loggedUser);
 
 			debtor1 = new User("payer", "pw");

@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
+import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
@@ -466,7 +467,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	}
 
 	@Override
-	public ReceiptController getController() {
+	public UserController getController() {
 		return receiptController;
 	}
 

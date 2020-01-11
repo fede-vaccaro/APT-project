@@ -110,7 +110,7 @@ public class PayReceiptViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.clear();
 
 			payReceiptsView = (PayReceiptsViewSwing) injector.getInstance(PayReceiptsView.class);
-			payReceiptsController = payReceiptsView.getController();
+			payReceiptsController = (PayReceiptsController) payReceiptsView.getController();
 			payReceiptsController.setLoggedUser(loggedUser);
 
 			// when the user is entering the view, the controller should call

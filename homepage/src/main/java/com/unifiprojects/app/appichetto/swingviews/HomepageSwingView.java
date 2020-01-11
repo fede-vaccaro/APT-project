@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.IView;
@@ -30,11 +29,6 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 	LinkedControlledSwingView payReceiptsView;
 	LinkedControlledSwingView showHistoryView;
 	LinkedControlledSwingView userPanelView;
-
-	public void setLoginView(LinkedSwingView loginView) {
-		this.loginView = loginView;
-
-	}
 
 	@Inject
 	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing,
@@ -127,16 +121,10 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		frame.getContentPane().add(btnLogOut, gbc_btnLogOut);
 	}
 
-	public void update(User loggedUser) {
-		this.show();
-		setLoggedUser(loggedUser);
-	}
-
 	@Override
 	public void setLoggedUser(User loggedUser) {
 		views.stream().forEach(view -> {
-			if (view.getController() != null)
-				view.getController().setLoggedUser(loggedUser);
+			view.getController().setLoggedUser(loggedUser);
 		});
 	}
 

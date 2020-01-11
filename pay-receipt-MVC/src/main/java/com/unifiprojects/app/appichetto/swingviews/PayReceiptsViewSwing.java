@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -53,7 +54,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	}
 	
 	@Override
-	public PayReceiptsController getController() {
+	public UserController getController() {
 		return payReceiptsController;
 	}
 

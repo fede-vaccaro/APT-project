@@ -19,15 +19,15 @@ import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
-public class LoginViewSwing extends LinkedSwingView implements LoginView{
+public class LoginViewSwing extends LinkedSwingView implements LoginView {
 	private LoginController loginController;
-	
+
 	private JTextField usernameTextbox;
 	private JPasswordField passwordField;
 	private JLabel errorMsg;
 
 	private HomepageView homepage;
-	
+
 	@Inject
 	public LoginViewSwing() {
 		initialize();
@@ -49,17 +49,17 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 		frame.setBounds(100, 100, width, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setBounds(115, 53, 72, 15);
 		frame.getContentPane().add(lblUsername);
-		
+
 		usernameTextbox = new JTextField();
 		usernameTextbox.setName("Username");
 		usernameTextbox.setBounds(197, 51, 114, 19);
 		frame.getContentPane().add(usernameTextbox);
 		usernameTextbox.setColumns(10);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setName("Password");
 		passwordField.setBounds(197, 121, 114, 19);
@@ -113,8 +113,8 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView{
 
 	@Override
 	public void goToHome(User loggedUser) {
-		homepage.update(loggedUser);
-		// frame.setVisible(false);
+		homepage.setLoggedUser(loggedUser);
+		homepage.show();
 	}
 
 	public void setHomepage(HomepageView homepage) {

@@ -118,7 +118,8 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		
 		loginViewSwing.goToHome(user);
 		
-		verify(homepage).update(user);
+		verify(homepage).setLoggedUser(user);
+		verify(homepage).show();
 		// assertThat(loginViewSwing.getFrame().isVisible()).isFalse();
 	}
 
