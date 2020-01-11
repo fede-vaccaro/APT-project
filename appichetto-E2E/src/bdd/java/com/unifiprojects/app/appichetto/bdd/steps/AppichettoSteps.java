@@ -34,8 +34,8 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
-import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 import com.unifiprojects.app.appichetto.swingviews.PayReceiptsViewSwing;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;

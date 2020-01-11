@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.LoginController;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 

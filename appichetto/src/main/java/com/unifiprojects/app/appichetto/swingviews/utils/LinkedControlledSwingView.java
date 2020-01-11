@@ -1,4 +1,4 @@
-package com.unifiprojects.app.appichetto.swingviews;
+package com.unifiprojects.app.appichetto.swingviews.utils;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;

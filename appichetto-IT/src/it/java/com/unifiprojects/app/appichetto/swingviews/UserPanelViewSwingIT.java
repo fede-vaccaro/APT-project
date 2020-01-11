@@ -33,6 +33,7 @@ import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.LoginModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 @RunWith(GUITestRunner.class)

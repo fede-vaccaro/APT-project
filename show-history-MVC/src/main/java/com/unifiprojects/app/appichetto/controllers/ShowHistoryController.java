@@ -8,8 +8,8 @@ import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.UncommittableTransactionException;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
-import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 

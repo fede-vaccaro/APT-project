@@ -13,6 +13,9 @@ import javax.swing.JFrame;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.models.User;
+import com.unifiprojects.app.appichetto.swingviews.utils.IView;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 // @Singleton

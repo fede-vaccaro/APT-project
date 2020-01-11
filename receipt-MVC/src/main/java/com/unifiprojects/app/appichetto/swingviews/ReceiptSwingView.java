@@ -25,6 +25,7 @@ import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
