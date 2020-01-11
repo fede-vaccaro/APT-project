@@ -19,31 +19,24 @@ import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		Module repositoriesModule = new RepositoriesModule();
 
-		Module entityManagerModule = new EntityManagerModule();
+		Injector persistenceInjector = Guice.createInjector(new EntityManagerModule());
 
-		Module payReceiptModule = new PayReceiptsModule();
+		Injector injector = persistenceInjector.createChildInjector(
+				new RepositoriesModule(), 
+				new PayReceiptsModule(),
+				new ReceiptModule(), 
+				new ShowHistoryModule(), 
+				new LoginModule(), 
+				new UserPanelModule());
 
-		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
-
-		Injector injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule,
-				new ReceiptModule(), new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
-		
-		LoginViewSwing loginViewSwing = injector.getInstance(LoginViewSwing.class);
 		HomepageSwingView homepageSwingView = injector.getInstance(HomepageSwingView.class);
-		
-		
-		homepageSwingView.setLoginView(loginViewSwing);
-		loginViewSwing.setHomepage(homepageSwingView);
-		homepageSwingView.setHomepageAndLoginToUserPanelView();
-		
+
 		EventQueue.invokeLater(() -> {
 			try {
 				LinkedSwingView.initializeMainFrame();
 				System.out.println("Showing login view");
-				loginViewSwing.show();
+				homepageSwingView.getLoginView().show();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

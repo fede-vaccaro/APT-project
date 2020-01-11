@@ -28,11 +28,11 @@
 			<artifactId>homepage</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>appichetto-IT</artifactId>
-			<version>${revision}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.unifiprojects.app</groupId> -->
+<!-- 			<artifactId>appichetto-IT</artifactId> -->
+<!-- 			<version>${revision}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>login-MVC</artifactId>

@@ -2,6 +2,8 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -13,10 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.unifiprojects.app.appichetto.controllers.UserController;
+import com.unifiprojects.app.appichetto.controllers.UserPanelController;
+
 public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
-	//TODO
+	// TODO
 	@Mock
 	private LoginViewSwing loginView;
 	@Mock
@@ -27,14 +32,19 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	private UserPanelViewSwing userPanelView;
 	@Mock
 	private ReceiptSwingView receiptView;
+	@Mock
+	private UserPanelController userController;
 
-	@InjectMocks
 	private HomepageSwingView homepageSwingView;
 
 	@Override
 	protected void onSetUp() {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
+			when(userPanelView.getController()).thenReturn(userController);
+			homepageSwingView = new HomepageSwingView(payReceiptsView, historyView, receiptView, userPanelView,
+					loginView);
+
 			return homepageSwingView;
 		});
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
@@ -91,7 +101,7 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(historyView).show();
 	}
 
-	//TODO
+	// TODO
 //	@Test
 //	public void testSetLoggedUserSetItInAllViews() {
 //		User loggedUser = new User("loggedUser", "");
@@ -106,6 +116,5 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 //		//TODO to test
 //	}
 //	
-	
-	
+
 }
