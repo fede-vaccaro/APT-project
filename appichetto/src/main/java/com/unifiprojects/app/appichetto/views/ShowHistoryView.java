@@ -8,4 +8,6 @@ public interface ShowHistoryView {
 	public void showShoppingHistory(List<Receipt> receipts);
 	
 	public void showErrorMsg(String msg);
+
+	public void setReceiptView(ReceiptView receiptView);
 }

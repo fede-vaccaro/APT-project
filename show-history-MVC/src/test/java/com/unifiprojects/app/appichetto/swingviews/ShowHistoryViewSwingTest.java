@@ -2,6 +2,8 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -20,6 +22,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -35,6 +38,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Mock
 	ShowHistoryController showHistoryController;
+	@Mock
+	ReceiptSwingView receiptSwingView;
 	@Mock
 	LinkedSwingView homepageSwingView;
 
@@ -58,6 +63,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			showHistoryViewSwing = new ShowHistoryViewSwing();
+			showHistoryViewSwing.setReceiptView(receiptSwingView);
 			showHistoryViewSwing.showHistoryController = showHistoryController;
 			return showHistoryViewSwing;
 		});
@@ -394,11 +400,15 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenUpdateButtonIsClickedUpdateRightReceiptIsPassedAndThisFrameIsDisposed() {
+	public void testWhenUpdateButtonIsClickedUpdateRightReceiptIsPassedAndReceiptViewIsShown() {
 		setupReceiptsAndUsers();
+		
 		showHistoryViewSwing.setLinkedSwingView(homepageSwingView);
 		ArgumentCaptor<Receipt> receiptCaptor = ArgumentCaptor.forClass(Receipt.class);
-
+		ReceiptController receiptController = mock(ReceiptController.class);
+		
+		when(receiptSwingView.getController()).thenReturn(receiptController);
+		
 		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
 		
@@ -406,7 +416,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
 		
-		verify(showHistoryController).updateReceipt(receiptCaptor.capture());
+		verify(receiptController).uploadReceipt(receiptCaptor.capture());
 		assertThat(receiptCaptor.getValue()).isEqualTo(receipt0);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}

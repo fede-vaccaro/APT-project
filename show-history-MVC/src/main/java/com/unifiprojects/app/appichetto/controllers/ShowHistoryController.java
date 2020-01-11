@@ -11,6 +11,7 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.swingviews.ReceiptSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.transactionhandlers.TransactionHandler;
+import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryController extends UserController {
@@ -18,15 +19,14 @@ public class ShowHistoryController extends UserController {
 	private ReceiptRepository receiptRepository;
 	private ShowHistoryView showHistoryView;
 	private TransactionHandler transaction;
-	private ReceiptSwingView receiptView;
-
 	@Inject
 	public ShowHistoryController(ReceiptRepository receiptRepository, @Assisted ShowHistoryView showHistoryView,
-			TransactionHandler transaction, ReceiptSwingView receiptView) {
+			TransactionHandler transaction, ReceiptView receiptView) {
 		this.receiptRepository = receiptRepository;
 		this.showHistoryView = showHistoryView;
 		this.transaction = transaction;
-		this.receiptView = receiptView;
+		
+		showHistoryView.setReceiptView(receiptView);
 	}
 
 	public void showHistory() {
@@ -54,14 +54,6 @@ public class ShowHistoryController extends UserController {
 
 	public void setTransaction(TransactionHandler transaction) {
 		this.transaction = transaction;
-	}
-
-	//TODO
-	public void updateReceipt(Receipt selected) {
-		receiptView.getController().setLoggedUser(loggedUser);
-		((ReceiptController)receiptView.getController()).uploadReceipt(selected);
-		receiptView.setLinkedSwingView((LinkedSwingView) showHistoryView);
-		receiptView.show();
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.reset;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -40,7 +41,7 @@ public class ShowHistoryControllerTest {
 	private ShowHistoryView showHistoryView;
 	
 	@Mock
-	private ReceiptView receiptSwingView;
+	private ReceiptView receiptView;
 	
 	@Captor
 	ArgumentCaptor<String> stringCaptor;
@@ -56,6 +57,7 @@ public class ShowHistoryControllerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		reset(showHistoryView);
 		loggedUser = new User("logged", "pw");
 		showHistoryController.setLoggedUser(loggedUser);
 		
@@ -92,7 +94,7 @@ public class ShowHistoryControllerTest {
 		Accounting accounting2ToOtherOwner2 = new Accounting(otherOwner2, item2.getPricePerOwner() + item3.getPricePerOwner());
 		
 		receipt1.setAccountingList(Arrays.asList(accounting2ToOtherOwner1, accounting2ToOtherOwner2));
-
+		
 		
 	}
 	

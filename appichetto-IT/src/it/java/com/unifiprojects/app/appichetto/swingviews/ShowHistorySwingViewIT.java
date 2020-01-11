@@ -34,7 +34,7 @@ import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 
 @RunWith(GUITestRunner.class)
-public class ShowHistoryReceiptViewIT extends AssertJSwingJUnitTestCase {
+public class ShowHistorySwingViewIT extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 	private static MVCBaseTest baseTest = new MVCBaseTest();

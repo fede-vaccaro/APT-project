@@ -2,6 +2,7 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.GregorianCalendar;
@@ -24,6 +25,7 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.transactionhandlers.HibernateTransaction;
+import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryControllerIT {
@@ -36,6 +38,9 @@ public class ShowHistoryControllerIT {
 
 	@Mock
 	ShowHistoryView showHistoryView;
+	@Mock
+	ReceiptView receiptView;
+	
 	private User loggedUser;
 	private User payerUser;
 	private Receipt firstReceipt;
@@ -60,11 +65,12 @@ public class ShowHistoryControllerIT {
 	@Before
 	public void setUp() {
 		baseTest.wipeTablesBeforeTest();
-		
 		MockitoAnnotations.initMocks(this);
+		
 		entityManager = baseTest.getEntityManager();
 		receiptRepository = new ReceiptRepositoryHibernate(entityManager);
 		showHistoryController = new ShowHistoryController(receiptRepository, showHistoryView, new HibernateTransaction(entityManager), null);
+		reset(showHistoryView);
 
 		loggedUser = new User("logged", "pw");
 		payerUser = new User("payer", "pw");

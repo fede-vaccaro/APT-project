@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import com.google.inject.Inject;
+import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
 import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Accounting;
@@ -24,6 +25,8 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
+import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
+import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryViewSwing extends LinkedControlledSwingView implements ShowHistoryView {
@@ -41,6 +44,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	private JButton btnUpdateReceipt;
 
 	private JList<Receipt> receiptList;
+	private ReceiptSwingView receiptView;
 
 
 	@Inject
@@ -162,7 +166,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		btnUpdateReceipt.addActionListener(e -> {
 			
 			Receipt selected = receiptList.getSelectedValue();
-			showHistoryController.updateReceipt(selected);
+			updateReceipt(selected);
 			getFrame().dispose();
 		});
 
@@ -236,6 +240,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		this.message.setText(msg);
 	}
 
+	@Override
 	public UserController getController() {
 		return showHistoryController;
 	}
@@ -243,6 +248,19 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	@Override
 	public void updateData() {
 		showHistoryController.update();
+	}
+
+	@Override
+	public void setReceiptView(ReceiptView receiptView) {
+		this.receiptView = (ReceiptSwingView) receiptView;
+	}
+	
+	public void updateReceipt(Receipt selected) {
+		User loggedUser = showHistoryController.getLoggedUser();
+ 		receiptView.getController().setLoggedUser(loggedUser);
+		((ReceiptController)receiptView.getController()).uploadReceipt(selected);
+		receiptView.setLinkedSwingView(this);
+		receiptView.show();
 	}
 	
 	//public void goToHome(Receipt receipt) {
