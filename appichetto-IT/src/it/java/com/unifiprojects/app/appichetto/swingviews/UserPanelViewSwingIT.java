@@ -35,6 +35,8 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
+// TODO: a test was launching exceptions while successing
+
 @RunWith(GUITestRunner.class)
 public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 

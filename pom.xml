@@ -357,13 +357,16 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<esclude>**/ReceiptGenerator.*</esclude>
-						<esclude>**/main/*.*</esclude>
-						<esclude>**/models/*.*</esclude>
-						<esclude>**/exceptions/*.*</esclude>
-						<esclude>**/swingviews/utils/*.*</esclude>
-						<esclude>**/modules/*.*</esclude>
-						<esclude>**/factories/*.*</esclude>
+						<param>**/main/*.*</param>
+						<param>**/models/*.*</param>
+						<param>**/exceptions/*.*</param>
+						<param>**/swingviews/utils/*.*</param>
+						<param>**/modules/*.*</param>
+						<param>**/factories/*.*</param>
+						<param>**/appichetto/**/swingviews/*.*</param>
+						<param>**/FakeTransaction.java</param>
+						<param>**/UserController.java</param>
+						<param>**/ReceiptGenerator.*</param>
 					</excludes>
 				</configuration>
 
