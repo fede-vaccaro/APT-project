@@ -187,4 +187,10 @@ public class UserPanelViewSwingTest extends AssertJSwingJUnitTestCase {
 		assertThat(userPanelViewSwing.getFrame().isVisible()).isFalse();
 	}
 
+	@Test
+	public void testGoToLoginView() {
+		userPanelViewSwing.goToLoginView();
+		verify(loginSwingView).show();
+	}
+	
 }
