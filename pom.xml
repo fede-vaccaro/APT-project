@@ -28,7 +28,7 @@
 			**/swingviews/utils/*.*,
 			**/modules/*.*,
 			**/factories/*.*,
-			<!-- TODO -->
+			**/appichetto/**/swingviews/*.*,
 			**/FakeTransaction.java,
 			**/UserController.java,
 			**/ReceiptGenerator.java
