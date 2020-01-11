@@ -101,10 +101,6 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	/**
 	 * Create the application.
 	 */
-	public PayReceiptsViewSwing(PayReceiptsController payViewReceiptsController) {
-		this.payReceiptsController = payViewReceiptsController;
-		initialize();
-	}
 
 	public PayReceiptsViewSwing() {
 		initialize();
