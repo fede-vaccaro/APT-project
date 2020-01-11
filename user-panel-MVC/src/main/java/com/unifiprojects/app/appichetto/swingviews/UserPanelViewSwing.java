@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.swingviews.utils.IView;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
@@ -45,26 +44,11 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	private JLabel lblConfirm;
 
 	private JButton btnNoButton;
-	/**
-	 * Launch the application.
-	 */
 
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { UserPanelViewSwing window = new
-	 * UserPanelViewSwing(); window.frame.setVisible(true); } catch (Exception e) {
-	 * e.printStackTrace(); } } }); }
-	 */
-	/**
-	 * Create the application.
-	 */
 	public UserPanelViewSwing() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("User panel");
@@ -195,13 +179,9 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		btnNoButton.setVisible(false);
 		lblConfirm.setVisible(false);
 
-		btnRemoveUser.addActionListener(e -> {
-			showConfirm(true);
-		});
+		btnRemoveUser.addActionListener(e -> showConfirm(true));
 
-		btnNoButton.addActionListener(e -> {
-			showConfirm(false);
-		});
+		btnNoButton.addActionListener(e -> showConfirm(false));
 
 		btnYesButton.addActionListener(e -> {
 			userPanelController.deleteUser();

@@ -12,7 +12,7 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
 import com.unifiprojects.app.appichetto.swingviews.HomepageSwingView;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
+import com.unifiprojects.app.appichetto.swingviews.LinkedSwingView;
 
 public class Main {
 

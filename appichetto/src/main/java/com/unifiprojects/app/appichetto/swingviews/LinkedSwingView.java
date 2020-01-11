@@ -1,11 +1,13 @@
-package com.unifiprojects.app.appichetto.swingviews.utils;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import javax.swing.JFrame;
+
+import com.unifiprojects.app.appichetto.swingviews.utils.IView;
 
 public abstract class LinkedSwingView implements IView {
 
 	protected JFrame frame;
-	public static JFrame mainFrame;
+	static JFrame mainFrame;
 
 	public static void initializeMainFrame() {
 		mainFrame = new JFrame();

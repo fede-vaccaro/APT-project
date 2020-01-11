@@ -31,7 +31,6 @@ import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.ReceiptModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.ShowHistoryModule;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistorySwingViewIT extends AssertJSwingJUnitTestCase {

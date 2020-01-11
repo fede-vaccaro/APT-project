@@ -14,8 +14,6 @@ import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.IView;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 // @Singleton

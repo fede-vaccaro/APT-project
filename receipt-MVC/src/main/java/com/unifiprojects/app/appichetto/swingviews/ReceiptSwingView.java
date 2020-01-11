@@ -26,7 +26,6 @@ import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.swingviews.utils.UsersListSelectionModel;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 
@@ -366,9 +365,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		gbc_btnSaveReceipt.gridx = 1;
 		gbc_btnSaveReceipt.gridy = 11;
 		frame.getContentPane().add(btnSaveReceipt, gbc_btnSaveReceipt);
-		btnSaveReceipt.addActionListener(e -> {
-			receiptController.saveReceipt();
-		});
+		btnSaveReceipt.addActionListener(e -> receiptController.saveReceipt());
 		btnSave.setEnabled(false);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
 		gbc_btnSave.anchor = GridBagConstraints.NORTH;

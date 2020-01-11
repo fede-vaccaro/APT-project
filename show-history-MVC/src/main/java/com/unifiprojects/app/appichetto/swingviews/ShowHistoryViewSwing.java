@@ -24,7 +24,6 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
@@ -265,9 +264,4 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	public void setShowHistoryController(ShowHistoryController showHistoryController) {
 		this.showHistoryController = showHistoryController;
 	}
-	
-	//public void goToHome(Receipt receipt) {
-	//	//getHomepageView().update(receipt);
-	//	getFrame().dispose();
-	//}
 }

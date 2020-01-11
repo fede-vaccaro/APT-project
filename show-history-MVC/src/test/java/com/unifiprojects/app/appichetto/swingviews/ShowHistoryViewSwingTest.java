@@ -29,7 +29,6 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingFormatter;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 
 @RunWith(GUITestRunner.class)
 public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {

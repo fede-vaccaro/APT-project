@@ -1,8 +1,9 @@
-package com.unifiprojects.app.appichetto.swingviews.utils;
+package com.unifiprojects.app.appichetto.swingviews;
 
 import javax.swing.JButton;
 
 import com.unifiprojects.app.appichetto.controllers.UserController;
+import com.unifiprojects.app.appichetto.swingviews.utils.IView;
 
 public abstract class LinkedControlledSwingView extends LinkedSwingView {
 
