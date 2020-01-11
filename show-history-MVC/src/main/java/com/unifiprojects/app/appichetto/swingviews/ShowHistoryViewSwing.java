@@ -25,7 +25,6 @@ import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.AccountingCellRenderer;
 import com.unifiprojects.app.appichetto.swingviews.utils.LinkedControlledSwingView;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
 import com.unifiprojects.app.appichetto.views.ReceiptView;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 

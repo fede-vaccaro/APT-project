@@ -19,7 +19,7 @@ public class LoginModule extends AbstractModule {
 	@Provides
 	public LoginViewSwing view(LoginControllerFactory controllerFactory) {
 		LoginViewSwing view = new LoginViewSwing();
-		view.loginController = controllerFactory.create(view);
+		view.setLoginController(controllerFactory.create(view));
 		return view;
 	}
 }

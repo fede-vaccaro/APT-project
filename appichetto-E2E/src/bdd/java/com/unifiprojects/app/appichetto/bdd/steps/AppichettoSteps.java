@@ -9,13 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.swing.JFrame;
-import javax.swing.ListModel;
-
 import org.assertj.core.util.Arrays;
 import org.assertj.swing.core.BasicRobot;
 import org.assertj.swing.core.ComponentLookupScope;
-import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.Robot;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JTextComponentMatcher;
@@ -26,7 +22,6 @@ import org.testcontainers.shaded.com.google.common.collect.ImmutableList;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
-import com.unifiprojects.app.appichetto.managers.ReceiptManager;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
@@ -35,8 +30,6 @@ import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepositoryHibernate;
 import com.unifiprojects.app.appichetto.repositories.UserRepositoryHibernate;
 import com.unifiprojects.app.appichetto.swingviews.PayReceiptsViewSwing;
-import com.unifiprojects.app.appichetto.swingviews.utils.LinkedSwingView;
-
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;

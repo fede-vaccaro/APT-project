@@ -10,7 +10,6 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
-import org.assertj.swing.timing.Pause;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

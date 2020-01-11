@@ -20,7 +20,7 @@ import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
 public class LoginViewSwing extends LinkedSwingView implements LoginView {
-	public LoginController loginController;
+	private LoginController loginController;
 
 	private JTextField usernameTextbox;
 	private JPasswordField passwordField;
@@ -119,5 +119,8 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 	@Override
 	public JFrame getFrame() {
 		return frame;
+	}
+	public void setLoginController(LoginController loginController) {
+		this.loginController = loginController;
 	}
 }

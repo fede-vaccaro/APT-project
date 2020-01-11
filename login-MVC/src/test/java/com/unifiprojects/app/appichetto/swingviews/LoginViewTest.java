@@ -1,6 +1,5 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -35,7 +34,7 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			loginViewSwing = new LoginViewSwing();
-			loginViewSwing.loginController = loginController;
+			loginViewSwing.setLoginController(loginController);
 			return loginViewSwing;
 		});
 		window = new FrameFixture(robot(), loginViewSwing.getFrame());
