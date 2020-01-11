@@ -19,7 +19,7 @@ public class ReceiptModule extends AbstractModule {
 	@Provides
 	public ReceiptSwingView view(ReceiptControllerFactory controllerFactory) {
 		ReceiptSwingView receiptView = new ReceiptSwingView();
-		receiptView.receiptController = controllerFactory.create(receiptView);
+		receiptView.setReceiptController(controllerFactory.create(receiptView));
 		return receiptView;
 	}
 }

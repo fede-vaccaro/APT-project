@@ -38,7 +38,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 	private JLabel message;
 
-	public ShowHistoryController showHistoryController;
+	private ShowHistoryController showHistoryController;
 
 	private JButton btnRmbutton;
 	private JButton btnUpdateReceipt;
@@ -261,6 +261,10 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		((ReceiptController)receiptView.getController()).uploadReceipt(selected);
 		receiptView.setLinkedSwingView(this);
 		receiptView.show();
+	}
+
+	public void setShowHistoryController(ShowHistoryController showHistoryController) {
+		this.showHistoryController = showHistoryController;
 	}
 	
 	//public void goToHome(Receipt receipt) {

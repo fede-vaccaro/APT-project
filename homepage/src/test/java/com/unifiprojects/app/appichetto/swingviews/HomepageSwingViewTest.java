@@ -4,6 +4,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -111,6 +113,11 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		homepageSwingView.setLoggedUser(loggedUser);
 
 		verify(userController, times(4)).setLoggedUser(loggedUser);
+	}
+	
+	@Test
+	public void getLoginViewTest() {
+		assertThat(homepageSwingView.getLoginView()).isEqualTo(loginView);
 	}
 
 	

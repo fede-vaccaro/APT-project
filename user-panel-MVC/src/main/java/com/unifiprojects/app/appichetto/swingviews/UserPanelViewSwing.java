@@ -20,7 +20,7 @@ import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
 
-	public UserPanelController userPanelController;
+	private UserPanelController userPanelController;
 
 	private IView loginViewSwing;
 
@@ -256,6 +256,10 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	@Override
 	public void updateData() {
 		userPanelController.update();
+	}
+
+	public void setUserPanelController(UserPanelController userPanelController) {
+		this.userPanelController = userPanelController;
 	}
 
 }

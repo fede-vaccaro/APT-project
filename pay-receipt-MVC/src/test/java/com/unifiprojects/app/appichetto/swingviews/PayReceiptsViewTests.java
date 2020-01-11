@@ -68,7 +68,7 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> {
 			MockitoAnnotations.initMocks(this);
 			payReceiptsSwing = new PayReceiptsViewSwing();
-			payReceiptsSwing.payReceiptsController = payReceiptsController;
+			payReceiptsSwing.setPayReceiptsController(payReceiptsController);
 			return payReceiptsSwing;
 		});
 		

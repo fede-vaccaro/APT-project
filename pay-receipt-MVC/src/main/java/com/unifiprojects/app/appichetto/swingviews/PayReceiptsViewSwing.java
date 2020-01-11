@@ -47,7 +47,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
 	public static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
 
-	public PayReceiptsController payReceiptsController;
+	private PayReceiptsController payReceiptsController;
 
 	@Override
 	public UserController getController() {
@@ -379,5 +379,9 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	@Override
 	public void updateData() {
 		getController().update();
+	}
+
+	public void setPayReceiptsController(PayReceiptsController payReceiptsController) {
+		this.payReceiptsController = payReceiptsController;
 	}
 }

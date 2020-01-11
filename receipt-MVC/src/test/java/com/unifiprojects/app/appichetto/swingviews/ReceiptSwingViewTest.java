@@ -57,7 +57,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		MockitoAnnotations.initMocks(this);
 		GuiActionRunner.execute(() -> {
 			receiptSwingView = new ReceiptSwingView();
-			receiptSwingView.receiptController = receiptController;
+			receiptSwingView.setReceiptController(receiptController);
 			return receiptSwingView;
 		});
 		window = new FrameFixture(robot(), receiptSwingView.getFrame());
