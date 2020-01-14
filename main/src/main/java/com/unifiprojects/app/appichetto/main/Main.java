@@ -29,6 +29,7 @@ public class Main {
 				new ReceiptModule(), new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
 
 		LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
+
 		EventQueue.invokeLater(() -> {
 			try {
 				LinkedSwingView.initializeMainFrame();

@@ -48,10 +48,11 @@ public class UserPanelController extends UserController {
 			userPanelView.showErrorMsg(ex.getMessage());
 		} catch (UncommittableTransactionException ex) {
 			userPanelView.showErrorMsg("Something went wrong while committing changes.");
-		} finally {
-			this.loggedUser = userRepository.findById(loggedUser.getId());
-			this.showUser();
 		}
+		
+		this.loggedUser = userRepository.findById(loggedUser.getId());
+		this.showUser();
+
 	}
 
 	public void deleteUser() {
@@ -60,7 +61,6 @@ public class UserPanelController extends UserController {
 			goToLoginView();
 		} catch (UncommittableTransactionException ex) {
 			userPanelView.showErrorMsg("Something went wrong while committing changes.");
-
 		}
 
 	}
