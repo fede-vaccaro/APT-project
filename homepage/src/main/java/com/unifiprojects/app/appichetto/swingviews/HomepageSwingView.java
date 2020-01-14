@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.User;
-import com.unifiprojects.app.appichetto.swingviews.utils.IView;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 
 // @Singleton
@@ -109,7 +108,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 		views.stream().forEach(view -> view.getController().setLoggedUser(loggedUser));
 	}
 
-	public IView getLoginView() {
+	public LinkedSwingView getLoginView() {
 		return loginView;
 	}
 }

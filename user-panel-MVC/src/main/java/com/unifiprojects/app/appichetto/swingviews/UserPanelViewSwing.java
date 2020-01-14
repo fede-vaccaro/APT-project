@@ -14,16 +14,15 @@ import javax.swing.JLabel;
 
 import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
-import com.unifiprojects.app.appichetto.swingviews.utils.IView;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
 
 	private UserPanelController userPanelController;
 
-	private IView loginViewSwing;
+	private LinkedSwingView loginViewSwing;
 
-	public void setLoginViewSwing(IView loginView) {
+	public void setLoginViewSwing(LinkedSwingView loginView) {
 		this.loginViewSwing = loginView;
 	}
 

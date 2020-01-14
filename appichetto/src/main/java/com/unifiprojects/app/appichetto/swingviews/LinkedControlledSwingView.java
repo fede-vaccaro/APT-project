@@ -3,12 +3,11 @@ package com.unifiprojects.app.appichetto.swingviews;
 import javax.swing.JButton;
 
 import com.unifiprojects.app.appichetto.controllers.UserController;
-import com.unifiprojects.app.appichetto.swingviews.utils.IView;
 
 public abstract class LinkedControlledSwingView extends LinkedSwingView {
 
 	protected JButton btnBack;
-	protected IView previousLinkedSwingView;
+	protected LinkedSwingView previousLinkedSwingView;
 	protected UserController userController;
 	
 	public UserController getController() {
@@ -21,11 +20,11 @@ public abstract class LinkedControlledSwingView extends LinkedSwingView {
 		btnBack.addActionListener(e -> goBack());
 	}
 
-	public void setLinkedSwingView(IView linkedSwingView) {
+	public void setLinkedSwingView(LinkedSwingView linkedSwingView) {
 		this.previousLinkedSwingView = linkedSwingView;
 	}
 
-	public IView getLinkedSwingView() {
+	public LinkedSwingView getLinkedSwingView() {
 		return previousLinkedSwingView;
 	}
 
