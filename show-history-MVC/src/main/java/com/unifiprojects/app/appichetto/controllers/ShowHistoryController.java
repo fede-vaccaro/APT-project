@@ -24,7 +24,6 @@ public class ShowHistoryController extends UserController {
 		this.showHistoryView = showHistoryView;
 		this.transaction = transaction;
 		
-		showHistoryView.setReceiptView(receiptView);
 	}
 
 	public void showHistory() {
