@@ -72,11 +72,10 @@ public class ReceiptManagerIT {
 		entityManager.getTransaction().commit();
 		
 		entityManager.getTransaction().begin();
-		Long receiptId = receiptManager.saveReceipt();
+		Receipt receipt = receiptManager.saveReceipt();
 		entityManager.getTransaction().commit();
 		entityManager.clear();
 		
-		System.out.println(receiptId);
-		assertThat(entityManager.find(Receipt.class, receiptId)).isEqualTo(receiptManager.getReceipt());
+		assertThat(entityManager.find(Receipt.class, receipt.getId())).isEqualTo(receipt);
 	}
 }

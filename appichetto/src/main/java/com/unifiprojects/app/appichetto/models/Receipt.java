@@ -91,10 +91,6 @@ public class Receipt {
 		items.remove(itemToDelete);
 	}
 
-	public int getItemsListSize() {
-		return items.size();
-	}
-
 	public void setItems(List<Item> items) {
 		this.items = items;
 	}

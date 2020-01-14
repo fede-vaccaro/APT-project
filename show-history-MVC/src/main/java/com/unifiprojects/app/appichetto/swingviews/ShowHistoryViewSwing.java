@@ -44,7 +44,6 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	private JList<Receipt> receiptList;
 	private ReceiptSwingView receiptView;
 
-
 	@Inject
 	public ShowHistoryViewSwing() {
 		initialize();
@@ -162,7 +161,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		gbc_btnUpdateReceipt.gridy = 8;
 		frame.getContentPane().add(btnUpdateReceipt, gbc_btnUpdateReceipt);
 		btnUpdateReceipt.addActionListener(e -> {
-			
+
 			Receipt selected = receiptList.getSelectedValue();
 			updateReceipt(selected);
 			getFrame().dispose();
@@ -215,17 +214,15 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		if (!history.isEmpty()) {
 			Map<User, Double> totalAccounting = new HashMap<>();
 
-			history.stream().forEach(r -> {
-				r.getAccountings().stream().forEach(a -> {
-					if (!a.isPaid()) {
-						Double partialAccounting = totalAccounting.get(a.getUser());
-						if (partialAccounting == null)
-							partialAccounting = 0.0;
-						partialAccounting += a.getAmount();
-						totalAccounting.put(a.getUser(), partialAccounting);
-					}
-				});
-			});
+			history.stream().forEach(r -> r.getAccountings().stream().forEach(a -> {
+				if (!a.isPaid()) {
+					Double partialAccounting = totalAccounting.get(a.getUser());
+					if (partialAccounting == null)
+						partialAccounting = 0.0;
+					partialAccounting += a.getAmount();
+					totalAccounting.put(a.getUser(), partialAccounting);
+				}
+			}));
 
 			String accountingFormat = "%s:	%.2f€";
 			totalAccounting.keySet().stream().forEach(u -> totalAccountingsListModel
@@ -252,11 +249,11 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	public void setReceiptView(ReceiptView receiptView) {
 		this.receiptView = (ReceiptSwingView) receiptView;
 	}
-	
+
 	public void updateReceipt(Receipt selected) {
 		User loggedUser = showHistoryController.getLoggedUser();
- 		receiptView.getController().setLoggedUser(loggedUser);
-		((ReceiptController)receiptView.getController()).uploadReceipt(selected);
+		receiptView.getController().setLoggedUser(loggedUser);
+		((ReceiptController) receiptView.getController()).uploadReceipt(selected);
 		receiptView.setLinkedSwingView(this);
 		receiptView.show();
 	}

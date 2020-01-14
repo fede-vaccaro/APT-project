@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.math3.util.Pair;
+
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
@@ -24,11 +26,13 @@ public class CreateDebtsService {
 		this.refundReceipts = new ArrayList<>();
 	}
 
-	public void computeDebts(Receipt receipt, Map<User, Accounting> oldAccountingsByItemPriceMap) {
+	public Pair<List<Accounting>, List<Receipt>> computeDebts(Receipt receipt, Map<User, Accounting> oldAccountingsByItemPriceMap) {
 		Map<User, Accounting> accountingsByItemPriceMap = calculateUserAccountingMapByItemPrice(receipt);
 		Map<User, Accounting> oldAccountingsMap = createUserAccountingMap(receipt);
 		calculateUserAccountingMap(oldAccountingsByItemPriceMap, oldAccountingsMap, accountingsByItemPriceMap);
 		createRefundReceipts(accountingsMap, receipt.getBuyer());
+		
+		return new Pair<>(new ArrayList<>(accountingsMap.values()), refundReceipts);
 	}
 
 	Map<User, Accounting> createUserAccountingMap(Receipt receipt) {
@@ -48,7 +52,7 @@ public class CreateDebtsService {
 			Double amount = Math.round(100 * (oldAM.getOrDefault(user, defaultAccountig).getAmount()
 					- oldAIPM.getOrDefault(user, defaultAccountig).getAmount()
 					+ aIPM.getOrDefault(user, defaultAccountig).getAmount())) / 100.0;
-			if (amount != 0.0)// TODO da decidere
+			if (amount != 0.0)
 				accountingsMap.put(user, new Accounting(user, amount));
 		});
 		
@@ -85,14 +89,6 @@ public class CreateDebtsService {
 
 	void setRefundReceipts(List<Receipt> refundReceipts) {
 		this.refundReceipts = refundReceipts;
-	}
-
-	public List<Receipt> getRefundReceipts() {
-		return refundReceipts;
-	}
-
-	public List<Accounting> getAccountings() {
-		return new ArrayList<>(accountingsMap.values());
 	}
 
 }
