@@ -2,9 +2,7 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import javax.swing.JFrame;
 
-import com.unifiprojects.app.appichetto.swingviews.utils.IView;
-
-public abstract class LinkedSwingView implements IView {
+public abstract class LinkedSwingView{
 
 	protected JFrame frame;
 	static JFrame mainFrame;
@@ -18,7 +16,6 @@ public abstract class LinkedSwingView implements IView {
 		return frame;
 	}
 
-	@Override
 	public void show() {
 		frame.setVisible(false);
 		

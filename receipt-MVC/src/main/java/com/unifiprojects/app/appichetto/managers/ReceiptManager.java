@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,18 +52,18 @@ public class ReceiptManager {
 		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", itemToDelete);
 	}
 
-	public Long saveReceipt() {
-		createDebtsService.computeDebts(receipt, accountingsMap);
+	public Receipt saveReceipt() {
+		Pair<List<Accounting>, List<Receipt>> fullDebts = createDebtsService.computeDebts(receipt, accountingsMap);
 
-		List<Receipt> refoundReceipts = createDebtsService.getRefundReceipts();
-		List<Accounting> accountings = createDebtsService.getAccountings();
+		List<Accounting> accountings = fullDebts.getFirst();
+		List<Receipt> refoundReceipts = fullDebts.getSecond();
 
 		receipt.setAccountingList(accountings);
 		receiptRepository.saveReceipt(receipt);
 		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
 
 		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
-		return receipt.getId();
+		return receipt;
 	}
 
 	public void uploadReceipt(Receipt receipt) {
@@ -92,14 +93,6 @@ public class ReceiptManager {
 
 	public void setBuyer(User buyer) {
 		receipt.setBuyer(buyer);
-	}
-
-	public int getItemsListSize() {
-		return receipt.getItemsListSize();
-	}
-
-	public Receipt getReceipt() {
-		return receipt;
 	}
 
 }

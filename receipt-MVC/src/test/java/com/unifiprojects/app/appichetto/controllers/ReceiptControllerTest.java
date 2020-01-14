@@ -88,8 +88,6 @@ public class ReceiptControllerTest {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item newItem = new Item(name, price, quantity, users);
 
-		when(receiptManager.getItemsListSize()).thenReturn(1);
-
 		receiptController.updateItem(newItem, index);
 
 		verify(receiptManager).updateItem(index, newItem);
