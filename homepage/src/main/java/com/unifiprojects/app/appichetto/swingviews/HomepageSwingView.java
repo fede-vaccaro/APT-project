@@ -11,9 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.HomepageView;
+import com.unifiprojects.app.appichetto.views.LoginView;
 
 // @Singleton
 public class HomepageSwingView extends LinkedSwingView implements HomepageView {
@@ -29,17 +31,16 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Inject
 	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing,
-			ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing, LoginViewSwing loginView) {
+			ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing,@Assisted LoginView loginView) {
 
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
 		this.userPanelView = userPanelViewSwing;
 		this.receiptView = receiptSwingView;
 
-		this.loginView = loginView;
-		loginView.setHomepage(this);
+		this.loginView = (LinkedSwingView) loginView;
 
-		userPanelViewSwing.setLoginViewSwing(loginView);
+		userPanelViewSwing.setLoginViewSwing((LinkedSwingView) loginView);
 		((UserPanelController) userPanelViewSwing.getController()).setHomepageView(this);
 
 		views = new ArrayList<>();

@@ -119,6 +119,10 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 	public JFrame getFrame() {
 		return frame;
 	}
+
+	public HomepageView getHomepage() {
+		return homepage;
+	}
 	public void setLoginController(LoginController loginController) {
 		this.loginController = loginController;
 	}
