@@ -28,7 +28,8 @@ public class Main {
 				new ReceiptModule(), new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
 
 		HomepageSwingView homepageSwingView = injector.getInstance(HomepageSwingView.class);
-
+		
+		
 		EventQueue.invokeLater(() -> {
 			try {
 				LinkedSwingView.initializeMainFrame();

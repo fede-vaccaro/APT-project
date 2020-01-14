@@ -45,7 +45,6 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	private ReceiptSwingView receiptView;
 
 
-	@Inject
 	public ShowHistoryViewSwing() {
 		initialize();
 	}

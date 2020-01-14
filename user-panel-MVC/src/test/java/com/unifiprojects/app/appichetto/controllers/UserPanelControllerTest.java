@@ -57,7 +57,6 @@ public class UserPanelControllerTest {
 		userPanelController.setHomepageView(homepageView);
 		userPanelController.setLoggedUser(loggedUser);
 
-		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
 
 	}
 
@@ -74,12 +73,15 @@ public class UserPanelControllerTest {
 		verify(transaction).doInTransaction(command.capture());
 		command.getValue().execute();
 		verify(userRepository).save(loggedUser);
+		
 	}
 
 	@Test
 	public void testChangeCredential() {
 		String newName = "newName";
 		String newPassword = "newPassword";
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
 
 		userPanelController.changeCredential(newName, newPassword);
 
@@ -97,6 +99,8 @@ public class UserPanelControllerTest {
 	public void testChangeCredentialWithOnlyUserName() {
 		String newName = "newName";
 
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
+		
 		userPanelController.changeCredential(newName, null);
 
 		verify(loggedUser).setUsername(newName);
@@ -112,7 +116,9 @@ public class UserPanelControllerTest {
 	@Test
 	public void testChangeCredentialWithOnlyUserPassword() {
 		String newPassword = "newPassword";
-
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
+		
 		userPanelController.changeCredential(null, newPassword);
 
 		verify(loggedUser, never()).setUsername(anyString());
@@ -128,6 +134,8 @@ public class UserPanelControllerTest {
 	@Test
 	public void testErrorMessageIsShownIfTheUserNameIsNotValid() {
 		String newName = "newName";
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
 
 		String exceptionMessage = "Invalid!";
 		doThrow(new IllegalArgumentException(exceptionMessage)).when(transaction)
@@ -137,11 +145,14 @@ public class UserPanelControllerTest {
 
 		verify(loggedUser).setUsername(newName);
 		verify(userPanelView).showErrorMsg(exceptionMessage);
+		verify(userPanelView).showUser(loggedUser.getUsername());
 	}
 
 	@Test
 	public void testSetLoggedUserIsNeverCalledIfAnyExceptionIsLaunched() {
 		String newName = "newName";
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
 
 		String exceptionMessage = "Invalid!";
 		doThrow(new IllegalArgumentException(exceptionMessage)).when(transaction)
@@ -150,7 +161,7 @@ public class UserPanelControllerTest {
 		userPanelController.changeCredential(newName, null);
 
 		verifyNoMoreInteractions(homepageView);
-
+		verify(userPanelView).showUser(loggedUser.getUsername());
 	}
 
 	@Test
@@ -176,6 +187,8 @@ public class UserPanelControllerTest {
 	@Test
 	public void testUsernameAlreadyExistentExceptionShowErrorMsg() {
 		String newName = "newName";
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
 
 		String exceptionMessage = "Invalid!";
 		doThrow(new AlreadyExistentException(exceptionMessage)).when(transaction)
@@ -184,13 +197,15 @@ public class UserPanelControllerTest {
 		userPanelController.changeCredential(newName, null);
 
 		verify(userPanelView).showErrorMsg(exceptionMessage);
-
+		verify(userPanelView).showUser(loggedUser.getUsername());
 	}
 
 	@Test
 	public void testUncommittableExceptionShowErrorMsg() {
 		String newName = "newName";
-
+		
+		when(userRepository.findById(loggedUser.getId())).thenReturn(loggedUser);
+		
 		String exceptionMessage = "Invalid!";
 		doThrow(new UncommittableTransactionException(exceptionMessage)).when(transaction)
 				.doInTransaction(any(TransactionCommands.class));
@@ -198,7 +213,7 @@ public class UserPanelControllerTest {
 		userPanelController.changeCredential(newName, null);
 
 		verify(userPanelView).showErrorMsg("Something went wrong while committing changes.");
-
+		verify(userPanelView).showUser(loggedUser.getUsername());
 	}
 
 	@Test
