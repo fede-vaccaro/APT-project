@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.math3.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -35,7 +36,7 @@ public class ReceiptManagerTest {
 
 	@Mock
 	private CreateDebtsService createDebtsService;
-	
+
 	@Mock
 	private ReceiptRepository receiptRepository;
 
@@ -56,7 +57,6 @@ public class ReceiptManagerTest {
 	public void testWhenAnItemIsAddedThenItIsAddedInReceipt() {
 		User pippo = new User("Pippo", "psw");
 		Item item = new Item("Sugo", 2.2, 2, Arrays.asList(pippo));
-
 
 		receiptManager.addItem(item);
 
@@ -90,7 +90,6 @@ public class ReceiptManagerTest {
 		verify(receipt).updateItem(0, updatedItem);
 	}
 
-
 	@Test
 	public void testWhenItemIsDeletedThenItIsDeletedInByReceipt() {
 		User pippo = new User("Pippo", "psw");
@@ -121,29 +120,23 @@ public class ReceiptManagerTest {
 		assertThat(accountingsMap.get(pluto)).isEqualTo(accountingPluto);
 		assertThat(accountingsMap.get(pippo)).isEqualTo(accountingPippo);
 	}
-	
-
-	@Test
-	public void testSaveReceiptCallCreateDebtsServiceWithItsGetWithNoRefundReceipt() {
-		when(createDebtsService.getAccountings()).thenReturn(new ArrayList<>());
-		when(createDebtsService.getRefundReceipts()).thenReturn(new ArrayList<>());
-
-		receiptManager.saveReceipt();
-		
-		verify(createDebtsService).computeDebts(receipt, accountingsMap);
-		verify(createDebtsService).getAccountings();
-		verify(createDebtsService).getRefundReceipts();	
-	}
 
 	@Test
 	public void testSaveReceiptCallCreateDebtsServiceWithItsGet() {
-		when(createDebtsService.getAccountings()).thenReturn(new ArrayList<>());
-		when(createDebtsService.getRefundReceipts()).thenReturn(new ArrayList<>(Arrays.asList(new Receipt())));
-		
+		when(createDebtsService.computeDebts(receipt, accountingsMap))
+				.thenReturn(new Pair<>(new ArrayList<>(), new ArrayList<>()));
+
 		receiptManager.saveReceipt();
-		
+
 		verify(createDebtsService).computeDebts(receipt, accountingsMap);
-		verify(createDebtsService).getAccountings();
-		verify(createDebtsService).getRefundReceipts();	
+	}
+
+	@Test
+	public void testSetBuyer() {
+		User newBuyer = new User("buyer", "");
+
+		receiptManager.setBuyer(newBuyer);
+
+		assertThat(receipt.getBuyer()).isEqualTo(newBuyer);
 	}
 }
