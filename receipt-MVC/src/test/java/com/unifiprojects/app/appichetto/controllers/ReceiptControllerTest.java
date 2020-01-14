@@ -127,6 +127,7 @@ public class ReceiptControllerTest {
 		receiptManagerCallSaveReceipt.execute();
 
 		verify(receiptManager).saveReceipt();
+		verify(receiptView).showCurrentItemsList(null);
 		verify(receiptView).goBack();
 	}
 

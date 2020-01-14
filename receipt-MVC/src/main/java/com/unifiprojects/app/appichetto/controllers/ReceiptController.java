@@ -2,9 +2,6 @@ package com.unifiprojects.app.appichetto.controllers;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
@@ -24,7 +21,6 @@ public class ReceiptController extends UserController {
 	private UserRepository userRepository;
 	private TransactionHandler transactionHandler;
 	
-	private static final Logger LOGGER = LogManager.getLogger(ReceiptController.class);
 
 	@Inject
 	public ReceiptController(ReceiptManager receiptManager, @Assisted ReceiptView receiptView,
@@ -42,7 +38,6 @@ public class ReceiptController extends UserController {
 	public void addItem(Item item) {
 		receiptManager.addItem(item);
 		receiptView.itemAdded(item);
-		LOGGER.debug("{} ADDED BY RECEIPT CONTROLLER", item);
 	}
 
 	public void updateItem(Item item, int index) {
@@ -51,15 +46,12 @@ public class ReceiptController extends UserController {
 			receiptView.itemUpdated(index, item);
 		} catch (IllegalIndex e) {
 			receiptView.showError("Item index not in list");
-			LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 		}
-		LOGGER.debug("{} UPDATED BY RECEIPT CONTROLLER", item);
 	}
 
 	public void deleteItem(Item item) {
 		receiptManager.deleteItem(item);
 		receiptView.itemDeleted(item);
-		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", item);
 	}
 
 	public void saveReceipt() {

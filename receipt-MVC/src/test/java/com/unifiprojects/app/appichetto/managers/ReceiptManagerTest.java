@@ -122,6 +122,50 @@ public class ReceiptManagerTest {
 	}
 
 	@Test
+	public void testUploadReceiptMantainDataconsistency() {
+		User mario = new User("Mario", "psw");
+		User pippo = new User("Pippo", "psw");
+		User pluto = new User("Pluto", "psw");
+		Accounting accountingPippo = new Accounting(pippo, 3.3);
+		Accounting accountingPluto = new Accounting(pluto, 1.1);
+
+		receipt.addItem(new Item("Sugo", 10., 1, Arrays.asList(pluto)));
+		accountingsMap.put(pluto, new Accounting(pluto, 10.));
+
+		Receipt receiptToUpload = new Receipt(mario);
+		receiptToUpload.addItem(new Item("Sugo", 1.1, 2, Arrays.asList(pippo, mario)));
+		receiptToUpload.addItem(new Item("Pesto", 1.1, 2, Arrays.asList(pippo)));
+		receiptToUpload.addItem(new Item("Pasta", 1.1, 1, Arrays.asList(pluto)));
+
+		receiptManager.uploadReceipt(receiptToUpload);
+
+		assertThat(accountingsMap.size()).isEqualTo(2);
+		assertThat(accountingsMap.get(pluto)).isEqualTo(accountingPluto);
+		assertThat(accountingsMap.get(pippo)).isEqualTo(accountingPippo);
+	}
+
+	@Test
+	public void testSaveReceiptSetAccountingInReceipt() {
+		when(createDebtsService.computeDebts(receipt, accountingsMap))
+				.thenReturn(new Pair<>(new ArrayList<Accounting>(), new ArrayList<Receipt>()));
+
+		receiptManager.saveReceipt();
+
+		verify(receipt).setAccountingList(new ArrayList<>());
+	}
+
+	@Test
+	public void testSaveReceiptCallReceiptRepositorySaveReceipt() {
+		when(createDebtsService.computeDebts(receipt, accountingsMap))
+				.thenReturn(new Pair<>(new ArrayList<Accounting>(), new ArrayList<Receipt>()));
+
+		Receipt savedReceipt = receiptManager.saveReceipt();
+
+		assertThat(savedReceipt).isEqualTo(receipt);
+		verify(receiptRepository).saveReceipt(receipt);
+	}
+
+	@Test
 	public void testSaveReceiptCallCreateDebtsServiceWithItsGet() {
 		when(createDebtsService.computeDebts(receipt, accountingsMap))
 				.thenReturn(new Pair<>(new ArrayList<>(), new ArrayList<>()));
@@ -129,6 +173,22 @@ public class ReceiptManagerTest {
 		receiptManager.saveReceipt();
 
 		verify(createDebtsService).computeDebts(receipt, accountingsMap);
+	}
+
+	@Test
+	public void testSaveReceiptCallReceiptRepositorySaveRefoundReceipt() {
+		User mario = new User("Mario", "psw");
+		User pluto = new User("Pluto", "psw");
+
+		Receipt refoundReceipt = new Receipt(mario);
+		refoundReceipt.addItem(new Item("", 1.1, 1, Arrays.asList(pluto)));
+
+		when(createDebtsService.computeDebts(receipt, accountingsMap))
+				.thenReturn(new Pair<>(new ArrayList<>(), new ArrayList<>(Arrays.asList(refoundReceipt))));
+
+		receiptManager.saveReceipt();
+
+		verify(receiptRepository).saveReceipt(refoundReceipt);
 	}
 
 	@Test

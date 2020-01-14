@@ -95,8 +95,6 @@ public class ShowHistoryControllerTest {
 		
 		receipt1.setAccountingList(Arrays.asList(accounting2ToOtherOwner1, accounting2ToOtherOwner2));
 		
-		verify(showHistoryView).setReceiptView(receiptView);
-
 	}
 	
 	@Test
