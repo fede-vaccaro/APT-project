@@ -95,6 +95,29 @@ public class PaymentManagerTest {
 		assertThat(accounting.isPaid()).isTrue();
 		verify(accountingRepository).saveAccounting(accounting);
 	}
+	
+	@Test
+	public void testMakePaymentThatAccountingIsNotPaidWhenIfThereIsOnlyOneReceiptAndEnteredAmountIsJustEnoughForTheExactlyFirstReceipt() {
+		setUpReceiptsAndUsers();
+
+		InOrder inOrder = inOrder(accountingRepository);
+
+		Accounting olderAccounting = getAccountingOf(receipt1, loggedUser);
+		Accounting newerAccounting = getAccountingOf(receipt2, loggedUser);
+
+		when(accountingRepository.getAccountingsOf(loggedUser))
+				.thenReturn(Arrays.asList(newerAccounting, olderAccounting));
+
+		double amountToPay = olderAccounting.getAmount();
+
+		paymentManager.makePayment(amountToPay, loggedUser, payerUser1);
+
+		assertThat(olderAccounting.isPaid()).isTrue();
+		assertThat(newerAccounting.isPaid()).isFalse();
+		inOrder.verify(accountingRepository).getAccountingsOf(loggedUser);
+		inOrder.verify(accountingRepository).saveAccounting(olderAccounting);
+		verifyNoMoreInteractions(accountingRepository);
+	}
 
 	@Test
 	public void testAccountingIsNotPaidButScaledWhenCalledMakePaymentAndEnteredAmountIsLessThanDebt() {
@@ -113,6 +136,7 @@ public class PaymentManagerTest {
 		assertThat(accounting.getAmount()).isEqualTo(difference);
 		verify(accountingRepository).saveAccounting(accounting);
 	}
+	
 
 	@Test
 	public void testOlderAccountingIsPaidFirstAndNewerLaterWhenCalledMakePaymentAndEnteredAmountIsEqualToDebt() {

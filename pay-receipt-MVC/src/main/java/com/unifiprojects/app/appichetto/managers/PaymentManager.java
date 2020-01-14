@@ -44,16 +44,13 @@ public class PaymentManager {
 
 	private void executePayment(List<Accounting> accountingsBetweenLoggedAndBuyer, double remainingAmount) {
 		for (Accounting accounting : accountingsBetweenLoggedAndBuyer) {
-			double accountingAmount = accounting.getAmount();
 			if (remainingAmount > 0.0) {
-				if (remainingAmount >= accountingAmount) {
-					accounting.setAmount(0.0);
-					remainingAmount -= accountingAmount;
-				} else {
-					accountingAmount -= remainingAmount;
-					accounting.setAmount(accountingAmount);
-					remainingAmount = 0.0;
-				}
+
+				double accountingAmount = accounting.getAmount();
+				double newAccountingAmount = Math.max(accountingAmount - remainingAmount, 0.0);
+				accounting.setAmount(newAccountingAmount);
+				remainingAmount -= accountingAmount;
+
 				accountingRepository.saveAccounting(accounting);
 			}
 		}

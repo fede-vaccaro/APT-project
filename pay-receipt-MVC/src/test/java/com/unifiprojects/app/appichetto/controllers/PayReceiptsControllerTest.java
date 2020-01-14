@@ -173,10 +173,19 @@ public class PayReceiptsControllerTest {
 	
 	@Test
 	public void testUpdate() {
+		User loggedUser = new User("logged", "pw");
+		User payerUser = new User("payer", "pw");
+
+		Receipt receipt = ReceiptGenerator.generateReceiptWithTwoItemsSharedByLoggedUserAndPayer(loggedUser, payerUser,
+				new GregorianCalendar(2019, 9, 14));
+
+		List<Receipt> unpaids = Arrays.asList(receipt);
+		when(receiptRepository.getAllUnpaidReceiptsOf(loggedUser)).thenReturn(unpaids);
+		payReceiptsController.setLoggedUser(loggedUser);
+		
 		payReceiptsController.update();
 		
-		// test that showUnpaidReceipts is called
-		testRepositoryAndViewAreDelegatedWhenShowUnpaidReceiptsThenShowItems();
+		verify(payReceiptsView).showReceipts(unpaids);
 	}
 
 }
