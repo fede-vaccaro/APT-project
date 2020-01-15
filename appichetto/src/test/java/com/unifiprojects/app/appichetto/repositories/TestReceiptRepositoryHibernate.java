@@ -376,7 +376,7 @@ public class TestReceiptRepositoryHibernate {
 		receipt2.setBuyer(creditorUser2);
 		receipt2.setTimestamp(new GregorianCalendar(2019, 8, 12));
 		receipt2.setItems(Arrays.asList(item2));
-		receipt2.setAccountingList(Arrays.asList(accountingToDebtorUserForReceipt1));
+		receipt2.setAccountingList(Arrays.asList(accountingToDebtorUserForReceipt2));
 		receipt2.setTotalPrice(item2.getPrice());
 
 		entityManager.getTransaction().begin();
@@ -397,7 +397,7 @@ public class TestReceiptRepositoryHibernate {
 
 		List<Receipt> receiptsBoughtByCreditorUser1 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(creditorUser1);
 		List<Receipt> receiptsBoughtByCreditorUser2 = receiptRepositoryHibernate.getAllReceiptsBoughtBy(creditorUser2);
-
+		
 		assertThat(receiptsBoughtByCreditorUser1).containsExactlyInAnyOrder(receipt1);
 		assertThat(receiptsBoughtByCreditorUser2).containsExactlyInAnyOrder(receipt2);
 
