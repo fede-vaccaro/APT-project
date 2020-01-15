@@ -166,7 +166,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Test
 	public void testSaveReceipt() {
-		Item sugo = new Item("Sugo", 2.2, 2, new ArrayList<>(Arrays.asList(pippo, pluto, mario)));
+		Item sugo = new Item("Sugo", 2.2, 3, new ArrayList<>(Arrays.asList(pippo, pluto, mario)));
 		Receipt receipt = new Receipt(pippo);
 		receipt.addItem(sugo);
 		receipt.addAccounting(new Accounting(pluto, 2.2));
@@ -174,7 +174,7 @@ public class ReceiptSwingViewIT extends AssertJSwingJUnitTestCase {
 
 		nameBox.enterText("Sugo");
 		priceBox.enterText("2.2");
-		quantityBox.enterText("2");
+		quantityBox.enterText("3");
 		
 		window.list("usersList").selectItem(0);
 		window.list("usersList").selectItem(1);
