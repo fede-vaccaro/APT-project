@@ -312,17 +312,17 @@
 					<version>1.4.3</version>
 					<configuration>
 						<targetClasses>
-							<param>**/controllers/*</param>
-							<param>**/repositories/*</param>
-							<param>**/swingviews/*</param>
-							<param>**/transactionhandlers/*</param>
-							<param>**/managers/*</param>
+							<param>*.repositories.*</param>
+							<!-- <param>*.swingviews.*</param> -->
+							<param>*.transactionhandlers.*</param>
+							<param>*.managers.*</param>
 						</targetClasses>
-						<targetTests>
-							<param>com.unifiprojects.app.appichetto/src/test/**</param>
-						</targetTests>
+						<param>*.repositories.*</param>
+						<!-- <param>*.swingviews.*</param> -->
+						<param>*.transactionhandlers.*</param>
+						<param>*.managers.*</param>
 						<mutators>
-							<mutator>NEW_DEFAULTS</mutator>
+							<mutator>DEFAULTS</mutator>
 						</mutators>
 						<mutationThreshold>85</mutationThreshold>
 					</configuration>

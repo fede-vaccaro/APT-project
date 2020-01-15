@@ -66,7 +66,10 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	public void onSetUp() {
 		baseTest.wipeTablesBeforeTest();
 		GuiActionRunner.execute(() -> {
-			homepageSwingView = injector.getInstance(HomepageSwingView.class);
+			
+			LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
+			homepageSwingView = (HomepageSwingView) loginView.getHomepage();
+					
 			System.out.println(homepageSwingView.toString());
 			entityManager.getTransaction().begin();
 			User logged = new User("Federico", "");
@@ -76,7 +79,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			entityManager.getTransaction().commit();
 
 			homepageSwingView.setLoggedUser(logged);
-			homepageSwingView.loginView = injector.getInstance(LoginViewSwing.class);
 
 			LinkedSwingView.initializeMainFrame();
 		});

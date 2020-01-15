@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -24,7 +25,11 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
+import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
+import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptGenerator;
+import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
+import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -79,7 +84,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(new RepositoriesModule(), new UserPanelModule(),
-				new LoginModule(), homepageModule);
+				new LoginModule());
 	}
 
 	@AfterClass
@@ -125,15 +130,23 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 			entityManager.clear();
 
 			loginView = injector.getInstance(LoginViewSwing.class);
-			homepage = injector.getInstance(HomepageSwingView.class);
+			homepage = (HomepageSwingView) loginView.getHomepage();
 
-			homepage.loginView = loginView;
+			mock(UserController.class);
 
-			userPanelViewSwing = injector.getInstance(UserPanelViewSwing.class);
+			((PayReceiptsViewSwing) homepage.payReceiptsView)
+					.setPayReceiptsController((PayReceiptsController) mock(PayReceiptsController.class));
+			((ReceiptSwingView) homepage.receiptView)
+					.setReceiptController((ReceiptController) mock(ReceiptController.class));
+			((ShowHistoryViewSwing) homepage.showHistoryView)
+					.setShowHistoryController((ShowHistoryController) mock(ShowHistoryController.class));
+
+//			homepage.loginView = loginView;
+
+			userPanelViewSwing = (UserPanelViewSwing) homepage.userPanelView;
 			userPanelViewSwing.setLoginViewSwing(homepage.loginView);
 			userPanelViewSwing.setLinkedSwingView(homepage);
-			
-			
+
 			userPanelController = (UserPanelController) userPanelViewSwing.getController();
 			userPanelController.setHomepageView(homepage);
 			userPanelController.setLoggedUser(loggedUser);
@@ -159,7 +172,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	public void testGoBackHome() {
 		window.button(JButtonMatcher.withText("Back")).click();
 		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-		.isEqualTo(homepage.getFrame().getContentPane());
+				.isEqualTo(homepage.getFrame().getContentPane());
 	}
 
 	@GUITest
@@ -169,7 +182,7 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Yes")).click();
 
 		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-		.isEqualTo(homepage.loginView.getFrame().getContentPane());
+				.isEqualTo(homepage.loginView.getFrame().getContentPane());
 
 		return;
 	}

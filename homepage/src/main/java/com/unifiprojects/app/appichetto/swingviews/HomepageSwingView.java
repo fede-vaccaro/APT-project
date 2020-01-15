@@ -31,7 +31,7 @@ public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	@Inject
 	public HomepageSwingView(PayReceiptsViewSwing payReceiptsViewSwing, ShowHistoryViewSwing showHistoryViewSwing,
-			ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing,@Assisted LoginView loginView) {
+			ReceiptSwingView receiptSwingView, UserPanelViewSwing userPanelViewSwing, @Assisted LoginView loginView) {
 
 		this.payReceiptsView = payReceiptsViewSwing;
 		this.showHistoryView = showHistoryViewSwing;
