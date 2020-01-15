@@ -94,12 +94,12 @@ public class AppichettoSteps {
 
 	@When("{string} view shown")
 	public void view_shown(String actualView) {
-		// TODO
+		assertThat(window.target().getTitle()).isEqualTo(actualView);
 	}
 
 	@When("Write {string} in {string} text box")
 	public void write_in_and_in(String string, String string2) {
-		window.textBox(JTextComponentMatcher.withName(string2)).enterText(string);
+		window.textBox(JTextComponentMatcher.withName(string2)).deleteText().enterText(string);
 	}
 
 	@When("Click {string} button")
@@ -239,6 +239,17 @@ public class AppichettoSteps {
 	public void the_debt_with_user_is_paid(String string) {
 		String[] accountingListStrings = window.list("accountingList").contents();
 		assertThat(accountingListStrings[0]).contains(string).contains("paid").contains("true");
+	}
+
+	@Then("There is an unpaid debt from {string}")
+	public void there_is_an_unpaid_debt_from(String user) {
+		String[] accountingListStrings = window.list("accountingList").contents();
+		assertThat(accountingListStrings[0]).contains(user).contains("paid").contains("false");
+	}
+
+	@Then("There is {string} in the users list")
+	public void there_is_user_in_the_users_list(String user) {
+		assertThat(window.list("usersList").contents()).contains(user);
 	}
 
 	@Then("A message is shown saying there are no more receipts to pay")
