@@ -26,12 +26,14 @@ public class CreateDebtsService {
 		this.refundReceipts = new ArrayList<>();
 	}
 
-	public Pair<List<Accounting>, List<Receipt>> computeDebts(Receipt receipt, Map<User, Accounting> oldAccountingsByItemPriceMap) {
+	public Pair<List<Accounting>, List<Receipt>> computeAccountingDebtsAndRefoundReceipts(Receipt receipt,
+			Map<User, Accounting> oldAccountingsByItemPriceMap) {
 		Map<User, Accounting> accountingsByItemPriceMap = calculateUserAccountingMapByItemPrice(receipt);
 		Map<User, Accounting> oldAccountingsMap = createUserAccountingMap(receipt);
 		calculateUserAccountingMap(oldAccountingsByItemPriceMap, oldAccountingsMap, accountingsByItemPriceMap);
 		createRefundReceipts(accountingsMap, receipt.getBuyer());
-		
+
+		accountingsMap.values().removeIf(accounting -> accounting.getAmount() == 0.0);
 		return new Pair<>(new ArrayList<>(accountingsMap.values()), refundReceipts);
 	}
 
@@ -47,7 +49,7 @@ public class CreateDebtsService {
 		Set<User> users = new HashSet<>();
 		users.addAll(oldAIPM.keySet());
 		users.addAll(aIPM.keySet());
-		
+
 		users.stream().forEach(user -> {
 			Double amount = Math.round(100 * (oldAM.getOrDefault(user, defaultAccountig).getAmount()
 					- oldAIPM.getOrDefault(user, defaultAccountig).getAmount()
@@ -55,7 +57,7 @@ public class CreateDebtsService {
 			if (amount != 0.0)
 				accountingsMap.put(user, new Accounting(user, amount));
 		});
-		
+
 		return accountingsMap;
 	}
 
@@ -73,7 +75,7 @@ public class CreateDebtsService {
 	}
 
 	List<Receipt> createRefundReceipts(Map<User, Accounting> accountings, User debtor) {
-		accountings.values().stream().filter(accountig -> accountig.getAmount() < 0.0)
+		accountings.values().stream().filter(accounting -> Math.signum(accounting.getAmount()) == -1.0)
 				.map(accounting -> createRefundReceipt(accounting, debtor))
 				.forEach(refundReceipt -> refundReceipts.add(refundReceipt));
 		return refundReceipts;
@@ -83,12 +85,8 @@ public class CreateDebtsService {
 		Receipt receipt = new Receipt(accounting.getUser());
 		receipt.addAccounting(new Accounting(debtor, Math.abs(accounting.getAmount())));
 		receipt.setDescription("Refund receipt");
-		accounting.setAmount(0.0);
+		accounting.setAmount(0.);
 		return receipt;
-	}
-
-	void setRefundReceipts(List<Receipt> refundReceipts) {
-		this.refundReceipts = refundReceipts;
 	}
 
 }
