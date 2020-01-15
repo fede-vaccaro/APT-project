@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.util.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.exceptions.IllegalIndex;
@@ -23,7 +21,6 @@ public class ReceiptManager {
 	private ReceiptRepository receiptRepository;
 	private Map<User, Accounting> accountingsMap;
 	private CreateDebtsService createDebtsService;
-	private static final Logger LOGGER = LogManager.getLogger(ReceiptManager.class);
 
 	@Inject
 	public ReceiptManager(Receipt receipt, ReceiptRepository receiptRepository, CreateDebtsService createDebtsService) {
@@ -35,13 +32,11 @@ public class ReceiptManager {
 
 	public void addItem(Item item) {
 		receipt.addItem(item);
-		LOGGER.debug("{} ADDED BY RECEIPT MANAGER", item);
 	}
 
 	public void updateItem(int index, Item item) {
 		if (index < receipt.getItems().size()) {
 			receipt.updateItem(index, item);
-			LOGGER.debug("{} UPDATED BY RECEIPT MANAGER", item);
 		} 
 		else
 			throw new IllegalIndex("Index not in list");
@@ -49,7 +44,6 @@ public class ReceiptManager {
 
 	public void deleteItem(Item itemToDelete) {
 		receipt.deleteItem(itemToDelete);
-		LOGGER.debug("{} DELETED BY RECEIPT MANAGER", itemToDelete);
 	}
 
 	public Receipt saveReceipt() {
@@ -62,7 +56,6 @@ public class ReceiptManager {
 		receiptRepository.saveReceipt(receipt);
 		refoundReceipts.stream().forEach(refoundReceipt -> receiptRepository.saveReceipt(refoundReceipt));
 
-		LOGGER.debug("{} SAVED BY RECEIPT MANAGER", receipt);
 		return receipt;
 	}
 
