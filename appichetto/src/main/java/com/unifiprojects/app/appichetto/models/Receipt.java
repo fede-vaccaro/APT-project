@@ -210,7 +210,7 @@ public class Receipt {
 
 	@Override
 	public String toString() {
-		return "Receipt [description= " + description + " items " + items + "]" + accountingList;
+		return "Receipt [description= " + description + " items " + items + "]";
 	}
 
 	public long getVersion() {
