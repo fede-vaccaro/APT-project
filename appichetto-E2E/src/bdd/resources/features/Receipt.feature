@@ -12,7 +12,7 @@ Feature: Receipt features
     And Application start
     And "Login" view shows
     And User "Giuseppe" is logged
-    When Click "Show History" button on homepage
+    When Click "Show History" button
     And Select the receipt
     And Click "Update receipt" button
     And Add new item
@@ -23,7 +23,7 @@ Feature: Receipt features
     And Click "Log Out" button
     And "Login" view shows
     And User "Federico" is logged
-    And Click "Pay Receipt" button on homepage
+    And Click "Pay Receipt" button
     Then debt increased of 4.5
 
   Scenario: Create new Receipt
@@ -36,7 +36,7 @@ Feature: Receipt features
     And Application start
     And "Login" view shows
     And User "Giuseppe" is logged
-    And Click "Create Receipt" button on homepage
+    And Click "Create Receipt" button
     When Add new item
       | name  | price | quantity | owners                            |
       | pizza |   2.2 |        3 | Giuseppe Federico Pasquale        |
@@ -55,12 +55,12 @@ Feature: Receipt features
     And Application start
     And "Login" view shows
     And User "Giuseppe" is logged
-    And Click "Create Receipt" button on homepage
+    And Click "Create Receipt" button
     When Add new item
       | name  | price | quantity | owners                            |
       | pizza |   2.5 |        3 | Giuseppe Federico Pasquale        |
       | birra |     1 |        4 | Giuseppe Federico Pasquale Checco |
     And Click "Save Receipt" button
-    And Click "Show History" button on homepage
+    And Click "Show History" button
     Then "Receipts list" contains
       | Receipt [description= null items [pizza, EUR: 2.5, x3, birra, EUR: 1.0, x4]] |
