@@ -149,6 +149,12 @@ public class Receipt {
 		if (accountingList == null && other.accountingList != null) {
 			return false;
 		}
+		if(!accountingList.containsAll(other.accountingList))
+			return false;
+
+		if(!other.accountingList.containsAll(accountingList))
+			return false;
+					
 		if (buyer == null) {
 			if (other.buyer != null)
 				return false;
@@ -204,7 +210,7 @@ public class Receipt {
 
 	@Override
 	public String toString() {
-		return "Receipt [description= " + description + " items " + items + "]";
+		return "Receipt [description= " + description + " items " + items + "]" + accountingList;
 	}
 
 	public long getVersion() {

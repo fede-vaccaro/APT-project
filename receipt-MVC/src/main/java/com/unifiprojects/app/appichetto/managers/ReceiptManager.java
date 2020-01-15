@@ -47,7 +47,7 @@ public class ReceiptManager {
 	}
 
 	public Receipt saveReceipt() {
-		Pair<List<Accounting>, List<Receipt>> fullDebts = createDebtsService.computeDebts(receipt, accountingsMap);
+		Pair<List<Accounting>, List<Receipt>> fullDebts = createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap);
 
 		List<Accounting> accountings = fullDebts.getFirst();
 		List<Receipt> refoundReceipts = fullDebts.getSecond();

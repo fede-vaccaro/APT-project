@@ -146,7 +146,7 @@ public class ReceiptManagerTest {
 
 	@Test
 	public void testSaveReceiptSetAccountingInReceipt() {
-		when(createDebtsService.computeDebts(receipt, accountingsMap))
+		when(createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap))
 				.thenReturn(new Pair<>(new ArrayList<Accounting>(), new ArrayList<Receipt>()));
 
 		receiptManager.saveReceipt();
@@ -156,7 +156,7 @@ public class ReceiptManagerTest {
 
 	@Test
 	public void testSaveReceiptCallReceiptRepositorySaveReceipt() {
-		when(createDebtsService.computeDebts(receipt, accountingsMap))
+		when(createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap))
 				.thenReturn(new Pair<>(new ArrayList<Accounting>(), new ArrayList<Receipt>()));
 
 		Receipt savedReceipt = receiptManager.saveReceipt();
@@ -167,12 +167,12 @@ public class ReceiptManagerTest {
 
 	@Test
 	public void testSaveReceiptCallCreateDebtsServiceWithItsGet() {
-		when(createDebtsService.computeDebts(receipt, accountingsMap))
+		when(createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap))
 				.thenReturn(new Pair<>(new ArrayList<>(), new ArrayList<>()));
 
 		receiptManager.saveReceipt();
 
-		verify(createDebtsService).computeDebts(receipt, accountingsMap);
+		verify(createDebtsService).computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap);
 	}
 
 	@Test
@@ -183,7 +183,7 @@ public class ReceiptManagerTest {
 		Receipt refoundReceipt = new Receipt(mario);
 		refoundReceipt.addItem(new Item("", 1.1, 1, Arrays.asList(pluto)));
 
-		when(createDebtsService.computeDebts(receipt, accountingsMap))
+		when(createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap))
 				.thenReturn(new Pair<>(new ArrayList<>(), new ArrayList<>(Arrays.asList(refoundReceipt))));
 
 		receiptManager.saveReceipt();

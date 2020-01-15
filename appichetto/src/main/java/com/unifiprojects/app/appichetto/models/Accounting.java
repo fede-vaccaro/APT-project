@@ -44,7 +44,7 @@ public class Accounting {
 			if (other.receipt != null)
 				return false;
 		} else {
-			if (!receipt.equals(other.receipt))
+			if (!receipt.getTimestamp().equals(other.receipt.getTimestamp()))
 				return false;
 		}
 		if (user == null) {

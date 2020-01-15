@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -137,36 +138,38 @@ public class CreateDebtsServiceTest {
 	}
 
 	@Test
-	public void testComputeDebdtsCreateRefundReceiptCorrectly() {
-		List<Receipt> refundReceipts = new ArrayList<>();
-		createDebtsService.setRefundReceipts(refundReceipts);
-		
+	public void testComputeDebdtsCreateRefundReceiptAndAccountingCorrectly() {
 		User buyer = new User("pippo", "");
 		User participant1 = new User("pluto", "");
 		User participant2 = new User("mario", "");
-		
+
 		Item item1 = new Item("Sugo", 1.1, 2, Arrays.asList(participant1));
-		
+
 		Accounting oldAIPP1 = new Accounting(participant1, 2.2);
 		Accounting oldAIPP2 = new Accounting(participant2, 2.2);
 		Accounting oldAP1 = new Accounting(participant1, 1.1);
 		Accounting oldAP2 = new Accounting(participant2, 2.0);
-				
+
 		Receipt receipt = new Receipt(buyer);
 		receipt.addItem(item1);
 		receipt.addAccounting(oldAP1);
 		receipt.addAccounting(oldAP2);
-		
+
 		Map<User, Accounting> oldAccountingsByItemPriceMap = new HashMap<>();
 		oldAccountingsByItemPriceMap.put(participant1, oldAIPP1);
 		oldAccountingsByItemPriceMap.put(participant2, oldAIPP2);
-		
-		createDebtsService.computeDebts(receipt, oldAccountingsByItemPriceMap);		
-		
+
+		Pair<List<Accounting>, List<Receipt>> totalDebts = createDebtsService
+				.computeAccountingDebtsAndRefoundReceipts(receipt, oldAccountingsByItemPriceMap);
+
+		List<Accounting> accountings = totalDebts.getFirst();
+		List<Receipt> refundReceipts = totalDebts.getSecond();
+
 		Receipt aspectedRefundReceipt = new Receipt(participant2);
 		aspectedRefundReceipt.addAccounting(new Accounting(buyer, 0.2));
 		aspectedRefundReceipt.setDescription("Refund receipt");
 
+		assertThat(accountings).containsExactlyInAnyOrder(new Accounting(participant1, 1.1));
 		assertThat(refundReceipts).containsExactlyInAnyOrder(aspectedRefundReceipt);
 	}
 }
