@@ -29,9 +29,9 @@
 			**/modules/*.*,
 			**/factories/*.*,
 			**/appichetto/**/swingviews/*.*,
-			**/FakeTransaction.java,
-			**/UserController.java,
-			**/ReceiptGenerator.java
+			**/FakeTransaction.*,
+			**/UserController.*,
+			**/ReceiptGenerator.*
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -364,8 +364,8 @@
 						<param>**/modules/*.*</param>
 						<param>**/factories/*.*</param>
 						<param>**/appichetto/**/swingviews/*.*</param>
-						<param>**/FakeTransaction.java</param>
-						<param>**/UserController.java</param>
+						<param>**/FakeTransaction.*</param>
+						<param>**/UserController.*</param>
 						<param>**/ReceiptGenerator.*</param>
 					</excludes>
 				</configuration>
