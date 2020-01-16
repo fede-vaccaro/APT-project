@@ -311,20 +311,27 @@
 					<artifactId>pitest-maven</artifactId>
 					<version>1.4.3</version>
 					<configuration>
-						<targetClasses>
-							<param>*.repositories.*</param>
-							<!-- <param>*.swingviews.*</param> -->
-							<param>*.transactionhandlers.*</param>
-							<param>*.managers.*</param>
-						</targetClasses>
-						<param>*.repositories.*</param>
-						<!-- <param>*.swingviews.*</param> -->
-						<param>*.transactionhandlers.*</param>
-						<param>*.managers.*</param>
+						<excludedClasses>
+							<!-- <param>*.repositories.*</param> -->
+							<param>**.swingviews.*</param>
+							<param>**.homepage.*</param>
+							<param>**.swingviews.utils.*</param>
+							<param>**.exceptions.*</param>
+							<param>**.models.*</param>
+							<param>**.transactionhandlers.*</param>
+							<param>**.controllers.ReceiptGenerator.*</param>
+							<!-- <param>*.managers.*</param> -->
+						</excludedClasses>
+						<excludedTestClasses>
+							<param>apt.project.frontend.view.swing.*</param>
+							<param>**.*IT*</param>
+							<param>**.*BDD.*</param>
+						</excludedTestClasses>
+
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
-						<mutationThreshold>85</mutationThreshold>
+						<mutationThreshold>0</mutationThreshold>
 					</configuration>
 				</plugin>
 				<plugin>
