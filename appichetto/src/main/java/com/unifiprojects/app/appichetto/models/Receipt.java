@@ -148,13 +148,14 @@ public class Receipt {
 		Receipt other = (Receipt) obj;
 		if (accountingList == null && other.accountingList != null) {
 			return false;
+		} else {
+			if (!accountingList.containsAll(other.accountingList))
+				return false;
+			else {
+				if (!other.accountingList.containsAll(accountingList))
+					return false;
+			}
 		}
-		if(!accountingList.containsAll(other.accountingList))
-			return false;
-
-		if(!other.accountingList.containsAll(accountingList))
-			return false;
-					
 		if (buyer == null) {
 			if (other.buyer != null)
 				return false;
