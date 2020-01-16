@@ -31,7 +31,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return name  + ", EUR: " + price + ", x" + quantity;
+		return name + ", EUR: " + price + ", x" + quantity;
 	}
 
 	public Long getId() {
@@ -122,9 +122,7 @@ public class Item {
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (quantity != other.quantity)
-			return false;
-		return true;
+		return quantity == other.quantity;
 	}
 
 	public double getPricePerOwner() {

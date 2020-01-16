@@ -179,9 +179,6 @@
 										<POSTGRES_PASSWORD>docker</POSTGRES_PASSWORD>
 										<POSTGRES_DB>docker</POSTGRES_DB>
 									</env>
-									<!-- <wait> -->
-									<!-- <log>database system is ready to accept connections</log> -->
-									<!-- </wait> -->
 								</run>
 							</image>
 						</images>
@@ -312,7 +309,6 @@
 					<version>1.4.3</version>
 					<configuration>
 						<excludedClasses>
-							<!-- <param>*.repositories.*</param> -->
 							<param>**.swingviews.*</param>
 							<param>**.homepage.*</param>
 							<param>**.swingviews.utils.*</param>
@@ -320,7 +316,6 @@
 							<param>**.models.*</param>
 							<param>**.transactionhandlers.*</param>
 							<param>**.controllers.ReceiptGenerator.*</param>
-							<!-- <param>*.managers.*</param> -->
 						</excludedClasses>
 						<excludedTestClasses>
 							<param>apt.project.frontend.view.swing.*</param>
@@ -380,9 +375,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<!-- binds by default to the phase "initialize" -->
 							<goal>prepare-agent</goal>
-							<!-- binds by default to the phase "verify" -->
 							<goal>report</goal>
 						</goals>
 					</execution>

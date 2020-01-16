@@ -149,7 +149,7 @@ public class Receipt {
 		if (accountingList == null && other.accountingList != null) {
 			return false;
 		} else {
-			if (!accountingList.containsAll(other.accountingList))
+			if (accountingList != null && !accountingList.containsAll(other.accountingList))
 				return false;
 			else {
 				if (!other.accountingList.containsAll(accountingList))
@@ -184,9 +184,7 @@ public class Receipt {
 			if (!timestamp.getTime().equals(other.timestamp.getTime()))
 				return false;
 		}
-		if (Double.doubleToLongBits(totalPrice) != Double.doubleToLongBits(other.totalPrice))
-			return false;
-		return true;
+		return Double.doubleToLongBits(totalPrice) == Double.doubleToLongBits(other.totalPrice);
 	}
 
 	public User getBuyer() {

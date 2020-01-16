@@ -115,11 +115,15 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private void initialize() {
 
 		Locale.setDefault(Locale.US);
-
+		String fontName = "Dialog";
+		
+		Font dialogFontPlain = new Font(fontName, Font.PLAIN, 14);
+		Font fialogFontBold = new Font(fontName, Font.BOLD, 14);
+		
 		frame = new JFrame();
 		frame.setTitle("Pay and View receipts bought by others");
 		frame.setName("Pay Receipt");
-		frame.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 14));
+		frame.getContentPane().setFont(dialogFontPlain);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setMinimumSize(new Dimension(800, 600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -239,7 +243,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 		lblTotaldebttouser = new JLabel(TOTALDEBTTOUSERMESSAGE);
 		lblTotaldebttouser.setName("totalDebtToUser");
-		lblTotaldebttouser.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblTotaldebttouser.setFont(fialogFontBold);
 		GridBagConstraints gbc_lblTotaldebttouser = new GridBagConstraints();
 		gbc_lblTotaldebttouser.anchor = GridBagConstraints.WEST;
 		gbc_lblTotaldebttouser.insets = new Insets(0, 0, 5, 5);
@@ -248,7 +252,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		frame.getContentPane().add(lblTotaldebttouser, gbc_lblTotaldebttouser);
 
 		lblTotalForThis = new JLabel(TOTALFORTHISRECEIPTMESSAGE);
-		lblTotalForThis.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblTotalForThis.setFont(fialogFontBold);
 		lblTotalForThis.setName("totalForSelectedReceipt");
 		GridBagConstraints gbc_lblTotalForThis = new GridBagConstraints();
 		gbc_lblTotalForThis.anchor = GridBagConstraints.WEST;
@@ -259,7 +263,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 		txtEnterAmount = new JTextField();
 		txtEnterAmount.setName("enterAmountField");
-		txtEnterAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txtEnterAmount.setFont(dialogFontPlain);
 
 		txtEnterAmount.addKeyListener(new KeyAdapter() {
 			@Override

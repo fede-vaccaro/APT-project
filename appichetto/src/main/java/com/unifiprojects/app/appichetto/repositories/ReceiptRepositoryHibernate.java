@@ -30,7 +30,6 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
 	@Override
 	public List<Receipt> getAllUnpaidReceiptsOf(User user) {
-		entityManager.clear();
 		return entityManager.createQuery("from Accounting where amount!=:amount and user=:user", Accounting.class)
 				.setParameter("amount", 0.0).setParameter("user", user).getResultList().stream()
 				.map(Accounting::getReceipt).collect(Collectors.toList());
@@ -39,7 +38,6 @@ public class ReceiptRepositoryHibernate implements ReceiptRepository {
 
 	@Override
 	public List<Receipt> getAllReceiptsBoughtBy(User user) {
-		entityManager.clear();
 		return entityManager.createQuery("from Receipt where buyer=:buyer", Receipt.class).setParameter("buyer", user)
 				.getResultList();
 
