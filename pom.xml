@@ -308,6 +308,7 @@
 					<artifactId>pitest-maven</artifactId>
 					<version>1.4.3</version>
 					<configuration>
+						<verbose>true</verbose>
 						<excludedClasses>
 							<param>**.swingviews.*</param>
 							<param>**.homepage.*</param>
@@ -315,7 +316,7 @@
 							<param>**.exceptions.*</param>
 							<param>**.models.*</param>
 							<param>**.transactionhandlers.*</param>
-							<param>**.controllers.ReceiptGenerator.*</param>
+							<param>**.ReceiptGenerator</param>
 						</excludedClasses>
 						<excludedTestClasses>
 							<param>apt.project.frontend.view.swing.*</param>
@@ -326,7 +327,7 @@
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
-						<mutationThreshold>0</mutationThreshold>
+						<mutationThreshold>85</mutationThreshold>
 					</configuration>
 				</plugin>
 				<plugin>
