@@ -74,9 +74,9 @@ public class ReceiptControllerTest {
 		Item item = new Item("Item", 2.2, 2, users);
 		doThrow(IllegalIndex.class).when(receiptManager).updateItem(0, item);
 		
-		receiptController.updateItem(item, 0);
+		receiptController.updateItem(0, item);
+		
 		verify(receiptView).showError("Item index not in list");
-
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class ReceiptControllerTest {
 		List<User> users = new ArrayList<User>(Arrays.asList(new User()));
 		Item newItem = new Item(name, price, quantity, users);
 
-		receiptController.updateItem(newItem, index);
+		receiptController.updateItem(index, newItem);
 
 		verify(receiptManager).updateItem(index, newItem);
 		verify(receiptView).itemUpdated(index, newItem);
@@ -151,9 +151,9 @@ public class ReceiptControllerTest {
 		receiptController.uploadReceipt(receipt);
 
 		verify(receiptManager).uploadReceipt(receipt);
-		verify(receiptView).descriptionUploaded(receipt.getDescription());
+		verify(receiptView).setDescriptionUploadedReceipt(receipt.getDescription());
 		verify(receiptView).showCurrentItemsList(receipt.getItems());
-		verify(receiptView).dateUploaded(receipt.getTimestamp());
+		verify(receiptView).setTimestampUploadedReceipt(receipt.getTimestamp());
 	}
 	
 	@Test

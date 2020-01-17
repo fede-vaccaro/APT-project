@@ -21,7 +21,7 @@ public interface ReceiptView {
 	
 	void goBack();
 
-	void descriptionUploaded(String description);
+	void setDescriptionUploadedReceipt(String description);
 
-	void dateUploaded(GregorianCalendar timestamp);
+	void setTimestampUploadedReceipt(GregorianCalendar timestamp);
 }

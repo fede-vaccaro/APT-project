@@ -451,7 +451,7 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.list("Items list").selectItem(1);
 
 		window.button(JButtonMatcher.withText("Update")).click();
-		verify(receiptController).updateItem(new Item("Pasta", 1., 1, Arrays.asList(user1, user2)), 1);
+		verify(receiptController).updateItem(1, new Item("Pasta", 1., 1, Arrays.asList(user1, user2)));
 		window.list("usersList").requireNoSelection();
 		window.list("Items list").requireNoSelection();
 	}
@@ -504,14 +504,14 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		GregorianCalendar timestamp = new GregorianCalendar(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
 				LocalDate.now().getDayOfMonth());
 
-		GuiActionRunner.execute(() -> receiptSwingView.dateUploaded(timestamp));
+		GuiActionRunner.execute(() -> receiptSwingView.setTimestampUploadedReceipt(timestamp));
 		window.textBox("txtDate").requireText(timestamp.getTime().toString());
 	}
 
 	@Test
 	public void testDescriptionUploadedShowItInRightTextField() {
 		String description = "This is a fancy receipt";
-		GuiActionRunner.execute(() -> receiptSwingView.descriptionUploaded(description));
+		GuiActionRunner.execute(() -> receiptSwingView.setDescriptionUploadedReceipt(description));
 		window.textBox("txtDescription").requireText(description);
 	}
 

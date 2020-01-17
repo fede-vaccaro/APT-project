@@ -15,6 +15,7 @@ import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
 import com.unifiprojects.app.appichetto.models.User;
 
+
 public class CreateDebtsService {
 
 	private Map<User, Accounting> accountingsMap;
@@ -27,33 +28,37 @@ public class CreateDebtsService {
 	}
 
 	public Pair<List<Accounting>, List<Receipt>> computeAccountingDebtsAndRefoundReceipts(Receipt receipt,
-			Map<User, Accounting> oldAccountingsByItemPriceMap) {
-		Map<User, Accounting> accountingsByItemPriceMap = calculateUserAccountingMapByItemPrice(receipt);
-		Map<User, Accounting> oldAccountingsMap = createUserAccountingMap(receipt);
-		calculateUserAccountingMap(oldAccountingsByItemPriceMap, oldAccountingsMap, accountingsByItemPriceMap);
+			Map<User, Accounting> accountingsFromOldItemPrice) {
+		
+		Map<User, Accounting> accountingsFromItemPrice = calculateAccountingMapFromItemPrice(receipt);
+		Map<User, Accounting> oldAccountingsMap = createAccountingMapFromAccountingList(receipt.getAccountings());
+		
+		calculateAccountingMap(accountingsFromOldItemPrice, oldAccountingsMap, accountingsFromItemPrice);
 		createRefundReceipts(accountingsMap, receipt.getBuyer());
 
 		accountingsMap.values().removeIf(accounting -> accounting.getAmount() == 0.0);
+		
 		return new Pair<>(new ArrayList<>(accountingsMap.values()), refundReceipts);
 	}
 
-	Map<User, Accounting> createUserAccountingMap(Receipt receipt) {
+	Map<User, Accounting> createAccountingMapFromAccountingList(List<Accounting> receiptAccountings) {
 		Map<User, Accounting> accountings = new HashMap<>();
-		receipt.getAccountings().stream().forEach(accounting -> accountings.put(accounting.getUser(), accounting));
+		receiptAccountings.stream().forEach(accounting -> accountings.put(accounting.getUser(), accounting));
 		return accountings;
 	}
 
-	Map<User, Accounting> calculateUserAccountingMap(Map<User, Accounting> oldAIPM, Map<User, Accounting> oldAM,
-			Map<User, Accounting> aIPM) {
+	Map<User, Accounting> calculateAccountingMap(Map<User, Accounting> accountingsFromOldItemPrice, Map<User, Accounting> oldAccountingsMap,
+			Map<User, Accounting> accountingsFromItemPrice) {
 		Accounting defaultAccountig = new Accounting(new User(), 0.0);
 		Set<User> users = new HashSet<>();
-		users.addAll(oldAIPM.keySet());
-		users.addAll(aIPM.keySet());
+		
+		users.addAll(accountingsFromOldItemPrice.keySet());
+		users.addAll(accountingsFromItemPrice.keySet());
 
 		users.stream().forEach(user -> {
-			Double amount = Math.round(100 * (oldAM.getOrDefault(user, defaultAccountig).getAmount()
-					- oldAIPM.getOrDefault(user, defaultAccountig).getAmount()
-					+ aIPM.getOrDefault(user, defaultAccountig).getAmount())) / 100.0;
+			Double amount = Math.round(100 * (oldAccountingsMap.getOrDefault(user, defaultAccountig).getAmount()
+					- accountingsFromOldItemPrice.getOrDefault(user, defaultAccountig).getAmount()
+					+ accountingsFromItemPrice.getOrDefault(user, defaultAccountig).getAmount())) / 100.0;
 			if (amount != 0.0)
 				accountingsMap.put(user, new Accounting(user, amount));
 		});
@@ -61,21 +66,21 @@ public class CreateDebtsService {
 		return accountingsMap;
 	}
 
-	Map<User, Accounting> calculateUserAccountingMapByItemPrice(Receipt receipt) {
-		Map<User, Accounting> accountingByPrice = new HashMap<>();
+	Map<User, Accounting> calculateAccountingMapFromItemPrice(Receipt receipt) {
+		Map<User, Accounting> accountingFromItemPrice = new HashMap<>();
 		for (Item i : receipt.getItems()) {
 			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer())).forEach(owner -> {
-				if (accountingByPrice.containsKey(owner))
-					accountingByPrice.get(owner).addAmount(i.getPricePerOwner());
+				if (accountingFromItemPrice.containsKey(owner))
+					accountingFromItemPrice.get(owner).addAmount(i.getPricePerOwner());
 				else
-					accountingByPrice.put(owner, new Accounting(owner, i.getPricePerOwner()));
+					accountingFromItemPrice.put(owner, new Accounting(owner, i.getPricePerOwner()));
 			});
 		}
-		return accountingByPrice;
+		return accountingFromItemPrice;
 	}
 
-	List<Receipt> createRefundReceipts(Map<User, Accounting> accountings, User debtor) {
-		accountings.values().stream().filter(accounting -> Math.signum(accounting.getAmount()) == -1.0)
+	List<Receipt> createRefundReceipts(Map<User, Accounting> accountingsMap, User debtor) {
+		accountingsMap.values().stream().filter(accounting -> Math.signum(accounting.getAmount()) == -1.0)
 				.map(accounting -> createRefundReceipt(accounting, debtor))
 				.forEach(refundReceipt -> refundReceipts.add(refundReceipt));
 		return refundReceipts;

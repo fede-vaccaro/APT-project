@@ -36,7 +36,7 @@ public class CreateDebtsServiceTest {
 		receipt.addItem(item);
 		receipt.addItem(item2);
 
-		Map<User, Accounting> accountings = createDebtsService.calculateUserAccountingMapByItemPrice(receipt);
+		Map<User, Accounting> accountings = createDebtsService.calculateAccountingMapFromItemPrice(receipt);
 
 		assertThat(accountings.values()).containsExactlyInAnyOrder(new Accounting(participant, 4.8));
 	}
@@ -51,7 +51,7 @@ public class CreateDebtsServiceTest {
 		Accounting accounting2 = new Accounting(participant2, 1.3);
 		receipt.setAccountingList(new ArrayList<>(Arrays.asList(accounting1, accounting2)));
 
-		Map<User, Accounting> accountings = createDebtsService.createUserAccountingMap(receipt);
+		Map<User, Accounting> accountings = createDebtsService.createAccountingMapFromAccountingList(receipt.getAccountings());
 
 		assertThat(accountings.get(participant1)).isEqualTo(accounting1);
 		assertThat(accountings.get(participant2)).isEqualTo(accounting2);
@@ -72,7 +72,7 @@ public class CreateDebtsServiceTest {
 		Map<User, Accounting> aIPM = new HashMap<>();
 		aIPM.put(participant1, oldAP1);
 
-		Map<User, Accounting> accountingsMap = createDebtsService.calculateUserAccountingMap(oldAIPM, oldAM, aIPM);
+		Map<User, Accounting> accountingsMap = createDebtsService.calculateAccountingMap(oldAIPM, oldAM, aIPM);
 
 		assertThat(accountingsMap.values()).containsExactlyInAnyOrder(oldAP1);
 	}
@@ -93,7 +93,7 @@ public class CreateDebtsServiceTest {
 		Map<User, Accounting> aIPM = new HashMap<>();
 		aIPM.put(participant1, oldAIP1);
 
-		Map<User, Accounting> accountingsMap = createDebtsService.calculateUserAccountingMap(oldAIPM, oldAM, aIPM);
+		Map<User, Accounting> accountingsMap = createDebtsService.calculateAccountingMap(oldAIPM, oldAM, aIPM);
 
 		assertThat(accountingsMap.values()).containsExactlyInAnyOrder(oldA1);
 	}
@@ -114,7 +114,7 @@ public class CreateDebtsServiceTest {
 		Map<User, Accounting> aIPM = new HashMap<>();
 		aIPM.put(participant2, oldAIP2);
 
-		Map<User, Accounting> accountingsMap = createDebtsService.calculateUserAccountingMap(oldAIPM, oldAM, aIPM);
+		Map<User, Accounting> accountingsMap = createDebtsService.calculateAccountingMap(oldAIPM, oldAM, aIPM);
 
 		assertThat(accountingsMap.values()).containsExactlyInAnyOrder(oldAIP2, new Accounting(participant1, -1.1));
 	}

@@ -40,7 +40,7 @@ public class ReceiptController extends UserController {
 		receiptView.itemAdded(item);
 	}
 
-	public void updateItem(Item item, int index) {
+	public void updateItem(int index, Item item) {
 		try {
 			receiptManager.updateItem(index, item);
 			receiptView.itemUpdated(index, item);
@@ -66,9 +66,9 @@ public class ReceiptController extends UserController {
 	
 	public void uploadReceipt(Receipt receipt) {
 		receiptManager.uploadReceipt(receipt);
-		receiptView.descriptionUploaded(receipt.getDescription());
+		receiptView.setDescriptionUploadedReceipt(receipt.getDescription());
 		receiptView.showCurrentItemsList(receipt.getItems());
-		receiptView.dateUploaded(receipt.getTimestamp());
+		receiptView.setTimestampUploadedReceipt(receipt.getTimestamp());
 	}
 	
 	protected void clear() {

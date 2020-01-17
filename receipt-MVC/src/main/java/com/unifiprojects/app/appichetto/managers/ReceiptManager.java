@@ -47,10 +47,10 @@ public class ReceiptManager {
 	}
 
 	public Receipt saveReceipt() {
-		Pair<List<Accounting>, List<Receipt>> fullDebts = createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap);
+		Pair<List<Accounting>, List<Receipt>> accountingListRefundReceiptsListPair = createDebtsService.computeAccountingDebtsAndRefoundReceipts(receipt, accountingsMap);
 
-		List<Accounting> accountings = fullDebts.getFirst();
-		List<Receipt> refoundReceipts = fullDebts.getSecond();
+		List<Accounting> accountings = accountingListRefundReceiptsListPair.getFirst();
+		List<Receipt> refoundReceipts = accountingListRefundReceiptsListPair.getSecond();
 
 		receipt.setAccountingList(accountings);
 		receiptRepository.saveReceipt(receipt);
@@ -62,12 +62,12 @@ public class ReceiptManager {
 	public void uploadReceipt(Receipt receipt) {
 		this.receipt = receipt;
 		accountingsMap.clear();
-		for (Item i : receipt.getItems()) {
-			i.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer())).forEach(owner -> {
+		for (Item item : receipt.getItems()) {
+			item.getOwners().stream().filter(owner -> !owner.equals(receipt.getBuyer())).forEach(owner -> {
 				if (accountingsMap.containsKey(owner))
-					accountingsMap.get(owner).addAmount(i.getPricePerOwner());
+					accountingsMap.get(owner).addAmount(item.getPricePerOwner());
 				else
-					accountingsMap.put(owner, new Accounting(owner, i.getPricePerOwner()));
+					accountingsMap.put(owner, new Accounting(owner, item.getPricePerOwner()));
 			});
 		}
 	}

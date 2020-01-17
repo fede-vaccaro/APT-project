@@ -378,9 +378,9 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(e -> {
 			receiptController.updateItem(
+					itemsList.getSelectedIndex(),
 					new Item(txtName.getText(), Double.valueOf(txtPrice.getText()),
-							Integer.valueOf(txtQuantity.getText()), usersList.getSelectedValuesList()),
-					itemsList.getSelectedIndex());
+							Integer.valueOf(txtQuantity.getText()), usersList.getSelectedValuesList()));
 			btnSaveReceipt.setEnabled(true);
 			clearForm();
 			itemsList.clearSelection();
@@ -444,12 +444,12 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	}
 
 	@Override
-	public void descriptionUploaded(String description) {
+	public void setDescriptionUploadedReceipt(String description) {
 		txtDescription.setText(description);
 	}
 
 	@Override
-	public void dateUploaded(GregorianCalendar timestamp) {
+	public void setTimestampUploadedReceipt(GregorianCalendar timestamp) {
 		txtDate.setText(timestamp.getTime().toString());
 	}
 
