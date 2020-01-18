@@ -93,8 +93,6 @@ public class UserRepositoryHibernate implements UserRepository {
 			receipt.removeAccounting(a);
 
 			entityManager.merge(receipt);
-
-			entityManager.remove(a);
 		});
 	}
 
