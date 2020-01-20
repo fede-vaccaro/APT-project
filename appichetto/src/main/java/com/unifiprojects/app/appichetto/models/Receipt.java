@@ -146,15 +146,12 @@ public class Receipt {
 		if (getClass() != obj.getClass())
 			return false;
 		Receipt other = (Receipt) obj;
-		if (accountingList == null && other.accountingList != null) {
-			return false;
-		} else {
-			if (accountingList != null && !accountingList.containsAll(other.accountingList))
+		if (accountingList == null) {
+			if (other.items != null)
 				return false;
-			else {
-				if (!other.accountingList.containsAll(accountingList))
-					return false;
-			}
+		} else {
+			if (!(accountingList.containsAll(other.accountingList) && other.accountingList.containsAll(this.accountingList)))
+				return false;
 		}
 		if (buyer == null) {
 			if (other.buyer != null)
