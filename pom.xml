@@ -320,6 +320,7 @@
 							<param>**.models.*</param>
 							<param>**.transactionhandlers.*</param>
 							<param>**.ReceiptGenerator</param>
+							<param>**.UserController</param>
 						</excludedClasses>
 						<excludedTestClasses>
 							<param>apt.project.frontend.view.swing.*</param>
@@ -329,7 +330,7 @@
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
-						<mutationThreshold>85</mutationThreshold>
+						<mutationThreshold>100</mutationThreshold>
 					</configuration>
 					<executions>
 						<execution>
