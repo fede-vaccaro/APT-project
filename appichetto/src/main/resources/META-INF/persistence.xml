@@ -26,24 +26,6 @@
 				value="org.hibernate.dialect.HSQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="false" />
-
-			<property name="connection.provider_class"
-				value="org.hibernate.connection.C3P0ConnectionProvider" />
-			<property name="hibernate.c3p0.acquire_increment" value="1" />
-			<property name="hibernate.c3p0.idle_test_period" value="60" />
-			<property name="hibernate.c3p0.min_size" value="1" />
-			<property name="hibernate.c3p0.max_size" value="2" />
-			<property name="hibernate.c3p0.max_statements" value="50" />
-			<property name="hibernate.c3p0.timeout" value="0" />
-			<property name="hibernate.c3p0.acquireRetryAttempts"
-				value="1" />
-			<property name="hibernate.c3p0.acquireRetryDelay"
-				value="250" />
-
-			<property name="hibernate.transaction.factory_class"
-				value="org.hibernate.transaction.JDBCTransactionFactory" />
-			<property name="hibernate.current_session_context_class"
-				value="thread" />
 		</properties>
 	</persistence-unit>
 
@@ -73,24 +55,6 @@
 
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="false" />
-
-			<property name="connection.provider_class"
-				value="org.hibernate.connection.C3P0ConnectionProvider" />
-			<property name="hibernate.c3p0.acquire_increment" value="1" />
-			<property name="hibernate.c3p0.idle_test_period" value="60" />
-			<property name="hibernate.c3p0.min_size" value="1" />
-			<property name="hibernate.c3p0.max_size" value="2" />
-			<property name="hibernate.c3p0.max_statements" value="50" />
-			<property name="hibernate.c3p0.timeout" value="0" />
-			<property name="hibernate.c3p0.acquireRetryAttempts"
-				value="1" />
-			<property name="hibernate.c3p0.acquireRetryDelay"
-				value="250" />
-
-			<property name="hibernate.transaction.factory_class"
-				value="org.hibernate.transaction.JDBCTransactionFactory" />
-			<property name="hibernate.current_session_context_class"
-				value="thread" />
 		</properties>
 	</persistence-unit>
 </persistence>
