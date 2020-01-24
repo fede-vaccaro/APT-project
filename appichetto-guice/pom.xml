@@ -51,7 +51,14 @@
 			<artifactId>homepage</artifactId>
 			<version>${revision}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
