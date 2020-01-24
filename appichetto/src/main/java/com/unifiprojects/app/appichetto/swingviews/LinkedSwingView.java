@@ -29,8 +29,6 @@ public abstract class LinkedSwingView{
 		mainFrame.setTitle(frame.getTitle());
 		mainFrame.setName(frame.getName());
 		mainFrame.setSize(frame.getSize());
-		
-
 	}
 
 }

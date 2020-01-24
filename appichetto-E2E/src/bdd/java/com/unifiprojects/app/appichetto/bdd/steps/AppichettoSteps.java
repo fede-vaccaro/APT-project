@@ -85,11 +85,11 @@ public class AppichettoSteps {
 		robot = BasicRobot.robotWithNewAwtHierarchy();
 		robot.settings().componentLookupScope(ComponentLookupScope.ALL);
 		application("com.unifiprojects.app.appichetto.main.Main").start();
+		window = WindowFinder.findFrame("Login").using(robot);
 	}
 
 	@When("{string} view shows")
 	public void view_shows(String viewToShow) {
-		window = WindowFinder.findFrame(viewToShow).using(robot);
 	}
 
 	@When("{string} view shown")
@@ -105,11 +105,6 @@ public class AppichettoSteps {
 	@When("Click {string} button")
 	public void click_button(String string) {
 		window.button(JButtonMatcher.withText(string)).click();
-//		if (string.equals("Save Receipt"))
-//			window = WindowFinder.findFrame("Homepage").using(robot);
-//		else if(string.equals("Update receipt"))
-//			window = WindowFinder.findFrame("Create Receipt").using(robot);
-
 	}
 
 	@When("Click {string} button on homepage")
@@ -137,7 +132,6 @@ public class AppichettoSteps {
 		window.textBox(JTextComponentMatcher.withName("Username")).deleteText().enterText(usernameToLog);
 		window.textBox(JTextComponentMatcher.withName("Password")).deleteText().enterText(usersOnDb.get(usernameToLog));
 		window.button(JButtonMatcher.withText("Log-in")).click();
-		window = WindowFinder.findFrame("Homepage").using(robot);
 	}
 
 	@When("Add new item")
@@ -160,24 +154,6 @@ public class AppichettoSteps {
 		String[] itemListContents = window.list(listName).contents();
 
 		assertThat(itemListContents).containsExactlyInAnyOrderElementsOf(itemsString);
-	}
-
-	@Then("Going back")
-	public void going_back() {
-		window.button(JButtonMatcher.withText("Back")).click();
-		window = WindowFinder.findFrame("Homepage").using(robot);
-	}
-
-	// @Then("Log out")
-	@When("Log out")
-	public void log_out() {
-		window.button(JButtonMatcher.withText("Log Out")).click();
-//		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
-//			@Override
-//			protected boolean isMatching(JFrame frame) {
-//				return "Login".equals(frame.getTitle()) && frame.isShowing();
-//			}
-//		}).using(robot);
 	}
 
 	@Then("Set {string} in {string}")
@@ -259,7 +235,6 @@ public class AppichettoSteps {
 
 	@Then("debt increased of {float}")
 	public void the_debt_is_increased_of(float value) {
-		window = WindowFinder.findFrame("Pay Receipt").using(robot);
 		window.label("totalDebtToUser")
 				.requireText(String.format(PayReceiptsViewSwing.TOTALDEBTTOUSERMESSAGE + "%.2f", receipt_debt + value));
 	}

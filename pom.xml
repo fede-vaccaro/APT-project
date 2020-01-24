@@ -188,8 +188,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
@@ -312,28 +310,24 @@
 							<param>**.*IT*</param>
 							<param>**.*BDD.*</param>
 						</excludedTestClasses>
-
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
 						<mutationThreshold>100</mutationThreshold>
 					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>mutationCoverage</goal>
+							</goals>
+							<phase>verify</phase>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>4.3.0</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.4</version>
-					<configuration>
-						<archive>
-							<manifest>
-								<mainClass>com.unifiprojects.app.appichetto.main</mainClass>
-							</manifest>
-						</archive>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -415,6 +409,17 @@
 
 
 	<profiles>
+		<profile>
+			<id>run-PIT</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>no-gui-tests</id>
 			<build>

@@ -1,6 +1,7 @@
 package com.unifiprojects.app.appichetto.main;
 
 import java.awt.EventQueue;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,21 +24,23 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Injector persistenceInjector = Guice.createInjector(new EntityManagerModule());
 
-		Injector injector = persistenceInjector.createChildInjector(new RepositoriesModule(), new PayReceiptsModule(),
-				new ReceiptModule(), new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
+		try {
+			EventQueue.invokeAndWait(() -> {
+				Injector persistenceInjector = Guice.createInjector(new EntityManagerModule());
 
-		LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
+				Injector injector = persistenceInjector.createChildInjector(new RepositoriesModule(),
+						new PayReceiptsModule(), new ReceiptModule(), new ShowHistoryModule(), new LoginModule(),
+						new UserPanelModule());
 
-		EventQueue.invokeLater(() -> {
-			try {
-				LinkedSwingView.initializeMainFrame();
-				loginView.show();
-			} catch (Exception e) {
-				LOGGER.error("An error occurred.", e);
-			}
-		});
+				LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
+					LinkedSwingView.initializeMainFrame();
+					loginView.show();
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			LOGGER.error(e);
+			Thread.currentThread().interrupt();
+		}
 	}
 
 }

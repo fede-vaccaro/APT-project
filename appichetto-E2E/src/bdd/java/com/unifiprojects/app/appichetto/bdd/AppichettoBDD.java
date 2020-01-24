@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.bdd;
 
+import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -13,6 +14,6 @@ public class AppichettoBDD {
 	@BeforeClass
 	public static void setUpOnce() {
 		//This checks that all access to Swing components is performed in the EDT
-//		FailOnThreadViolationRepaintManager.install();
+		FailOnThreadViolationRepaintManager.install();
 	}
 }
