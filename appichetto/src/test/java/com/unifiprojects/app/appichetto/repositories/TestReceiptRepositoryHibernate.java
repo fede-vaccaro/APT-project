@@ -69,8 +69,6 @@ public class TestReceiptRepositoryHibernate {
 		receipt1.setAccountingList(Arrays.asList(accountingToUser1));
 		receipt1.setTotalPrice(item1.getPrice() + item2.getPrice());
 
-		entityManager.clear();
-
 		entityManager.getTransaction().begin();
 		receiptRepositoryHibernate.saveReceipt(receipt1);
 		entityManager.getTransaction().commit();
@@ -78,7 +76,8 @@ public class TestReceiptRepositoryHibernate {
 		entityManager.clear();
 		Receipt foundReceipt = entityManager.find(Receipt.class, receipt1.getId());
 		assertThat(foundReceipt).isEqualTo(receipt1);
-
+		assertThat(foundReceipt.getAccountings()).containsOnly(accountingToUser1);
+		assertThat(foundReceipt.getItems()).containsOnly(item1, item2);
 	}
 
 	@Test
