@@ -378,7 +378,6 @@
 						<param>**/swingviews/utils/*.*</param>
 						<param>**/modules/*.*</param>
 						<param>**/factories/*.*</param>
-						<param>**/appichetto/**/swingviews/*.*</param>
 						<param>**/FakeTransaction.*</param>
 						<param>**/UserController.*</param>
 						<param>**/ReceiptGenerator.*</param>
