@@ -22,6 +22,7 @@
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
 		<guice.version>4.2.2</guice.version>
 		<log4j.version>2.11.1</log4j.version>
+		<docker.host.address>localhost</docker.host.address>
 		<sonar.coverage.exclusions>
 			**/main/*.*,
 			**/models/*.*,
@@ -186,8 +187,12 @@
 										<POSTGRES_DB>docker</POSTGRES_DB>
 									</env>
 									<wait>
-										<time>10000</time>
-										<log>database system is ready to accept connections</log>
+										<!-- <log>database system is ready to accept connections</log> -->
+										<!-- <time>10000</time> -->
+										<tcp>
+											<mode>mapped</mode>
+											<ports>5432</ports>
+										</tcp>
 									</wait>
 								</run>
 							</image>
@@ -312,9 +317,9 @@
 							<param>**.models.*</param>
 							<param>**.transactionhandlers.*</param>
 							<param>**.ReceiptGenerator</param>
+							<param>**.UserController</param>
 						</excludedClasses>
 						<excludedTestClasses>
-							<param>apt.project.frontend.view.swing.*</param>
 							<param>**.*IT*</param>
 							<param>**.*BDD.*</param>
 						</excludedTestClasses>
