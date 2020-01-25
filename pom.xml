@@ -21,6 +21,7 @@
 		<testcontainer.version>1.10.5</testcontainer.version>
 		<postgresql.version>9.4.1212.jre6</postgresql.version>
 		<guice.version>4.2.2</guice.version>
+		<log4j.version>2.11.1</log4j.version>
 		<sonar.coverage.exclusions>
 			**/main/*.*,
 			**/models/*.*,
@@ -40,7 +41,7 @@
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-bom</artifactId>
-				<version>2.11.1</version>
+				<version>${log4j.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -52,7 +53,7 @@
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.22.0-GA</version>
+			<version>3.26.0-GA</version>
 		</dependency>
 
 		<dependency>
@@ -184,6 +185,10 @@
 										<POSTGRES_PASSWORD>docker</POSTGRES_PASSWORD>
 										<POSTGRES_DB>docker</POSTGRES_DB>
 									</env>
+									<wait>
+										<time>10000</time>
+										<log>database system is ready to accept connections</log>
+									</wait>
 								</run>
 							</image>
 						</images>
@@ -204,14 +209,6 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -286,12 +283,6 @@
 					</executions>
 				</plugin>
 
-
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.1</version>
-
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
@@ -306,6 +297,7 @@
 						</execution>
 					</executions>
 				</plugin>
+
 				<plugin>
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>
@@ -329,7 +321,7 @@
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
-						<mutationThreshold>85</mutationThreshold>
+						<mutationThreshold>100</mutationThreshold>
 					</configuration>
 					<executions>
 						<execution>
@@ -349,6 +341,21 @@
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.1</version>
+			</plugin>
+
+			<plugin>
+
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
@@ -451,7 +458,6 @@
 								<esclude>**/swingviews/utils/*.*</esclude>
 								<esclude>**/modules/*.*</esclude>
 								<esclude>**/factories/*.*</esclude>
-
 								<esclude>**/swingviews/**</esclude>
 							</excludes>
 						</configuration>
