@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.swingviews.utils.ItemsListSelectionModel;
@@ -48,7 +47,6 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	private JList<Item> itemsList;
 	private DefaultListModel<Item> listItemModel;
 	private JLabel errorMsgLabel;
-	private ReceiptController receiptController;
 	private JList<User> usersList;
 
 	private DefaultListModel<User> listUsersModel;
@@ -64,7 +62,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 	private JLabel lblItemsList;
 
 	public void setUsers() {
-		receiptController.getUsers().stream().filter(user -> !listUsersModel.contains(user))
+		((ReceiptController) getController()).getUsers().stream().filter(user -> !listUsersModel.contains(user))
 				.forEach(listUsersModel::addElement);
 	}
 
@@ -350,8 +348,9 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(e -> {
-			receiptController.addItem(new Item(txtName.getText(), Double.valueOf(txtPrice.getText()),
-					Integer.valueOf(txtQuantity.getText()), usersList.getSelectedValuesList()));
+			((ReceiptController) getController())
+					.addItem(new Item(txtName.getText(), Double.valueOf(txtPrice.getText()),
+							Integer.valueOf(txtQuantity.getText()), usersList.getSelectedValuesList()));
 			btnSaveReceipt.setEnabled(true);
 			clearForm();
 			itemsList.clearSelection();
@@ -365,7 +364,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		gbc_btnSaveReceipt.gridx = 1;
 		gbc_btnSaveReceipt.gridy = 11;
 		frame.getContentPane().add(btnSaveReceipt, gbc_btnSaveReceipt);
-		btnSaveReceipt.addActionListener(e -> receiptController.saveReceipt());
+		btnSaveReceipt.addActionListener(e -> ((ReceiptController) getController()).saveReceipt());
 		btnSave.setEnabled(false);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
 		gbc_btnSave.anchor = GridBagConstraints.NORTH;
@@ -377,8 +376,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(e -> {
-			receiptController.updateItem(
-					itemsList.getSelectedIndex(),
+			((ReceiptController) getController()).updateItem(itemsList.getSelectedIndex(),
 					new Item(txtName.getText(), Double.valueOf(txtPrice.getText()),
 							Integer.valueOf(txtQuantity.getText()), usersList.getSelectedValuesList()));
 			btnSaveReceipt.setEnabled(true);
@@ -403,7 +401,7 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(e -> {
-			receiptController.deleteItem(itemsList.getSelectedValue());
+			((ReceiptController) getController()).deleteItem(itemsList.getSelectedValue());
 			btnSaveReceipt.setEnabled(true);
 		});
 
@@ -459,13 +457,8 @@ public class ReceiptSwingView extends LinkedControlledSwingView implements Recei
 		setUsers();
 	}
 
-	@Override
-	public UserController getController() {
-		return receiptController;
-	}
-
 	public void setReceiptController(ReceiptController receiptController) {
-		this.receiptController = receiptController;
+		setController(receiptController);
 	}
 
 }

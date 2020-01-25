@@ -12,13 +12,10 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.controllers.UserPanelController;
 import com.unifiprojects.app.appichetto.views.UserPanelView;
 
 public class UserPanelViewSwing extends LinkedControlledSwingView implements UserPanelView {
-
-	private UserPanelController userPanelController;
 
 	private LinkedSwingView loginViewSwing;
 
@@ -182,7 +179,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 		btnNoButton.addActionListener(e -> showConfirm(false));
 
 		btnYesButton.addActionListener(e -> {
-			userPanelController.deleteUser();
+			((UserPanelController) getController()).deleteUser();
 			loginViewSwing.show();
 			frame.dispose();
 		});
@@ -208,7 +205,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 			newPassword = null;
 		}
 
-		userPanelController.changeCredential(newName, newPassword);
+		((UserPanelController) getController()).changeCredential(newName, newPassword);
 	}
 
 	@Override
@@ -227,17 +224,12 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	}
 
 	@Override
-	public UserController getController() {
-		return userPanelController;
-	}
-
-	@Override
 	public void updateData() {
-		userPanelController.update();
+		getController().update();
 	}
 
 	public void setUserPanelController(UserPanelController userPanelController) {
-		this.userPanelController = userPanelController;
+		setController(userPanelController);
 	}
 
 }

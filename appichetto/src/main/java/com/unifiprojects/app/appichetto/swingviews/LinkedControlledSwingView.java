@@ -8,13 +8,21 @@ public abstract class LinkedControlledSwingView extends LinkedSwingView {
 
 	protected JButton btnBack;
 	protected LinkedSwingView previousLinkedSwingView;
+	protected UserController userController;
 	
-	public abstract UserController getController();
 
 	public LinkedControlledSwingView() {
 		btnBack = new JButton("Back");
 		btnBack.setName("backBtn");
 		btnBack.addActionListener(e -> goBack());
+	}
+
+	public UserController getController() {
+		return userController;
+	}
+	
+	public void setController(UserController userController) {
+		this.userController = userController;
 	}
 
 	public void setLinkedSwingView(LinkedSwingView linkedSwingView) {

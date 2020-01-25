@@ -18,7 +18,6 @@ import javax.swing.JList;
 import com.google.inject.Inject;
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
 import com.unifiprojects.app.appichetto.controllers.ShowHistoryController;
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -35,8 +34,6 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	private DefaultListModel<String> totalAccountingsListModel;
 
 	private JLabel message;
-
-	private ShowHistoryController showHistoryController;
 
 	private JButton btnRmbutton;
 	private JButton btnUpdateReceipt;
@@ -152,7 +149,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 		btnRmbutton = new JButton("Remove selected");
 		btnRmbutton.setEnabled(false);
-		btnRmbutton.addActionListener(e -> showHistoryController.removeReceipt(receiptList.getSelectedValue()));
+		btnRmbutton.addActionListener(e -> ((ShowHistoryController) getController()).removeReceipt(receiptList.getSelectedValue()));
 
 		btnUpdateReceipt = new JButton("Update receipt");
 		btnUpdateReceipt.setEnabled(false);
@@ -234,16 +231,11 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	@Override
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
-	}
-
-	@Override
-	public UserController getController() {
-		return showHistoryController;
-	}
+	}	
 
 	@Override
 	public void updateData() {
-		showHistoryController.update();
+		getController().update();
 	}
 
 	@Override
@@ -252,7 +244,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	}
 
 	public void updateReceipt(Receipt selected) {
-		User loggedUser = showHistoryController.getLoggedUser();
+		User loggedUser = getController().getLoggedUser();
 		receiptView.getController().setLoggedUser(loggedUser);
 		((ReceiptController) receiptView.getController()).uploadReceipt(selected);
 		receiptView.setLinkedSwingView(this);
@@ -260,6 +252,6 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 	}
 
 	public void setShowHistoryController(ShowHistoryController showHistoryController) {
-		this.showHistoryController = showHistoryController;
+		setController(showHistoryController);
 	}
 }

@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
-import com.unifiprojects.app.appichetto.controllers.UserController;
 import com.unifiprojects.app.appichetto.models.Accounting;
 import com.unifiprojects.app.appichetto.models.Item;
 import com.unifiprojects.app.appichetto.models.Receipt;
@@ -45,13 +44,6 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 	private static final String TOTALFORTHISRECEIPTMESSAGE = "Total for this receipt: ";
 	public static final String TOTALDEBTTOUSERMESSAGE = "Total debt to user: ";
-
-	private PayReceiptsController payReceiptsController;
-
-	@Override
-	public UserController getController() {
-		return payReceiptsController;
-	}
 
 	private JTextField txtEnterAmount;
 	private JLabel lblErrorMsg;
@@ -177,12 +169,12 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		btnPay.setEnabled(false);
 		btnPay.addActionListener(e -> {
 			
-			User loggedUser = payReceiptsController.getLoggedUser();
+			User loggedUser = getController().getLoggedUser();
 			LOGGER.info(enteredAmount);
 			LOGGER.info(loggedUser);
 			LOGGER.info(userComboBoxModel.getSelectedItem());
-			LOGGER.info(payReceiptsController);
-			payReceiptsController.payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
+			LOGGER.info(getController());
+			((PayReceiptsController) getController()).payAmount(enteredAmount, loggedUser, (User) userComboBoxModel.getSelectedItem());
 			txtEnterAmount.setText("");
 		});
 
@@ -347,7 +339,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	private void extractEachAccountingOfLoggedUser(List<Receipt> receipts) {
 		accountings = new ArrayList<>();
 		receipts.stream().forEach(r -> accountings.addAll(r.getAccountings()));
-		User loggedUser = payReceiptsController.getLoggedUser();
+		User loggedUser = getController().getLoggedUser();
 		accountings = accountings.stream().filter(a -> a.getUser().equals(loggedUser)).collect(Collectors.toList());
 	}
 
@@ -372,6 +364,6 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 	}
 
 	public void setPayReceiptsController(PayReceiptsController payReceiptsController) {
-		this.payReceiptsController = payReceiptsController;
+		super.setController(payReceiptsController);	
 	}
 }
