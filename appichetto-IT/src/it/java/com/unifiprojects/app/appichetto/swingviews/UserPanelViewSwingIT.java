@@ -19,11 +19,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Singleton;
 import com.unifiprojects.app.appichetto.basetest.MVCBaseTest;
 import com.unifiprojects.app.appichetto.controllers.PayReceiptsController;
 import com.unifiprojects.app.appichetto.controllers.ReceiptController;
@@ -38,9 +36,6 @@ import com.unifiprojects.app.appichetto.modules.EntityManagerModule;
 import com.unifiprojects.app.appichetto.modules.LoginModule;
 import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.modules.UserPanelModule;
-import com.unifiprojects.app.appichetto.views.HomepageView;
-
-// TODO: a test was launching exceptions while successing
 
 @RunWith(GUITestRunner.class)
 public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
@@ -69,14 +64,6 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 	public static void setupEntityManager() {
 
 		Module entityManagerModule = new EntityManagerModule();
-
-		Module homepageModule = new AbstractModule() {
-			@Override
-			public void configure() {
-				bind(HomepageView.class).to(HomepageSwingView.class).in(Singleton.class);
-			}
-
-		};
 
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
 
