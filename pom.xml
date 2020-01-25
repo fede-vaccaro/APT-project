@@ -60,13 +60,13 @@
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-assistedinject</artifactId>
-			<version>4.2.2</version>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-persist</artifactId>
-			<version>4.2.2</version>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<dependency>
@@ -188,7 +188,7 @@
 									</env>
 									<wait>
 										<!-- <log>database system is ready to accept connections</log> -->
-										<!-- <time>10000</time> -->
+										<time>1000</time> 
 										<tcp>
 											<mode>mapped</mode>
 											<ports>5432</ports>
@@ -369,6 +369,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
 				<configuration>
 					<excludes>
 						<param>**/main/*.*</param>
