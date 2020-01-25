@@ -2,6 +2,7 @@ package com.unifiprojects.app.appichetto.swingviews;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -514,15 +515,22 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> receiptSwingView.setDescriptionUploadedReceipt(description));
 		window.textBox("txtDescription").requireText(description);
 	}
+	
+	@Test
+	public void testUpdateDataCallUpdateControllerAnsSetUsers() {
+		
+		receiptSwingView.updateData();
+		
+		verify(receiptController).getUsers();		
+	}
 
 	@Test
-	public void testSetUserUpdateListUserModel() {
+	public void testSetUserUpdateListUserModelWithoutDuplicate() {
 		User pippo = new User("pippo", "");
 		User pluto = new User("pluto", "");
 
 		GuiActionRunner.execute(() -> {
 			receiptSwingView.getListUsersModel().addElement(pippo);
-			receiptSwingView.getListUsersModel().addElement(pluto);
 		});
 
 		when(receiptController.getUsers()).thenReturn(Arrays.asList(pippo, pluto));
@@ -532,6 +540,23 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(receiptController).getUsers();
 		assertThat(receiptSwingView.getListUsersModel().toArray()).containsExactlyInAnyOrder(pippo, pluto);
 
+	}
+
+	@Test
+	public void testSetUserCatchTheException() {
+		User pippo = new User("pippo", "");
+		
+		GuiActionRunner.execute(() -> {
+			receiptSwingView.getListUsersModel().addElement(pippo);
+		});
+		
+		doThrow(Exception.class).when(receiptController).getUsers();
+		
+		receiptSwingView.setUsers();
+		
+		verify(receiptController).getUsers();
+		assertThat(receiptSwingView.getListUsersModel().toArray()).containsExactlyInAnyOrder(pippo);
+		
 	}
 
 }
