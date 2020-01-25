@@ -44,16 +44,6 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-assistedinject</artifactId>
-				<version>4.2.2</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-math3</artifactId>
-				<version>3.5</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -66,15 +56,53 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+			<version>4.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-persist</artifactId>
+			<version>4.2.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>${guice.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>${testcontainer.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-forms</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-common</artifactId>
+			<version>1.8.1</version>
 		</dependency>
 
 		<dependency>
@@ -131,17 +159,6 @@
 			<artifactId>assertj-swing-junit</artifactId>
 			<version>3.9.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.4.10.Final</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/c3p0/c3p0 -->
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
 		</dependency>
 
 	</dependencies>
@@ -303,7 +320,6 @@
 							<param>**.models.*</param>
 							<param>**.transactionhandlers.*</param>
 							<param>**.ReceiptGenerator</param>
-							<param>**.UserController</param>
 						</excludedClasses>
 						<excludedTestClasses>
 							<param>apt.project.frontend.view.swing.*</param>
@@ -313,7 +329,7 @@
 						<mutators>
 							<mutator>DEFAULTS</mutator>
 						</mutators>
-						<mutationThreshold>100</mutationThreshold>
+						<mutationThreshold>85</mutationThreshold>
 					</configuration>
 					<executions>
 						<execution>
@@ -341,7 +357,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
 				<configuration>
 					<excludes>
 						<param>**/main/*.*</param>
@@ -427,7 +442,6 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>${jacoco.version}</version>
 						<configuration>
 							<excludes>
 								<esclude>**/ReceiptGenerator.*</esclude>

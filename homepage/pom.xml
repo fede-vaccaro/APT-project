@@ -41,10 +41,6 @@
 			<artifactId>user-panel-MVC</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-assistedinject</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
