@@ -226,6 +226,7 @@ public class UserPanelViewSwing extends LinkedControlledSwingView implements Use
 	@Override
 	public void updateData() {
 		getController().update();
+		showConfirm(false);
 	}
 
 	public void setUserPanelController(UserPanelController userPanelController) {
