@@ -1,6 +1,7 @@
 # Appichetto
-
 A course project concerning Test Driven Development and other useful tools. In Java. 
+
+
 [![Build Status](https://travis-ci.org/fede-vaccaro/APT-project.svg?branch=master)](https://travis-ci.org/fede-vaccaro/APT-project)
 [![Coverage Status](https://coveralls.io/repos/github/fede-vaccaro/APT-project/badge.svg?branch=master)](https://coveralls.io/github/fede-vaccaro/APT-project?branch=master)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fede-vaccaro_APT-project&metric=sqale_index)](https://sonarcloud.io/dashboard?id=fede-vaccaro_APT-project)
@@ -12,6 +13,21 @@ A course project concerning Test Driven Development and other useful tools. In J
 * Docker Compose
 * Maven
 * Java 8
+
+* ### Run on virtual screen:
+
+    We recommend to run the build on a virtual screen in isolation avoiding making the PC useless for 5 minutes, by following 
+    this commands:
+    ```
+    sudo apt-get install -y tightvncserver
+    ```
+
+    and then:
+
+    ```
+    ./onVirtualScreen.sh mvn clean test verify
+    ```
+
 
 ## Run the tests
 
@@ -37,19 +53,6 @@ A course project concerning Test Driven Development and other useful tools. In J
     ```
     mvn clean test verify sonar:sonar
     ```
-* ### Run on virtual screen:
-
-    You can run the tests on a virtual screen avoiding making the PC useless for 5 minutes: 
-    ```
-    sudo apt-get install -y tightvncserver
-    ```
-
-    and then:
-
-    ```
-    ./onVirtualScreen.sh mvn clean test verify
-    ```
-
 
 ## Start AppIchetto
 
