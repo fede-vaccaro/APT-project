@@ -15,7 +15,7 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
 
   db:
-    image: postgres
+    image: postgres:11
     networks:
       - sonarnet
     environment:

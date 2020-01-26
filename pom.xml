@@ -176,7 +176,7 @@
 						<images>
 							<image>
 								<alias>db</alias>
-								<name>postgres:10</name>
+								<name>postgres:11</name>
 								<run>
 									<ports>
 										<port>5432:5432</port>
