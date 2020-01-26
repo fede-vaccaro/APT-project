@@ -27,16 +27,17 @@ public abstract class LinkedSwingView{
 	public void show() {
 		frame.setVisible(false);
 		
-		mainFrame.setVisible(true);
 		mainFrame.getContentPane().removeAll();
-		mainFrame.revalidate();
-		mainFrame.getContentPane().add(frame.getContentPane());
-		mainFrame.revalidate();
-		mainFrame.repaint();
 		
 		mainFrame.setTitle(frame.getTitle());
 		mainFrame.setName(frame.getName());
-		mainFrame.setSize(frame.getSize());
+		mainFrame.setBounds(frame.getBounds());
+		mainFrame.getContentPane().setLayout(frame.getContentPane().getLayout());
+		mainFrame.setContentPane(frame.getContentPane());
+
+		mainFrame.revalidate();
+		mainFrame.repaint();
+		mainFrame.setVisible(true);
 	}
 
 }
