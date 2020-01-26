@@ -375,6 +375,8 @@
 						<param>**/models/*.*</param>
 						<param>**/exceptions/*.*</param>
 						<param>**/swingviews/utils/*.*</param>
+						<param>**/LinkedControlledSwingView.*</param>
+						<param>**/LinkedSwingView.*</param>
 						<param>**/modules/*.*</param>
 						<param>**/factories/*.*</param>
 						<param>**/FakeTransaction.*</param>
