@@ -17,6 +17,7 @@ public abstract class LinkedSwingView{
 	public static void initializeMainFrame() {
 		mainFrame = new JFrame();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setLocation(200, 200);
 	}
 
 	public JFrame getFrame() {
