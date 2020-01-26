@@ -55,7 +55,7 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
-				new ShowHistoryModule(), new LoginModule(), new UserPanelModule());
+				new ShowHistoryModule(persistenceInjector), new LoginModule(), new UserPanelModule());
 
 	}
 
@@ -96,8 +96,8 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 
 		assertThat(newUser).isEqualTo(new User(username, password));
 
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.getFrame().getName());
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 
@@ -134,8 +134,8 @@ public class LoginViewSwingIT extends AssertJSwingJUnitTestCase {
 
 		assertThat(newUser).isEqualTo(new User(username, password));
 
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.getFrame().getName());
 		homepageSwingView.views.forEach(v -> assertThat(v.getController().getLoggedUser()).isEqualTo(newUser));
 	}
 

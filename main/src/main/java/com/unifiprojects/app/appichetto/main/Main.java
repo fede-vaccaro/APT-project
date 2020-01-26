@@ -30,7 +30,7 @@ public class Main {
 				Injector persistenceInjector = Guice.createInjector(new EntityManagerModule());
 
 				Injector injector = persistenceInjector.createChildInjector(new RepositoriesModule(),
-						new PayReceiptsModule(), new ReceiptModule(), new ShowHistoryModule(), new LoginModule(),
+						new PayReceiptsModule(), new ReceiptModule(), new ShowHistoryModule(persistenceInjector), new LoginModule(),
 						new UserPanelModule());
 
 				LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);

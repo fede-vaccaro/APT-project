@@ -58,7 +58,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
-				userPanelModule, new ShowHistoryModule(), new LoginModule());
+				userPanelModule, new ShowHistoryModule(persistenceInjector), new LoginModule());
 
 	}
 
@@ -70,7 +70,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
 			homepageSwingView = (HomepageSwingView) loginView.getHomepage();
 					
-			System.out.println(homepageSwingView.toString());
 			entityManager.getTransaction().begin();
 			User logged = new User("Federico", "");
 			User another = new User("Pasquale", "");
@@ -109,24 +108,24 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.receiptView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.receiptView.getFrame().getName());
 	}
 
 	@Test
 	@GUITest
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.payReceiptsView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.payReceiptsView.getFrame().getName());
 	}
 
 	@Test
 	@GUITest
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.loginView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.loginView.getFrame().getName());
 
 	}
 
@@ -134,8 +133,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testUserPanelButtonShowOnlyUserPanelView() {
 		window.button(JButtonMatcher.withText("User panel")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-				.isEqualTo(homepageSwingView.userPanelView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.userPanelView.getFrame().getName());
 	}
 
 	
@@ -144,8 +143,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane().getComponents()[0])
-		.isEqualTo(homepageSwingView.showHistoryView.getFrame().getContentPane());	
+		assertThat(LinkedSwingView.mainFrame.getName())
+		.isEqualTo(homepageSwingView.showHistoryView.getFrame().getName());	
 	}
 
 }

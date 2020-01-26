@@ -12,6 +12,13 @@ import com.unifiprojects.app.appichetto.swingviews.ShowHistoryViewSwing;
 import com.unifiprojects.app.appichetto.views.ShowHistoryView;
 
 public class ShowHistoryModule extends AbstractModule {
+	
+	private Injector persistenceInjector;
+
+	public ShowHistoryModule(Injector persistenceInjector) {
+		this.persistenceInjector = persistenceInjector;
+	}
+	
 	@Override
 	protected void configure() {
 		bind(ShowHistoryView.class).to(ShowHistoryViewSwing.class);
@@ -21,7 +28,6 @@ public class ShowHistoryModule extends AbstractModule {
 
 	@Provides
 	public ShowHistoryViewSwing view(ShowHistoryControllerFactory controllerFactory) {
-		Injector persistenceInjector = Guice.createInjector(new EntityManagerModule());
 
 		Injector injector = persistenceInjector.createChildInjector(new RepositoriesModule(),
 				new ReceiptModule(), new UserPanelModule());
