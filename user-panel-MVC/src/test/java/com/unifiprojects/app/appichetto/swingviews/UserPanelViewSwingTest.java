@@ -12,7 +12,6 @@ import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -23,7 +22,6 @@ public class UserPanelViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 
-	@InjectMocks
 	private UserPanelViewSwing userPanelViewSwing;
 
 	@Mock
@@ -34,8 +32,12 @@ public class UserPanelViewSwingTest extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() {
+		MockitoAnnotations.initMocks(this);
 		GuiActionRunner.execute(() -> {
-			MockitoAnnotations.initMocks(this);
+			userPanelViewSwing = new UserPanelViewSwing();
+			userPanelViewSwing.setUserPanelController(userPanelController);
+			userPanelViewSwing.setLoginViewSwing(loginSwingView);
+			return userPanelViewSwing;
 		});
 		window = new FrameFixture(robot(), userPanelViewSwing.getFrame());
 		window.show(); // shows the frame to test
