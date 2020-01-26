@@ -9,7 +9,7 @@
 		<artifactId>appichetto-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
-	<artifactId>appichetto</artifactId>
+	<artifactId>appichetto-general</artifactId>
 	<name>appichetto</name>
 	<url>http://maven.apache.org</url>
 	<properties>

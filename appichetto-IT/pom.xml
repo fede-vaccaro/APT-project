@@ -64,7 +64,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>appichetto</artifactId>
+			<artifactId>appichetto-general</artifactId>
 			<version>${revision}</version>
 		</dependency>
 	</dependencies>

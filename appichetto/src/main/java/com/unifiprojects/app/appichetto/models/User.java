@@ -13,7 +13,7 @@ public class User {
 
 	@Id
 	@GeneratedValue
-	Long id;
+	private Long id;
 
 	public Long getId() {
 		return id;
