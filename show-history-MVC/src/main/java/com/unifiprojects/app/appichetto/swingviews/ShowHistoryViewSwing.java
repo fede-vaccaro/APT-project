@@ -228,6 +228,14 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 		}
 	}
 
+	public String getMessage() {
+		return message.getText();
+	}
+
+	public void setMessage(String message) {
+		this.message.setText(message);
+	}
+
 	@Override
 	public void showErrorMsg(String msg) {
 		this.message.setText(msg);
@@ -235,6 +243,7 @@ public class ShowHistoryViewSwing extends LinkedControlledSwingView implements S
 
 	@Override
 	public void updateData() {
+		message.setText("");
 		getController().update();
 	}
 

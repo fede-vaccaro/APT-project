@@ -74,7 +74,7 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testSchoolControllerIsDelegatedWhenLogInButtonIsClicked() {
+	public void testLoginControllerIsDelegatedWhenLogInButtonIsClicked() {
 		String username = "user";
 		String password = "password";
 
@@ -87,7 +87,7 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testSchoolControllerIsDelegatedWhenSignInButtonIsClicked() {
+	public void testLoginControllerIsDelegatedWhenSignInButtonIsClicked() {
 		String username = "newUser";
 		String password = "pword";
 
@@ -123,15 +123,17 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void testShowCleanTHeField() {
+	public void testShowCleanTheField() {
 		GuiActionRunner.execute(() -> {
 			loginViewSwing.setUsernameTextbox("Pippo");
 			loginViewSwing.setPasswordField("psw");
+			loginViewSwing.setErrorMsg("Error");
 			loginViewSwing.show();
 		});
 		
 		assertThat(loginViewSwing.getUsernameTextbox()).isEqualTo("");
 		assertThat(loginViewSwing.getPasswordFromPasswordField()).isEqualTo("");
+		assertThat(loginViewSwing.getErrorMsg()).isEqualTo("");
 	}
 
 }

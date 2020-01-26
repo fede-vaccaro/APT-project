@@ -112,6 +112,14 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 		this.passwordField.setText(passwordField);
 	}
 	
+	public String getErrorMsg() {
+		return errorMsg.getText();
+	}
+	
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg.setText(errorMsg);
+	}
+	
 	@Override
 	public void showErrorMsg(String message) {
 		SwingUtilities.invokeLater(() -> errorMsg.setText(message));
@@ -136,6 +144,7 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 	public void show() {
 		usernameTextbox.setText("");
 		passwordField.setText("");
+		errorMsg.setText("");
 		super.show();
 	}
 

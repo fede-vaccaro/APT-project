@@ -68,10 +68,8 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		});
 		window = new FrameFixture(robot(), showHistoryViewSwing.getFrame());
 		window.show(); // shows the frame to test
-		
 
 	}
-
 
 	private void setupReceiptsAndUsers() {
 		otherOwner1 = new User("other1", "pw");
@@ -112,7 +110,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testInititialState() {
 		setupReceiptsAndUsers();
-		
+
 		window.list("Receipts list").requireEnabled();
 		window.list("Items list").requireEnabled();
 		window.list("accountingList").requireEnabled();
@@ -164,7 +162,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	public void testShowShoppingHistoryEmptyEachListIfArgumentIsEmpty() {
 		setupReceiptsAndUsers();
 
-		
 		List<Receipt> history = Arrays.asList(receipt0);
 		List<Receipt> updatedHistory = Arrays.asList();
 		GuiActionRunner.execute(() -> {
@@ -186,7 +183,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	public void testShowShoppingHistoryShowCorrectlyTheItems() {
 		setupReceiptsAndUsers();
 
-		
 		List<Receipt> history = Arrays.asList(receipt0);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
 
@@ -282,10 +278,10 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 		setupReceiptsAndUsers();
 
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
-		
-		accounting1ToOtherOwner1.setAmount(0.0); // this won't generate debt, so shouldn't be included in the computing of the total accounting
-		
-		
+
+		accounting1ToOtherOwner1.setAmount(0.0); // this won't generate debt, so shouldn't be included in the computing
+													// of the total accounting
+
 		Double totalCreditFromOwner1 = accounting2ToOtherOwner1.getAmount();
 		Double totalCreditFromOwner2 = accounting1ToOtherOwner2.getAmount() + accounting2ToOtherOwner2.getAmount();
 
@@ -303,7 +299,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testErrorMsgDisplayTheMsg() {
-		
+
 		String msg = "Testing error messages.";
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showErrorMsg(msg));
@@ -315,7 +311,7 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testRemoveReceiptDelegateToController() {
 		setupReceiptsAndUsers();
-		
+
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(history));
@@ -400,30 +396,34 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testWhenUpdateButtonIsClickedUpdateRightReceiptIsPassedAndReceiptViewIsShown() {
 		setupReceiptsAndUsers();
-		
+
 		showHistoryViewSwing.setLinkedSwingView(homepageSwingView);
 		ArgumentCaptor<Receipt> receiptCaptor = ArgumentCaptor.forClass(Receipt.class);
 		ReceiptController receiptController = mock(ReceiptController.class);
-		
+
 		when(receiptSwingView.getController()).thenReturn(receiptController);
-		
+
 		List<Receipt> historyBefore = Arrays.asList(receipt0, receipt1);
 		GuiActionRunner.execute(() -> showHistoryViewSwing.showShoppingHistory(historyBefore));
-		
+
 		window.list("Receipts list").selectItem(0);
 
 		window.button(JButtonMatcher.withText("Update receipt")).click();
-		
+
 		verify(receiptController).uploadReceipt(receiptCaptor.capture());
 		assertThat(receiptCaptor.getValue()).isEqualTo(receipt0);
 		assertThat(showHistoryViewSwing.getFrame().isDisplayable()).isFalse();
 	}
-	
+
 	@Test
 	public void testUpdateDataCallControllerShowHistory() {
-		
-		showHistoryViewSwing.updateData();
-		
+		GuiActionRunner.execute(() -> {
+			showHistoryViewSwing.setMessage("Message");
+
+			showHistoryViewSwing.updateData();
+		});
+
+		assertThat(showHistoryViewSwing.getMessage()).isEqualTo("");
 		verify(showHistoryController).update();
 	}
 }

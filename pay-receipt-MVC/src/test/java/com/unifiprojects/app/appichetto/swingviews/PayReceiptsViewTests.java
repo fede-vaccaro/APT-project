@@ -71,10 +71,10 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 			payReceiptsSwing.setPayReceiptsController(payReceiptsController);
 			return payReceiptsSwing;
 		});
-		
+
 		logged = new User("logged", "pw");
 		when(payReceiptsController.getLoggedUser()).thenReturn(logged);
-		
+
 		window = new FrameFixture(robot(), payReceiptsSwing.getFrame());
 		window.show(); // shows the frame to test
 	}
@@ -136,11 +136,10 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 	public void testShowReceiptsVisualizeTheOnlyReceipt() {
 		setUpUsersAndReceipts();
 		Receipt receipt1 = receipt1FromPayer1;
-		
+
 		GuiActionRunner.execute(() -> payReceiptsSwing.showReceipts(Arrays.asList(receipt1)));
 		String[] receiptListString = window.list("Receipts list").contents();
-		assertThat(receiptListString)
-				.containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1));
+		assertThat(receiptListString).containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1));
 	}
 
 	@Test
@@ -208,8 +207,7 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 
 		String[] receiptListString = window.list("Receipts list").contents();
 		assertThat(receiptListString)
-				.containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1),
-						ReceiptFormatter.format(receipt2))
+				.containsExactlyInAnyOrder(ReceiptFormatter.format(receipt1), ReceiptFormatter.format(receipt2))
 				.doesNotContain(ReceiptFormatter.format(receipt3));
 
 	}
@@ -658,11 +656,16 @@ public class PayReceiptsViewTests extends AssertJSwingJUnitTestCase {
 		window.textBox("enterAmountField").requireText("");
 
 	}
-	
+
 	@Test
-	public void testUpdatedData() {
-		payReceiptsSwing.updateData();
-		
+	public void testUpdatedDataAndClearErrorMessage() {
+		GuiActionRunner.execute(() -> {
+			payReceiptsSwing.setLblErrorMsg("Error");
+
+			payReceiptsSwing.updateData();
+		});
+
+		assertThat(payReceiptsSwing.getLblErrorMsg()).isEqualTo("");
 		verify(payReceiptsController).update();
 	}
 

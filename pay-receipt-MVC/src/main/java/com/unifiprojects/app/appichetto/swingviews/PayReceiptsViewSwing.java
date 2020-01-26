@@ -336,6 +336,14 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 		}
 	}
 
+	public String getLblErrorMsg() {
+		return lblErrorMsg.getText();
+	}
+
+	public void setLblErrorMsg(String lblErrorMsg) {
+		this.lblErrorMsg.setText(lblErrorMsg);
+	}
+
 	private void extractEachAccountingOfLoggedUser(List<Receipt> receipts) {
 		accountings = new ArrayList<>();
 		receipts.stream().forEach(r -> accountings.addAll(r.getAccountings()));
@@ -360,6 +368,7 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 	@Override
 	public void updateData() {
+		lblErrorMsg.setText("");
 		getController().update();
 	}
 
