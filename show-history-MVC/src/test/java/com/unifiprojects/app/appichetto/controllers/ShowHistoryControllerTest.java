@@ -175,19 +175,4 @@ public class ShowHistoryControllerTest {
 		verify(showHistoryView).showShoppingHistory(history);
 		verifyNoMoreInteractions(showHistoryView);
 	}
-	
-//TODO
-//	@Test
-//	public void testUpdateReceipt() {
-//		ReceiptController receiptController = mock(ReceiptController.class);
-//		
-//		when(receiptSwingView.getController()).thenReturn(receiptController);
-//		
-//		showHistoryController.updateReceipt(receipt0);
-//		
-//		verify(receiptController).setLoggedUser(receipt0.getBuyer());
-//		verify(receiptController).uploadReceipt(receipt0);
-////		verify(receiptSwingView).setLinkedSwingView((LinkedSwingView)showHistoryView);
-//		assertThat(receiptSwingView.getFrame().isVisible()).isTrue();
-//	}
 }

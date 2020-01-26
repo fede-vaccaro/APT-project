@@ -80,8 +80,6 @@ public class ReceiptSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.label(JLabelMatcher.withText("Quantity"));
 		quantityBox.requireEnabled();
 
-		// TODO test both scroll panels are present
-
 		window.button(JButtonMatcher.withText("Save")).requireDisabled();
 		window.button(JButtonMatcher.withText("Update")).requireDisabled();
 		window.button(JButtonMatcher.withText("Delete")).requireDisabled();

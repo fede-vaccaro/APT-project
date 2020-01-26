@@ -187,7 +187,6 @@
 										<POSTGRES_DB>docker</POSTGRES_DB>
 									</env>
 									<wait>
-										<!-- <log>database system is ready to accept connections</log> -->
 										<time>1000</time> 
 										<tcp>
 											<mode>mapped</mode>

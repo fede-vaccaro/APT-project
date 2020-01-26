@@ -283,7 +283,6 @@ public class ShowHistoryViewSwingTest extends AssertJSwingJUnitTestCase {
 
 		List<Receipt> history = Arrays.asList(receipt0, receipt1);
 		
-		//accounting1ToOtherOwner1.setPaid(true); // this won't generate debt, so shouldn't be included in the computing of the total accounting
 		accounting1ToOtherOwner1.setAmount(0.0); // this won't generate debt, so shouldn't be included in the computing of the total accounting
 		
 		

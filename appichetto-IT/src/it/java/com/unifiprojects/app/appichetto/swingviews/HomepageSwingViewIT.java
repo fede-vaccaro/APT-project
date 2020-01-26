@@ -82,7 +82,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 
 			LinkedSwingView.initializeMainFrame();
 		});
-		// this.setUpRobot();
 		window = new FrameFixture(robot(), homepageSwingView.getFrame());
 		window.show();
 	}

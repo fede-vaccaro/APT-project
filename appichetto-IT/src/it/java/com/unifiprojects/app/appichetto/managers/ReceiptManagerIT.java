@@ -24,7 +24,7 @@ import com.unifiprojects.app.appichetto.modules.RepositoriesModule;
 import com.unifiprojects.app.appichetto.repositories.ReceiptRepository;
 
 public class ReceiptManagerIT {
-	private static MVCBaseTest baseTest;// = new MVCBaseTest();
+	private static MVCBaseTest baseTest;
 	private static EntityManager entityManager;
 	private User buyer;
 	private static ReceiptManager receiptManager;
@@ -32,7 +32,6 @@ public class ReceiptManagerIT {
 	
 	@BeforeClass
 	public static void setupEntityManager() {
-		//baseTest.setupEntityManager();
 		baseTestInjector = Guice.createInjector(new EntityManagerModule());
 		baseTest = baseTestInjector.getInstance(MVCBaseTest.class);
 	}

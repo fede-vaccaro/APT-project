@@ -40,7 +40,7 @@ public class UserPanelViewSwingTest extends AssertJSwingJUnitTestCase {
 			return userPanelViewSwing;
 		});
 		window = new FrameFixture(robot(), userPanelViewSwing.getFrame());
-		window.show(); // shows the frame to test
+		window.show();
 	}
 
 	@Test

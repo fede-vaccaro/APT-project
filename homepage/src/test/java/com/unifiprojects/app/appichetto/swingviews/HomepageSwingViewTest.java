@@ -54,12 +54,6 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.show();
 	}
 
-//	@GUITest
-//	@Test
-//	public void testUpdateSetFrameVisible() {
-//		homepageSwingView.show();
-//	}
-
 	@Test
 	@GUITest
 	public void testControlsInitialStates() {
@@ -119,13 +113,4 @@ public class HomepageSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void getLoginViewTest() {
 		assertThat(homepageSwingView.getLoginView()).isEqualTo(loginView);
 	}
-
-	
-//	
-//	@Test
-//	public void testUpdateMakeFrameTrue() {
-//		//TODO to test
-//	}
-//	
-
 }
