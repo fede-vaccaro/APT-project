@@ -1,5 +1,6 @@
 package com.unifiprojects.app.appichetto.swingviews;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -23,7 +24,7 @@ import com.unifiprojects.app.appichetto.views.HomepageView;
 public class LoginViewTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
-	
+
 	private LoginViewSwing loginViewSwing;
 
 	@Mock
@@ -41,7 +42,6 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 		window.show(); // shows the frame to test
 	}
 
-	
 	@Test
 	@GUITest
 	public void testControlsInitialStates() {
@@ -71,55 +71,67 @@ public class LoginViewTest extends AssertJSwingJUnitTestCase {
 
 		window.button(JButtonMatcher.withText("Log-in")).requireDisabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testSchoolControllerIsDelegatedWhenLogInButtonIsClicked() {
 		String username = "user";
 		String password = "password";
-		
+
 		window.textBox("Username").enterText(username);
 		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Log-in")).click();
-		
+
 		verify(loginController).login(username, password);
 	}
-	
+
 	@Test
 	@GUITest
 	public void testSchoolControllerIsDelegatedWhenSignInButtonIsClicked() {
 		String username = "newUser";
 		String password = "pword";
-		
+
 		window.textBox("Username").enterText(username);
 		window.textBox("Password").enterText(password);
 		window.button(JButtonMatcher.withText("Sign-in")).click();
-		
+
 		verify(loginController).signIn(username, password);
 
 	}
-	
+
 	@Test
 	@GUITest
 	public void testErrorMessageIsCorrectlyDisplayed() {
 		String expectedMsg = "Testing error message.";
 		loginViewSwing.showErrorMsg(expectedMsg);
-		
+
 		window.label("errorMsg").requireText(expectedMsg);
 	}
-	
+
 	@Test
+	@GUITest
 	public void testGoToHome() {
 		HomepageView homepage = mock(HomepageView.class);
 		loginViewSwing.setHomepage(homepage);
-		
+
 		User user = new User("username", "pw");
-		
+
 		loginViewSwing.goToHome(user);
-		
+
 		verify(loginViewSwing.getHomepage()).setLoggedUser(user);
 		verify(loginViewSwing.getHomepage()).show();
 	}
 
+	@Test
+	public void testShowCleanTHeField() {
+		GuiActionRunner.execute(() -> {
+			loginViewSwing.setUsernameTextbox("Pippo");
+			loginViewSwing.setPasswordField("psw");
+			loginViewSwing.show();
+		});
+		
+		assertThat(loginViewSwing.getUsernameTextbox()).isEqualTo("");
+		assertThat(loginViewSwing.getPasswordFromPasswordField()).isEqualTo("");
+	}
 
 }

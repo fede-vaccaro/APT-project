@@ -96,10 +96,22 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 
 	}
 
-	private String getPasswordFromPasswordField() {
+	String getPasswordFromPasswordField() {
 		return String.copyValueOf(passwordField.getPassword());
 	}
 
+	String getUsernameTextbox() {
+		return usernameTextbox.getText();
+	}
+	
+	void setUsernameTextbox(String usernameTextbox) {
+		this.usernameTextbox.setText(usernameTextbox);
+	}
+	
+	void setPasswordField(String passwordField) {
+		this.passwordField.setText(passwordField);
+	}
+	
 	@Override
 	public void showErrorMsg(String message) {
 		SwingUtilities.invokeLater(() -> errorMsg.setText(message));
@@ -118,6 +130,13 @@ public class LoginViewSwing extends LinkedSwingView implements LoginView {
 	@Override
 	public JFrame getFrame() {
 		return frame;
+	}
+	
+	@Override
+	public void show() {
+		usernameTextbox.setText("");
+		passwordField.setText("");
+		super.show();
 	}
 
 	public HomepageView getHomepage() {
