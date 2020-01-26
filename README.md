@@ -4,6 +4,7 @@ A course project concerning Test Driven Development and other useful tools. In J
 ## Requirements
 
 * Docker
+* Docker Compose
 * Maven
 * Java 8
 
@@ -20,15 +21,20 @@ A course project concerning Test Driven Development and other useful tools. In J
     ```
     mvn clean test verify -P run-PIT
     ```
-* ### Swing error
 
-    We have tested the application on various environments and on Gnome an error related to Swing is launched, while for example with the i3 window manager it is not.
+3. ### SonarQube 
+    If you want run the tests in SonarQube, exec the second *docker-compose*:
+    ```
+    docker-compose -f docker-compose-sonar.yml up
+    ```
+    and then:
 
     ```
-    [ERROR] Unable to make visible the location of the index <0> by scrolling to the point <2,2> on javax.swing.JTextField[name='Username', text='', enabled=true, visible=true, showing=true]
+    mvn clean test verify sonar:sonar
     ```
+* ### Run on virtual screen:
 
-    You can consider changing the desktop environment or you can run the tests on a virtual screen avoiding even making the PC useless for 5 minutes. For the second choice you can run: 
+    You can run the tests on a virtual screen avoiding making the PC useless for 5 minutes: 
     ```
     sudo apt-get install -y tightvncserver
     ```
@@ -52,7 +58,7 @@ A course project concerning Test Driven Development and other useful tools. In J
 
 * Now you can launch **AppIchetto** with:
     ```bash
-    java -jar aggregator-module/target/ aggregator-module-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+    java -jar aggregator-module/target/aggregator-module-0.0.1-SNAPSHOT-jar-with-dependencies.jar
     ```
 * To stop *Postgres DB* run:
     ```bash
