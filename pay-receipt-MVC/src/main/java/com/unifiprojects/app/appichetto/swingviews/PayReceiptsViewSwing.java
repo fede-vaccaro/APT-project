@@ -207,13 +207,13 @@ public class PayReceiptsViewSwing extends LinkedControlledSwingView implements P
 
 		userSelection.addActionListener(e -> btnPay.setEnabled(getIfPayButtonShouldBeEnabled()));
 
-		GridBagConstraints gbc_receiptList = new GridBagConstraints();
-		gbc_receiptList.gridheight = 2;
-		gbc_receiptList.insets = new Insets(0, 0, 5, 5);
-		gbc_receiptList.fill = GridBagConstraints.BOTH;
-		gbc_receiptList.gridx = 1;
-		gbc_receiptList.gridy = 5;
-		frame.getContentPane().add(receiptList, gbc_receiptList);
+		GridBagConstraints gbcReceiptList = new GridBagConstraints();
+		gbcReceiptList.gridheight = 2;
+		gbcReceiptList.insets = new Insets(0, 0, 5, 5);
+		gbcReceiptList.fill = GridBagConstraints.BOTH;
+		gbcReceiptList.gridx = 1;
+		gbcReceiptList.gridy = 5;
+		frame.getContentPane().add(receiptList, gbcReceiptList);
 
 		itemListModel = new DefaultListModel<>();
 		JList<Item> itemList = new JList<>(itemListModel);
