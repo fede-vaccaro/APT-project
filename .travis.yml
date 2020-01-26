@@ -30,3 +30,4 @@ install: true
 
 script:
   -  mvn clean test verify coveralls:report sonar:sonar -Dsonar.projectKey=fede-vaccaro_APT-project $PIT_MAVEN_ARGS
+
