@@ -58,7 +58,7 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 		entityManager = persistenceInjector.getInstance(EntityManager.class);
 
 		injector = persistenceInjector.createChildInjector(repositoriesModule, payReceiptModule, new ReceiptModule(),
-				userPanelModule, new ShowHistoryModule(), new LoginModule());
+				userPanelModule, new ShowHistoryModule(persistenceInjector), new LoginModule());
 
 	}
 
@@ -70,7 +70,6 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 			LoginViewSwing loginView = injector.getInstance(LoginViewSwing.class);
 			homepageSwingView = (HomepageSwingView) loginView.getHomepage();
 					
-			System.out.println(homepageSwingView.toString());
 			entityManager.getTransaction().begin();
 			User logged = new User("Federico", "");
 			User another = new User("Pasquale", "");

@@ -59,11 +59,12 @@ public class ShowHistorySwingViewIT extends AssertJSwingJUnitTestCase {
 
 		Module entityManagerModule = new EntityManagerModule();
 
-		Module showHistoryModule = new ShowHistoryModule();
 
 		Module receiptModule = new ReceiptModule();
 		
 		Injector persistenceInjector = Guice.createInjector(entityManagerModule);
+
+		Module showHistoryModule = new ShowHistoryModule(persistenceInjector);
 
 		baseTest = persistenceInjector.getInstance(MVCBaseTest.class);
 		entityManager = persistenceInjector.getInstance(EntityManager.class);

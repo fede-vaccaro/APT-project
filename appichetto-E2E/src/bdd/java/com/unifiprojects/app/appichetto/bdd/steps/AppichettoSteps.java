@@ -107,16 +107,6 @@ public class AppichettoSteps {
 		window.button(JButtonMatcher.withText(string)).click();
 	}
 
-	@When("Click {string} button on homepage")
-	public void click_button_on_homepage(String buttonName) {
-		window.button(JButtonMatcher.withText(buttonName)).click();
-		if (buttonName.equals("Log Out")) {
-			buttonName = "Login";
-			System.out.println(String.format("Changed 'Log Out' to %s", buttonName));
-		}
-		window = WindowFinder.findFrame(buttonName).using(robot);
-	}
-
 	@Then("The view contain the following message {string}")
 	public void the_view_contain_the_following_message(String string) {
 		assertThat(window.label("errorMsg").text()).contains(string);
