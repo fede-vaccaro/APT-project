@@ -17,7 +17,6 @@ public abstract class LinkedSwingView{
 	public static void initializeMainFrame() {
 		mainFrame = new JFrame();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setLocation(200, 200);
 	}
 
 	public JFrame getFrame() {
@@ -25,18 +24,17 @@ public abstract class LinkedSwingView{
 	}
 
 	public void show() {
-		frame.setVisible(false);
 		
 		mainFrame.getContentPane().removeAll();
-		
+	
 		mainFrame.setTitle(frame.getTitle());
 		mainFrame.setName(frame.getName());
 		mainFrame.setBounds(frame.getBounds());
-		mainFrame.getContentPane().setLayout(frame.getContentPane().getLayout());
-		mainFrame.setContentPane(frame.getContentPane());
-
+		mainFrame.getContentPane().add(frame.getContentPane());
+		
 		mainFrame.revalidate();
 		mainFrame.repaint();
+		frame.setVisible(false);
 		mainFrame.setVisible(true);
 	}
 

@@ -108,24 +108,24 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testCreateReceiptButtonShowOnlyCreateReceiptView() {
 		window.button(JButtonMatcher.withText("Create Receipt")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane())
-				.isEqualTo(homepageSwingView.receiptView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.receiptView.getFrame().getName());
 	}
 
 	@Test
 	@GUITest
 	public void testPayDebtButtonShowOnlyPayDebtView() {
 		window.button(JButtonMatcher.withText("Pay Receipt")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane())
-				.isEqualTo(homepageSwingView.payReceiptsView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.payReceiptsView.getFrame().getName());
 	}
 
 	@Test
 	@GUITest
 	public void testLogOutButtonShowOnlyLogInView() {
 		window.button(JButtonMatcher.withText("Log Out")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane())
-				.isEqualTo(homepageSwingView.loginView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.loginView.getFrame().getName());
 
 	}
 
@@ -133,8 +133,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testUserPanelButtonShowOnlyUserPanelView() {
 		window.button(JButtonMatcher.withText("User panel")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane())
-				.isEqualTo(homepageSwingView.userPanelView.getFrame().getContentPane());
+		assertThat(LinkedSwingView.mainFrame.getName())
+				.isEqualTo(homepageSwingView.userPanelView.getFrame().getName());
 	}
 
 	
@@ -143,8 +143,8 @@ public class HomepageSwingViewIT extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testShowHistoryButtonShowOnlyShowHistoryView() {
 		window.button(JButtonMatcher.withText("Show History")).click();
-		assertThat(LinkedSwingView.mainFrame.getContentPane())
-		.isEqualTo(homepageSwingView.showHistoryView.getFrame().getContentPane());	
+		assertThat(LinkedSwingView.mainFrame.getName())
+		.isEqualTo(homepageSwingView.showHistoryView.getFrame().getName());	
 	}
 
 }
