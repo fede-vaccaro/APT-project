@@ -128,10 +128,8 @@ public class UserPanelViewSwingIT extends AssertJSwingJUnitTestCase {
 			((ShowHistoryViewSwing) homepage.showHistoryView)
 					.setShowHistoryController((ShowHistoryController) mock(ShowHistoryController.class));
 
-//			homepage.loginView = loginView;
-
 			userPanelViewSwing = (UserPanelViewSwing) homepage.userPanelView;
-			userPanelViewSwing.setLoginViewSwing(homepage.loginView);
+			userPanelViewSwing.setLoginViewSwing(loginView);
 			userPanelViewSwing.setLinkedSwingView(homepage);
 
 			userPanelController = (UserPanelController) userPanelViewSwing.getController();

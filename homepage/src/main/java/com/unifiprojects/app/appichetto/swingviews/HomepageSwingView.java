@@ -17,7 +17,6 @@ import com.unifiprojects.app.appichetto.models.User;
 import com.unifiprojects.app.appichetto.views.HomepageView;
 import com.unifiprojects.app.appichetto.views.LoginView;
 
-// @Singleton
 public class HomepageSwingView extends LinkedSwingView implements HomepageView {
 
 	List<LinkedControlledSwingView> views;
