@@ -7,11 +7,12 @@
 	<parent>
 		<groupId>com.unifiprojects.app</groupId>
 		<artifactId>appichetto-parent</artifactId>
-		<version>${revision}</version>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../appichetto-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>appichetto-IT</artifactId>
 	<name>appichetto-IT</name>
-	<url>http://maven.apache.org</url>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -55,17 +56,17 @@
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>appichetto-guice</artifactId>
-			<version>${revision}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>homepage</artifactId>
-			<version>${revision}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.unifiprojects.app</groupId>
 			<artifactId>appichetto-general</artifactId>
-			<version>${revision}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

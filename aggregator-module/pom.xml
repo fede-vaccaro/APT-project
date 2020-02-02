@@ -4,110 +4,128 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.unifiprojects.app</groupId>
-		<artifactId>appichetto-parent</artifactId>
-		<version>${revision}</version>
-	</parent>
+	<!-- <parent> -->
+	<!-- <artifactId>appichetto-parent</artifactId> -->
+	<!-- </parent> -->
 
 	<artifactId>aggregator-module</artifactId>
+	<groupId>com.unifiprojects.app</groupId>
 	<name>aggregator-module</name>
+	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>appichetto-general</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>homepage</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>login-MVC</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>pay-receipt-MVC</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>receipt-MVC</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>show-history-MVC</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>user-panel-MVC</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unifiprojects.app</groupId>
-			<artifactId>main</artifactId>
-			<version>${revision}</version>
-		</dependency>
-	</dependencies>
+	<packaging>pom</packaging>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>report-aggregate</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>report-aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.1</version>
+	<modules>
+		<module>../receipt-MVC</module>
+		<module>../show-history-MVC</module>
+		<module>../pay-receipt-MVC</module>
+		<module>../login-MVC</module>
+		<module>../user-panel-MVC</module>
+		<module>../appichetto-guice</module>
+		<module>../main</module>
+		<module>../homepage</module>
+		<module>../appichetto-IT</module>
+		<module>../appichetto</module>
+		<module>../appichetto-E2E</module>
+		<module>../appichetto-parent</module>
+<!-- 		<module>aggregator-module</module> -->
+	</modules>
 
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>com.unifiprojects.app.appichetto.main.Main</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
+	<!-- <dependencies> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>appichetto-general</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>homepage</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>login-MVC</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>pay-receipt-MVC</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>receipt-MVC</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>show-history-MVC</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>user-panel-MVC</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>com.unifiprojects.app</groupId> -->
+	<!-- <artifactId>main</artifactId> -->
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<!-- </dependency> -->
+	<!-- </dependencies> -->
 
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	<!-- <build> -->
+	<!-- <plugins> -->
+	<!-- <plugin> -->
+	<!-- <groupId>org.jacoco</groupId> -->
+	<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
+	<!-- <executions> -->
+	<!-- <execution> -->
+	<!-- <id>report-aggregate</id> -->
+	<!-- <phase>verify</phase> -->
+	<!-- <goals> -->
+	<!-- <goal>report-aggregate</goal> -->
+	<!-- </goals> -->
+	<!-- </execution> -->
+	<!-- </executions> -->
+	<!-- </plugin> -->
+	<!-- <plugin> -->
+	<!-- <groupId>org.pitest</groupId> -->
+	<!-- <artifactId>pitest-maven</artifactId> -->
+	<!-- <configuration> -->
+	<!-- <skip>true</skip> -->
+	<!-- </configuration> -->
+	<!-- </plugin> -->
+	<!-- <plugin> -->
+	<!-- <groupId>org.apache.maven.plugins</groupId> -->
+	<!-- <artifactId>maven-assembly-plugin</artifactId> -->
+	<!-- <version>3.1.1</version> -->
+
+	<!-- <configuration> -->
+	<!-- <descriptorRefs> -->
+	<!-- <descriptorRef>jar-with-dependencies</descriptorRef> -->
+	<!-- </descriptorRefs> -->
+	<!-- <archive> -->
+	<!-- <manifest> -->
+	<!-- <mainClass>com.unifiprojects.app.appichetto.main.Main</mainClass> -->
+	<!-- </manifest> -->
+	<!-- </archive> -->
+	<!-- </configuration> -->
+
+	<!-- <executions> -->
+	<!-- <execution> -->
+	<!-- <id>make-assembly</id> -->
+	<!-- <phase>package</phase> -->
+	<!-- <goals> -->
+	<!-- <goal>single</goal> -->
+	<!-- </goals> -->
+	<!-- </execution> -->
+	<!-- </executions> -->
+	<!-- </plugin> -->
+	<!-- </plugins> -->
+	<!-- </build> -->
 
 </project>

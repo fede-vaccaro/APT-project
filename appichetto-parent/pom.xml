@@ -5,9 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.unifiprojects.app</groupId>
 	<artifactId>appichetto-parent</artifactId>
-	<version>${revision}</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
+
 
 	<properties>
 		<revision>0.0.1-SNAPSHOT</revision>
@@ -420,20 +421,20 @@
 	</build>
 
 
-	<modules>
-		<module>receipt-MVC</module>
-		<module>show-history-MVC</module>
-		<module>pay-receipt-MVC</module>
-		<module>login-MVC</module>
-		<module>user-panel-MVC</module>
-		<module>appichetto-guice</module>
-		<module>main</module>
-		<module>homepage</module>
-		<module>appichetto-IT</module>
-		<module>appichetto</module>
-		<module>appichetto-E2E</module>
-		<module>aggregator-module</module>
-	</modules>
+<!-- 	<modules> -->
+<!-- 		<module>receipt-MVC</module> -->
+<!-- 		<module>show-history-MVC</module> -->
+<!-- 		<module>pay-receipt-MVC</module> -->
+<!-- 		<module>login-MVC</module> -->
+<!-- 		<module>user-panel-MVC</module> -->
+<!-- 		<module>appichetto-guice</module> -->
+<!-- 		<module>main</module> -->
+<!-- 		<module>homepage</module> -->
+<!-- 		<module>appichetto-IT</module> -->
+<!-- 		<module>appichetto</module> -->
+<!-- 		<module>appichetto-E2E</module> -->
+<!-- 		<module>aggregator-module</module> -->
+<!-- 	</modules> -->
 
 
 	<profiles>
